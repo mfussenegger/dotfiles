@@ -1,0 +1,6 @@
+vbell off
+startup_message off
+autodetach on
+
+caption always " "			# clear line before hardstatus
+hardstatus alwayslastline "%{= kb}[ %{B}%H:$USER %{b}][ %=%{w}%?%-Lw%?%{b}(%{W}%n*%f %t%?(%u)%?%{b})%{w}%?%+Lw%?%?%= %{b}][%{B} %l %{B}%{W}%d.%0m %{b}]"

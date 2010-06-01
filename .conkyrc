@@ -1,0 +1,40 @@
+background yes
+update_interval 5.0
+double_buffer yes
+
+use_xft yes
+xftfont terminus:size=8
+xftalpha 0.8
+
+own_window no
+own_window_type root
+own_window_transparent yes
+own_window_hints undecorated,below,skip_taskbar,skip_pager
+
+minimum_size 1024 20
+draw_shades no
+draw_outline yes
+draw_borders yes
+draw_graph_borders yes
+
+border_margin 3
+border_width 0
+alignment top_left
+gap_x 4
+gap_y 4
+uppercase no
+cpu_avg_samples 2
+net_avg_samples 2
+
+mpd_host monika
+mpd_port 6600
+
+default_color white
+default_shade_color black
+default_outline_color black
+
+#use_spacer yes
+no_buffers yes
+
+TEXT
+${color #f09000}TIME: ${color white}${time} | ${color #f09000}CPU: ${color white} ${cpu}% ${freq}MHz ${acpitemp}°C | ${color #f09000}MEM: ${color white} ${memperc}% ${mem} / ${memmax} | ${color #f09000}BAT: ${color white}${battery} | ${color #f09000}UPTIME: ${color white} ${uptime} | ${color #f09000}DOWN/UP @ ${addr ath0}: ${color white} ${downspeed ath0}KBs - ${totaldown ath0} / ${upspeed ath0}KBs - ${totalup ath0} | ${color #f09000}FAN:${color white} ${ibm_fan} ${color #f09000}VOLUME: ${color white} ${ibm_volume}

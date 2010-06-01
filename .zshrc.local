@@ -1,0 +1,62 @@
+
+set -o vi
+
+PATH=$PATH:/home/$USER/bin/
+
+salias p='powerpill'
+salias shutdown='shutdown'
+alias pac='packer'
+
+alias ls="ls -b --group-directories-first --color=auto -CF"
+alias ll="ls -l -h --color=auto"
+alias music='ncmpcpp'
+alias c="echo -e '\n`ddate`\n\n\t\t' `date` && echo -e && cal -3m"
+alias rcp='rsync --progress'
+alias rsync="ionice -c 3 rsync"
+
+alias rm="rm -i"
+alias mv="mv -i"
+alias rdesktop="rdesktop -k de -D -K -z"
+
+alias images=geeqie
+
+for ext in png jpeg jpg gif; do alias -s $ext=geeqie; done
+for ext in avi mkv flv mp4 wmv mpg mpeg; do alias -s $ext=mplayer; done
+for ext in html php org com net at de; do alias -s $ext=firefox; done
+for ext in py tex txt c cs; do alias -s $ext=vim; done
+alias -s pdf=evince
+
+
+alias -g L='|less'
+
+delicious_bookmark_backup()
+{
+	curl -u $1 -o $2 https://api.del.icio.us/v1/posts/all
+}
+
+
+svc() {
+	sudo /etc/rc.d/$@
+}
+
+dropshadow() {
+	convert $1 \( +clone -background black -shadow 60x5+0+5 \) +swap -background white -layers merge +repage $2
+}
+
+zle-keymap-select() {
+  local showcmd="<C>"
+
+  if [[ $KEYMAP = vicmd ]]; then
+    if [[ $PS1 != "<C>"* ]]; then
+      PS1="$showcmd$PS1"
+      zle reset-prompt
+    fi
+  else
+    if [[ $PS1 = "<C>"* ]]; then
+      PS1=${PS1##$showcmd}
+      zle reset-prompt
+    fi
+  fi
+}
+zle -N zle-keymap-select
+
