@@ -40,7 +40,9 @@ URxvt*shading: 20
 URxvt.internalBorder: 0
 URxvt.jumpScroll: true
 ! URxvt.loginShell: true
+URxvt*perl-lib:         /usr/lib/urxvt/perl/
 URxvt.perl-ext-common: default,matcher,searchable-scrollback
+URxvt.matcher.button: 1
 URxvt.pointerBlank: true
 URxvt.saveLines: 4000
 URxvt.secondaryScroll: true
