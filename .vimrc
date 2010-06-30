@@ -97,6 +97,9 @@ map <C-h> :py EvaluateCurrentRange()
 " You will have the ability to to type :cn and :cp to move around the error list. You can also type :clist to see all the errors
 autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 autocmd BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+" Hightlight chars that go over the 80 column limit
+autocmd FileType python highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+autocmd FileType python match OverLength '\%81v.*'
 
 
 
