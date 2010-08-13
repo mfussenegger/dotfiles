@@ -28,7 +28,7 @@ set statusline=[%l,%c\ %P%M]\ %f\ %r%h%w
 set complete=.,t,i,b,w,k
 set completeopt=longest,menuone
 "set completeopt-=preview
-let g:pydiction_location = '$HOME/.vim/ftplugin/pydiction/complete-dict'
+"let g:pydiction_location = '$HOME/.vim/ftplugin/pydiction/complete-dict'
 "
 set wildchar=<tab>
 set wildmenu
