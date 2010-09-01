@@ -12,13 +12,13 @@ map <F11> :setlocal spell spelllang=de<CR>
 set t_Co=256
 colors zenburn
 if has('gui')
-	set guioptions-=m
-	set guioptions-=T
-	set guioptions-=l
-	set guioptions-=L
-	set guioptions-=r
-	set guioptions-=R
-	set gfn=Terminus\ 12
+    set guioptions-=m
+    set guioptions-=T
+    set guioptions-=l
+    set guioptions-=L
+    set guioptions-=r
+    set guioptions-=R
+    set gfn=Terminus\ 12
 endif
 
 set cmdheight=2
@@ -32,11 +32,17 @@ set completeopt=longest,menuone
 "
 set wildchar=<tab>
 set wildmenu
+set wildignore=*.pyc
 set wildmode=longest:full,full
 set wildignore+=*~,*.o,*.tmp
 set ruler
 set nu
 set mouse=a
+
+" change working directory automatically
+set autochdir
+set cursorline
+set scrolloff=3
 
 if has("folding")
     set foldenable
