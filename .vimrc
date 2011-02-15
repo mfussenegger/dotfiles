@@ -26,7 +26,7 @@ set laststatus=2
 set statusline=[%l,%c\ %P%M]\ %f\ %r%h%w
 
 set complete=.,t,i,b,w,k
-set completeopt=longest,menuone
+set completeopt=longest,menuone,preview
 "set completeopt-=preview
 "let g:pydiction_location = '$HOME/.vim/ftplugin/pydiction/complete-dict'
 "
@@ -73,6 +73,7 @@ set smarttab
 set expandtab shiftwidth=4 tabstop=4 softtabstop=4
 autocmd FileType python,c setlocal textwidth=79
 autocmd FileType css,html,xhtml,xml,htmldjango,htmljinja,eruby,mako setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType csharp setlocal tabstop=8 sw=8
 
 " template support
 autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl

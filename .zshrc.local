@@ -61,3 +61,5 @@ zle-keymap-select() {
 }
 zle -N zle-keymap-select
 
+PYTHONSTARTUP=~/.pythonrc.py
+export PYTHONSTARTUP

@@ -37,6 +37,7 @@ XTerm*cursorColor: magenta
 URxvt*inheritPixmap: true
 !URxvt*tintColor: gray30
 URxvt*shading: 20
+URxvt*fading: 40
 URxvt.internalBorder: 0
 URxvt.jumpScroll: true
 ! URxvt.loginShell: true
