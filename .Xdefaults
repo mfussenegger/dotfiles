@@ -36,7 +36,7 @@ XTerm*cursorColor: magenta
 ! URxvt.font: xft:DejaVu Sans Mono:pixelsize=9
 URxvt*inheritPixmap: true
 !URxvt*tintColor: gray30
-URxvt*shading: 20
+URxvt*shading: 15
 URxvt*fading: 40
 URxvt.internalBorder: 0
 URxvt.jumpScroll: true

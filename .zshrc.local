@@ -3,6 +3,7 @@ set -o vi
 
 PATH=$PATH:/home/$USER/bin/
 export GDK_NATIVE_WINDOWS=1
+export WINEDEBUG=-all
 
 salias p='powerpill'
 salias shutdown='shutdown'
@@ -18,13 +19,14 @@ alias rsync="ionice -c 3 rsync"
 alias rm="rm -i"
 alias mv="mv -i"
 alias rdesktop="rdesktop -k de -D -K -z"
+alias kvm="qemu-kvm -enable-kvm"
 
 alias images=geeqie
 
 for ext in png jpeg jpg gif; do alias -s $ext=geeqie; done
 for ext in avi mkv flv mp4 wmv mpg mpeg m2t ogm; do alias -s $ext=mplayer; done
 for ext in html php org com net at de; do alias -s $ext=firefox; done
-for ext in py tex txt c cs; do alias -s $ext=vim; done
+for ext in tex txt c cs; do alias -s $ext=vim; done
 alias -s pdf=evince
 
 

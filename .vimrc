@@ -71,7 +71,6 @@ set smartindent
 set smarttab
 
 set expandtab shiftwidth=4 tabstop=4 softtabstop=4
-autocmd FileType python,c setlocal textwidth=79
 autocmd FileType css,html,xhtml,xml,htmldjango,htmljinja,eruby,mako setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType csharp setlocal tabstop=8 sw=8
 
@@ -108,6 +107,30 @@ autocmd BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^
 autocmd FileType python highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
 autocmd FileType python match OverLength '\%81v.*'
 
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set tabstop=8
+au BufRead,BufNewFile *.py,*.pyw set shiftwidth=4
+au BufRead,BufNewFile *.py,*.pyw set expandtab
+fu Select_c_style()
+    if search('^\t', 'n', 150)
+        set shiftwidth=8
+        set noexpandtab
+    el
+        set shiftwidth=4
+        set expandtab
+    en
+endf
+au BufRead,BufNewFile *.c,*.h call Select_c_style()
+au BufRead,BufNewFile Makefile* set noexpandtab
+
+
+highlight BadWhitespace ctermbg=red guibg=red
+au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h,*.rst match BadWhitespace /\s\+$/
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set textwidth=79
+
+au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
+
+let python_highlight_all=1
 
 
 " Settings for taglist.vim
