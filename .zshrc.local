@@ -6,6 +6,7 @@ export GDK_NATIVE_WINDOWS=1
 export WINEDEBUG=-all
 
 salias p='powerpill'
+salias rc.d='rc.d'
 salias shutdown='shutdown'
 alias pac='packer'
 
@@ -37,10 +38,6 @@ delicious_bookmark_backup()
 	curl -u $1 -o $2 https://api.del.icio.us/v1/posts/all
 }
 
-
-svc() {
-	sudo /etc/rc.d/$@
-}
 
 dropshadow() {
 	convert $1 \( +clone -background black -shadow 60x5+0+5 \) +swap -background white -layers merge +repage $2

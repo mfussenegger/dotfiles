@@ -1,6 +1,8 @@
 syntax on
 filetype indent plugin on
 
+set lazyredraw
+
 " encoding
 set enc=utf-8
 set fileencoding=utf-8
@@ -24,24 +26,24 @@ endif
 set cmdheight=2
 set laststatus=2
 set statusline=[%l,%c\ %P%M]\ %f\ %r%h%w
+set ruler
+set nu
+set mouse=a
+set cursorline
 
 set complete=.,t,i,b,w,k
 set completeopt=longest,menuone,preview
+set infercase
 "set completeopt-=preview
 "let g:pydiction_location = '$HOME/.vim/ftplugin/pydiction/complete-dict'
 "
 set wildchar=<tab>
 set wildmenu
-set wildignore=*.pyc
 set wildmode=longest:full,full
-set wildignore+=*~,*.o,*.tmp
-set ruler
-set nu
-set mouse=a
+set wildignore=*.pyc,*~,*.o,*.tmp
 
 " change working directory automatically
 set autochdir
-set cursorline
 set scrolloff=3
 
 if has("folding")
@@ -129,6 +131,8 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h,*.rst match BadWhitespace /\s\+$/
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set textwidth=79
 
 au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
+
+au BufRead,BufNewFile /etc/nginx/conf/* set ft=nginx
 
 let python_highlight_all=1
 
