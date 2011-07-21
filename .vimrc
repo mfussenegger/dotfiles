@@ -3,12 +3,16 @@ filetype indent plugin on
 
 set lazyredraw
 
+" sane paste
+set nopaste
+
 " encoding
 set enc=utf-8
 set fileencoding=utf-8
 
 " spellcheck
-map <F11> :setlocal spell spelllang=de<CR>
+map <F11> :setlocal spell<CR>
+set spelllang=en,de
 
 " visual stuff
 set t_Co=256
@@ -25,7 +29,7 @@ endif
 
 set cmdheight=2
 set laststatus=2
-set statusline=[%l,%c\ %P%M]\ %f\ %r%h%w
+set statusline=%f\ %r%h%w\ format=%{&ff}\ enc=%{&fenc}\ type=%Y\ bom=%{&bomb}\ hex=\%02.2B\ [%l,%c\ %P%M]
 set ruler
 set nu
 set mouse=a
@@ -89,7 +93,13 @@ autocmd FileType plaintex,latex,tex map <F6> :w<CR> :!evince %:p:r.pdf<CR>
 cmap w!! %!sudo tee > /dev/null %
 imap jj <Esc>
 
-nnoremap <silent> <F9> :Tlist<CR>
+" might need to set g:tagbar_ctags_bin
+"
+" Settings for tagbar.vim
+let g:tagbar_compact=1
+let g:tagbar_width=28
+
+nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <silent> <F10> :NERDTree<CR>
 
 " Visually Select a method / class and execute it by hitting 'Ctrl+h'
@@ -137,16 +147,6 @@ au BufRead,BufNewFile /etc/nginx/conf/* set ft=nginx
 let python_highlight_all=1
 
 
-" Settings for taglist.vim
-let Tlist_Use_Right_Window=0
-let Tlist_Auto_Open=0
-let Tlist_Enable_Fold_Column=0
-let Tlist_Compact_Format=1
-let Tlist_WinWidth=28
-let Tlist_Exit_OnlyWindow=1
-let Tlist_File_Fold_Auto_Close = 1
-
-
 " improved tab display shameless stolen from http://blog.golden-ratio.net/2008/08/19/using-tabs-in-vim/
 function! GuiTabLabel()
 	" add the tab number
@@ -176,6 +176,43 @@ function! GuiTabLabel()
 endfunction
  
 set guitablabel=%{GuiTabLabel()}
+
+
+" thanks reddit/r/vim for this gem
+" shows the diff between current modified file and the original file on disk
+nnoremap <Leader>df :call DiffOrig()<CR>
+
+function! DiffOrig()
+ if !exists("b:diff_active") && &buftype == "nofile"
+        echoerr "E: Cannot diff a scratch buffer"
+        return -1
+    elseif expand("%") == ""
+        echoerr "E: Buffer doesn't exist on disk"
+        return -1
+    endif
+
+    if !exists("b:diff_active") || b:diff_active == 0
+        let b:diff_active = 1
+        let l:orig_filetype = &l:filetype
+
+        leftabove vnew
+        let t:diff_buffer = bufnr("%")
+        set buftype=nofile
+
+        read #
+        0delete_
+        let &l:filetype = l:orig_filetype
+
+        diffthis
+        wincmd p
+        diffthis
+    else
+        diffoff
+        execute "bdelete " . t:diff_buffer
+        let b:diff_active = 0
+    endif
+endfunction
+
 
 if &term =~ "rxvt"
         "Set the cursor white in cmd-mode and orange in insert mode
