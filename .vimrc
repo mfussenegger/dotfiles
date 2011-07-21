@@ -93,8 +93,10 @@ autocmd FileType plaintex,latex,tex map <F6> :w<CR> :!evince %:p:r.pdf<CR>
 cmap w!! %!sudo tee > /dev/null %
 imap jj <Esc>
 
+" settings for acp
+let g:acp_behaviorKeyWordLength = 3
+
 " might need to set g:tagbar_ctags_bin
-"
 " Settings for tagbar.vim
 let g:tagbar_compact=1
 let g:tagbar_width=28
