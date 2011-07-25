@@ -83,6 +83,16 @@ autocmd FileType csharp setlocal tabstop=8 sw=8
 " template support
 autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
 
+" automatically give execute permissions
+" if file begins with #! and contains '/bin/'
+"
+function ModeChange()
+    if getline(1) =~ "^#!.*/bin/*"
+        silent !chmod u+x <afile>
+    endif
+endfunction
+au BufWritePost *.sh,*.py call ModeChange()
+
 " mappings
 autocmd FileType python map <F5> :w<CR>:!python "%"<CR>
 autocmd FileType python map <F6> :w<CR>:!python -m pdb "%"<CR>
@@ -144,7 +154,15 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set textwidth=79
 
 au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
 
+" even more filetypes
+
+au BufRead,BufNewFile *.log set ft=messages
+au BufRead,BufNewFile *.log{.*} set ft=messages
 au BufRead,BufNewFile /etc/nginx/conf/* set ft=nginx
+
+au BufRead,BufNewFile *.bc,*.cln set ft=baan
+
+autocmd Filetype baan set ff=unix fileencoding=latin1
 
 let python_highlight_all=1
 
