@@ -5,7 +5,7 @@ PATH=$PATH:/home/$USER/bin/
 export GDK_NATIVE_WINDOWS=1
 export WINEDEBUG=-all
 
-salias p='powerpill'
+salias p='spacman'
 salias rc.d='rc.d'
 salias shutdown='shutdown'
 alias pac='packer'

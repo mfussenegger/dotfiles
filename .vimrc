@@ -34,17 +34,17 @@ set ruler
 set nu
 set mouse=a
 set cursorline
+set listchars=tab:▷⋅,trail:⋅,nbsp:⋅,eol:$   " type :set list to activate
+set backspace=2                             " allow backspacing over indent, eol, start
 
 set complete=.,t,i,b,w,k
-set completeopt=longest,menuone,preview
+set completeopt=longest,menu,menuone,preview
 set infercase
-"set completeopt-=preview
-"let g:pydiction_location = '$HOME/.vim/ftplugin/pydiction/complete-dict'
 "
 set wildchar=<tab>
 set wildmenu
 set wildmode=longest:full,full
-set wildignore=*.pyc,*~,*.o,*.tmp
+set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
 " change working directory automatically
 set autochdir
@@ -94,6 +94,7 @@ endfunction
 au BufWritePost *.sh,*.py call ModeChange()
 
 " mappings
+autocmd FileType python map <F2> :w<CR>:!python -i "%"<CR>
 autocmd FileType python map <F5> :w<CR>:!python "%"<CR>
 autocmd FileType python map <F6> :w<CR>:!python -m pdb "%"<CR>
 autocmd FileType plaintex,latex,tex map <F5> :w<CR> :!pdflatex "%"<CR>
@@ -115,25 +116,12 @@ nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <silent> <F10> :NERDTree<CR>
 
 " Visually Select a method / class and execute it by hitting 'Ctrl+h'
+" method defined in ftplugin/python.vim
+map <C-h> :py evaluate_range()
 
-python << EOL
-import vim
-def EvaluateCurrentRange():
-	eval(compile('\n'.join(vim.current.range),'','exec'),globals())
-EOL
-map <C-h> :py EvaluateCurrentRange()
-
-" type :make and get a list of syntax errors: 
-" You will have the ability to to type :cn and :cp to move around the error list. You can also type :clist to see all the errors
-autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-autocmd BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-" Hightlight chars that go over the 80 column limit
-autocmd FileType python highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-autocmd FileType python match OverLength '\%81v.*'
-
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set tabstop=8
-au BufRead,BufNewFile *.py,*.pyw set shiftwidth=4
-au BufRead,BufNewFile *.py,*.pyw set expandtab
+au FileType python,c,cpp set tabstop=8
+au FileType python set shiftwidth=4
+au FileType python set expandtab
 fu Select_c_style()
     if search('^\t', 'n', 150)
         set shiftwidth=8
@@ -143,56 +131,39 @@ fu Select_c_style()
         set expandtab
     en
 endf
-au BufRead,BufNewFile *.c,*.h call Select_c_style()
+au FileType c,cpp call Select_c_style()
 au BufRead,BufNewFile Makefile* set noexpandtab
 
-
-highlight BadWhitespace ctermbg=red guibg=red
-au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h,*.rst match BadWhitespace /\s\+$/
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h set textwidth=79
-
-au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
-
-" even more filetypes
-
-au BufRead,BufNewFile *.log set ft=messages
-au BufRead,BufNewFile *.log{.*} set ft=messages
-au BufRead,BufNewFile /etc/nginx/conf/* set ft=nginx
-
-au BufRead,BufNewFile *.bc,*.cln set ft=baan
-
-autocmd Filetype baan set ff=unix fileencoding=latin1
-
-let python_highlight_all=1
-
+au FileType python set textwidth=79
+au FileType python,baan,c,cpp set fileformat=unix
+au FileType baan set fileencoding=latin1
 
 " improved tab display shameless stolen from http://blog.golden-ratio.net/2008/08/19/using-tabs-in-vim/
 function! GuiTabLabel()
-	" add the tab number
-	let label = '['.tabpagenr()
- 
-	" modified since the last save?
-	let buflist = tabpagebuflist(v:lnum)
-	for bufnr in buflist
-		if getbufvar(bufnr, '&modified')
-			let label .= '*'
-			break
-		endif
-	endfor
- 
-	" count number of open windows in the tab
-	let wincount = tabpagewinnr(v:lnum, '$')
-	if wincount > 1
-		let label .= ', '.wincount
-	endif
-	let label .= '] '
- 
-	" add the file name without path information
-	let n = bufname(buflist[tabpagewinnr(v:lnum) - 1])
-	let label .= fnamemodify(n, ':t')
- 
-	return label
+    " add the tab number
+    let label = '['.tabpagenr()
+
+    " modified since the last save?
+    let buflist = tabpagebuflist(v:lnum)
+    for bufnr in buflist
+        if getbufvar(bufnr, '&modified')
+            let label .= '*'
+            break
+        endif
+    endfor
+
+    " count number of open windows in the tab
+    let wincount = tabpagewinnr(v:lnum, '$')
+    if wincount > 1
+        let label .= ', '.wincount
+    endif
+    let label .= '] '
+
+    " add the file name without path information
+    let n = bufname(buflist[tabpagewinnr(v:lnum) - 1])
+    let label .= fnamemodify(n, ':t')
+
+    return label
 endfunction
  
 set guitablabel=%{GuiTabLabel()}
