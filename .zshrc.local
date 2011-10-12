@@ -4,6 +4,8 @@ set -o vi
 PATH=$PATH:/home/$USER/bin/
 export GDK_NATIVE_WINDOWS=1
 export WINEDEBUG=-all
+export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+export LESS=" -R "
 
 salias p='spacman'
 salias rc.d='rc.d'
@@ -13,7 +15,7 @@ alias pac='packer'
 alias ls="ls -b --group-directories-first --color=auto -CF"
 alias ll="ls -l -h --color=auto"
 alias music='ncmpcpp'
-alias c="echo -e '\n`ddate`\n\n\t\t' `date` && echo -e && cal -3m"
+alias c="date && echo -e && cal -3m"
 alias rcp='rsync --progress'
 alias rsync="ionice -c 3 rsync"
 

@@ -2,3 +2,5 @@ set editing-mode vi
 set keymap vi
 
 set completion-display-width 0
+
+set show-all-if-ambiguous on

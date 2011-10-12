@@ -95,4 +95,4 @@ snippet interact
 	import code; code.interact(local=locals())
 
 snippet ipython
-	import IPython; IPython.Shell.IPShell(user_ns=locals()).mainloop()
+	from IPython import embed; embed()

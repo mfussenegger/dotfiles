@@ -29,7 +29,7 @@ endif
 
 set cmdheight=2
 set laststatus=2
-set statusline=%f\ %r%h%w\ format=%{&ff}\ enc=%{&fenc}\ type=%Y\ bom=%{&bomb}\ hex=\%02.2B\ [%l,%c\ %P%M]
+set statusline=%f\ %r%h%w\ [format=%{&ff}]\ [enc=%{&fenc}]\ [type=%Y]\ [bom=%{&bomb}]\ [hex=\%02.2B]\ [%l,%c\ %P%M]
 set ruler
 set nu
 set mouse=a
@@ -77,7 +77,7 @@ set smartindent
 set smarttab
 
 set expandtab shiftwidth=4 tabstop=4 softtabstop=4
-autocmd FileType css,html,xhtml,xml,htmldjango,htmljinja,eruby,mako setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType css,html,xhtml,xml,htmldjango,htmljinja,eruby,mako setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2 tw=120
 autocmd FileType csharp setlocal tabstop=8 sw=8
 
 " template support
@@ -91,13 +91,13 @@ function ModeChange()
         silent !chmod u+x <afile>
     endif
 endfunction
-au BufWritePost *.sh,*.py call ModeChange()
+au BufWritePost *.sh call ModeChange()
 
 " mappings
 autocmd FileType python map <F2> :w<CR>:!python -i "%"<CR>
 autocmd FileType python map <F5> :w<CR>:!python "%"<CR>
 autocmd FileType python map <F6> :w<CR>:!python -m pdb "%"<CR>
-autocmd FileType plaintex,latex,tex map <F5> :w<CR> :!pdflatex "%"<CR>
+autocmd FileType plaintex,latex,tex map <F5> :w<CR> :!pdflatex -shell-escape "%"<CR>
 autocmd FileType plaintex,latex,tex map <F6> :w<CR> :!evince %:p:r.pdf<CR>
 
 
@@ -211,4 +211,11 @@ if &term =~ "rxvt"
         let &t_SI = "\<Esc>]12;orange\x9c"
         "We normally start in cmd-mode
         silent !echo -e "\e]12;white\x9c"
+endif
+
+if has("autocmd") && exists("+omnifunc")
+    autocmd FileType *
+        \ if &omnifunc == "" |
+        \   setlocal omnifunc=syntaxcomplete#Complete |
+        \ endif
 endif
