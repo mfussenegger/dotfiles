@@ -6,12 +6,14 @@ export GDK_NATIVE_WINDOWS=1
 export WINEDEBUG=-all
 export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
+export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 
 salias p='spacman'
 salias rc.d='rc.d'
 salias shutdown='shutdown'
 alias pac='packer'
 
+alias g='git'
 alias ls="ls -b --group-directories-first --color=auto -CF"
 alias ll="ls -l -h --color=auto"
 alias music='ncmpcpp'
@@ -21,10 +23,13 @@ alias rsync="ionice -c 3 rsync"
 
 alias rm="rm -i"
 alias mv="mv -i"
-alias rdesktop="rdesktop -k de -D -K -z"
+alias rdesktop="rdesktop -k de -K -z"
 alias kvm="qemu-kvm -enable-kvm"
 
 alias images=geeqie
+
+# star trek engine noice:
+alias engage='play -n -c1 synth whitenoise band -n 100 20 band -n 50 20 gain +25  fade h 1 864000 1'
 
 for ext in png jpeg jpg gif; do alias -s $ext=geeqie; done
 for ext in avi mkv flv mp4 wmv mpg mpeg m2t ogm; do alias -s $ext=mplayer; done
