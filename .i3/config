@@ -13,7 +13,10 @@ set $mod Mod4
 
 # font for window titles. ISO 10646 = Unicode
 #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-font -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
+font -*-terminus-medium-r-*-*-12-*-*-*-*-*-*-*
+
+new_window 1pixel
+workspace_auto_back_and_forth yes
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -153,4 +156,24 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
 	status_command i3status
+    font -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
 }
+
+# window specific settings
+#
+for_window [class="Workrave"] floating enable
+assign [class="Gajim.py"] 3
+
+exec `cat ~/.fehbg`
+
+# workspace settings
+
+workspace 3 output HDMI3
+
+# additional keybindings
+bindcode 172 exec mpc toggle
+bindcode 167 exec mpc next
+bindcode 166 exec mpc prev
+bindcode 123 exec amixer set PCM 5%+ && amixer set Master 5%+
+bindcode 122 exec amixer set PCM 5%- && amixer set Master 5%-
+bindcode 121 exec amixer set Master toggle

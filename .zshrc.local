@@ -13,6 +13,7 @@ salias rc.d='rc.d'
 salias shutdown='shutdown'
 alias pac='packer'
 
+alias s='ssh'
 alias g='git'
 alias ls="ls -b --group-directories-first --color=auto -CF"
 alias ll="ls -l -h --color=auto"
@@ -48,6 +49,11 @@ delicious_bookmark_backup()
 
 dropshadow() {
 	convert $1 \( +clone -background black -shadow 60x5+0+5 \) +swap -background white -layers merge +repage $2
+}
+
+greph() {
+    emulate -L zsh
+    history 0 | grep $1
 }
 
 zle-keymap-select() {
