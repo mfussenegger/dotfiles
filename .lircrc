@@ -1,0 +1,85 @@
+## suspend
+
+begin
+    prog = irexec
+    button = Power
+    config = go2bed.py
+end
+
+## alsa
+
+begin
+    prog = irexec
+    button = vol-
+    config = amixer set PCM 5%- && amixer set Master 5%-
+end
+
+begin
+    prog = irexec
+    button = vol+
+    config = amixer set PCM 5%+ && amixer set Master 5%+
+end
+
+begin
+    prog = irexec
+    button = Mute
+    config = amixer set Master toggle
+end
+
+
+## mpd/mpc
+
+begin
+    prog = irexec
+    button = Play
+    config = mpc play
+    repeat = 0
+end
+
+begin
+    prog = irexec
+    button = Pause
+    config = mpc pause
+    repeat = 0
+end
+
+begin
+    prog = irexec
+    button = Stop
+    config = mpc stop
+    repeat = 0
+end
+
+begin
+    prog = irexec
+    button = Rew
+    config = mpc prev
+    repeat = 0
+end
+
+begin
+    prog = irexec
+    button = Fwd
+    config = mpc next
+    repeat = 0
+end
+
+
+##mplayer
+
+begin
+    button = OK
+    prog = mplayer
+    config = pause
+    repeat = 0
+end
+begin
+    button = Right
+    prog = mplayer
+    config = seek 5
+end
+begin
+    button = Left
+    prog = mplayer
+    config = seek -5
+end

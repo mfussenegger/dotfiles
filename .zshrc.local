@@ -2,15 +2,16 @@
 set -o vi
 
 PATH=$PATH:/home/$USER/bin/
-export GDK_NATIVE_WINDOWS=1
 export WINEDEBUG=-all
 export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 
+salias eject='eject'
 salias p='spacman'
 salias rc.d='rc.d'
 salias shutdown='shutdown'
+
 alias pac='packer'
 
 alias s='ssh'
@@ -46,6 +47,10 @@ delicious_bookmark_backup()
 	curl -u $1 -o $2 https://api.del.icio.us/v1/posts/all
 }
 
+
+cdl() {
+    cd $1 && ll
+}
 
 dropshadow() {
 	convert $1 \( +clone -background black -shadow 60x5+0+5 \) +swap -background white -layers merge +repage $2

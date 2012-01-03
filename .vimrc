@@ -16,8 +16,8 @@ set spelllang=en,de
 
 " visual stuff
 set t_Co=256
-colors zenburn
-if has('gui')
+if has('gui_running')
+    colors wombat
     set guioptions-=m
     set guioptions-=T
     set guioptions-=l
@@ -25,6 +25,8 @@ if has('gui')
     set guioptions-=r
     set guioptions-=R
     set gfn=Terminus\ 12
+else
+    colors zenburn
 endif
 
 set cmdheight=2
@@ -94,6 +96,7 @@ endfunction
 au BufWritePost *.sh call ModeChange()
 
 " mappings
+map <F7> :w<CR>:!./"%"<CR>
 autocmd FileType python map <F2> :w<CR>:!python -i "%"<CR>
 autocmd FileType python map <F5> :w<CR>:!python "%"<CR>
 autocmd FileType python map <F6> :w<CR>:!python -m pdb "%"<CR>
@@ -134,7 +137,6 @@ endf
 au FileType c,cpp call Select_c_style()
 au BufRead,BufNewFile Makefile* set noexpandtab
 
-au FileType python set textwidth=79
 au FileType python,baan,c,cpp set fileformat=unix
 au FileType baan set fileencoding=latin1
 

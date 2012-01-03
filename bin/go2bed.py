@@ -29,7 +29,7 @@ time.sleep(5)
 
 seconds_to_sleep = minutes_to_sleep * 60
 
-call('sudo rtcwake -m mem -s {0}'.format(seconds_to_sleep), shell=True)
+call('i3lock -p win && sudo rtcwake -m mem -s {0}'.format(seconds_to_sleep), shell=True)
 call(['mpc', 'play'])
 
 time.sleep(15)

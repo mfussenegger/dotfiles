@@ -164,8 +164,6 @@ bar {
 for_window [class="Workrave"] floating enable
 assign [class="Gajim.py"] 3
 
-exec `cat ~/.fehbg`
-
 # workspace settings
 
 workspace 3 output HDMI3
