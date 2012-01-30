@@ -1,3 +1,4 @@
+call pathogen#infect()
 syntax on
 filetype indent plugin on
 
@@ -221,3 +222,4 @@ if has("autocmd") && exists("+omnifunc")
         \   setlocal omnifunc=syntaxcomplete#Complete |
         \ endif
 endif
+
