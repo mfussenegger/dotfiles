@@ -2,7 +2,11 @@ call pathogen#infect()
 syntax on
 filetype indent plugin on
 
+let mapleader = ","
+
 set lazyredraw
+
+set hidden
 
 " sane paste
 set nopaste
@@ -104,6 +108,9 @@ autocmd FileType python map <F6> :w<CR>:!python -m pdb "%"<CR>
 autocmd FileType plaintex,latex,tex map <F5> :w<CR> :!pdflatex -shell-escape "%"<CR>
 autocmd FileType plaintex,latex,tex map <F6> :w<CR> :!evince %:p:r.pdf<CR>
 
+" switch buffers like tabs
+map <S-J> :bp<cr>
+map <S-K> :bn<cr>
 
 cmap w!! %!sudo tee > /dev/null %
 imap jj <Esc>
@@ -118,6 +125,13 @@ let g:tagbar_width=28
 
 nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <silent> <F10> :NERDTree<CR>
+
+" open nerdtree if vim was opened with no files specified
+autocmd vimenter * if !argc() | NERDTree | endif
+
+" close vim if nerdtree is the last open window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
 
 " Visually Select a method / class and execute it by hitting 'Ctrl+h'
 " method defined in ftplugin/python.vim
