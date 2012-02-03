@@ -117,6 +117,22 @@ imap jj <Esc>
 
 " settings for acp
 let g:acp_behaviorKeyWordLength = 3
+let g:acp_behavior = {
+        \ 'baan' : [],
+        \ }
+
+" not sure if meetsForKeyword makes sense, but it seems to work
+call add(g:acp_behavior['baan'], {
+            \   'command'      : "\<C-x>\<C-o>",
+            \   'completefunc' : 'baancomplete#Complete',
+            \   'meets'        : 'acp#meetsForKeyword',
+            \   'repeat'       : 0,
+            \ })
+call add(g:acp_behavior['baan'], {
+      \   'command' : "\<C-x>\<C-n>",
+      \   'meets'   : 'acp#meetsForKeyword',
+      \   'repeat'  : 0,
+      \ })
 
 " might need to set g:tagbar_ctags_bin
 " Settings for tagbar.vim
