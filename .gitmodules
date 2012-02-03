@@ -13,3 +13,9 @@
 [submodule ".vim/bundle/minibufexpl"]
 	path = .vim/bundle/minibufexpl
 	url = https://github.com/fholgado/minibufexpl.vim.git
+[submodule ".vim/bundle/dbext"]
+	path = .vim/bundle/dbext
+	url = https://github.com/vim-scripts/dbext.vim.git
+[submodule ".vim/bundle/python-mode"]
+	path = .vim/bundle/python-mode
+	url = git://github.com/klen/python-mode.git

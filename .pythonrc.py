@@ -8,6 +8,7 @@ complement this file.
 
 # Got this file from https://github.com/sontek/dotfiles/
 
+from see import see
 import os
 
 try:
