@@ -1,4 +1,5 @@
 PATH=$PATH:/home/$USER/bin/
+export EDITOR=vim
 export WINEDEBUG=-all
 export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
