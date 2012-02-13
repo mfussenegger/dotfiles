@@ -30,6 +30,12 @@ else
     colors zenburn
 endif
 
+if has('win32')
+    inoremap <c-v> <esc>"*p<return>i
+    vnoremap <c-c> "+y
+    set gfn=Andale_Mono:h11:cANSI
+endif
+
 set ttyfast
 
 set showmatch
