@@ -1,4 +1,7 @@
+filetype off
 call pathogen#infect()
+
+set nocompatible
 
 syntax on
 filetype indent plugin on
@@ -7,9 +10,8 @@ let mapleader = ","
 
 set lazyredraw
 set hidden
-" sane paste
 set nopaste
-set enc=utf-8
+set encoding=utf-8
 set fileencoding=utf-8
 
 " visual stuff
@@ -28,6 +30,10 @@ else
     colors zenburn
 endif
 
+set ttyfast
+
+set showmatch
+set matchtime=3
 
 set cmdheight=2
 set laststatus=2                            " always have a status line
@@ -43,19 +49,25 @@ set ruler
 set number numberwidth=4
 set mouse=a
 set cursorline
-set listchars=tab:¿¿,trail:¿,nbsp:¿,eol:$   " type :set list to activate
 set backspace=2                             " allow backspacing over indent, eol, start
 
 set complete=.,t,i,b,w,k
-set completeopt=longest,menu,menuone,preview
+set completeopt=longest,menuone,preview
 set infercase
 "
 set wildchar=<tab>
 set wildmenu
-set wildmode=longest:full,full
+set wildmode=list:longest:full,full
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set wrap
 set textwidth=80
+
+
 
 " change working directory automatically
 " deactivated - command-T works better without
@@ -69,11 +81,16 @@ if has("folding")
     set foldlevel=2
 endif
 
+" Resize splits when the window is resized
+autocmd VimResized * :wincmd =
+
 " improve search
 set ignorecase
 set smartcase
 set hlsearch
 set incsearch
+set gdefault
+
 
 " faster scrolling
 nnoremap <C-e> 3<C-e>
@@ -89,7 +106,6 @@ set noswapfile
 set smartindent
 set smarttab
 
-set expandtab shiftwidth=4 tabstop=4 softtabstop=4
 
 " template support
 autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
@@ -100,12 +116,15 @@ let g:tex_flavor = "latex"
 
 " mappings {{{
 noremap <F7> :w<CR>:!./"%"<CR>
+set pastetoggle=<F8>
 
 " uppercase word in insert mode
-inoremap <c-u> <esc>viwUea
+" inoremap <c-u> <esc>viwUea
 
 nnoremap <leader>ev :split $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+
+nnoremap <leader>s :%s//<left>
 
 " highlight trailing whitespaces
 nnoremap <leader>w :match Error /\v +$/<cr>
@@ -114,9 +133,9 @@ nnoremap <leader>W :match none<cr>
 " use very magic regex on searches by default, see :help magic
 nnoremap / /\v
 
-" switch buffers like tabs
-noremap <A-j> :bp<cr>
-noremap <A-k> :bn<cr>
+" buffer navigation
+noremap <c-j> :bp<cr>
+noremap <c-k> :bn<cr>
 
 cnoremap w!! %!sudo tee > /dev/null %
 inoremap jj <Esc>
@@ -125,39 +144,27 @@ inoremap jj <Esc>
 noremap <F11> :setlocal spell!<CR>
 set spelllang=en,de
 
-
 nnoremap <silent> <F9> :TagbarToggle<CR>
-nnoremap <silent> <F10> :NERDTree<CR>
+nnoremap <silent> <F10> :NERDTreeToggle<CR>
+inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
+
+
+" fugitive {{{
+"
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gci :Gcommit<cr>
+
+" }}}
+
 " }}}
 
 " plugin settings {{{
+"
 
 " settings for acp
 let g:acp_behaviorKeyWordLength = 3
-
-
-" don't set acp_behavior more than once.
-" it will freak out vim
-"
-if exists("g:acp_behavior_set") ==# 0
-    let g:acp_behavior_set = 1
-    let g:acp_behavior = {
-                \ 'baan' : [],
-                \ }
-
-    " not sure if meetsForKeyword makes sense, but it seems to work
-    call add(g:acp_behavior['baan'], {
-                \   'command'      : "\<C-x>\<C-o>",
-                \   'completefunc' : 'baancomplete#Complete',
-                \   'meets'        : 'acp#meetsForKeyword',
-                \   'repeat'       : 0,
-                \ })
-    call add(g:acp_behavior['baan'], {
-                \   'command' : "\<C-x>\<C-n>",
-                \   'meets'   : 'acp#meetsForKeyword',
-                \   'repeat'  : 0,
-                \ })
-endif
 
 " might need to set g:tagbar_ctags_bin
 " Settings for tagbar.vim
@@ -165,7 +172,7 @@ let g:tagbar_compact=1
 let g:tagbar_width=28
 
 " open nerdtree if vim was opened with no files specified
-autocmd vimenter * if !argc() | NERDTree | endif
+" autocmd vimenter * if !argc() | NERDTree | endif
 
 " close vim if nerdtree is the last open window
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
@@ -274,15 +281,14 @@ endfunction
 autocmd BufWritePost *.sh call ModeChange()
 
 
-
-augroup webdev
+augroup ft_webdev
     autocmd!
     autocmd FileType css,html,xhtml,xml,htmldjango setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2 tw=120
     autocmd FileType htmljinja,eruby,mako setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2 tw=120
 augroup end
 
 
-augroup dotNet
+augroup ft_dotNet
     autocmd!
     autocmd FileType csharp,vb setlocal tabstop=8 sw=8
 augroup end
@@ -291,7 +297,7 @@ augroup end
 autocmd BufRead,BufNewFile Makefile* set noexpandtab
 
 " baan file settings {{{
-augroup baan
+augroup ft_baan
     autocmd!
     autocmd FileType baan setlocal omnifunc=baancomplete#Complete
     autocmd FileType baan setlocal fileencoding=latin1
@@ -300,7 +306,7 @@ augroup end
 " }}}
 
 " latex file settings {{{
-augroup tex
+augroup ft_tex
     autocmd!
     autocmd FileType tex noremap <buffer> <F5> :w<CR> :!pdflatex -shell-escape "%"<CR>
     autocmd FileType tex noremap <buffer> <F6> :w<CR> :!evince %:p:r.pdf<CR>
@@ -308,16 +314,12 @@ augroup end
 " }}}
 
 " python file settings {{{
-augroup python
+augroup ft_python
     autocmd!
     " Visually Select a method / class and execute it by hitting 'Ctrl+h'
     " method defined in ftplugin/python.vim
     autocmd FileType python noremap <buffer> <C-h> :py evaluate_range()
 
-
-    autocmd FileType python setlocal tabstop=4
-    autocmd FileType python setlocal shiftwidth=4
-    autocmd FileType python setlocal expandtab
     autocmd FileType python setlocal fileformat=unix
 
     autocmd FileType python noremap <buffer> <F2> :w<CR>:!python -i "%"<CR>
@@ -327,7 +329,7 @@ augroup end
 " }}}
 
 " Vimscript file settings {{{
-augroup vim
+augroup ft_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
 augroup end

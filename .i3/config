@@ -162,11 +162,13 @@ bar {
 # window specific settings
 #
 for_window [class="Workrave"] floating enable
-assign [class="Gajim.py"] 3
+assign [class="Gajim.py"] 9
 
 # workspace settings
 
-workspace 3 output HDMI3
+workspace 7 output HDMI3
+workspace 8 output HDMI3
+workspace 9 output HDMI3
 
 # additional keybindings
 bindcode 172 exec mpc toggle
