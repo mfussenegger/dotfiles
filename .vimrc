@@ -43,14 +43,6 @@ set matchtime=3
 
 set cmdheight=2
 set laststatus=2                            " always have a status line
-set statusline=%.20F                        " filename
-set statusline+=\ [format=%{&ff}]           " fileformat
-set statusline+=\ [enc=%{&fenc}]            " encoding
-set statusline+=\ [ft=%Y]                   " detected FileType
-set statusline+=\ [a=%03b\ 0x%02.2B]        " ascii & hex
-set statusline+=%=                          " switch to right side of statusline
-set statusline+=\ %m%r%h%w                  " modified flag, readonly flag, helpbuffer flag, preview window flag
-set statusline+=[l=%04l\ c=%02c\ %P]      " current line and column number
 set ruler
 set number numberwidth=4
 set mouse=a
@@ -160,7 +152,7 @@ inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gci :Gcommit<cr>
+nnoremap <leader>gci :Gcommit -a<cr>
 
 " }}}
 
@@ -168,6 +160,7 @@ nnoremap <leader>gci :Gcommit<cr>
 
 " plugin settings {{{
 "
+let g:Powerline_symbols = 'unicode'
 
 " settings for acp
 let g:acp_behaviorKeyWordLength = 3
