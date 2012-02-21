@@ -152,7 +152,7 @@ inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gci :Gcommit -a<cr>
+nnoremap <leader>gci :Gcommit<cr>
 
 " }}}
 
