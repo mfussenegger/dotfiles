@@ -2,5 +2,8 @@ vbell off
 startup_message off
 autodetach on
 
+term screen-256color
+terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+
 caption always " "			# clear line before hardstatus
 hardstatus alwayslastline "%{= kb}[ %{B}%H:$USER %{b}][ %=%{w}%?%-Lw%?%{b}(%{W}%n*%f %t%?(%u)%?%{b})%{w}%?%+Lw%?%?%= %{b}][%{B} %l %{B}%{W}%d.%0m %{b}]"
