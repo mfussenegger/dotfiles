@@ -9,6 +9,9 @@ salias eject='eject'
 salias p='spacman'
 salias rc.d='rc.d'
 salias shutdown='shutdown'
+salias lvs='lvs'
+salias vgs='vgs'
+salias pvs='pvs'
 
 alias pac='packer'
 
@@ -65,3 +68,5 @@ greph() {
 
 PYTHONSTARTUP=~/.pythonrc.py
 export PYTHONSTARTUP
+
+source /usr/bin/virtualenvwrapper.sh
