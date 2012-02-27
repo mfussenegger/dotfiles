@@ -164,6 +164,8 @@ let g:Powerline_symbols = 'unicode'
 
 " settings for acp
 let g:acp_behaviorKeyWordLength = 3
+let g:acp_behaviorHtmlOmniLength = 2
+
 
 " might need to set g:tagbar_ctags_bin
 " Settings for tagbar.vim
