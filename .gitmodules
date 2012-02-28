@@ -32,7 +32,9 @@
     ignore = untracked
 [submodule ".vim/bundle/html5"]
 	path = .vim/bundle/html5
+    ignore = untracked
 	url = https://github.com/othree/html5.vim.git
 [submodule ".oh-my-zsh"]
 	path = .oh-my-zsh
+    ignore = untracked
 	url = https://github.com/chobojordi/oh-my-zsh
