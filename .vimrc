@@ -138,6 +138,12 @@ noremap <c-k> :bn<cr>
 cnoremap w!! %!sudo tee > /dev/null %
 inoremap jj <Esc>
 
+" split navigation
+noremap <c-h> <c-w>h
+noremap <c-j> <c-w>j
+noremap <c-k> <c-w>k
+noremap <c-l> <c-w>l
+
 " spellcheck
 noremap <F11> :setlocal spell!<CR>
 set spelllang=en,de
@@ -149,6 +155,7 @@ inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
 
 " fugitive {{{
 "
+nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Gblame<cr>
@@ -177,6 +184,12 @@ let g:tagbar_width=28
 
 " close vim if nerdtree is the last open window
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+if exists("&colorcolumn")
+    autocmd InsertEnter * set colorcolumn=80
+    autocmd InsertLeave * set colorcolumn=""
+endif
+
 
 " }}}
 
@@ -319,7 +332,7 @@ augroup ft_python
     autocmd!
     " Visually Select a method / class and execute it by hitting 'Ctrl+h'
     " method defined in ftplugin/python.vim
-    autocmd FileType python noremap <buffer> <C-h> :py evaluate_range()
+    autocmd FileType python noremap <buffer> <C-i> :py evaluate_range()
 
     autocmd FileType python setlocal fileformat=unix
 
@@ -328,6 +341,15 @@ augroup ft_python
     autocmd FileType python noremap <buffer> <F6> :w<CR>:!python -m pdb "%"<CR>
 augroup end
 " }}}
+"
+
+" git file settings {{{
+augroup ft_git
+    au FileType gitcommit setlocal textwidth=60
+augroup end
+
+" }}}
+
 
 " Vimscript file settings {{{
 augroup ft_vim
