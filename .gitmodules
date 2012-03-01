@@ -24,7 +24,7 @@
     ignore = untracked
 [submodule ".vim/bundle/snipmate"]
 	path = .vim/bundle/snipmate
-	url = git@github.com:chobojordi/snipmate.vim.git
+	url = https://github.com/chobojordi/snipmate.vim.git
     ignore = untracked
 [submodule ".vim/bundle/vim-powerline"]
 	path = .vim/bundle/vim-powerline
