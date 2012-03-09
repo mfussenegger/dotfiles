@@ -14,6 +14,7 @@ salias vgs='vgs'
 salias pvs='pvs'
 
 alias pac='packer'
+alias ipythonqt='ipython qtconsole --colors=linux'
 
 alias s='ssh'
 alias g='git'
