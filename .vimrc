@@ -31,6 +31,7 @@ else
 endif
 
 if has('win32')
+    set t_Co=16
     inoremap <c-v> <esc>"*p<return>i
     vnoremap <c-c> "+y
     set gfn=Andale_Mono:h11:cANSI
@@ -63,9 +64,6 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set wrap
-set textwidth=80
-
-
 
 " change working directory automatically
 " deactivated - command-T works better without
