@@ -11,37 +11,8 @@ Xft*hintstyle: hintfull
 Xft*rgba:      rgb
 *font:-*-terminus-medium-*-*-*-*-140-*-*-*-*-*-*
 
-! XTerm
-XTerm*background: #000010
-XTerm*foreground: #ffffff
-XTerm*color0: #000000
-XTerm*color1: #9e1828
-XTerm*color2: #aece92
-XTerm*color3: #968a38
-XTerm*color4: #414171
-XTerm*color5: #963c59
-XTerm*color6: #418179
-XTerm*color7: #bebebe
-XTerm*color8: #666666
-XTerm*color9: #cf6171
-XTerm*color10: #c5f779
-XTerm*color11: #fff796
-XTerm*color12: #4186be
-XTerm*color13: #cf9ebe
-XTerm*color14: #71bebe
-XTerm*color15: #ffffff
-XTerm*cursorColor: magenta
-
-! URxvt.geometry: 80x25
-! URxvt.font: xft:DejaVu Sans Mono:pixelsize=9
-!urxvt*inheritPixmap: true
-!URxvt*tintColor: gray30
-!urxvt*transparent: true
-!urxvt*shading: 15
-!URxvt*fading: 15
 urxvt.internalBorder: 0
 urxvt.jumpScroll: true
-! URxvt.loginShell: true
 urxvt*perl-lib:         /usr/lib/urxvt/perl/
 urxvt.perl-ext-common: default,matcher,searchable-scrollback
 urxvt.matcher.button: 1
@@ -52,27 +23,44 @@ urxvt.scrollBar: false
 urxvt.scrollTtyKeypress: true
 urxvt.scrollWithBuffer: true
 urxvt*urlLauncher: /usr/bin/firefox
-!urxvt*background: #000010
 urxvt*depth: 32
-urxvt*background: rgba:0000/0000/3f00/dddd
-urxvt*foreground: Wheat
-urxvt*cursorColor: magenta
-urxvt*colorUL: #c5f779
-urxvt*underlineColor: #c5f779
-urxvt*color0: #000000
-urxvt*color1: #9e1828
-urxvt*color2: #aece92
-urxvt*color3: #968a38
-urxvt*color4: #414171
-urxvt*color5: #963c59
-urxvt*color6: #418179
-urxvt*color7: #bebebe
-urxvt*color8: #666666
-urxvt*color9: #cf6171
-urxvt*color10: #c5f779
-urxvt*color11: #fff796
-urxvt*color12: #4186be
-urxvt*color13: #cf9ebe
-urxvt*color14: #71bebe
-urxvt*color15: #ffffff
 
+*background:            #002b36
+*foreground:            #657b83
+*fading:                40
+*fadeColor:             #002b36
+*cursorColor:           #93a1a1
+*pointerColorBackground:#586e75
+*pointerColorForeground:#93a1a1
+
+!! black dark/light
+*color0:                #073642
+*color8:                #002b36
+
+!! red dark/light
+*color1:                #dc322f
+*color9:                #cb4b16
+
+!! green dark/light
+*color2:                #859900
+*color10:               #586e75
+
+!! yellow dark/light
+*color3:                #b58900
+*color11:               #657b83
+
+!! blue dark/light
+*color4:                #268bd2
+*color12:               #839496
+
+!! magenta dark/light
+*color5:                #d33682
+*color13:               #6c71c4
+
+!! cyan dark/light
+*color6:                #2aa198
+*color14:               #93a1a1
+
+!! white dark/light
+*color7:                #eee8d5
+*color15:               #fdf6e3
