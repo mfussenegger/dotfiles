@@ -15,9 +15,10 @@ set encoding=utf-8
 set fileencoding=utf-8
 
 " visual stuff
-set t_Co=256
+set t_Co=16
 if has('gui_running')
-    colors wombat
+    set background=dark
+    colorscheme wombat
     set guioptions-=m
     set guioptions-=T
     set guioptions-=l
@@ -26,12 +27,12 @@ if has('gui_running')
     set guioptions-=R
     set gfn=Terminus\ 12
 else
-    let g:zenburn_high_Contrast = 1
-    colors zenburn
+    "let g:solarized_termcolors=256
+    set background=dark
+    colorscheme solarized
 endif
 
 if has('win32')
-    set t_Co=16
     inoremap <c-v> <esc>"*p<return>i
     vnoremap <c-c> "+y
     set gfn=Andale_Mono:h11:cANSI
@@ -165,7 +166,7 @@ nnoremap <leader>gci :Gcommit<cr>
 
 " plugin settings {{{
 "
-let g:Powerline_symbols = 'unicode'
+let g:Powerline_symbols = 'compatible'
 
 " settings for acp
 let g:acp_behaviorKeyWordLength = 3
