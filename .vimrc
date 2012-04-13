@@ -1,7 +1,10 @@
 filetype off
 call pathogen#infect()
 
+" Use vim instead of vi settings.
 set nocompatible
+
+set shortmess+=I                    " Don't show vim welcome screen
 
 syntax on
 filetype indent plugin on
@@ -167,6 +170,8 @@ nnoremap <leader>gci :Gcommit<cr>
 " plugin settings {{{
 "
 let g:Powerline_symbols = 'compatible'
+
+let g:gist_detect_filetype = 1
 
 " settings for acp
 let g:acp_behaviorKeyWordLength = 3
