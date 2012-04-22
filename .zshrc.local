@@ -5,6 +5,7 @@ export WINEDEBUG=-all
 export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
+export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
 
 salias eject='eject'
 salias p='spacman'
@@ -45,7 +46,7 @@ for ext in png jpeg jpg gif; do alias -s $ext=sxiv; done
 for ext in avi mkv flv mp4 wmv mpg mpeg m2t ogm; do alias -s $ext=mplayer; done
 for ext in html php org com net at de; do alias -s $ext=firefox; done
 for ext in tex txt c cs; do alias -s $ext=vim; done
-alias -s pdf=evince
+alias -s pdf=zathura
 
 
 alias -g L='|less'

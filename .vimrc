@@ -67,6 +67,7 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set expandtab
+set shiftround
 set wrap
 
 " change working directory automatically
@@ -327,7 +328,7 @@ augroup end
 augroup ft_tex
     autocmd!
     autocmd FileType tex noremap <buffer> <F5> :w<CR> :!pdflatex -shell-escape "%"<CR>
-    autocmd FileType tex noremap <buffer> <F6> :w<CR> :!evince %:p:r.pdf<CR>
+    autocmd FileType tex noremap <buffer> <F6> :w<CR> :!zathura %:p:r.pdf<CR>
 augroup end
 " }}}
 
