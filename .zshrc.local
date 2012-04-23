@@ -5,7 +5,6 @@ export WINEDEBUG=-all
 export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
-export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
 
 salias eject='eject'
 salias p='spacman'
