@@ -155,6 +155,9 @@ nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <silent> <F10> :NERDTreeToggle<CR>
 inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
 
+" gnupg
+nnoremap <leader>pe :GPGEditRecipients<cr>
+nnoremap <leader>pv :GPGViewRecipients<cr>
 
 " fugitive {{{
 "
@@ -170,6 +173,8 @@ nnoremap <leader>gci :Gcommit<cr>
 
 " plugin settings {{{
 "
+
+
 let g:Powerline_symbols = 'compatible'
 
 let g:gist_detect_filetype = 1
