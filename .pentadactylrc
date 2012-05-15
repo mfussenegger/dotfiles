@@ -4,5 +4,7 @@ nnoremap j 3j
 nnoremap k 3k
 
 " Switch tabs with J and K
-nnoremap J :tn<CR>
-nnoremap K :tp<CR>
+nnoremap K :tn<CR>
+nnoremap J :tp<CR>
+
+set defsearch='duckduckgo'
