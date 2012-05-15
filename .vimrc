@@ -10,6 +10,7 @@ syntax on
 filetype indent plugin on
 
 let mapleader = ","
+let maplocalleader = ";"
 
 set lazyredraw
 set hidden
@@ -112,9 +113,6 @@ set smarttab
 autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
 
 
-" latex
-let g:tex_flavor = "latex"
-
 " mappings {{{
 noremap <F7> :w<CR>:!./"%"<CR>
 set pastetoggle=<F8>
@@ -173,7 +171,8 @@ nnoremap <leader>gci :Gcommit<cr>
 
 " plugin settings {{{
 "
-
+let g:tex_flavor = 'latex'
+let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
 
 let g:Powerline_symbols = 'compatible'
 
