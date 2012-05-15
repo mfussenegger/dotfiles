@@ -180,6 +180,10 @@ workspace 7 output HDMI3
 workspace 8 output HDMI3
 workspace 9 output HDMI3
 
+# scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
 # additional keybindings
 bindcode 172 exec mpc toggle
 bindcode 167 exec mpc next
