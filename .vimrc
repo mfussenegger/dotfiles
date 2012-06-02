@@ -19,7 +19,7 @@ set encoding=utf-8
 set fileencoding=utf-8
 
 " visual stuff
-set t_Co=16
+set t_Co=256
 if has('gui_running')
     set background=dark
     colorscheme wombat
@@ -31,7 +31,7 @@ if has('gui_running')
     set guioptions-=R
     set gfn=Terminus\ 12
 else
-    "let g:solarized_termcolors=256
+    let g:solarized_termcolors=256
     set background=dark
     colorscheme solarized
 endif
