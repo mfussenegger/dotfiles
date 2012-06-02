@@ -50,3 +50,6 @@
 [submodule ".vim/bundle/vim-gnupg"]
 	path = .vim/bundle/vim-gnupg
 	url = https://git.gitorious.org/vim-gnupg/vim-gnupg.git
+[submodule ".vim/bundle/conque"]
+	path = .vim/bundle/conque
+	url = https://github.com/rson/vim-conque.git
