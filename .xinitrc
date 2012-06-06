@@ -9,6 +9,7 @@ redshift -l 47.22:10.09 -t 6000:4200 &
 xset b off
 #irexec &> /dev/null &
 workrave &> /dev/null &
+mpd .config/mpd/mpd.conf
 
 hsetroot -full workspace/Pictures/tmp/background.jpg &
 

@@ -7,7 +7,6 @@ general {
 order = "disk /"
 order += "ethernet br0"
 order += "volume master"
-order += "volume pcm"
 order += "cpu_temperature 0"
 order += "cpu_usage"
 order += "load"
@@ -68,11 +67,3 @@ volume master {
     mixer = "Master"
     mixer_idx = 0
 }
-
-volume pcm {
-    format = "pcm: %volume"
-    device = "default"
-    mixer = "PCM"
-    mixer_idx = 0
-}
-

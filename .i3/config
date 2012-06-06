@@ -190,6 +190,6 @@ bindsym $mod+minus scratchpad show
 bindcode 172 exec mpc toggle
 bindcode 167 exec mpc next
 bindcode 166 exec mpc prev
-bindcode 123 exec amixer set PCM 5%+ && amixer set Master 5%+
-bindcode 122 exec amixer set PCM 5%- && amixer set Master 5%-
-bindcode 121 exec amixer set Master toggle
+bindcode 123 exec vol_up
+bindcode 122 exec vol_down
+bindcode 121 exec mute_toggle
