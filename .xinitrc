@@ -1,4 +1,5 @@
 xrandr --output HDMI3 --right-of HDMI1
+xrandr --output HDMI1 --primary
 
 xset +dpms
 xset dpms 0 0 180
