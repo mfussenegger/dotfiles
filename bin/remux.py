@@ -43,7 +43,7 @@ def remux(filename):
 
     cutfile = mplexed + '_cut'
     idxfile = mplexed + '.idx'
-    infotext = 'Starting avidemux. Save file as {0}'.format(cutfile)
+    infotext = 'Starting avidemux. Save file as {0}. Use MPEG-PS'.format(cutfile)
     call(['zenity', '--info', '--text="{0}"'.format(infotext)])
     call(['avidemux2_gtk', mplexed])
 
