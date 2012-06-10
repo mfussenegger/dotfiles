@@ -26,41 +26,42 @@ urxvt.scrollWithBuffer: true
 urxvt*urlLauncher: /usr/bin/firefox
 urxvt*depth: 32
 
-*background: #1f1f1f
-*foreground: #DDDDDD
+urxvt*background: #1f1f1f
+urxvt*foreground: #DDDDDD
 
 ! 0: black
-*color0:  #000000
-*color8:  #696dc3
-
-! 1: red
-*color1:  #9f6767
-*color9:  #9f6767
-
-! 2: green
-*color2:  #92ac68
-*color10: #92ac68
-
-! 3: yellow
-*color3:  #d0d293
-*color11: #d0d293
-
-! 4: blue
-*color4:  #9aacc3
-*color12: #9aacc3
-
-! 5: magenta
-*color5:  #bb77a4
-*color13: #bb77a4
-
-! 6: cyan
-*color6:  #77bbb5
-*color14: #77bbb5
-
-! 7: white
-*color7:  #777777
-*color15: #777777
-
+urxvt*color0:  #000000
+urxvt*color8:  #709080
+!
+!! 1: red
+urxvt*color1:  #705050
+urxvt*color9:  #dca3a3
+!
+!! 2: green
+urxvt*color2:  #60b48a
+urxvt*color10: #c3bf9f
+!
+!! 3: yellow
+urxvt*color3:  #dfaf8f
+urxvt*color11: #f0dfaf
+!
+!! 4: blue
+urxvt*color4:  #506070
+urxvt*color12: #9ebadc
+!
+!! 5: magenta
+urxvt*color5:  #dc8cc3
+urxvt*color13: #ec93d3
+!
+!! 6: cyan
+urxvt*color6:  #8cd0d3
+urxvt*color14: #93e0e3
+!
+!! 7: white
+urxvt*color7:  #dcdccc
+urxvt*color15: #ffffff
+!
 URxvt.colorBD: #ffcfaf
 URxvt.colorUL: #ccdc90
 URxvt.colorIT: #80d4aa
+
