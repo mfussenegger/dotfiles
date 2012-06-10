@@ -1,0 +1,66 @@
+! X cursor
+Xcursor.theme: Vanilla-DMZ
+! Xcursor.size: 16
+
+
+! XFT and Font settings
+Xft*dpi:       96
+Xft*antialias: true
+Xft*hinting:   true
+Xft*hintstyle: hintfull
+Xft*rgba:      rgb
+*font:-*-terminus-medium-*-*-*-*-140-*-*-*-*-*-*
+
+urxvt.termName: rxvt-unicode-256color
+urxvt.internalBorder: 0
+urxvt.jumpScroll: true
+urxvt*perl-lib:         /usr/lib/urxvt/perl/
+urxvt.perl-ext-common: default,matcher,searchable-scrollback
+urxvt.matcher.button: 1
+urxvt.pointerBlank: true
+urxvt.saveLines: 4000
+urxvt.secondaryScroll: true
+urxvt.scrollBar: false
+urxvt.scrollTtyKeypress: true
+urxvt.scrollWithBuffer: true
+urxvt*urlLauncher: /usr/bin/firefox
+urxvt*depth: 32
+
+*background: #1f1f1f
+*foreground: #DDDDDD
+
+! 0: black
+*color0:  #000000
+*color8:  #696dc3
+
+! 1: red
+*color1:  #9f6767
+*color9:  #9f6767
+
+! 2: green
+*color2:  #92ac68
+*color10: #92ac68
+
+! 3: yellow
+*color3:  #d0d293
+*color11: #d0d293
+
+! 4: blue
+*color4:  #9aacc3
+*color12: #9aacc3
+
+! 5: magenta
+*color5:  #bb77a4
+*color13: #bb77a4
+
+! 6: cyan
+*color6:  #77bbb5
+*color14: #77bbb5
+
+! 7: white
+*color7:  #777777
+*color15: #777777
+
+URxvt.colorBD: #ffcfaf
+URxvt.colorUL: #ccdc90
+URxvt.colorIT: #80d4aa
