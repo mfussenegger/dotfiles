@@ -38,7 +38,10 @@ def main():
     print(minutes_to_sleep)
     print('wakeup at {0:%H:%M}'.format(now + timedelta(minutes=minutes_to_sleep)))
 
-    time.sleep(5)
+    try:
+        time.sleep(5)
+    except KeyboardInterrupt:
+        exit()
 
     seconds_to_sleep = minutes_to_sleep * 60
 
