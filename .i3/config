@@ -186,6 +186,8 @@ workspace 9 output HDMI3
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
+bindsym $mod+o exec sleep 1 && ts.sh
+
 # additional keybindings
 bindcode 172 exec mpc toggle
 bindcode 167 exec mpc next
