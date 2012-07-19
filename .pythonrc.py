@@ -8,7 +8,7 @@ complement this file.
 
 # Got this file from https://github.com/sontek/dotfiles/
 
-from see import see
+#from see import see
 import os
 
 try:
@@ -98,7 +98,7 @@ sys.displayhook = my_displayhook
 
 # Django Helpers
 def SECRET_KEY():
-    "Generates a new SECRET_KEY that can be used in a project settings file." 
+    "Generates a new SECRET_KEY that can be used in a project settings file."
 
     from random import choice
     return ''.join(

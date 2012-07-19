@@ -71,6 +71,8 @@ set expandtab
 set shiftround
 set wrap
 
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
 " change working directory automatically
 " deactivated - command-T works better without
 " set autochdir
