@@ -61,3 +61,6 @@
 [submodule ".vim/bundle/tagbar"]
 	path = .vim/bundle/tagbar
 	url = https://github.com/majutsushi/tagbar.git
+[submodule ".vim/bundle/csv"]
+	path = .vim/bundle/csv
+	url = https://github.com/chrisbra/csv.vim.git
