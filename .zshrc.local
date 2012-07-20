@@ -22,6 +22,7 @@ alias g='git'
 alias ls="ls -b --group-directories-first --color=auto -CF"
 alias ll="ls -l -h --color=auto"
 alias music='ncmpcpp'
+alias m="mplayer -vo vaapi"
 alias c="date && echo -e && cal -3m"
 alias rcp='rsync --progress'
 alias rsync="ionice -c 3 rsync"
