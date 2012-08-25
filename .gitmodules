@@ -64,3 +64,6 @@
 [submodule ".vim/bundle/csv"]
 	path = .vim/bundle/csv
 	url = https://github.com/chrisbra/csv.vim.git
+[submodule ".vim/bundle/linediff"]
+	path = .vim/bundle/linediff
+	url = https://github.com/vim-scripts/linediff.vim.git
