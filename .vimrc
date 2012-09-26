@@ -50,7 +50,7 @@ set matchtime=3
 set cmdheight=2
 set laststatus=2                            " always have a status line
 set ruler
-set number numberwidth=4
+set rnu numberwidth=4
 set mouse=a
 set cursorline
 set backspace=2                             " allow backspacing over indent, eol, start
@@ -169,6 +169,9 @@ nnoremap <leader>gci :Gcommit<cr>
 
 " }}}
 
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
 " }}}
 
 " plugin settings {{{
@@ -201,6 +204,8 @@ if exists("&colorcolumn")
     autocmd InsertLeave * set colorcolumn=""
 endif
 
+autocmd InsertEnter * :set nu
+autocmd InsertEnter * :set rnu
 
 " }}}
 
