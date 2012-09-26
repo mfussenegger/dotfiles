@@ -1,0 +1,33 @@
+[user]
+    name = Mathias Fussenegger
+    email = f.mathias@zignar.net
+
+[core]
+    editor = vim
+    autocrlf = input
+    excludesfile = ~/.gitignore
+
+[color]
+    ui = true
+
+[github]
+    user = mfussenegger
+    token = !cat .githubtoken 2> /dev/null
+
+[push]
+    default = upstream
+
+[merge]
+    tool = gvimdiff
+
+[diff]
+    tool = vimdiff
+[alias]
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+    killbranches = !git branch | grep -v master | xargs git branch -d 2> /dev/null
+    ls = ls-files
+
+[instaweb]
+    httpd = webrick
+[push]
+    default = current
