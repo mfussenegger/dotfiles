@@ -61,12 +61,16 @@
 [submodule ".vim/bundle/tagbar"]
 	path = .vim/bundle/tagbar
 	url = https://github.com/majutsushi/tagbar.git
+    ignore = untracked
 [submodule ".vim/bundle/csv"]
 	path = .vim/bundle/csv
 	url = https://github.com/chrisbra/csv.vim.git
+    ignore = untracked
 [submodule ".vim/bundle/linediff"]
 	path = .vim/bundle/linediff
+    ignore = untracked
 	url = https://github.com/vim-scripts/linediff.vim.git
 [submodule ".vim/bundle/vim-ipython"]
 	path = .vim/bundle/vim-ipython
 	url = https://github.com/ivanov/vim-ipython.git
+    ignore = untracked
