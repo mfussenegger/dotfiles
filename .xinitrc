@@ -14,7 +14,9 @@ redshift -l 47.22:10.09 -t 6000:4200 &
 #irexec &> /dev/null &
 
 workrave &> /dev/null &
-mpd .config/mpd/mpd.conf
+if [[ -x '/usr/bin/mpd' ]]; then
+    mpd .config/mpd/mpd.conf
+fi
 
 hsetroot -full workspace/Pictures/tmp/background.jpg &
 
