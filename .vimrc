@@ -119,6 +119,9 @@ autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
 noremap <F7> :w<CR>:!./"%"<CR>
 set pastetoggle=<F8>
 
+" set working directory
+noremap <leader>. :lcd %:p:h<CR>
+
 " uppercase word in insert mode
 " inoremap <c-u> <esc>viwUea
 
