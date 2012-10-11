@@ -56,6 +56,9 @@ delicious_bookmark_backup()
 	curl -u $1 -o $2 https://api.del.icio.us/v1/posts/all
 }
 
+myoutube() {
+    mplayer -vo vaapi -fs $(youtube-dl -g $1)
+}
 
 cdl() {
     cd $1 && ll
