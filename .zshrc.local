@@ -13,9 +13,11 @@ salias shutdown='shutdown'
 salias lvs='lvs'
 salias vgs='vgs'
 salias pvs='pvs'
+salias sctl="systemctl"
 
 alias pac='packer'
 alias ipythonqt='ipython qtconsole --colors=linux'
+alias skype='xhost +local: && sudo su skype -c skype'
 
 alias s='ssh'
 alias g='git'
