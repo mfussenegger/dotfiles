@@ -8,3 +8,5 @@ nnoremap K :tn<CR>
 nnoremap J :tp<CR>
 
 set defsearch='duckduckgo'
+
+colorscheme solarized-light
