@@ -2,8 +2,6 @@ PATH=$PATH:/home/$USER/bin/
 PATH=$PATH:/home/$USER/.gem/ruby/1.9.1/bin/
 export EDITOR=vim
 export WINEDEBUG=-all
-export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
-export LESS=" -R "
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 
 salias eject='eject'
@@ -15,9 +13,13 @@ salias vgs='vgs'
 salias pvs='pvs'
 salias sctl="systemctl"
 
+alias services="sctl -t service list-unit-files | grep -v static"
+
 alias pac='packer'
 alias ipythonqt='ipython qtconsole --colors=linux'
 alias skype='xhost +local: && sudo su skype -c skype'
+
+alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
 
 alias s='ssh'
 alias g='git'
@@ -52,6 +54,8 @@ alias -s pdf=zathura
 
 
 alias -g L='|less'
+alias -g N='2> /dev/null'
+alias -g G='|grep'
 
 delicious_bookmark_backup()
 {
