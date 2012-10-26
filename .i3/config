@@ -186,12 +186,12 @@ workspace 9 output HDMI3
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
-bindsym $mod+o exec sleep 1 && ts.sh
+bindsym $mod+o exec --no-startup-id sleep 1 && $HOME/bin/ts.sh
 
 # additional keybindings
 bindcode 172 exec mpc toggle
 bindcode 167 exec mpc next
 bindcode 166 exec mpc prev
-bindcode 123 exec vol_up
-bindcode 122 exec vol_down
-bindcode 121 exec mute_toggle
+bindcode 123 exec amixer set Master 5%+
+bindcode 122 exec amixer set Master 5%-
+bindcode 121 exec amixer set Master toggle
