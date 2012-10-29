@@ -183,6 +183,7 @@ let g:tex_flavor = 'latex'
 let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
 
 let g:Powerline_symbols = 'compatible'
+let g:Powerline_colorscheme = 'solarized'
 
 let g:gist_detect_filetype = 1
 
