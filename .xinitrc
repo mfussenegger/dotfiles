@@ -18,7 +18,15 @@ if [[ -x '/usr/bin/mpd' ]]; then
     mpd .config/mpd/mpd.conf
 fi
 
-hsetroot -full workspace/Pictures/tmp/background.jpg &
+
+DIR="$HOME/workspace/Pictures/wallpapers"
+
+if [[ -d "${DIR}" ]]
+then
+    background=$(ls -1 $DIR | shuf -n1)
+
+    hsetroot -full "${DIR}/${background}"
+fi
 
 until dbus-launch i3 &> /dev/null; do
 	true
