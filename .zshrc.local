@@ -4,27 +4,23 @@ export EDITOR=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 
-salias eject='eject'
-salias p='spacman'
-salias shutdown='shutdown'
-salias lvs='lvs'
-salias vgs='vgs'
-salias pvs='pvs'
-salias sctl="systemctl"
+alias eject='sudo eject'
+alias p='sudo spacman'
+alias shutdown='sudo shutdown'
+alias lvs='sudo lvs'
+alias vgs='sudo vgs'
+alias pvs='sudo pvs'
+alias sctl="sudo systemctl"
 
 alias services="sctl -t service list-unit-files | grep -v static"
 
 alias pac='packer'
 alias ipythonqt='ipython qtconsole --colors=linux'
-alias skype='xhost +local: && sudo su skype -c skype'
 
 alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
 
 alias s='ssh'
-alias g='git'
 alias n='nosetests3'
-alias ls="ls -b --group-directories-first --color=auto -CF"
-alias ll="ls -l -h --color=auto"
 alias music='ncmpcpp'
 alias m="mplayer -vo vaapi"
 alias c="date && echo -e && cal -3m"
@@ -36,8 +32,6 @@ alias :q="exit"
 
 alias iostat="iostat -mtx"
 
-alias rm="rm -i"
-alias mv="mv -i"
 alias rdesktop="rdesktop -k de -K -z"
 alias kvm="qemu-kvm -enable-kvm"
 
@@ -88,7 +82,7 @@ pip_outdated() {
 
 
 # after ranger quits, cd to the chosen directory.
-ranger-cd() {
+ranger() {
     tempfile='/tmp/chosendir'
    /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
    test -f "$tempfile" &&

@@ -34,10 +34,6 @@
 	path = .vim/bundle/html5
     ignore = untracked
 	url = https://github.com/othree/html5.vim.git
-[submodule ".oh-my-zsh"]
-	path = .oh-my-zsh
-    ignore = untracked
-	url = https://github.com/mfussenegger/oh-my-zsh
 [submodule ".vim/bundle/solarized"]
 	path = .vim/bundle/solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
