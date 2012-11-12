@@ -22,7 +22,6 @@ alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
 alias s='ssh'
 alias n='nosetests3'
 alias music='ncmpcpp'
-alias m="mplayer -vo vaapi"
 alias c="date && echo -e && cal -3m"
 alias rcp='rsync --progress'
 alias rsync="ionice -c 3 rsync"
