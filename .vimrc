@@ -154,7 +154,7 @@ noremap <c-l> <c-w>l
 noremap <F11> :setlocal spell!<CR>
 set spelllang=en,de
 
-nnoremap <silent> <F9> :TagbarToggle<CR>
+nnoremap <F9> :TagbarToggle<CR>
 nnoremap <silent> <F10> :NERDTreeToggle<CR>
 inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
 
@@ -196,6 +196,8 @@ let g:acp_behaviorHtmlOmniLength = 2
 " Settings for tagbar.vim
 let g:tagbar_compact=1
 let g:tagbar_width=28
+
+let g:pymode_rope_guess_project = 0
 
 " open nerdtree if vim was opened with no files specified
 " autocmd vimenter * if !argc() | NERDTree | endif
