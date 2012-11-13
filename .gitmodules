@@ -70,3 +70,6 @@
 	path = .vim/bundle/vim-ipython
 	url = https://github.com/ivanov/vim-ipython.git
     ignore = untracked
+[submodule ".zprezto"]
+	path = .zprezto
+	url = git@github.com:mfussenegger/prezto.git
