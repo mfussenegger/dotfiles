@@ -72,4 +72,4 @@
     ignore = untracked
 [submodule ".zprezto"]
 	path = .zprezto
-	url = git@github.com:mfussenegger/prezto.git
+	url = https://github.com/mfussenegger/prezto.git
