@@ -52,12 +52,12 @@ def remux(filename):
         sys.exit(1)
 
     call(['HandBrakeCLI',
-               '-Z',
-               'Normal',
-               '-i',
-               cutfile,
-               '-o',
-               re.sub('\.mpg$', '.mp4', mplexed)])
+          '-Z',
+          'Normal',
+          '-i',
+          cutfile,
+          '-o',
+          re.sub('\.mpg$', '.mp4', mplexed)])
 
     os.remove(cutfile)
     os.remove(mplexed)
@@ -66,7 +66,7 @@ def remux(filename):
 
 def main():
     p = ArghParser()
-    p.add_commands([remux])
+    p.set_default_command(remux)
     p.dispatch()
 
 
