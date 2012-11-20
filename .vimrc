@@ -183,7 +183,6 @@ let g:tex_flavor = 'latex'
 let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
 
 let g:Powerline_symbols = 'compatible'
-let g:Powerline_colorscheme = 'solarized'
 
 let g:gist_detect_filetype = 1
 
@@ -211,7 +210,7 @@ if exists("&colorcolumn")
 endif
 
 autocmd InsertEnter * :set nu
-autocmd InsertEnter * :set rnu
+autocmd InsertLeave * :set rnu
 
 " }}}
 
