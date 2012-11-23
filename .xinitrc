@@ -8,12 +8,15 @@ xset dpms 0 0 180
 xset r rate 200 40
 xset b off
 
+if [[ -x '/usr/bin/blueman-applet' ]]; then
+    blueman-applet &
+fi
+
 urxvtd -q -f -o &
 redshift -l 47.22:10.09 -t 6000:4200 &
 
 #irexec &> /dev/null &
 
-workrave &> /dev/null &
 if [[ -x '/usr/bin/mpd' ]]; then
     mpd .config/mpd/mpd.conf
 fi
