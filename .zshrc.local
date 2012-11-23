@@ -4,6 +4,7 @@ PATH=$PATH:/opt/android-sdk/tools/
 PATH=$PATH:/opt/android-sdk/platform-tools/
 export EDITOR=vim
 export VISUAL=vim
+export SUDO_EDIT=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 
