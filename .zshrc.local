@@ -1,6 +1,9 @@
 PATH=$PATH:/home/$USER/bin/
 PATH=$PATH:/home/$USER/.gem/ruby/1.9.1/bin/
+PATH=$PATH:/opt/android-sdk/tools/
+PATH=$PATH:/opt/android-sdk/platform-tools/
 export EDITOR=vim
+export VISUAL=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 
@@ -77,6 +80,14 @@ greph() {
 
 pip_outdated() {
     pip freeze | cut -d = -f 1 | xargs -n 1 pip search | grep -B2 'LATEST:'
+}
+
+ffind() {
+    find ./ -type f -name "*$1*"
+}
+
+dfind() {
+    find ./ -type d -name "*$1*"
 }
 
 
