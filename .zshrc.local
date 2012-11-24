@@ -30,6 +30,8 @@ alias c="date && echo -e && cal -3m"
 alias rcp='rsync --progress'
 alias rsync="ionice -c 3 rsync"
 
+alias v='fasd -f -e vim'
+
 alias rec="ffmpeg -f x11grab -s 2048x1152 -r 150 -i :0.0 -sameq workspace/tmp/foo.mpg"
 alias :q="exit"
 
