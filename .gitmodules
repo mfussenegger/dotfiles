@@ -73,3 +73,6 @@
 [submodule ".zprezto"]
 	path = .zprezto
 	url = https://github.com/mfussenegger/prezto.git
+[submodule ".vim/bundle/puppet-syntax"]
+	path = .vim/bundle/puppet-syntax
+	url = https://github.com/vim-scripts/Puppet-Syntax-Highlighting.git
