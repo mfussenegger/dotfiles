@@ -179,6 +179,9 @@ cnoremap <C-e> <End>
 
 " plugin settings {{{
 "
+let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#popup_on_dot = 0
+
 let g:tex_flavor = 'latex'
 let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
 
@@ -360,6 +363,7 @@ augroup ft_python
     autocmd FileType python noremap <buffer> <F2> :w<CR>:!python -i "%"<CR>
     autocmd FileType python noremap <buffer> <F5> :w<CR>:!python "%"<CR>
     autocmd FileType python noremap <buffer> <F6> :w<CR>:!python -m pdb "%"<CR>
+    autocmd BufWritePost *.py call Flake8()
 augroup end
 " }}}
 "

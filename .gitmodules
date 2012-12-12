@@ -18,10 +18,6 @@
 	path = .vim/bundle/dbext
 	url = https://github.com/vim-scripts/dbext.vim.git
     ignore = untracked
-[submodule ".vim/bundle/python-mode"]
-	path = .vim/bundle/python-mode
-	url = https://github.com/klen/python-mode.git
-    ignore = untracked
 [submodule ".vim/bundle/snipmate"]
 	path = .vim/bundle/snipmate
 	url = https://github.com/mfussenegger/snipmate.vim.git
@@ -76,3 +72,9 @@
 [submodule ".vim/bundle/puppet-syntax"]
 	path = .vim/bundle/puppet-syntax
 	url = https://github.com/vim-scripts/Puppet-Syntax-Highlighting.git
+[submodule ".vim/bundle/jedi-vim"]
+	path = .vim/bundle/jedi-vim
+	url = https://github.com/davidhalter/jedi-vim.git
+[submodule ".vim/bundle/vim-flake8"]
+	path = .vim/bundle/vim-flake8
+	url = https://github.com/nvie/vim-flake8.git
