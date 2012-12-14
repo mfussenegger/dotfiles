@@ -62,6 +62,7 @@ set infercase
 set wildchar=<tab>
 set wildmenu
 set wildmode=list:longest:full,full
+set wildignore+=.pyc
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
 set tabstop=4
@@ -367,6 +368,16 @@ augroup ft_python
 augroup end
 " }}}
 "
+
+" notmuch settings {{{
+augroup ft_notmuch
+    autocmd!
+
+    autocmd FileType notmuch-folder setlocal foldmethod=manual
+    autocmd FileType notmuch-show setlocal foldmethod=manual
+augroup end
+" }}}
+
 
 " git file settings {{{
 augroup ft_git
