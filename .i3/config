@@ -23,7 +23,7 @@ client.focused_inactive #aaaaaa #000000     #aaaaaa
 client.focused          #e1aa5d #e1aa5d     #000000
 client.urgent           #a0cf5d #000000     #eeeeee
 
-new_window 1pixel
+new_window pixel 2
 workspace_auto_back_and_forth yes
 
 # Use Mouse+$mod to drag floating windows to their wanted position
@@ -45,11 +45,10 @@ bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
 
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+Left move container to output left
+bindsym $mod+Right move container to output right
+bindsym $mod+Shift+Left move workspace to output left
+bindsym $mod+Shift+Right move workspace to output right
 
 # move focused window
 bindsym $mod+Shift+J move down
@@ -85,6 +84,9 @@ bindsym $mod+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
+
+# lock screen
+bindsym $mod+Ctrl+l exec i3-msg workspace 0 && i3lock -d
 
 # focus the child container
 #bindcode $mod+d focus child
