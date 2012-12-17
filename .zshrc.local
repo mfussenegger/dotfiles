@@ -14,7 +14,6 @@ alias shutdown='sudo shutdown'
 alias lvs='sudo lvs'
 alias vgs='sudo vgs'
 alias pvs='sudo pvs'
-alias sctl="sudo systemctl"
 
 alias services="sctl -t service list-unit-files | grep -v static"
 
