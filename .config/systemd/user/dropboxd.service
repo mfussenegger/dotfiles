@@ -1,0 +1,10 @@
+[Unit]
+Description=Dropbox
+After=local-fs.target network.target
+
+[Service]
+Environment="DISPLAY=:0"
+ExecStart=/usr/bin/dropboxd
+
+[Install]
+WantedBy=graphical.target

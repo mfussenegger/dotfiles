@@ -1,3 +1,4 @@
+systemd --user & 
 xrandr --output HDMI3 --right-of HDMI1
 xrandr --output HDMI1 --primary
 
@@ -16,10 +17,6 @@ urxvtd -q -f -o &
 redshift -l 47.22:10.09 -t 6000:4200 &
 
 #irexec &> /dev/null &
-
-if [[ -x '/usr/bin/mpd' ]]; then
-    mpd .config/mpd/mpd.conf
-fi
 
 
 DIR="$HOME/workspace/Pictures/wallpapers"
