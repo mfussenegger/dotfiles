@@ -62,7 +62,7 @@ set infercase
 set wildchar=<tab>
 set wildmenu
 set wildmode=list:longest:full,full
-set wildignore+=.pyc
+set wildignore+=*.pyc,.git
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
 set tabstop=4
