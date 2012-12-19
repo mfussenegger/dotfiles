@@ -135,8 +135,6 @@ nnoremap <leader>s :%s//<left>
 nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
 
-" use very magic regex on searches by default, see :help magic
-nnoremap / /\v
 
 " buffer navigation
 noremap <c-j> :bp<cr>
