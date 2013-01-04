@@ -5,8 +5,8 @@
 " Install in ~/.vim/autoload (or ~\vimfiles\autoload).
 "
 " For management of individually installed plugins in ~/.vim/bundle (or
-" ~\vimfiles\bundle), adding `call pathogen#infect()` to your .vimrc
-" prior to `filetype plugin indent on` is the only other setup necessary.
+" ~\vimfiles\bundle), adding `call pathogen#infect()` to the top of your
+" .vimrc is the only other setup necessary.
 "
 " The API is documented inline below.  For maximum ease of reading,
 " :set foldmethod=marker
@@ -196,6 +196,10 @@ function! pathogen#fnameescape(string) " {{{1
   endif
 endfunction " }}}1
 
+if exists(':Vedit')
+  finish
+endif
+
 function! s:find(count,cmd,file,lcd) " {{{1
   let rtp = pathogen#join(1,pathogen#split(&runtimepath))
   let file = pathogen#runtime_findfile(a:file,a:count)
@@ -247,4 +251,4 @@ command! -bar -bang -range=1 -nargs=1 -complete=customlist,s:Findcomplete Vtabed
 command! -bar -bang -range=1 -nargs=1 -complete=customlist,s:Findcomplete Vpedit   :execute s:find(<count>,'pedit',<q-args>,<bang>1)
 command! -bar -bang -range=1 -nargs=1 -complete=customlist,s:Findcomplete Vread    :execute s:find(<count>,'read',<q-args>,<bang>1)
 
-" vim:set ft=vim ts=8 sw=2 sts=2:
+" vim:set et sw=2:

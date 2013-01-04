@@ -22,7 +22,7 @@ set fileencoding=utf-8
 set t_Co=256
 if has('gui_running')
     set background=dark
-    colorscheme wombat
+    colorscheme zenburn
     set guioptions-=m
     set guioptions-=T
     set guioptions-=l
