@@ -24,7 +24,7 @@ client.focused          #e1aa5d #e1aa5d     #000000
 client.urgent           #a0cf5d #000000     #eeeeee
 
 new_window pixel 2
-workspace_auto_back_and_forth yes
+workspace_auto_back_and_forth no
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
