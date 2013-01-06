@@ -24,7 +24,8 @@
     tool = vimdiff
 [alias]
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-    killbranches = !git branch | grep -v master | xargs git branch -d 2> /dev/null
+    killbranches = !git branch --merged | grep -v '^*' \
+                   | grep -v master | xargs git branch -d 2> /dev/null
     ls = ls-files
 
 [instaweb]
