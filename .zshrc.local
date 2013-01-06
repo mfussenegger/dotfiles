@@ -68,6 +68,10 @@ myoutube() {
     mplayer -vo vaapi -cache 8192 -fs $(youtube-dl -g $1)
 }
 
+pw() {
+    getpw.py $1 | xclip
+}
+
 cdl() {
     cd $1 && ll
 }
