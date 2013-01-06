@@ -8,61 +8,57 @@ export SUDO_EDIT=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 
-alias eject='sudo eject'
+# aliases
+
+### pacman 
+
 alias p='sudo spacman'
-alias shutdown='sudo shutdown'
+alias pac='packer'
+
+### sudo make me a sandwich
+
+alias eject='sudo eject'
+
+#### lvm
 alias lvs='sudo lvs'
 alias vgs='sudo vgs'
 alias pvs='sudo pvs'
+alias lvdisplay='sudo lvdisplay'
+alias pvdisplay='sudo pvdisplay'
+alias vgdisplay='sudo vgdisplay'
 
-alias services="sctl -t service list-unit-files | grep -v static"
+### systemd
 
-alias pac='packer'
-alias ipythonqt='ipython qtconsole --colors=linux'
+alias services="systemctl -t service list-unit-files | grep -v static"
 
+### yay python smtpd
 alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
 
+### shorten all the things
+alias -g L='|less'
+alias -g N='2> /dev/null'
+alias -g G='|grep'
+alias -g H='|head'
+alias -g T='|tail'
+
+alias vi='vim'
 alias s='ssh'
 alias n='nosetests3'
-alias music='ncmpcpp'
 alias c="date && echo -e && cal -3m"
-alias rcp='rsync --progress'
-alias rsync="ionice -c 3 rsync"
-
-alias v='fasd -f -e vim'
-
-alias rec="ffmpeg -f x11grab -s 2048x1152 -r 150 -i :0.0 -sameq workspace/tmp/foo.mpg"
 alias :q="exit"
-
-alias iostat="iostat -mtx"
-
-alias rdesktop="rdesktop -k de -K -z"
+alias v='fasd -f -e vim'
+alias rcp='rsync --progress'
 alias kvm="qemu-kvm -enable-kvm"
+alias rec="ffmpeg -f x11grab -s 2048x1152 -r 150 -i :0.0 -sameq workspace/tmp/foo.mpg"
 
-alias images=sxiv
+### useful defaults
+alias rsync="ionice -c 3 rsync"
+alias iostat="iostat -mtx"
+alias rdesktop="rdesktop -k de -K -z"
 
 # star trek engine noice:
 alias engage='play -n -c1 synth whitenoise band -n 100 20 band -n 50 20 gain +25  fade h 1 864000 1'
 
-for ext in png jpeg jpg gif; do alias -s $ext=sxiv; done
-for ext in avi mkv flv mp4 wmv mpg mpeg m2t ogm; do alias -s $ext=mplayer; done
-for ext in html php org com net at de; do alias -s $ext=firefox; done
-for ext in tex txt c cs; do alias -s $ext=vim; done
-alias -s pdf=zathura
-
-
-alias -g L='|less'
-alias -g N='2> /dev/null'
-alias -g G='|grep'
-
-delicious_bookmark_backup()
-{
-	curl -u $1 -o $2 https://api.del.icio.us/v1/posts/all
-}
-
-mkdircd() {
-    mkdir $1 && cd $1
-}
 
 myoutube() {
     mplayer -vo vaapi -cache 8192 -fs $(youtube-dl -g $1)
@@ -72,16 +68,8 @@ pw() {
     getpw.py $1 | xclip
 }
 
-cdl() {
-    cd $1 && ll
-}
-
-dropshadow() {
-	convert $1 \( +clone -background black -shadow 60x5+0+5 \) +swap -background white -layers merge +repage $2
-}
-
 greph() {
-    history | grep $1
+    grep $1 $HOME/.zhistory
 }
 
 pip_outdated() {
@@ -98,7 +86,7 @@ dfind() {
 
 
 # after ranger quits, cd to the chosen directory.
-ranger() {
+ra() {
     tempfile='/tmp/chosendir'
    /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
    test -f "$tempfile" &&
