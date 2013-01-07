@@ -32,8 +32,8 @@ if has('gui_running')
     set gfn=Terminus\ 12
 else
     let g:solarized_termcolors=256
-    colorscheme solarized
     set background=dark
+    colorscheme zenburn
 endif
 
 if has('win32')

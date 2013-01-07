@@ -5,7 +5,7 @@ ln -s ${PWD}/config/i3status $HOME/.config/i3status
 ln -s ${PWD}/config/systemd $HOME/.config/systemd
 ln -s ${PWD}/i3 $HOME/.i3
 ln -s ${PWD}/mplayer $HOME/.mplayer
-ln -s ${PWD}/.vim $HOME/.vim
+ln -s ${PWD}/vim $HOME/.vim
 ln -s ${PWD}/.zprezto $HOME/.zprezto
 
 # files
