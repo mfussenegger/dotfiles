@@ -1,3 +1,5 @@
+source $HOME/.zshrc.local.dyn
+
 PATH=$PATH:/home/$USER/bin/
 PATH=$PATH:/home/$USER/.gem/ruby/1.9.1/bin/
 PATH=$PATH:/opt/android-sdk/tools/
@@ -103,3 +105,4 @@ export PYTHONSTARTUP
 if [[ -x '/usr/bin/virtualenvwrapper.sh' ]]; then
     source /usr/bin/virtualenvwrapper.sh
 fi
+

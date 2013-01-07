@@ -1,1 +1,0 @@
-/home/jordi/.zprezto/runcoms/zlogout
