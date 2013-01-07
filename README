@@ -1,3 +1,24 @@
 My public dotfiles.
 
 Feel free to steal whatever you find useful.
+
+
+
+Installation
+============
+
+    git clone https://github.com/mfussenegger/dotfiles.git
+
+    cd dotfiles
+    git submodule update --init --recursive
+
+
+There is a script that will symlink all necessary files to the home directory::
+
+    ./bootstrap.sh
+
+And another script to remove all symlinks.
+
+BE CAREFUL RUNNING THIS. It uses rm -f! You might delete stuff you wanted to keep::
+
+    ./clean.sh
