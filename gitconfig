@@ -15,10 +15,9 @@
 
 [github]
     user = mfussenegger
-    token = !cat .githubtoken 2> /dev/null
 
 [push]
-    default = upstream
+    default = current
 
 [merge]
     tool = gvimdiff
