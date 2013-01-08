@@ -1,7 +1,3 @@
-[submodule ".zprezto"]
-	path = .zprezto
-	url = https://github.com/mfussenegger/prezto.git
-    ignore = untracked
 [submodule "vim/bundle/acp"]
 	path = vim/bundle/acp
 	url = https://github.com/vim-scripts/AutoComplPop.git
@@ -58,3 +54,6 @@
 	path = vim/bundle/webapi-vim
 	url = https://github.com/mattn/webapi-vim
     ignore = untracked
+[submodule "zprezto"]
+	path = zprezto
+	url = https://github.com/mfussenegger/prezto.git
