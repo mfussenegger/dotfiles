@@ -57,3 +57,6 @@
 [submodule "zprezto"]
 	path = zprezto
 	url = https://github.com/mfussenegger/prezto.git
+[submodule "vim/bundle/ack"]
+	path = vim/bundle/ack
+	url = https://github.com/mileszs/ack.vim.git
