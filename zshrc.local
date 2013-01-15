@@ -9,6 +9,7 @@ export VISUAL=vim
 export SUDO_EDIT=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
+export PYTHONDONTWRITEBYTECODE=1
 
 # aliases
 
