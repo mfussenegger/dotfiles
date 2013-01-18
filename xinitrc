@@ -18,16 +18,11 @@ redshift -l 47.22:10.09 -t 6000:4200 &
 
 #irexec &> /dev/null &
 
-
 DIR="$HOME/workspace/Pictures/wallpapers"
-
-if [[ -d "${DIR}" ]]
-then
+if [[ -d "${DIR}" ]]; then
     background=$(ls -1 $DIR | shuf -n1)
 
     hsetroot -full "${DIR}/${background}"
 fi
 
-until dbus-launch i3 &> /dev/null; do
-	true
-done
+exec dbus-launch i3

@@ -56,12 +56,6 @@ bindsym $mod+Shift+K move up
 bindsym $mod+Shift+L move right
 bindsym $mod+Shift+H move left
 
-# alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
-
 # split in horizontal orientation
 bindsym $mod+m split h
 
@@ -194,6 +188,7 @@ bindsym $mod+o exec --no-startup-id sleep 1 && $HOME/bin/ts.sh
 bindcode 172 exec mpc toggle
 bindcode 167 exec mpc next
 bindcode 166 exec mpc prev
-bindcode 123 exec amixer set Master 5%+
-bindcode 122 exec amixer set Master 5%-
-bindcode 121 exec amixer set Master toggle
+
+bindsym XF86AudioRaiseVolume exec amixer -q set Master 2%+ unmute
+bindsym XF86AudioLowerVolume exec amixer -q set Master 2%- unmute
+bindsym XF86AudioMute exec amixer -q set Master mute
