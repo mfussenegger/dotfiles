@@ -324,6 +324,10 @@ augroup ft_webdev
     autocmd FileType htmljinja,eruby,mako setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2 tw=120
 augroup end
 
+augroup ft_puppet
+    autocmd!
+    autocmd FileType puppet setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+augroup end
 
 augroup ft_dotNet
     autocmd!
@@ -366,6 +370,12 @@ augroup ft_python
 augroup end
 " }}}
 "
+
+" mutt mail settings {{{
+augroup ft_mail
+   au BufRead,BufNewFile .followup,.article,.letter,/tmp/pico*,nn.*,snd.*,/tmp/mutt* :set ft=mail
+augroup end
+
 
 " notmuch settings {{{
 augroup ft_notmuch
