@@ -70,11 +70,11 @@ myoutube() {
 }
 
 pw() {
-    getpw.py $1 | xclip
+    echo -n `getpw.py $1` | xclip
 }
 
 greph() {
-    grep $1 $HOME/.zhistory
+    history 0 | grep $1
 }
 
 pip_outdated() {
