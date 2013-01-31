@@ -63,3 +63,6 @@
 [submodule "vim/bundle/vim-gnupg"]
 	path = vim/bundle/vim-gnupg
 	url = https://git.gitorious.org/vim-gnupg/vim-gnupg.git
+[submodule "vim/bundle/salt-vim"]
+	path = vim/bundle/salt-vim
+	url = https://github.com/saltstack/salt-vim.git
