@@ -329,6 +329,11 @@ augroup ft_puppet
     autocmd FileType puppet setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
 augroup end
 
+augroup ft_yaml
+    autocmd!
+    autocmd FileType yaml setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+augroup end
+
 augroup ft_dotNet
     autocmd!
     autocmd FileType csharp,vb setlocal tabstop=8 sw=8
