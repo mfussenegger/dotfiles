@@ -29,3 +29,5 @@ rm -f $HOME/.zshenv
 rm -f $HOME/.zshrc
 rm -f $HOME/.zshrc.local
 rm -f $HOME/nose.cfg
+
+rm -f $HOME/.urlview
