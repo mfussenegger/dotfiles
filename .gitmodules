@@ -2,10 +2,6 @@
 	path = vim/bundle/acp
 	url = https://github.com/vim-scripts/AutoComplPop.git
     ignore = untracked
-[submodule "vim/bundle/command-t"]
-	path = vim/bundle/command-t
-	url = https://github.com/wincent/Command-T.git
-    ignore = untracked
 [submodule "vim/bundle/dbext"]
 	path = vim/bundle/dbext
 	url = https://github.com/vim-scripts/dbext.vim.git
@@ -66,3 +62,6 @@
 [submodule "vim/bundle/salt-vim"]
 	path = vim/bundle/salt-vim
 	url = https://github.com/saltstack/salt-vim.git
+[submodule "vim/bundle/ctrlp"]
+	path = vim/bundle/ctrlp
+	url = https://github.com/kien/ctrlp.vim.git

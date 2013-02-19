@@ -75,7 +75,7 @@ set wrap
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 " change working directory automatically
-" deactivated - command-T works better without
+" deactivated - ctrlp works better without
 " set autochdir
 "
 set scrolloff=3
@@ -135,6 +135,9 @@ nnoremap <leader>s :%s//<left>
 nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
 
+" ctrlp
+nnoremap <leader>t :CtrlP<cr>
+nnoremap <leader>b :CtrlPBuffer<cr>
 
 " buffer navigation
 noremap <c-j> :bp<cr>
