@@ -15,7 +15,7 @@ urxvt.termName: rxvt-unicode-256color
 urxvt.internalBorder: 0
 urxvt.jumpScroll: true
 urxvt*perl-lib:         /usr/lib/urxvt/perl/
-urxvt.perl-ext-common: default,matcher,searchable-scrollback
+urxvt.perl-ext-common: default,matcher,searchable-scrollback,clipboard
 urxvt.matcher.button: 1
 urxvt.pointerBlank: true
 urxvt.saveLines: 40000
@@ -24,6 +24,8 @@ urxvt.scrollTtyOutput: false
 urxvt.scrollTtyKeypress: true
 urxvt.scrollWithBuffer: true
 urxvt*url-launcher: /usr/bin/firefox
+urxvt*keysym.Mod4-c:   perl:clipboard:copy
+urxvt*keysym.Mod4-v:   perl:clipboard:paste
 urxvt*depth: 32
 
 urxvt*background: #1f1f1f
