@@ -55,7 +55,7 @@ alias :q="exit"
 alias v='fasd -f -e vim'
 alias rcp='rsync --progress'
 alias kvm="qemu-kvm -enable-kvm"
-alias rec="ffmpeg -f x11grab -s 2048x1152 -r 150 -i :0.0 -sameq workspace/tmp/foo.mpg"
+alias rec="ffmpeg -f x11grab -s 2048x1152 -r 150 -i :0.0 workspace/tmp/foo.mpg"
 
 ### useful defaults
 alias rsync="ionice -c 3 rsync"

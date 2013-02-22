@@ -65,3 +65,6 @@
 [submodule "vim/bundle/ctrlp"]
 	path = vim/bundle/ctrlp
 	url = https://github.com/kien/ctrlp.vim.git
+[submodule "vim/bundle/python-indent"]
+	path = vim/bundle/python-indent
+	url = git://github.com/hynek/vim-python-pep8-indent.git
