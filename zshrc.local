@@ -102,6 +102,11 @@ ra() {
    rm -f -- "$tempfile"
 }
 
+# kill all processes that use port $1
+portkill() {
+    lsof -i :$1 | tail -n +2 | awk '{ print $2 }' | xargs kill
+}
+
 
 PYTHONSTARTUP=~/.pythonrc.py
 export PYTHONSTARTUP
