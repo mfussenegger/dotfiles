@@ -123,6 +123,8 @@ set pastetoggle=<F8>
 " set working directory
 noremap <leader>. :lcd %:p:h<CR>
 
+noremap <leader>o :only<CR>
+
 " uppercase word in insert mode
 " inoremap <c-u> <esc>viwUea
 
@@ -201,7 +203,6 @@ let g:acp_behaviorHtmlOmniLength = 2
 let g:tagbar_compact=1
 let g:tagbar_width=28
 
-let g:pymode_rope_guess_project = 0
 
 " open nerdtree if vim was opened with no files specified
 " autocmd vimenter * if !argc() | NERDTree | endif
