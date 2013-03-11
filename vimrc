@@ -221,39 +221,6 @@ autocmd InsertLeave * :set rnu
 " }}}
 
 
-" tab label {{{
-" improved tab display shameless stolen from http://blog.golden-ratio.net/2008/08/19/using-tabs-in-vim/
-function! GuiTabLabel()
-    " add the tab number
-    let label = '['.tabpagenr()
-
-    " modified since the last save?
-    let buflist = tabpagebuflist(v:lnum)
-    for bufnr in buflist
-        if getbufvar(bufnr, '&modified')
-            let label .= '*'
-            break
-        endif
-    endfor
-
-    " count number of open windows in the tab
-    let wincount = tabpagewinnr(v:lnum, '$')
-    if wincount > 1
-        let label .= ', '.wincount
-    endif
-    let label .= '] '
-
-    " add the file name without path information
-    let n = bufname(buflist[tabpagewinnr(v:lnum) - 1])
-    let label .= fnamemodify(n, ':t')
-
-    return label
-endfunction
-
-set guitablabel=%{GuiTabLabel()}
-" }}}
-
-
 " diff modified / current file {{{
 " thanks reddit/r/vim for this gem
 " shows the diff between current modified file and the original file on disk
@@ -366,10 +333,6 @@ augroup end
 " python file settings {{{
 augroup ft_python
     autocmd!
-    " Visually Select a method / class and execute it by hitting 'Ctrl+h'
-    " method defined in ftplugin/python.vim
-    autocmd FileType python noremap <buffer> <C-i> :py evaluate_range()
-
     autocmd FileType python setlocal fileformat=unix
 
     autocmd FileType python noremap <buffer> <F2> :w<CR>:!python -i "%"<CR>
