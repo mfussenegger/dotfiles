@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ ! -d $HOME/.config/ ]]; then
+    mkdir $HOME/.config
+fi
+
 # folders
 ln -sn ${PWD}/config/i3status $HOME/.config/i3status
 ln -sn ${PWD}/config/systemd $HOME/.config/systemd
