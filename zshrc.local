@@ -107,6 +107,14 @@ portkill() {
     lsof -i :$1 | tail -n +2 | awk '{ print $2 }' | xargs kill
 }
 
+waitssh() {
+    until [ `nmap --open -p 22 $1 | grep -c "ssh"` -eq 1 ]
+    do
+        sleep 4
+    done
+    ssh $1
+}
+
 
 PYTHONSTARTUP=~/.pythonrc.py
 export PYTHONSTARTUP

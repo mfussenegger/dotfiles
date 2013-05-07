@@ -138,7 +138,7 @@ nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
 
 " ctrlp
-nnoremap <leader>t :CtrlP<cr>
+nnoremap <leader>t :CtrlPCurWD<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
 
 " buffer navigation
