@@ -1,4 +1,4 @@
-systemd --user & 
+/usr/lib/systemd/systemd --user &
 xrandr --output HDMI3 --right-of HDMI1
 xrandr --output HDMI1 --primary
 
