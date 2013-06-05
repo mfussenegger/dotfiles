@@ -115,10 +115,12 @@ set smarttab
 " template support
 autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
 
-
 " mappings {{{
 noremap <F7> :w<CR>:!./"%"<CR>
 set pastetoggle=<F8>
+
+" re-indent current line
+nnoremap <leader>f I <ESC>0d/\w<CR>i<backspace><CR><ESC>:nohlsearch<CR>
 
 " set working directory
 noremap <leader>. :lcd %:p:h<CR>
