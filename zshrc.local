@@ -82,15 +82,6 @@ pip_outdated() {
     pip freeze | cut -d = -f 1 | xargs -n 1 pip search | grep -B2 'LATEST:'
 }
 
-ffind() {
-    find ./ -type f -name "*$1*"
-}
-
-dfind() {
-    find ./ -type d -name "*$1*"
-}
-
-
 # after ranger quits, cd to the chosen directory.
 ra() {
     tempfile='/tmp/chosendir'
