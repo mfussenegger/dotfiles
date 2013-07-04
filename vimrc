@@ -127,6 +127,8 @@ noremap <leader>. :lcd %:p:h<CR>
 
 noremap <leader>o :only<CR>
 
+
+
 " uppercase word in insert mode
 " inoremap <c-u> <esc>viwUea
 
@@ -139,13 +141,17 @@ nnoremap <leader>s :%s//<left>
 nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
 
-" ctrlp
-nnoremap <leader>t :CtrlPCurWD<cr>
-nnoremap <leader>b :CtrlPBuffer<cr>
+" unite
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
-" buffer navigation
-noremap <c-j> :bp<cr>
-noremap <c-k> :bn<cr>
+"   ack
+nnoremap <leader>a :Unite grep:.<cr>
+
+"   search files
+nnoremap <leader>t :Unite -buffer-name=files -no-split -start-insert file_rec/async:!<cr>
+nnoremap <leader>f :Unite -buffer-name=files -no-split -start-insert file<cr>
+nnoremap <leader>b :Unite -buffer-name=files -no-split -start-insert buffer<cr>
+
 
 cnoremap w!! %!sudo tee > /dev/null %
 inoremap jj <Esc>
