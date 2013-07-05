@@ -1,13 +1,47 @@
-filetype off
-call pathogen#infect()
-
 " Use vim instead of vi settings.
 set nocompatible
+filetype off
+
+if has('vim_starting')
+    set runtimepath+=~/.vim/bundle/neobundle.vim
+endif
+
+
+call neobundle#rc(expand('~/.vim/bundle/'))
+
+NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/vimproc', {
+    \ 'build' : {
+    \   'unix' : 'make -f make_unix.mak',
+    \   },
+    \ }
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/unite-outline'
+NeoBundle 'Valloric/YouCompleteMe', {
+    \ 'build' : {
+    \   'unix' : 'sh install.sh',
+    \   },
+    \ }
+NeoBundle 'vim-scripts/dbext.vim'
+NeoBundle 'davidhalter/jedi-vim' " remove this once the features are in YouCompleteMe see issue #119
+NeoBundle 'mattn/webapi-vim'
+NeoBundle 'mattn/gist-vim'
+NeoBundle 'vim-scripts/linediff.vim'
+NeoBundle 'hynek/vim-python-pep8-indent'
+NeoBundle 'saltstack/salt-vim'
+NeoBundle 'mfussenegger/snipmate.vim'
+NeoBundle 'majutsushi/tagbar'
+NeoBundle 'nvie/vim-flake8'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'https://git.gitorious.org/vim-gnupg/vim-gnupg.git'
+NeoBundle 'Lokaltog/vim-powerline', {'rev': 'develop'}
 
 set shortmess+=I                    " Don't show vim welcome screen
 
 syntax on
 filetype indent plugin on
+
+NeoBundleCheck
 
 let mapleader = ","
 let maplocalleader = ";"
@@ -64,6 +98,11 @@ set wildmenu
 set wildmode=list:longest:full,full
 set wildignore+=*.pyc,.git
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
+
+
+" lower the delay of escaping out of other modes
+set timeout timeoutlen=1000 ttimeoutlen=0
+
 
 set tabstop=4
 set shiftwidth=4
@@ -141,17 +180,61 @@ nnoremap <leader>s :%s//<left>
 nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
 
+" =============================================================================
+" YouCompleteMe
+" =============================================================================
+let g:ycm_filetype_blacklist = {
+            \ 'unite' : 1,
+            \ }
+
+" =============================================================================
 " unite
+" =============================================================================
+"
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
 
-"   ack
-nnoremap <leader>a :Unite grep:.<cr>
+nnoremap [unite] <Nop>
+nmap <space> [unite]
 
-"   search files
-nnoremap <leader>t :Unite -buffer-name=files -no-split -start-insert file_rec/async:!<cr>
-nnoremap <leader>f :Unite -buffer-name=files -no-split -start-insert file<cr>
-nnoremap <leader>b :Unite -buffer-name=files -no-split -start-insert buffer<cr>
+" general fuzzy search
+nnoremap <silent> [unite]<space> :<C-u>Unite
+            \ -buffer-name=files -start-insert 
+            \ buffer file_mru bookmark file_rec/async<CR>
 
+" search for files
+nnoremap <silent> [unite]t :<C-u>Unite
+            \ -buffer-name=files -no-split -start-insert file_rec/async<CR>
+
+" quick registers
+nnoremap <silent> [unite]r :<C-u>Unite
+            \ -buffer-name=register register<CR>
+
+" buffer
+nnoremap <silent> [unite]b :<C-u>Unite
+            \ -buffer-name=files -no-split -start-insert buffer<cr>
+
+" quick outline
+nnoremap <silent> [unite]o :<C-u>Unite
+            \ -buffer-name=outline -start-insert -vertical outline<CR>
+
+" quick switch lcd
+nnoremap <silent> [unite]d :<C-u>Unite
+            \ -buffer-name=change-cwd -default-action=lcd directory_mru<CR>
+
+" grep
+nnoremap <silent> [unite]g :<C-u>Unite 
+            \ -buffer-name=grep grep:.<CR>
+
+" use ack if available
+if executable('ack')
+    let g:unite_source_grep_command = 'ack'
+    let g:unite_source_grep_default_opts = '--no-heading --no-color'
+    let g:unite_source_grep_recursive_opt = ''
+endif
+
+
+" =============================================================================
 
 cnoremap w!! %!sudo tee > /dev/null %
 inoremap jj <Esc>
@@ -167,8 +250,14 @@ noremap <F11> :setlocal spell!<CR>
 set spelllang=en,de
 
 nnoremap <F9> :TagbarToggle<CR>
-nnoremap <silent> <F10> :NERDTreeToggle<CR>
-inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
+" nnoremap <silent> <F10> :NERDTreeToggle<CR>
+" inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
+" open nerdtree if vim was opened with no files specified
+" autocmd vimenter * if !argc() | NERDTree | endif
+
+" close vim if nerdtree is the last open window
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
 
 " gnupg
 nnoremap <leader>pe :GPGEditRecipients<cr>
@@ -201,22 +290,11 @@ let g:Powerline_symbols = 'compatible'
 
 let g:gist_detect_filetype = 1
 
-" settings for acp
-let g:acp_behaviorKeyWordLength = 3
-let g:acp_behaviorHtmlOmniLength = 2
-
-
 " might need to set g:tagbar_ctags_bin
 " Settings for tagbar.vim
 let g:tagbar_compact=1
 let g:tagbar_width=28
 
-
-" open nerdtree if vim was opened with no files specified
-" autocmd vimenter * if !argc() | NERDTree | endif
-
-" close vim if nerdtree is the last open window
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 if exists("&colorcolumn")
     autocmd InsertEnter * set colorcolumn=80
