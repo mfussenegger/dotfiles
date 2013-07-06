@@ -99,7 +99,13 @@ portkill() {
 }
 
 waitssh() {
-    until [ `nmap --open -p 22 $1 | grep -c "ssh"` -eq 1 ]
+    SSH_HOST=$1
+    if [[ "$1" == *@* ]]
+    then
+        SSH_HOST=$(echo $1 | cut -d'@' -f 2)
+    fi
+    
+    until [ `nmap --open -p 22 $SSH_HOST | grep -c "ssh"` -eq 1 ]
     do
         sleep 4
     done
