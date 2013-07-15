@@ -193,6 +193,7 @@ let g:ycm_filetype_blacklist = {
 "
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
+call unite#custom#profile('files', 'filters', 'sorter_rank')
 
 nnoremap [unite] <Nop>
 nmap <space> [unite]
@@ -205,6 +206,9 @@ nnoremap <silent> [unite]<space> :<C-u>Unite
 " search for files
 nnoremap <silent> [unite]t :<C-u>Unite
             \ -buffer-name=files -no-split -start-insert file_rec/async<CR>
+
+nnoremap <silent> [unite]f :<C-u>Unite
+            \ -buffer-name=files -no-split -start-insert file<CR>
 
 " quick registers
 nnoremap <silent> [unite]r :<C-u>Unite
