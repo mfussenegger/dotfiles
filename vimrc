@@ -35,6 +35,7 @@ NeoBundle 'nvie/vim-flake8'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'https://git.gitorious.org/vim-gnupg/vim-gnupg.git'
 NeoBundle 'Lokaltog/vim-powerline', {'rev': 'develop'}
+NeoBundle 'scrooloose/nerdtree'
 
 set shortmess+=I                    " Don't show vim welcome screen
 
@@ -96,7 +97,7 @@ set infercase
 set wildchar=<tab>
 set wildmenu
 set wildmode=list:longest:full,full
-set wildignore+=*.pyc,.git
+set wildignore+=*.pyc,.git,.idea
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
 
@@ -191,21 +192,26 @@ let g:ycm_filetype_blacklist = {
 " unite
 " =============================================================================
 "
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-call unite#custom#profile('files', 'filters', 'sorter_rank')
+" call unite#filters#matcher_default#use(['matcher_fuzzy'])
+" call unite#filters#sorter_default#use(['sorter_rank'])
+" call unite#custom#profile('files', 'filters', 'sorter_rank')
 
 nnoremap [unite] <Nop>
 nmap <space> [unite]
+
+autocmd FileType unite inoremap <buffer> <F5> <ESC>:execute "normal \<Plug>(unite_redraw)"<CR>i
 
 " general fuzzy search
 nnoremap <silent> [unite]<space> :<C-u>Unite
             \ -buffer-name=files -start-insert 
             \ buffer file_mru bookmark file_rec/async<CR>
 
-" search for files
+" search for files recursive
 nnoremap <silent> [unite]t :<C-u>Unite
             \ -buffer-name=files -no-split -start-insert file_rec/async<CR>
+
+nnoremap <silent> [unite]f :<C-u>Unite
+            \ -buffer-name=files -no-split -start-insert file<CR>
 
 nnoremap <silent> [unite]f :<C-u>Unite
             \ -buffer-name=files -no-split -start-insert file<CR>
@@ -254,8 +260,9 @@ noremap <F11> :setlocal spell!<CR>
 set spelllang=en,de
 
 nnoremap <F9> :TagbarToggle<CR>
-" nnoremap <silent> <F10> :NERDTreeToggle<CR>
-" inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
+nnoremap <silent> <F10> :NERDTreeToggle<CR>
+inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
+
 " open nerdtree if vim was opened with no files specified
 " autocmd vimenter * if !argc() | NERDTree | endif
 
