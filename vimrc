@@ -100,6 +100,8 @@ set wildmode=list:longest:full,full
 set wildignore+=*.pyc,.git,.idea
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
+" do not select the end of line
+set selection=old
 
 " lower the delay of escaping out of other modes
 set timeout timeoutlen=1000 ttimeoutlen=0
@@ -136,7 +138,6 @@ set hlsearch
 set incsearch
 set gdefault
 
-
 " faster scrolling
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
@@ -160,11 +161,12 @@ noremap <F7> :w<CR>:!./"%"<CR>
 set pastetoggle=<F8>
 
 " re-indent current line
-nnoremap <leader>f I <ESC>0d/\w<CR>i<backspace><CR><ESC>:nohlsearch<CR>
+nnoremap <leader>f I <ESC>k$Ja<backspace><CR><ESC>
 
 " set working directory
 noremap <leader>. :lcd %:p:h<CR>
 
+" close all split windows except the one that is currently active
 noremap <leader>o :only<CR>
 
 
