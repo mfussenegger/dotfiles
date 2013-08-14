@@ -34,8 +34,16 @@ NeoBundle 'majutsushi/tagbar'
 NeoBundle 'nvie/vim-flake8'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'https://git.gitorious.org/vim-gnupg/vim-gnupg.git'
-NeoBundle 'Lokaltog/vim-powerline', {'rev': 'develop'}
 NeoBundle 'scrooloose/nerdtree'
+
+NeoBundle 'sgur/unite-git_grep'
+NeoBundle 'mfussenegger/unite-git'
+
+
+" deprecated and replaced with Lokaltog/powerline
+" but using the package from AUR
+" NeoBundle 'Lokaltog/vim-powerline', {'rev': 'develop'}
+
 
 set shortmess+=I                    " Don't show vim welcome screen
 
@@ -188,9 +196,9 @@ nnoremap <leader>W :match none<cr>
 " unite
 " =============================================================================
 "
-" call unite#filters#matcher_default#use(['matcher_fuzzy'])
-" call unite#filters#sorter_default#use(['sorter_rank'])
-" call unite#custom#profile('files', 'filters', 'sorter_rank')
+
+call unite#custom#profile('git/ls-files', 'matchers', ['matcher_fuzzy'])
+call unite#custom#profile('git/ls-files', 'filters', ['sorter_rank'])
 
 nnoremap [unite] <Nop>
 nmap <space> [unite]
@@ -207,10 +215,8 @@ nnoremap <silent> [unite]t :<C-u>Unite
             \ -buffer-name=files -no-split -start-insert file_rec/async<CR>
 
 nnoremap <silent> [unite]f :<C-u>Unite
-            \ -buffer-name=files -no-split -start-insert file<CR>
+            \ -buffer-name=files -no-split -start-insert git/ls-files<CR>
 
-nnoremap <silent> [unite]f :<C-u>Unite
-            \ -buffer-name=files -no-split -start-insert file<CR>
 
 " quick registers
 nnoremap <silent> [unite]r :<C-u>Unite
@@ -229,8 +235,12 @@ nnoremap <silent> [unite]d :<C-u>Unite
             \ -buffer-name=change-cwd -default-action=lcd directory_mru<CR>
 
 " grep
-nnoremap <silent> [unite]g :<C-u>Unite 
-            \ -buffer-name=grep grep:.<CR>
+nnoremap [unite]ga :<C-u>Unite
+            \ -buffer-name=grep grep:
+
+" git grep
+nnoremap [unite]gg :<C-u>Unite
+            \ -buffer-name=grep vcs_grep/git -input=
 
 " use ack if available
 if executable('ack')
