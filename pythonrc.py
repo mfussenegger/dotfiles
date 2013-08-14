@@ -7,8 +7,8 @@ complement this file.
 """
 
 try:
-    from IPython.frontend.terminal.ipapp import launch_new_instance
-    launch_new_instance()
+    from IPython import embed
+    embed()
     raise SystemExit
 except ImportError:
     print('Could not launch IPython')
