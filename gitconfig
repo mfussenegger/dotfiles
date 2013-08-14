@@ -40,3 +40,5 @@
 
 [instaweb]
     httpd = webrick
+[rebase]
+	autosquash = true
