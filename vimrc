@@ -29,8 +29,6 @@ NeoBundle 'mattn/gist-vim'
 NeoBundle 'vim-scripts/linediff.vim'
 NeoBundle 'hynek/vim-python-pep8-indent'
 NeoBundle 'saltstack/salt-vim'
-NeoBundle 'mfussenegger/snipmate.vim'
-NeoBundle 'majutsushi/tagbar'
 NeoBundle 'nvie/vim-flake8'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'https://git.gitorious.org/vim-gnupg/vim-gnupg.git'
@@ -38,6 +36,12 @@ NeoBundle 'scrooloose/nerdtree'
 
 NeoBundle 'sgur/unite-git_grep'
 NeoBundle 'mfussenegger/unite-git'
+
+NeoBundle "MarcWeber/vim-addon-mw-utils"
+NeoBundle "tomtom/tlib_vim"
+NeoBundle "garbas/vim-snipmate"
+NeoBundle "honza/vim-snippets"
+
 
 
 " deprecated and replaced with Lokaltog/powerline
@@ -191,6 +195,13 @@ nnoremap <leader>s :%s//<left>
 nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
 
+
+" =============================================================================
+" snipmate
+" =============================================================================
+"
+imap <c-J> <Plug>snipMateNextOrTrigger
+smap <c-J> <Plug>snipMateNextOrTrigger
 
 " =============================================================================
 " unite
