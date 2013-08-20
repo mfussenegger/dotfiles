@@ -42,3 +42,5 @@
     httpd = webrick
 [rebase]
 	autosquash = true
+[rerere]
+	enabled = true
