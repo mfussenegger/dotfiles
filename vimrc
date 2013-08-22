@@ -1,49 +1,78 @@
 " Use vim instead of vi settings.
 set nocompatible
-filetype off
 
 if has('vim_starting')
     set runtimepath+=~/.vim/bundle/neobundle.vim
 endif
 
-
 call neobundle#rc(expand('~/.vim/bundle/'))
-
 NeoBundleFetch 'Shougo/neobundle.vim'
+
+" for async commands (NeoBundle, Unite)
 NeoBundle 'Shougo/vimproc', {
     \ 'build' : {
     \   'unix' : 'make -f make_unix.mak',
     \   },
     \ }
+
+" unite stuff
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/unite-outline'
+NeoBundleLazy 'Shougo/unite-outline', {'autoload': {'unite_sources': 'outline'}}
+NeoBundleLazy 'osyo-manga/unite-quickfix', {'autoload':{'unite_sources':
+            \ ['quickfix', 'location_list']}}
+NeoBundle 'mfussenegger/unite-git'
+
+" generic plugins {{{
+
 NeoBundle 'Valloric/YouCompleteMe', {
     \ 'build' : {
     \   'unix' : 'sh install.sh',
     \   },
     \ }
-NeoBundle 'vim-scripts/dbext.vim'
-NeoBundle 'davidhalter/jedi-vim' " remove this once the features are in YouCompleteMe see issue #119
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'mattn/gist-vim'
 NeoBundle 'vim-scripts/linediff.vim'
-NeoBundle 'hynek/vim-python-pep8-indent'
-NeoBundle 'saltstack/salt-vim'
-NeoBundle 'nvie/vim-flake8'
-NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'https://git.gitorious.org/vim-gnupg/vim-gnupg.git'
+NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'scrooloose/nerdtree'
 
-NeoBundle 'sgur/unite-git_grep'
-NeoBundle 'mfussenegger/unite-git'
+" }}}
 
-NeoBundle "MarcWeber/vim-addon-mw-utils"
-NeoBundle "tomtom/tlib_vim"
-NeoBundle "garbas/vim-snipmate"
-NeoBundle "honza/vim-snippets"
+NeoBundle 'SirVer/ultisnips'
+
+" sql
+NeoBundle 'vim-scripts/dbext.vim'
+
+" python {{{
+
+" remove this once the features are in YouCompleteMe see issue #119
+NeoBundleLazy 'davidhalter/jedi-vim', {'autoload': {'filetypes': ['python']}}
+NeoBundleLazy 'hynek/vim-python-pep8-indent', {'autoload': {'filetypes': ['python']}}
+NeoBundleLazy 'nvie/vim-flake8', {'autoload': {'filetypes': ['python']}}
 
 
+" }}}
 
+" salt
+NeoBundle 'saltstack/salt-vim'
+
+" Syntax {{{
+
+NeoBundleLazy 'vim-scripts/JSON.vim', {'autoload': {'filetypes': ['json']}}
+
+" }}}
+
+" HTML/CSS {{{
+
+NeoBundleLazy 'othree/html5.vim', {'autoload':
+            \ {'filetypes': ['html', 'xhttml', 'css']}}
+
+" }}}
+
+
+NeoBundleCheck
+
+" powerline
 " deprecated and replaced with Lokaltog/powerline
 " but using the package from AUR
 " NeoBundle 'Lokaltog/vim-powerline', {'rev': 'develop'}
@@ -54,11 +83,11 @@ set shortmess+=I                    " Don't show vim welcome screen
 syntax on
 filetype indent plugin on
 
-NeoBundleCheck
 
 let mapleader = ","
-let maplocalleader = ";"
+let maplocalleader = " "
 
+set history=200
 set lazyredraw
 set hidden
 set nopaste
@@ -108,7 +137,7 @@ set infercase
 "
 set wildchar=<tab>
 set wildmenu
-set wildmode=list:longest:full,full
+set wildmode=list:longest,full
 set wildignore+=*.pyc,.git,.idea
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
@@ -195,13 +224,12 @@ nnoremap <leader>s :%s//<left>
 nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
 
+" =============================================================================
+" ultiSnips
+" =============================================================================
 
-" =============================================================================
-" snipmate
-" =============================================================================
-"
-imap <c-J> <Plug>snipMateNextOrTrigger
-smap <c-J> <Plug>snipMateNextOrTrigger
+" <tab> is already used by YouCompleteMe, so use <c-j> as expand trigger
+let g:UltiSnipsExpandTrigger="<c-j>"
 
 " =============================================================================
 " unite
@@ -210,56 +238,52 @@ smap <c-J> <Plug>snipMateNextOrTrigger
 
 call unite#custom#profile('git/ls-files', 'matchers', ['matcher_fuzzy'])
 call unite#custom#profile('git/ls-files', 'filters', ['sorter_rank'])
-
-nnoremap [unite] <Nop>
-nmap <space> [unite]
-
-autocmd FileType unite inoremap <buffer> <F5> <ESC>:execute "normal \<Plug>(unite_redraw)"<CR>i
+call unite#custom#source('file_mru,file_rec,file_rec/async,grep,locate',
+            \ 'ignore_pattern', join(['\.git/', 'tmp/', 'bundle/'], '\|'))
 
 " general fuzzy search
-nnoremap <silent> [unite]<space> :<C-u>Unite
+nnoremap <silent><localleader><space> :Unite
             \ -buffer-name=files -start-insert 
             \ buffer file_mru bookmark file_rec/async<CR>
 
 " search for files recursive
-nnoremap <silent> [unite]t :<C-u>Unite
+nnoremap <silent><localleader>t :Unite
             \ -buffer-name=files -no-split -start-insert file_rec/async<CR>
 
-nnoremap <silent> [unite]f :<C-u>Unite
+nnoremap <silent><localleader>f :Unite
             \ -buffer-name=files -no-split -start-insert git/ls-files<CR>
 
 
 " quick registers
-nnoremap <silent> [unite]r :<C-u>Unite
-            \ -buffer-name=register register<CR>
+nnoremap <silent><localleader>r :Unite -buffer-name=register register<CR>
 
 " buffer
-nnoremap <silent> [unite]b :<C-u>Unite
+nnoremap <silent><localleader>b :Unite
             \ -buffer-name=files -no-split -start-insert buffer<cr>
 
 " quick outline
-nnoremap <silent> [unite]o :<C-u>Unite
+nnoremap <silent><localleader>o :Unite -silent -direction=topleft -winwidth=40
             \ -buffer-name=outline -start-insert -vertical outline<CR>
 
 " quick switch lcd
-nnoremap <silent> [unite]d :<C-u>Unite
+nnoremap <silent><localleader>d :Unite -toggle
             \ -buffer-name=change-cwd -default-action=lcd directory_mru<CR>
 
-" grep
-nnoremap [unite]ga :<C-u>Unite
-            \ -buffer-name=grep grep:
+" tasks
+nnoremap <silent><localleader>; :Unite -silent -toggle
+            \ grep:.::FIXME\|TODO\|XXX<CR>
 
-" git grep
-nnoremap [unite]gg :<C-u>Unite
-            \ -buffer-name=grep vcs_grep/git -input=
+" grep
+nnoremap <localleader>g :Unite -silent -no-quit grep<CR>
+
 
 " use ack if available
 if executable('ack')
     let g:unite_source_grep_command = 'ack'
-    let g:unite_source_grep_default_opts = '--no-heading --no-color'
+    let g:unite_source_grep_default_opts = '--no-group --no-color'
     let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_search_word_highlight = 1
 endif
-
 
 " =============================================================================
 
@@ -297,7 +321,11 @@ nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gci :Gcommit<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gg :exe 'silent Ggrep -i '.input("Pattern: ")<Bar>Unite
+            \ quickfix -no-quit<CR>
+nnoremap <leader>gl :exe "silent Glog <Bar> Unite -no-quit
+            \ quickfix"<CR>:redraw!<CR>
 
 " }}}
 
