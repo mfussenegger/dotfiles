@@ -48,7 +48,7 @@ NeoBundle 'vim-scripts/dbext.vim'
 " remove this once the features are in YouCompleteMe see issue #119
 NeoBundleLazy 'davidhalter/jedi-vim', {'autoload': {'filetypes': ['python']}}
 NeoBundleLazy 'hynek/vim-python-pep8-indent', {'autoload': {'filetypes': ['python']}}
-NeoBundleLazy 'nvie/vim-flake8', {'autoload': {'filetypes': ['python']}}
+NeoBundleLazy 'alfredodeza/khuno.vim', {'autoload': {'filetypes': ['python']}}
 
 
 " }}}
@@ -223,6 +223,15 @@ nnoremap <leader>s :%s//<left>
 " highlight trailing whitespaces
 nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
+
+
+" =============================================================================
+" khuno
+" =============================================================================
+
+" color column is enough for me to try to stick to 79 columns
+" so relax with warnings a bit
+let g:khuno_max_line_length = 99
 
 " =============================================================================
 " ultiSnips
@@ -480,7 +489,6 @@ augroup ft_python
     autocmd FileType python noremap <buffer> <F2> :w<CR>:!python -i "%"<CR>
     autocmd FileType python noremap <buffer> <F5> :w<CR>:!python "%"<CR>
     autocmd FileType python noremap <buffer> <F6> :w<CR>:!python -m pdb "%"<CR>
-    autocmd BufWritePost *.py call Flake8()
 augroup end
 " }}}
 "
