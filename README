@@ -2,8 +2,6 @@ My public dotfiles.
 
 Feel free to steal whatever you find useful.
 
-
-
 Installation
 ============
 
@@ -17,8 +15,12 @@ There is a script that will symlink all necessary files to the home directory::
 
     ./bootstrap.sh
 
+The script uses GNU stow to create most of the symlinks. Make sure to install
+it before calling bootstrap.sh
+
 And another script to remove all symlinks.
 
-BE CAREFUL RUNNING THIS. It uses rm -f! You might delete stuff you wanted to keep::
+BE CAREFUL RUNNING THIS. It uses rm -f! You might delete stuff you wanted to
+keep::
 
     ./clean.sh
