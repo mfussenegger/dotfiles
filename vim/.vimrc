@@ -70,12 +70,10 @@ NeoBundleLazy 'othree/html5.vim', {'autoload':
 " }}}
 
 
+NeoBundle 'bling/vim-airline'
+
 NeoBundleCheck
 
-" powerline
-" deprecated and replaced with Lokaltog/powerline
-" but using the package from AUR
-" NeoBundle 'Lokaltog/vim-powerline', {'rev': 'develop'}
 
 
 set shortmess+=I                    " Don't show vim welcome screen
