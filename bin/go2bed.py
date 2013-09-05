@@ -70,6 +70,7 @@ def main():
     seconds_to_sleep = minutes_to_sleep * 60
 
     call('sudo rtcwake -m mem -s {0}'.format(seconds_to_sleep), shell=True)
+    time.sleep(60)  # time for pc to wake up
     p = Process(target=max_volume)
     p.start()
     try:
