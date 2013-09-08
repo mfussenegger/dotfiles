@@ -19,6 +19,7 @@ stow shell
 stow vim
 stow pentadactyl
 stow i3
+stow git
 stow mplayer
 
 if [[ ! -d $HOME/.pip_cache/ ]]; then
