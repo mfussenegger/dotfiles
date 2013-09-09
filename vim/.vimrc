@@ -35,6 +35,8 @@ NeoBundle 'vim-scripts/linediff.vim'
 NeoBundle 'https://git.gitorious.org/vim-gnupg/vim-gnupg.git'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'bling/vim-airline'
 
 " }}}
 
@@ -48,7 +50,6 @@ NeoBundle 'vim-scripts/dbext.vim'
 " remove this once the features are in YouCompleteMe see issue #119
 NeoBundleLazy 'davidhalter/jedi-vim', {'autoload': {'filetypes': ['python']}}
 NeoBundleLazy 'hynek/vim-python-pep8-indent', {'autoload': {'filetypes': ['python']}}
-NeoBundleLazy 'alfredodeza/khuno.vim', {'autoload': {'filetypes': ['python']}}
 
 
 " }}}
@@ -70,7 +71,6 @@ NeoBundleLazy 'othree/html5.vim', {'autoload':
 " }}}
 
 
-NeoBundle 'bling/vim-airline'
 
 NeoBundleCheck
 
