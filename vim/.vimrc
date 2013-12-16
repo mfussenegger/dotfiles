@@ -34,9 +34,11 @@ NeoBundle 'mattn/gist-vim'
 NeoBundle 'vim-scripts/linediff.vim'
 NeoBundle 'https://git.gitorious.org/vim-gnupg/vim-gnupg.git'
 NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-sensible'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'bling/vim-airline'
+NeoBundle 'sjl/gundo.vim'
 
 " }}}
 
@@ -74,18 +76,11 @@ NeoBundleLazy 'othree/html5.vim', {'autoload':
 
 NeoBundleCheck
 
-
-
 set shortmess+=I                    " Don't show vim welcome screen
-
-syntax on
-filetype indent plugin on
-
 
 let mapleader = ","
 let maplocalleader = " "
 
-set history=200
 set lazyredraw
 set hidden
 set nopaste
@@ -118,23 +113,18 @@ endif
 
 set ttyfast
 
-set showmatch
+" show matching parenthesis a bit faster.
 set matchtime=3
 
 set cmdheight=2
-set laststatus=2                            " always have a status line
-set ruler
 set rnu numberwidth=4
 set mouse=a
 set cursorline
-set backspace=2                             " allow backspacing over indent, eol, start
 
-set complete=.,t,i,b,w,k
 set completeopt=longest,menuone,preview
 set infercase
 "
 set wildchar=<tab>
-set wildmenu
 set wildmode=list:longest,full
 set wildignore+=*.pyc,.git,.idea
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
@@ -153,12 +143,6 @@ set expandtab
 set shiftround
 set nowrap
 
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
-
-" change working directory automatically
-" deactivated - ctrlp works better without
-" set autochdir
-"
 set scrolloff=3
 
 if has("folding")
@@ -174,7 +158,6 @@ autocmd VimResized * :wincmd =
 set ignorecase
 set smartcase
 set hlsearch
-set incsearch
 set gdefault
 
 " faster scrolling
@@ -189,8 +172,6 @@ set noswapfile
 
 " indent settings
 set smartindent
-set smarttab
-
 
 " template support
 autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
@@ -224,14 +205,6 @@ nnoremap <leader>W :match none<cr>
 
 
 " =============================================================================
-" khuno
-" =============================================================================
-
-" color column is enough for me to try to stick to 79 columns
-" so relax with warnings a bit
-let g:khuno_max_line_length = 99
-
-" =============================================================================
 " ultiSnips
 " =============================================================================
 
@@ -250,7 +223,7 @@ call unite#custom#source('file_mru,file_rec,file_rec/async,grep,locate',
 
 " general fuzzy search
 nnoremap <silent><localleader><space> :Unite
-            \ -buffer-name=files -start-insert 
+            \ -buffer-name=files -start-insert
             \ buffer file_mru bookmark file_rec/async<CR>
 
 " search for files recursive
