@@ -219,7 +219,7 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 call unite#custom#profile('git/ls-files', 'matchers', ['matcher_fuzzy'])
 call unite#custom#profile('git/ls-files', 'filters', ['sorter_rank'])
 call unite#custom#source('file_mru,file_rec,file_rec/async,grep,locate',
-            \ 'ignore_pattern', join(['\.git/', 'tmp/', 'bundle/'], '\|'))
+            \ 'ignore_pattern', join(['\.pyc$', '\.pyo', '\.git/', 'tmp/', 'bundle/'], '\|'))
 
 " general fuzzy search
 nnoremap <silent><localleader><space> :Unite
