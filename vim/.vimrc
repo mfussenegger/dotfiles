@@ -73,6 +73,13 @@ NeoBundleLazy 'othree/html5.vim', {'autoload':
 " }}}
 
 
+" antlr {{{
+
+NeoBundleLazy 'rollxx/vim-antlr', {'autoload':
+            \ {'filetypes': ['antlr3']}}
+
+" }}}
+
 
 NeoBundleCheck
 
@@ -487,6 +494,12 @@ augroup end
 
 " }}}
 
+" antlr file settings {{{
+augroup ft_antlr
+    au BufRead,BufNewFile *.g setlocal ft=antlr3
+augroup end
+
+" }}}
 
 " Vimscript file settings {{{
 augroup ft_vim
