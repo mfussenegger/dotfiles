@@ -37,6 +37,7 @@
     ls = ls-files
     wtf = !$ZSH/bin/git-wtf
     up = !$ZSH/bin/git-up
+    fixup = !git commit --fixup $(git rev-parse HEAD)
 
 [instaweb]
     httpd = webrick
