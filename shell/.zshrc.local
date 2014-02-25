@@ -91,6 +91,32 @@ ra() {
    rm -f -- "$tempfile"
 }
 
+merge() {
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    gf origin
+    g rebase -p origin/master
+    g rebase -i origin/master
+    g push -f
+    g checkout master
+    g merge $BRANCH
+    g killbranches
+}
+
+pull_request() {
+    if [[ -z "$1" ]] then
+        TARGET_BRANCH="master"
+    else
+        TARGET_BRANCH=$1
+    fi
+
+    if [[ -z "$2" ]] then
+        GH_USER="crate"
+    else
+        GH_USER=$2
+    fi
+    gh pull-request -b $TARGET_BRANCH -h $GH_USER:$(git rev-parse --abbrev-ref HEAD)
+}
+
 # kill all processes that use port $1
 portkill() {
     lsof -i :$1 | tail -n +2 | awk '{ print $2 }' | xargs kill
