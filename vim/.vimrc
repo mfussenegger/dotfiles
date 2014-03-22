@@ -47,7 +47,7 @@ NeoBundle 'sjl/gundo.vim'
 NeoBundle 'SirVer/ultisnips'
 
 " sql
-NeoBundle 'vim-scripts/dbext.vim'
+NeoBundle 'mfussenegger/dbext.vim'
 
 " python {{{
 
