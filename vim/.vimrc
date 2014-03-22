@@ -21,6 +21,8 @@ NeoBundleLazy 'Shougo/unite-outline', {'autoload': {'unite_sources': 'outline'}}
 NeoBundleLazy 'osyo-manga/unite-quickfix', {'autoload':{'unite_sources':
             \ ['quickfix', 'location_list']}}
 NeoBundle 'mfussenegger/unite-git'
+NeoBundle 'tsukkee/unite-tag'
+NeoBundle 'Shougo/neomru.vim'
 
 " generic plugins {{{
 
@@ -235,6 +237,9 @@ nnoremap <silent><localleader><space> :Unite
 
 " search for files recursive
 nnoremap <silent><localleader>t :Unite
+            \ -buffer-name=files -no-split -start-insert tag<CR>
+
+nnoremap <silent><localleader>a :Unite
             \ -buffer-name=files -no-split -start-insert file_rec/async<CR>
 
 nnoremap <silent><localleader>f :Unite
