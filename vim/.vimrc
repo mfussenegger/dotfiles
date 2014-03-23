@@ -45,6 +45,7 @@ NeoBundle 'sjl/gundo.vim'
 " }}}
 
 NeoBundle 'SirVer/ultisnips'
+NeoBundle 'mfussenegger/vim-snippets'
 
 " sql
 NeoBundle 'mfussenegger/dbext.vim'
@@ -296,13 +297,6 @@ nnoremap <F9> :TagbarToggle<CR>
 nnoremap <silent> <F10> :NERDTreeToggle<CR>
 inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
 
-" open nerdtree if vim was opened with no files specified
-" autocmd vimenter * if !argc() | NERDTree | endif
-
-" close vim if nerdtree is the last open window
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
-
 " gnupg
 nnoremap <leader>pe :GPGEditRecipients<cr>
 nnoremap <leader>pv :GPGViewRecipients<cr>
@@ -410,6 +404,12 @@ if has("autocmd") && exists("+omnifunc")
                 \ endif
 endif
 
+
+function! Tags()
+    silent !git ls-files | xargs ctags
+endfunction
+command! Tags call Tags()
+
 " ----- file type settings
 "
 " automatically give execute permissions
@@ -421,7 +421,6 @@ function! ModeChange()
     endif
 endfunction
 autocmd BufWritePost *.sh call ModeChange()
-
 
 augroup ft_webdev
     autocmd!
