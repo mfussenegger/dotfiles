@@ -12,3 +12,5 @@ try:
     raise SystemExit
 except ImportError:
     print('Could not launch IPython')
+except ValueError:
+    pass
