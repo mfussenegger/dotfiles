@@ -38,6 +38,7 @@
     wtf = !$ZSH/bin/git-wtf
     up = !$ZSH/bin/git-up
     fixup = !git commit --fixup $(git rev-parse HEAD)
+    serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
 
 [instaweb]
     httpd = webrick
