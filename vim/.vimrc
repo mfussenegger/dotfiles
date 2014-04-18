@@ -229,7 +229,8 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 call unite#custom#profile('git/ls-files', 'matchers', ['matcher_fuzzy'])
 call unite#custom#profile('git/ls-files', 'filters', ['sorter_rank'])
 call unite#custom#source('file_mru,file_rec,file_rec/async,grep,locate',
-            \ 'ignore_pattern', join(['\.pyc$', '\.pyo', '\.git/', 'tmp/', 'bundle/'], '\|'))
+            \ 'ignore_pattern', join(['\.pyc$', '\.pyo', '\.git/',
+            \ '\.venv/', 'tmp/', 'bundle/'], '\|'))
 
 " general fuzzy search
 nnoremap <silent><localleader><space> :Unite
@@ -331,6 +332,10 @@ let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
 let g:Powerline_symbols = 'compatible'
 
 let g:gist_detect_filetype = 1
+
+let g:syntastic_python_checkers=['frosted']
+
+let NERDTreeIgnore = ['^develop-eggs$', '\.egg-info$']
 
 " might need to set g:tagbar_ctags_bin
 " Settings for tagbar.vim
