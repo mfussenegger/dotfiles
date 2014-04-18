@@ -171,12 +171,12 @@ assign [class="Gajim.py"] 9
 
 # workspace settings
 
-workspace 1 output HDMI1
-workspace 2 output HDMI1
-workspace 3 output HDMI1
-workspace 7 output HDMI3
-workspace 8 output HDMI3
-workspace 9 output HDMI3
+workspace 1 output DVI-I-3
+workspace 2 output DVI-I-3
+workspace 3 output DVI-I-3
+workspace 7 output DVI-I-2
+workspace 8 output DVI-I-2
+workspace 9 output DVI-I-2
 
 # scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -189,6 +189,6 @@ bindcode 172 exec mpc toggle
 bindcode 167 exec mpc next
 bindcode 166 exec mpc prev
 
-bindsym XF86AudioRaiseVolume exec amixer -q set Master 2%+ unmute
-bindsym XF86AudioLowerVolume exec amixer -q set Master 2%- unmute
-bindsym XF86AudioMute exec amixer -q set Master mute
+bindsym XF86AudioRaiseVolume exec amixer -q set Master 2%+ unmute && killall -USR1 i3status
+bindsym XF86AudioLowerVolume exec amixer -q set Master 2%- unmute && killall -USR1 i3status
+bindsym XF86AudioMute exec amixer -q set Master mute && killall -USR1 i3status
