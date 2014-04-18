@@ -279,6 +279,16 @@ if executable('ack')
     let g:unite_source_grep_search_word_highlight = 1
 endif
 
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings() "{{{
+" Overwrite settings.
+  nmap <buffer> <ESC> <Plug>(unite_exit)
+  imap <buffer> <C-j> <Plug>(unite_select_next_line)
+  imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+  imap <silent><buffer><expr> <C-s> unite#do_action('split')
+  imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+endfunction "}}}
+
 " =============================================================================
 
 cnoremap w!! %!sudo tee > /dev/null %
