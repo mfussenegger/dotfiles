@@ -83,6 +83,9 @@ NeoBundleLazy 'rollxx/vim-antlr', {'autoload':
 
 " }}}
 
+" systemd {{{
+NeoBundle "Matt-Stevens/vim-systemd-syntax"
+" }}}
 
 NeoBundleCheck
 
