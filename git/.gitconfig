@@ -21,6 +21,7 @@
 
 [merge]
     tool = gvimdiff
+    conflictstyle = diff3
 
 [mergetool]
     keepBackup = false
