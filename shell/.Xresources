@@ -23,7 +23,7 @@ urxvt.scrollBar: false
 urxvt.scrollTtyOutput: false
 urxvt.scrollTtyKeypress: true
 urxvt.scrollWithBuffer: true
-urxvt*url-launcher: /usr/bin/firefox
+urxvt*url-launcher: /usr/bin/dwb
 urxvt*keysym.Mod4-c:   perl:clipboard:copy
 urxvt*keysym.Mod4-v:   perl:clipboard:paste
 
