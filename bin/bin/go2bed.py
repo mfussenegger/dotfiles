@@ -45,16 +45,34 @@ def inc_vol():
 
 
 def max_volume():
-    while get_vol() < 100:
+    while get_vol() < 80:
         inc_vol()
         time.sleep(10)
+
+def parse_arg(arg):
+    sleep_cycles = 0
+    try:
+        sleep_cycles = int(arg)
+    except ValueError:
+        now = datetime.now()
+        dt = datetime.strptime(arg, '%H:%M')
+        dt = dt.replace(year=now.year, month=now.month, day=now.day)
+        dt += timedelta(1)
+        dt -= timedelta(minutes=20)
+        print(dt)
+        print(now)
+        delta = dt - now
+        minutes = delta.total_seconds() / 60
+        sleep_cycles = minutes / 90.
+    return sleep_cycles
 
 
 def main():
     if len(sys.argv) >= 2:
-        sleep_cycles = int(sys.argv[1])
+        sleep_cycles = parse_arg(sys.argv[1])
     else:
         sleep_cycles = get_sleep_cycles()
+    print('sleep cycles: ' + str(sleep_cycles))
 
     # 20 minutes to fall asleep
     minutes_to_sleep = (sleep_cycles * 90 + 20)
@@ -67,10 +85,10 @@ def main():
     except KeyboardInterrupt:
         exit()
 
-    seconds_to_sleep = minutes_to_sleep * 60
+    seconds_to_sleep = int((minutes_to_sleep - 2) * 60)
 
     call('sudo rtcwake -m mem -s {0}'.format(seconds_to_sleep), shell=True)
-    time.sleep(60)  # time for pc to wake up
+    time.sleep(2 * 60)  # time for pc to wake up
     p = Process(target=max_volume)
     p.start()
     try:
