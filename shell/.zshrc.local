@@ -1,5 +1,5 @@
 PATH=$PATH:/home/$USER/bin/
-PATH=$PATH:/home/$USER/.gem/ruby/2.0.0/bin/
+PATH=$PATH:/home/$USER/.gem/ruby/2.1.0/bin/
 PATH=$PATH:/opt/android-sdk/tools/
 PATH=$PATH:/opt/android-sdk/platform-tools/
 export EDITOR=vim
