@@ -21,6 +21,7 @@ stow pentadactyl
 stow i3
 stow git
 stow mplayer
+stow dwb
 
 if [[ ! -d $HOME/.pip_cache/ ]]; then
     mkdir $HOME/.pip_cache
