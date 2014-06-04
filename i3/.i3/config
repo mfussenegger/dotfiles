@@ -39,6 +39,7 @@ bindsym $mod+Shift+Q kill
 # start dmenu (a program launcher)
 bindsym $mod+p exec dmenu_run
 
+
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -183,6 +184,7 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
 bindsym $mod+o exec --no-startup-id sleep 1 && $HOME/bin/ts.sh
+bindsym $mod+i exec $HOME/bin/passmenu.sh
 
 # additional keybindings
 bindcode 172 exec mpc toggle
