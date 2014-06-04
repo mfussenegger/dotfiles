@@ -14,7 +14,7 @@ export PIP_DOWNLOAD_CACHE=$HOME/.pip_cache
 
 # aliases
 
-### pacman 
+### pacman
 
 alias p='sudo spacman'
 alias pac='packer'
@@ -120,15 +120,23 @@ ra() {
 }
 
 merge() {
+    if [[ -z "$1" ]] then
+        TARGET_BRANCH="master"
+    else
+        TARGET_BRANCH=$1
+    fi
     BRANCH=$(git rev-parse --abbrev-ref HEAD)
     gf origin
-    g rebase -p origin/master
-    g rebase -i origin/master
+    g rebase -p origin/$TARGET_BRANCH
+    g rebase -i origin/$TARGET_BRANCH
     g push -f
-    g checkout master
-    g merge --ff-only origin/master
+    g checkout $TARGET_BRANCH
+    g merge --ff-only origin/$TARGET_BRANCH
     g merge $BRANCH
-    g killbranches
+
+    if [[ $TARGET_BRANCH -eq "master" ]] then
+        g killbranches
+    fi
 }
 
 pull_request() {
@@ -146,10 +154,12 @@ pull_request() {
     gh pull-request -b $TARGET_BRANCH -h $GH_USER:$(git rev-parse --abbrev-ref HEAD)
 }
 
+
 # kill all processes that use port $1
 portkill() {
     lsof -i :$1 | tail -n +2 | awk '{ print $2 }' | xargs kill
 }
+
 
 waitssh() {
     SSH_HOST=$1
@@ -157,7 +167,7 @@ waitssh() {
     then
         SSH_HOST=$(echo $1 | cut -d'@' -f 2)
     fi
-    
+
     until [ `nmap --open -p 22 $SSH_HOST | grep -c "ssh"` -eq 1 ]
     do
         sleep 4
