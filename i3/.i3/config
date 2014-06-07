@@ -185,6 +185,7 @@ bindsym $mod+minus scratchpad show
 
 bindsym $mod+o exec --no-startup-id sleep 1 && $HOME/bin/ts.sh
 bindsym $mod+i exec $HOME/bin/passmenu.sh
+bindsym $mod+u exec $HOME/bin/dm.py
 
 # additional keybindings
 bindcode 172 exec mpc toggle
