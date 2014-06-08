@@ -25,7 +25,6 @@ def cmd_xrandr_on():
     outputs = output(grep(xrandr(), ' connected')).split('\n')
     outputs = [o.split(' ')[0] for o in outputs
                if not OUTPUT_ACTIVE_REX.match(o)]
-    print(outputs)
     if len(outputs) > 1:
         outputs = output(dmenu(echo('\n'.join(outputs)))).split('\n')
     if not outputs:
@@ -48,8 +47,6 @@ def cmd_xrandr_on():
 
 def _get_active_outputs():
     outputs = output(grep(xrandr(), ' connected')).split('\n')
-    for o in outputs:
-        print(o)
     return [o.split(' ')[0] for o in outputs
             if OUTPUT_ACTIVE_REX.match(o)]
 
