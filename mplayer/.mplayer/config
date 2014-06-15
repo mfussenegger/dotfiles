@@ -1,4 +1,29 @@
 # Write your default config options here!
 vo=vaapi
+double=yes
+
+font=/usr/share/fonts/TTF/calibri.ttf
+subfont-text-scale="3.7"    #truetype font scaling
+subfont-blur="1"            #Slight blur
+
+# Set subtitle position. (100: as low as possible)
+subpos=100
+#
+# # Set subtitle alignment at its position. (2: bottom)
+subalign=2
+
+# Align subs. (-1: as they want to align themselves)
+spualign=-1
+#
+# # Anti-alias subs. (4: best and slowest)
+spuaa=4
+#
+# # Set language.
+slang=en,eng
 
 
+# Set autoscale coefficient. (default: 6)
+subfont-osd-scale=4.4
+
+
+ass=true
