@@ -64,6 +64,10 @@ alias rdesktop="rdesktop -k de -K -z"
 alias engage='play -n -c1 synth whitenoise band -n 100 20 band -n 50 20 gain +25  fade h 1 864000 1'
 
 
+alias benice="renice -n 19 -p $$ && ionice -c3 -p $$ && ionice -p $$"
+alias berude="sudo renice -n -19 -p $$ && sudo ionice -c1 -p $$ && ionice -p $$"
+
+
 myoutube() {
     mplayer -vo vaapi -cache 8192 -fs $(youtube-dl -g $1)
 }
