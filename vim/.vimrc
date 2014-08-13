@@ -113,7 +113,6 @@ if has('gui_running')
     set guioptions-=R
     set gfn=Terminus\ 12
 else
-    let g:solarized_termcolors=256
     set background=dark
     colorscheme zenburn
 endif
@@ -340,8 +339,6 @@ let g:jedi#popup_on_dot = 0
 
 let g:tex_flavor = 'latex'
 let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
-
-let g:Powerline_symbols = 'compatible'
 
 let g:gist_detect_filetype = 1
 
