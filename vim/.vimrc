@@ -190,7 +190,6 @@ set smartindent
 autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
 
 " mappings {{{
-noremap <F7> :w<CR>:!./"%"<CR>
 set pastetoggle=<F8>
 
 " re-indent current line
@@ -485,10 +484,6 @@ augroup end
 augroup ft_python
     autocmd!
     autocmd FileType python setlocal fileformat=unix
-
-    autocmd FileType python noremap <buffer> <F2> :w<CR>:!python -i "%"<CR>
-    autocmd FileType python noremap <buffer> <F5> :w<CR>:!python "%"<CR>
-    autocmd FileType python noremap <buffer> <F6> :w<CR>:!python -m pdb "%"<CR>
 augroup end
 " }}}
 "
