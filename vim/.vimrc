@@ -309,6 +309,8 @@ nnoremap <F9> :TagbarToggle<CR>
 nnoremap <silent> <F10> :NERDTreeToggle<CR>
 inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
 
+nnoremap <F5> :GundoToggle<CR>
+
 " gnupg
 nnoremap <leader>pe :GPGEditRecipients<cr>
 nnoremap <leader>pv :GPGViewRecipients<cr>
