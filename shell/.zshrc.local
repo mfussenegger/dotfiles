@@ -143,6 +143,21 @@ merge() {
     fi
 }
 
+share_internet() {
+    if [[ -z "$1" ]] then
+        echo "share_internet <dev with clients> <dev with internet>"
+        return 1
+    fi
+    if [[ -z "$2" ]] then
+        echo "share_internet <dev with clients> <dev with internet>"
+        return 1
+    fi
+    # share_internet from(dev with clients) to (dev with internet)
+    sudo sysctl net.ipv4.ip_forward=1
+    sudo iptables -t nat -A POSTROUTING -o $1 -j MASQUERADE
+    sudo iptables -A FORWARD -i $2 -o $1 -j ACCEPT
+}
+
 pull_request() {
     if [[ -z "$1" ]] then
         TARGET_BRANCH="master"
