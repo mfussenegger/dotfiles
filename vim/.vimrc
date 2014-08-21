@@ -170,7 +170,6 @@ autocmd VimResized * :wincmd =
 set ignorecase
 set smartcase
 set hlsearch
-set gdefault
 
 " faster scrolling
 nnoremap <C-e> 3<C-e>
