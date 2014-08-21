@@ -158,22 +158,6 @@ share_internet() {
     sudo iptables -A FORWARD -i $2 -o $1 -j ACCEPT
 }
 
-pull_request() {
-    if [[ -z "$1" ]] then
-        TARGET_BRANCH="master"
-    else
-        TARGET_BRANCH=$1
-    fi
-
-    if [[ -z "$2" ]] then
-        GH_USER="crate"
-    else
-        GH_USER=$2
-    fi
-    gh pull-request -b $TARGET_BRANCH -h $GH_USER:$(git rev-parse --abbrev-ref HEAD)
-}
-
-
 # kill all processes that use port $1
 portkill() {
     lsof -i :$1 | tail -n +2 | awk '{ print $2 }' | xargs kill
