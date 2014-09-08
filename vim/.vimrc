@@ -138,7 +138,7 @@ set infercase
 "
 set wildchar=<tab>
 set wildmode=list:longest,full
-set wildignore+=*.pyc,.git,.idea
+set wildignore+=*.pyc,.git,.idea,*.o
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
 " do not select the end of line
