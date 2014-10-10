@@ -2,10 +2,11 @@
 set nocompatible
 
 if has('vim_starting')
-    set runtimepath+=~/.vim/bundle/neobundle.vim
+    set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/.vim/bundle/'))
+
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " for async commands (NeoBundle, Unite)
@@ -87,6 +88,7 @@ NeoBundleLazy 'rollxx/vim-antlr', {'autoload':
 NeoBundle "Matt-Stevens/vim-systemd-syntax"
 " }}}
 
+call neobundle#end()
 NeoBundleCheck
 
 set shortmess+=I                    " Don't show vim welcome screen
