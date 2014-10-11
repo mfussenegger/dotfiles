@@ -57,8 +57,9 @@ NeoBundle 'mfussenegger/dbext.vim'
 NeoBundleLazy 'davidhalter/jedi-vim', {'autoload': {'filetypes': ['python']}}
 NeoBundleLazy 'hynek/vim-python-pep8-indent', {'autoload': {'filetypes': ['python']}}
 
-
 " }}}
+
+NeoBundleLazy 'stephpy/vim-yaml', {'autoload': {'filetypes': ['yaml']}}
 
 " salt
 NeoBundle 'saltstack/salt-vim'
