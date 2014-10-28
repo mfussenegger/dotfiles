@@ -21,7 +21,6 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundleLazy 'Shougo/unite-outline', {'autoload': {'unite_sources': 'outline'}}
 NeoBundleLazy 'osyo-manga/unite-quickfix', {'autoload':{'unite_sources':
             \ ['quickfix', 'location_list']}}
-NeoBundle 'mfussenegger/unite-git'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'Shougo/neomru.vim'
 
@@ -229,26 +228,36 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 " =============================================================================
 "
 
-call unite#custom#profile('git/ls-files', 'matchers', ['matcher_fuzzy'])
-call unite#custom#profile('git/ls-files', 'filters', ['sorter_rank'])
+let g:unite_matcher_fuzzy_max_input_length = 400
+let g:unite_prompt='» '
+let g:unite_enable_start_insert = 1
+let g:unite_force_overwrite_statusline = 0
+
+
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+
 call unite#custom#source('file_mru,file_rec,file_rec/async,grep,locate',
-            \ 'ignore_pattern', join(['\.pyc$', '\.pyo', '\.git/',
-            \ '\.venv/', 'tmp/', 'bundle/'], '\|'))
+            \ 'ignore_pattern', join(['\.pyc$', '\.pyo', '\.git/', '\.class$',
+            \ '\.venv/', 'tmp/', 'bundle/', '\.doctrees'], '\|'))
+
+autocmd FileType unite inoremap <buffer> <F5> <ESC>:execute "normal \<Plug>(unite_redraw)"<CR>i
 
 " general fuzzy search
 nnoremap <silent><localleader><space> :Unite
-            \ -buffer-name=files -start-insert
+            \ -buffer-name=files
             \ buffer file_mru bookmark file_rec/async<CR>
 
 " search for files recursive
 nnoremap <silent><localleader>t :Unite
-            \ -buffer-name=files -no-split -start-insert tag<CR>
+            \ -buffer-name=files -no-split tag<CR>
 
 nnoremap <silent><localleader>a :Unite
-            \ -buffer-name=files -no-split -start-insert file_rec/async<CR>
+            \ -buffer-name=files -no-split file_rec/async<CR>
 
 nnoremap <silent><localleader>f :Unite
-            \ -buffer-name=files -no-split -start-insert git/ls-files<CR>
+            \ -buffer-name=files -no-split
+            \ file_rec/git:--cached:--exclude-standard<CR>
 
 
 " quick registers
@@ -256,11 +265,11 @@ nnoremap <silent><localleader>r :Unite -buffer-name=register register<CR>
 
 " buffer
 nnoremap <silent><localleader>b :Unite
-            \ -buffer-name=files -no-split -start-insert buffer<cr>
+            \ -buffer-name=files -no-split buffer<cr>
 
 " quick outline
 nnoremap <silent><localleader>o :Unite -silent -direction=topleft -winwidth=40
-            \ -buffer-name=outline -start-insert -vertical outline<CR>
+            \ -buffer-name=outline -vertical outline<CR>
 
 " quick switch lcd
 nnoremap <silent><localleader>d :Unite -toggle
@@ -307,7 +316,6 @@ noremap <c-l> <c-w>l
 noremap <F11> :setlocal spell!<CR>
 set spelllang=en,de
 
-nnoremap <F9> :TagbarToggle<CR>
 nnoremap <silent> <F10> :NERDTreeToggle<CR>
 inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
 
@@ -349,11 +357,6 @@ let g:gist_detect_filetype = 1
 let g:syntastic_python_checkers=['frosted']
 
 let NERDTreeIgnore = ['^develop-eggs$', '\.egg-info$']
-
-" might need to set g:tagbar_ctags_bin
-" Settings for tagbar.vim
-let g:tagbar_compact=1
-let g:tagbar_width=28
 
 
 if exists("&colorcolumn")
