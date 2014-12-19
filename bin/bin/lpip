@@ -1,0 +1,12 @@
+#!/bin/bash
+
+PACKAGE=$1
+EXECUTABLE=${2:-$1}
+TARGET_PATH=$HOME/.lpip/$PACKAGE
+
+
+test -d $HOME/.lpip || mkdir $HOME/.lpip
+python -m venv $TARGET_PATH
+$TARGET_PATH/bin/pip install --upgrade $PACKAGE
+
+find $TARGET_PATH/bin -name $EXECUTABLE && ln -s $TARGET_PATH/bin/$EXECUTABLE $HOME/bin/$EXECUTABLE

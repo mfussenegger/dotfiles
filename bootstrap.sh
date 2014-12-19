@@ -1,8 +1,6 @@
 #!/bin/bash
 
-if [[ ! -d $HOME/.config/ ]]; then
-    mkdir $HOME/.config
-fi
+test -d $HOME/.config || mkdir $HOME/.config
 
 ln -sn ${PWD}/zprezto $HOME/.zprezto
 
@@ -23,6 +21,6 @@ stow git
 stow mplayer
 stow dwb
 
-if [[ ! -d $HOME/.pip_cache/ ]]; then
-    mkdir $HOME/.pip_cache
-fi
+$HOME/bin/peru sync
+
+test -d $HOME/.pip_cache || mkdir $HOME/.pip_cache

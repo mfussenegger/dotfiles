@@ -1,0 +1,66 @@
+imports:
+  pathogen: vim/.vim/autoload/
+  vimproc: vim/.vim/bundle/vimproc
+  unite: vim/.vim/bundle/unite
+  unite-outline: vim/.vim/bundle/unite-outline
+  unite-quickfix: vim/.vim/bundle/unite-quickfix
+  unite-tag: vim/.vim/bundle/unite-tag
+  neomru: vim/.vim/bundle/neomru
+
+  vim-sensible: vim/.vim/bundle/vim-sensible
+  vim-fugitive: vim/.vim/bundle/vim-fugitive
+  vim-airline: vim/.vim/bundle/vim-airline
+  syntastic: vim/.vim/bundle/syntastic
+  nerdtree: vim/.vim/bundle/nerdtree
+  ycm: vim/.vim/bundle/ycm
+  webapi-vim: vim/.vim/bundle/webapi-vim
+  gist-vim: vim/.vim/bundle/gist-vim
+  linediff: vim/.vim/bundle/linediff
+
+  jedi-vim: vim/.vim/bundle/jedi-vim
+  python-pep8-indent: vim/.vim/bundle/python-pep8-indent
+
+
+curl module pathogen:
+  url: https://tpo.pe/pathogen.vim
+
+
+git module vimproc:
+  url: https://github.com/Shougo/vimproc.vim.git
+  build: make -f make_unix.mak
+
+git module unite:
+  url: https://github.com/Shougo/unite.vim.git
+git module unite-outline:
+  url: https://github.com/Shougo/unite-outline.git
+git module unite-quickfix:
+  url: https://github.com/osyo-manga/unite-quickfix.git
+git module unite-tag:
+  url: https://github.com/tsukkee/unite-tag.git
+git module neomru:
+  url: https://github.com/Shougo/neomru.vim.git
+
+git module vim-sensible:
+  url: https://github.com/tpope/vim-sensible.git
+git module vim-fugitive:
+  url: https://github.com/tpope/vim-fugitive.git
+git module vim-airline:
+  url: https://github.com/bling/vim-airline.git
+git module syntastic:
+  url: https://github.com/scrooloose/syntastic.git
+git module nerdtree:
+  url: https://github.com/scrooloose/nerdtree.git
+git module ycm:
+  url: https://github.com/Valloric/YouCompleteMe.git
+  build: sh install.sh
+git module webapi-vim:
+  url: https://github.com/mattn/webapi-vim.git
+git module gist-vim:
+  url: https://github.com/mattn/gist-vim.git
+git module linediff:
+  url: https://github.com/vim-scripts/linediff.vim.git
+
+git module jedi-vim:
+  url: https://github.com/davidhalter/jedi-vim.git
+git module python-pep8-indent:
+  url: https://github.com/hynek/vim-python-pep8-indent.git
