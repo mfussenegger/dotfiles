@@ -8,6 +8,7 @@ export SUDO_EDIT=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export PIP_DOWNLOAD_CACHE=$HOME/.pip_cache
+export TERM=xterm
 
 # doesn't work with buildout
 #export PYTHONDONTWRITEBYTECODE=1
