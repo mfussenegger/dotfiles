@@ -161,7 +161,7 @@ set scrolloff=3
 
 if has("folding")
     set foldenable
-    set foldmethod=syntax
+    set foldmethod=indent
     set foldlevel=2
 endif
 
