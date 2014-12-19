@@ -1,8 +1,0 @@
-ddg https://next.duckduckgo.com/?q=XXX
-google https://www.google.com/search?hl=en&tbo=d&output=search&sclient=psy-ab&q=XXX&oq=&gs_l=&pbx=1
-aw https://wiki.archlinux.org/index.php?title=Special:Search&search=XXX
-gh https://github.com/search?q=XXX&ref=cmdform
-pypi https://warehouse.python.org/search/project/?q=XXX
-crate https://crate.io/docs/stable/search.html?check_keywords=yes&area=default&q=XXX
-py3 https://docs.python.org/3/search.html?q=XXX
-py2 https://docs.python.org/2.7/search.html?q=XXX&check_keywords=yes&area=default

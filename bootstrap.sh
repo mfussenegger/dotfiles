@@ -15,11 +15,9 @@ stow bin
 stow python
 stow shell
 stow vim
-stow pentadactyl
 stow i3
 stow git
 stow mplayer
-stow dwb
 
 $HOME/bin/peru sync
 
