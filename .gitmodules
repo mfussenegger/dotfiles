@@ -1,3 +1,3 @@
-[submodule "zprezto"]
-	path = zprezto
-	url = https://github.com/mfussenegger/prezto.git
+[submodule "shell/.zsh/antigen-hs"]
+	path = shell/.zsh/antigen-hs
+	url = git@github.com:Tarrasch/antigen-hs.git
