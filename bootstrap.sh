@@ -11,7 +11,7 @@ stow git
 stow mplayer
 
 
-$HOME/bin/peru sync
+$HOME/bin/hopp.py
 
 test -d $HOME/.pip_cache || mkdir $HOME/.pip_cache
 

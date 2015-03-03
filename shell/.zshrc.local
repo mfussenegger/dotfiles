@@ -1,7 +1,3 @@
-PATH=$PATH:/home/$USER/bin/
-PATH=$PATH:/home/$USER/.local/bin/
-PATH=$PATH:/home/$USER/.gem/ruby/2.1.0/bin/
-
 export EDITOR=vim
 export VISUAL=vim
 export SUDO_EDIT=vim

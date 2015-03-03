@@ -1,0 +1,82 @@
+[
+    {
+        "location": "vim/.vim/autoload",
+        "curl": "https://tpo.pe/pathogen.vim"
+    },
+    {
+        "location": "~/bin/fasd",
+        "curl": "https://raw.githubusercontent.com/clvv/fasd/master/fasd",
+        "build": "chmod +x fasd"
+    },
+    {
+        "location": "vim/.vim/bundle/vimproc",
+        "git": "https://github.com/Shougo/vimproc.vim.git",
+        "build": "make -f make_unix.mak"
+    },
+    {
+        "github": "Shougo/unite.vim",
+        "location": "vim/.vim/bundle/unite"
+    },
+    {
+        "github": "Shougo/unite-outline",
+        "location": "vim/.vim/bundle/unite-outline"
+    },
+    {
+        "github": "osyo-manga/unite-quickfix",
+        "location": "vim/.vim/bundle/unite-quickfix"
+    },
+    {
+        "github": "tsukkee/unite-tag",
+        "location": "vim/.vim/bundle/unite-tag"
+    },
+    {
+        "github": "Shougo/neomru.vim",
+        "location": "vim/.vim/bundle/neomru"
+    },
+
+    {
+        "github": "tpope/vim-sensible",
+        "location": "vim/.vim/bundle/vim-sensible"
+    },
+    {
+        "github": "tpope/vim-fugitive",
+        "location": "vim/.vim/bundle/vim-fugitive"
+    },
+    {
+        "github": "bling/vim-airline",
+        "location": "vim/.vim/bundle/vim-airline"
+    },
+    {
+        "github": "scrooloose/syntastic",
+        "location": "vim/.vim/bundle/syntastic"
+    },
+    {
+        "github": "scrooloose/nerdtree",
+        "location": "vim/.vim/bundle/nerdtree"
+    },
+    {
+        "location": "vim/.vim/bundle/ycm",
+        "github": "Valloric/YouCompleteMe",
+        "build": "sh install.sh"
+    },
+    {
+        "github": "mattn/webapi-vim",
+        "location": "vim/.vim/bundle/webapi-vim"
+    },
+    {
+        "github": "mattn/gist-vim",
+        "location": "vim/.vim/bundle/gist-vim"
+    },
+    {
+        "github": "vim-scripts/linediff.vim",
+        "location": "vim/.vim/bundle/linediff"
+    },
+    {
+        "github": "davidhalter/jedi-vim",
+        "location": "vim/.vim/bundle/jedi-vim"
+    },
+    {
+        "github": "hynek/vim-python-pep8-indent",
+        "location": "vim/.vim/bundle/vim-python-pep8-indent"
+    }
+]

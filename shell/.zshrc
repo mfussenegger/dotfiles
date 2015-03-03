@@ -1,3 +1,6 @@
+PATH=$PATH:/home/$USER/bin/
+PATH=$PATH:/home/$USER/.local/bin/
+PATH=$PATH:/home/$USER/.gem/ruby/2.1.0/bin/
 
 PURE_GIT_PULL=0
 PURE_GIT_UNTRACKED_DIRTY=0
