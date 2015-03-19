@@ -1,6 +1,6 @@
 [
     {
-        "location": "vim/.vim/autoload",
+        "location": "vim/.vim/autoload/",
         "curl": "https://tpo.pe/pathogen.vim"
     },
     {
@@ -78,5 +78,9 @@
     {
         "github": "hynek/vim-python-pep8-indent",
         "location": "vim/.vim/bundle/vim-python-pep8-indent"
+    },
+    {
+        "github": "jamessan/vim-gnupg",
+        "location": "vim/.vim/bundle/vim-gnupg"
     }
 ]

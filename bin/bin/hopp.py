@@ -32,6 +32,9 @@ def curl(entry):
     resp = urlopen(source)
     if os.path.isdir(location):
         location = os.path.join(location, os.path.basename(source))
+    elif location.endswith('/'):
+        os.mkdir(location)
+        location = os.path.join(location, os.path.basename(source))
     if os.path.exists(location):
         print('Skip {}, there is already something at the location'.format(entry))
         return
