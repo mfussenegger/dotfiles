@@ -154,3 +154,6 @@ bindcode 166 exec mpc prev
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 2%+ unmute && killall -USR1 i3status
 bindsym XF86AudioLowerVolume exec amixer -q set Master 2%- unmute && killall -USR1 i3status
 bindsym XF86AudioMute exec amixer -q set Master mute && killall -USR1 i3status
+
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10
