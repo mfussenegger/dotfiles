@@ -1,5 +1,7 @@
-xrandr --output DVI-I-2 --right-of DVI-I-3
-xrandr --output DVI-I-3 --primary
+
+if [[ -x '/usr/bin/autorandr' ]]; then
+    autorandr --change --force
+fi
 
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
@@ -11,6 +13,10 @@ xset b off
 urxvtd -q -f -o &
 redshift -l 47.22:10.09 -t 6000:4200 &
 
+
+if [[ -x '/usr/bin/syndaemon' ]]; then
+    syndaemon -t -k -i 2 -d &
+fi
 
 DIR="$HOME/workspace/Pictures/wallpapers"
 if [[ -d "${DIR}" ]]; then
