@@ -9,6 +9,11 @@
         "build": "chmod +x fasd"
     },
     {
+        "location": "vim/.vim/bundle/fzf",
+        "github": "junegunn/fzf",
+        "build": "yes | sh install"
+    },
+    {
         "location": "vim/.vim/bundle/vimproc",
         "git": "https://github.com/Shougo/vimproc.vim.git",
         "build": "make -f make_unix.mak"
