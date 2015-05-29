@@ -87,5 +87,9 @@
     {
         "github": "jamessan/vim-gnupg",
         "location": "vim/.vim/bundle/vim-gnupg"
+    },
+    {
+        "virtualenv": ["i3pystatus", "psutil", "netifaces", "colour", "basiciw"],
+        "location": "~/.virtualenvs/i3pystatus"
     }
 ]

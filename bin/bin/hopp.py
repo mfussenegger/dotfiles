@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 import os
 import json
 from subprocess import Popen, PIPE
@@ -16,6 +17,28 @@ def _build(entry):
     if os.path.isfile(location):
         location = os.path.dirname(location)
     p = Popen(entry['build'], shell=True, cwd=location)
+    p.wait()
+
+
+def virtualenv(entry):
+    """ create a virtualenv with the given dependencies in the target location
+
+        {
+            "location": "target/path",
+            "virtualenv": ["dep1", "dep2"]
+        }
+    """
+    location = os.path.abspath(os.path.expanduser(entry['location']))
+    dependencies = entry['virtualenv']
+    cmd = ['python', '-m', 'venv', location]
+    p = Popen(cmd)
+    p.wait()
+    vpython = os.path.join(location, 'bin', 'python')
+
+    pip = [vpython, '-m', 'pip', 'install', '--upgrade']
+    p = Popen(pip + ['pip'])
+    p.wait()
+    p = Popen(pip + dependencies)
     p.wait()
 
 
@@ -83,7 +106,8 @@ def github(entry):
 loaders = {
     'curl': curl,
     'git': git,
-    'github': github
+    'github': github,
+    'virtualenv': virtualenv
 }
 
 
