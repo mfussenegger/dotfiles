@@ -11,7 +11,8 @@ import Antigen (
 import Shelly (shelly)
 
 bundles =
-  [ bundle "sindresorhus/pure"
+  [ bundle "mafredri/zsh-async"
+  , bundle "sindresorhus/pure"
   , bundle "zsh-users/zsh-syntax-highlighting"
   , bundle "zsh-users/zsh-history-substring-search"
   ]
