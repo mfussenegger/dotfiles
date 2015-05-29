@@ -57,6 +57,8 @@ def git(entry):
         p = Popen(cmd, cwd=location, stdout=PIPE)
         stdout, stderr = p.communicate()
         if b'Already up-to-date' not in stdout:
+            cmd = ['git', 'submodule', 'update', '--init', '--recursive']
+            p = Popen(cmd, cwd=location)
             _build(entry)
     else:
         source = entry['git']
