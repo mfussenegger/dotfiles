@@ -40,3 +40,4 @@ alias lu='lt -u'
 function mcd() {
     [[ -n "$1" ]] && mkdir -p "$1" && builtin cd "$1"
 }
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
