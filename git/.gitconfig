@@ -41,7 +41,7 @@
     pr = !~/bin/git-pull-request
     fixup = !git commit --fixup $(git rev-parse HEAD)
     serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
-    br = !git ls-remote -h . | awk '{print(substr($NF, 12))}' | tmenu -l 15 | xargs git checkout
+    br = !git ls-remote -h . | awk '{print(substr($NF, 12))}' | fzf | xargs git checkout
 
 [instaweb]
     httpd = webrick
