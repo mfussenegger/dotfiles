@@ -42,7 +42,17 @@
     fixup = !git commit --fixup $(git rev-parse HEAD)
     serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
     br = !git ls-remote -h . | awk '{print(substr($NF, 12))}' | fzf | xargs git checkout
-
+    filter-commits = "!sh -c 'git log --pretty=format:\"%h - %an: %s\" $1 \
+        | fzf --no-sort \
+        | cut -d \" \" -f1 ' -"
+    cpl = !git cherry-pick $(git filter-commits)
+    reset-file = "!sh -c 'git status --short \
+        | fzf --no-sort \
+        | cut -d \" \" -f3 \
+        | xargs git checkout ' -"
+    fixup-to = !git commit --fixup=$(git filter-commits)
+    prune-all = !git remote | xargs -n1 git remote prune
+    co-recurse = !sh -c 'git checkout $1 && git submodule update --recursive' -
 [instaweb]
     httpd = webrick
 [rebase]
