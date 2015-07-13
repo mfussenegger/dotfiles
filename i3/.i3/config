@@ -155,7 +155,7 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
 bindsym $mod+o exec --no-startup-id sleep 1 && $HOME/bin/ts.sh
-bindsym $mod+i exec $HOME/bin/passmenu.sh
+bindsym $mod+i exec passmenu
 bindsym $mod+u exec $HOME/bin/dm.py
 
 # additional keybindings
