@@ -36,8 +36,6 @@
     killbranches = !git branch --merged | grep -v '^*' \
                    | grep -v master | xargs git branch -d 2> /dev/null
     ls = ls-files
-    wtf = !$ZSH/bin/git-wtf
-    up = !$ZSH/bin/git-up
     pr = !~/bin/git-pull-request
     fixup = !git commit --fixup $(git rev-parse HEAD)
     serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
