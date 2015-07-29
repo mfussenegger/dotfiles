@@ -45,7 +45,10 @@
     filter-commits = "!sh -c 'git log --pretty=format:\"%h - %an: %s\" $1 \
         | fzf --no-sort \
         | cut -d \" \" -f1 ' -"
-    cpl = !git cherry-pick $(git filter-commits)
+    cpl = "!sh -c 'git log --pretty=format:\"%h - %an: %s\" $1 \
+        | fzf --no-sort \
+        | cut -d \" \" -f1 \
+        | xargs git cherry-pick ' -"
     reset-file = "!sh -c 'git status --short \
         | fzf --no-sort \
         | cut -d \" \" -f3 \
@@ -53,6 +56,9 @@
     fixup-to = !git commit --fixup=$(git filter-commits)
     prune-all = !git remote | xargs -n1 git remote prune
     co-recurse = !sh -c 'git checkout $1 && git submodule update --recursive' -
+    co-file = "!sh -c 'git ls-tree --name-only -r $1 \
+        | fzf \
+        | xargs git checkout $1 -- ' -"
 [instaweb]
     httpd = webrick
 [rebase]
