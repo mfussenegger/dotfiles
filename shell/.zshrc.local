@@ -13,7 +13,7 @@ export TERM=xterm
 ### pacman
 
 alias p='sudo spacman'
-alias pac='packer'
+alias pac='pkgbuilder'
 
 ### sudo make me a sandwich
 
