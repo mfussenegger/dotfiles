@@ -9,6 +9,7 @@ stow vim
 stow i3
 stow git
 stow mplayer
+stow termite
 
 
 $HOME/bin/hopp.py

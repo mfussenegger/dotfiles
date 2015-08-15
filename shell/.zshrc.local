@@ -3,7 +3,6 @@ export VISUAL=vim
 export SUDO_EDIT=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
-export TERM=xterm
 
 # doesn't work with buildout
 #export PYTHONDONTWRITEBYTECODE=1
@@ -192,3 +191,8 @@ if [[ -x '/usr/bin/virtualenvwrapper.sh' ]]; then
     source /usr/bin/virtualenvwrapper.sh
 fi
 
+
+if [[ $TERM == xterm-termite ]]; then
+    . /etc/profile.d/vte.sh
+    __vte_osc7
+fi
