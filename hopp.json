@@ -62,7 +62,7 @@
     {
         "location": "vim/.vim/bundle/ycm",
         "github": "Valloric/YouCompleteMe",
-        "build": "sh install.sh"
+        "build": "python2 install.py"
     },
     {
         "github": "mattn/webapi-vim",
