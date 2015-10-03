@@ -136,82 +136,19 @@ nnoremap <leader>W :match none<cr>
 let g:UltiSnipsExpandTrigger="<c-j>"
 
 " =============================================================================
-" unite
+" fzf
 " =============================================================================
 "
+nnoremap <silent><localleader><space> :History<CR>
+nnoremap <silent><localleader>t :Files<CR>
+nnoremap <silent><localleader>b :Buffers<CR>
+nnoremap <silent><localleader>o :BTags<CR>
+nnoremap <silent><leader>gl :BCommits<CR>
 
-let g:unite_matcher_fuzzy_max_input_length = 400
-let g:unite_prompt='» '
-let g:unite_enable_start_insert = 1
-let g:unite_force_overwrite_statusline = 0
-
-
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-
-call unite#custom#source('file_mru,file_rec,file_rec/async,grep,locate',
-            \ 'ignore_pattern', join(['\.pyc$', '\.pyo', '\.git/', '\.class$',
-            \ '\.venv/', 'tmp/', 'bundle/', '\.doctrees'], '\|'))
-
-autocmd FileType unite inoremap <buffer> <F5> <ESC>:execute "normal \<Plug>(unite_redraw)"<CR>i
-
-" general fuzzy search
-nnoremap <silent><localleader><space> :Unite
-            \ -buffer-name=files
-            \ buffer file_mru bookmark file_rec/async<CR>
-
-" search for files recursive
-nnoremap <silent><localleader>t :Unite
-            \ -buffer-name=files -no-split tag<CR>
-
-nnoremap <silent><localleader>a :Unite
-            \ -buffer-name=files -no-split file_rec/async<CR>
-
-nnoremap <silent><localleader>f :Unite
-            \ -buffer-name=files -no-split
-            \ file_rec/git:--cached:--exclude-standard<CR>
-
-
-" quick registers
-nnoremap <silent><localleader>r :Unite -buffer-name=register register<CR>
-
-" buffer
-nnoremap <silent><localleader>b :Unite
-            \ -buffer-name=files -no-split buffer<cr>
-
-" quick outline
-nnoremap <silent><localleader>o :Unite -silent -direction=topleft -winwidth=40
-            \ -buffer-name=outline -vertical outline<CR>
-
-" quick switch lcd
-nnoremap <silent><localleader>d :Unite -toggle
-            \ -buffer-name=change-cwd -default-action=lcd directory_mru<CR>
-
-" tasks
-nnoremap <silent><localleader>; :Unite -silent -toggle
-            \ grep:.::FIXME\|TODO\|XXX<CR>
-
-" grep
-nnoremap <localleader>g :Unite -silent -no-quit grep<CR>
-
-
-" use ack if available
-if executable('ack')
-    let g:unite_source_grep_command = 'ack'
-    let g:unite_source_grep_default_opts = '--no-group --no-color'
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_grep_search_word_highlight = 1
-endif
-
-autocmd FileType unite call s:unite_my_settings()
-function! s:unite_my_settings() "{{{
-" Overwrite settings.
-  nmap <buffer> <ESC> <Plug>(unite_exit)
-  imap <buffer> <C-j> <Plug>(unite_select_next_line)
-  imap <buffer> <C-k> <Plug>(unite_select_previous_line)
-  imap <silent><buffer><expr> <C-s> unite#do_action('split')
-  imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
-endfunction "}}}
+" fzf + git ls-files
+nnoremap <silent><localleader>f :call fzf#run({
+            \'source': 'git ls-files',
+            \'sink': 'e' })<CR>
 
 " =============================================================================
 
@@ -244,10 +181,6 @@ nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gg :exe 'silent Ggrep -i '.input("Pattern: ")<Bar>Unite
-            \ quickfix -no-quit<CR>
-nnoremap <leader>gl :exe "silent Glog <Bar> Unite -no-quit
-            \ quickfix"<CR>:redraw!<CR>
 
 " }}}
 

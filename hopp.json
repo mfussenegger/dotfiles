@@ -14,25 +14,13 @@
         "build": "yes | sh install"
     },
     {
+        "location": "vim/.vim/bundle/fzf.vim",
+        "github": "junegunn/fzf.vim"
+    },
+    {
         "location": "vim/.vim/bundle/vimproc",
         "git": "https://github.com/Shougo/vimproc.vim.git",
         "build": "make -f make_unix.mak"
-    },
-    {
-        "github": "Shougo/unite.vim",
-        "location": "vim/.vim/bundle/unite"
-    },
-    {
-        "github": "Shougo/unite-outline",
-        "location": "vim/.vim/bundle/unite-outline"
-    },
-    {
-        "github": "osyo-manga/unite-quickfix",
-        "location": "vim/.vim/bundle/unite-quickfix"
-    },
-    {
-        "github": "tsukkee/unite-tag",
-        "location": "vim/.vim/bundle/unite-tag"
     },
     {
         "github": "Shougo/neomru.vim",
