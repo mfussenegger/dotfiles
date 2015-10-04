@@ -3,7 +3,8 @@ font = Terminus (TTF) 12
 browser = /usr/bin/firefox
 scrollback_lines = 40000
 allow_bold = true
-cursor_blink = false
+cursor_blink = off
+cursor_shape = block
 
 [colors]
 background = #1f1f1f
