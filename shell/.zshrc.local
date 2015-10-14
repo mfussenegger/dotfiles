@@ -102,7 +102,7 @@ relative-paths = true
 recipe = zc.recipe.testrunner
 defaults = ['--auto-color']
 EOF
-    python3.4 -m venv .venv
+    python3 -m venv .venv
     .venv/bin/python -m ensurepip
     .venv/bin/python bootstrap.py
 }
