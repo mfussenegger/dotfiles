@@ -11,9 +11,6 @@ stow git
 stow mplayer
 stow termite
 
-
 $HOME/bin/hopp.py
-
-test -d $HOME/.pip_cache || mkdir $HOME/.pip_cache
 
 echo 'run "antigen-hs-compile" in new shell to complete setup'
