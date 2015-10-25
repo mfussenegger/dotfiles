@@ -1,6 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+utility that uses Gtk to put an image file (given as argument) into the
+clipboard making it possible to paste the image in other programs.
+
+Example usage::
+
+    scrot -s /tmp/screenshot.png -e 'imgclip.py $f'
+
+Then CTLR+v in any application to paste the image.
+"""
+
 from gi.repository import Gtk, Gdk
 import sys
 
