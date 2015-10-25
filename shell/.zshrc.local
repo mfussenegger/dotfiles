@@ -42,7 +42,6 @@ alias -g T='|tail'
 
 alias vi='vim'
 alias s='ssh'
-alias n='nosetests3'
 alias c="date && echo -e && cal -3m"
 alias :q="exit"
 alias v='fasd -f -e vim'
@@ -65,10 +64,6 @@ alias berude="sudo renice -n -19 -p $$ && sudo ionice -c1 -p $$ && ionice -p $$"
 
 myoutube() {
     mplayer -vo vaapi -cache 8192 -fs $(youtube-dl -g $1)
-}
-
-pw() {
-    echo -n `getpw.py $1` | xclip
 }
 
 greph() {
@@ -116,26 +111,6 @@ ra() {
      cd -- "$(cat "$tempfile")"
    fi
    rm -f -- "$tempfile"
-}
-
-merge() {
-    if [[ -z "$1" ]] then
-        TARGET_BRANCH="master"
-    else
-        TARGET_BRANCH=$1
-    fi
-    BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    gf origin
-    g rebase -p origin/$TARGET_BRANCH
-    g rebase -i origin/$TARGET_BRANCH
-    g push -f
-    g checkout $TARGET_BRANCH
-    g merge --ff-only origin/$TARGET_BRANCH
-    g merge $BRANCH
-
-    if [[ $TARGET_BRANCH -eq "master" ]] then
-        g killbranches
-    fi
 }
 
 share_internet() {
