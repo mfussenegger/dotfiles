@@ -79,5 +79,9 @@
     {
         "virtualenv": ["i3pystatus", "psutil", "netifaces", "colour", "basiciw"],
         "location": "~/.virtualenvs/i3pystatus"
+    },
+    {
+        "github": "cespare/vim-toml",
+        "location": "vim/.vim/bundle/vim-toml"
     }
 ]
