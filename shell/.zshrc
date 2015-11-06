@@ -12,10 +12,9 @@ source ~/.zsh/history.plugin.zsh
 source ~/.zsh/completion.plugin.zsh
 source ~/.zsh/systemd.plugin.zsh
 source ~/.zsh/git.plugin.zsh
+source ~/.zsh/z.sh
 
-
-eval "$(fasd --init auto)"
-alias j='fasd_cd -i'
+alias j='z'
 
 
 source ~/.zshrc.local

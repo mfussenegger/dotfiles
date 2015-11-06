@@ -4,9 +4,8 @@
         "curl": "https://tpo.pe/pathogen.vim"
     },
     {
-        "location": "~/bin/fasd",
-        "curl": "https://raw.githubusercontent.com/clvv/fasd/master/fasd",
-        "build": "chmod +x fasd"
+        "location": "~/.zsh/z.sh",
+        "curl": "https://raw.githubusercontent.com/rupa/z/master/z.sh"
     },
     {
         "location": "vim/.vim/bundle/fzf",

@@ -39,6 +39,7 @@ alias -g N='2> /dev/null'
 alias -g G='|grep'
 alias -g H='|head'
 alias -g T='|tail'
+alias -g F='|fzf'
 
 alias vi='vim'
 alias s='ssh'

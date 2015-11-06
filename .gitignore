@@ -3,3 +3,4 @@ vim/.vim/bundle/
 vim/.vim/autoload
 vim/.vim/.netrwhist
 .peru
+shell/.zsh/z.sh
