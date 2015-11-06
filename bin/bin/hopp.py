@@ -1,26 +1,52 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+A tool to clone git repos, bootstrap virtualenvs and download files.
+Kind of a generic bootstrapping tool or plugin manager.
+
+Inspired by https://github.com/buildinspace/peru but with some differences:
+    - no dependencies (json instead of yaml configuration)
+    - no version pinning - always bleeding edge
+    - can only fetch/update things
+    - only git suport
+    - supports unsafe cmd execution via shell subprocess calls
+
+Usage::
+
+    hopp.py -c hopp.json
+
+(There is an example hopp.json file in this repo as example)
+"""
+
+import sys
+
+if sys.version_info[:2] < (3, 5):
+    raise SystemExit('hopp requires at least python 3.5')
 
 import os
 import json
-from subprocess import Popen, PIPE
+import venv
+from argparse import ArgumentParser
+from subprocess import Popen, PIPE, run
 from urllib.request import urlopen
 from multiprocessing import Pool
 
 
-def _build(entry):
-    if not 'build' in entry:
+def _exec_cmds(location, cmds=None):
+    if not cmds:
         return
-    # shell=True -> scary!
-    location = entry['location']
     if os.path.isfile(location):
         location = os.path.dirname(location)
-    p = Popen(entry['build'], shell=True, cwd=location)
-    p.wait()
+
+    if isinstance(cmds, list):
+        for cmd in cmds:
+            run(cmd, shell=True, cwd=location)
+    else:
+        run(cmds, shell=True, cwd=location)
 
 
-def virtualenv(entry):
+def virtualenv(location, virtualenv, cmds=None):
     """ create a virtualenv with the given dependencies in the target location
 
         {
@@ -28,21 +54,21 @@ def virtualenv(entry):
             "virtualenv": ["dep1", "dep2"]
         }
     """
-    location = os.path.abspath(os.path.expanduser(entry['location']))
-    dependencies = entry['virtualenv']
-    cmd = ['python', '-m', 'venv', location]
-    p = Popen(cmd)
-    p.wait()
+    if not os.path.exists(location):
+        venv.create(location, with_pip=True)
+
     vpython = os.path.join(location, 'bin', 'python')
 
-    pip = [vpython, '-m', 'pip', 'install', '--upgrade']
-    p = Popen(pip + ['pip'])
-    p.wait()
-    p = Popen(pip + dependencies)
-    p.wait()
+    pip_install = [vpython, '-m', 'pip', 'install', '--upgrade']
+    run(pip_install + ['pip'])
+
+    dependencies = virtualenv
+    run(pip_install + dependencies)
+
+    _exec_cmds(location, cmds)
 
 
-def curl(entry):
+def curl(location, curl, cmds=None):
     """ load an entry like
 
         {
@@ -50,23 +76,20 @@ def curl(entry):
             "curl": "http://example.com/source.vim"
         }
     """
-    location = entry['location']
-    source = entry['curl']
+    location = location
+    source = curl
     resp = urlopen(source)
     if os.path.isdir(location):
         location = os.path.join(location, os.path.basename(source))
     elif location.endswith('/'):
         os.mkdir(location)
         location = os.path.join(location, os.path.basename(source))
-    if os.path.exists(location):
-        print('Skip {}, there is already something at the location'.format(entry))
-        return
     with open(location, 'wb') as f:
         f.write(resp.read())
-    _build(entry)
+    _exec_cmds(location, cmds)
 
 
-def git(entry):
+def git(location, git, branch=None, cmds=None):
     """ load a git entry:
 
         {
@@ -74,33 +97,27 @@ def git(entry):
             "git": "https://github.com/Shougo/vimproc.vim.git",
         }
     """
-    location = entry['location']
     if os.path.exists(location):
         cmd = ['git', 'pull', 'origin', 'master']
-        p = Popen(cmd, cwd=location, stdout=PIPE)
-        stdout, stderr = p.communicate()
-        if b'Already up-to-date' not in stdout:
+        p = run(cmd, cwd=location, stdout=PIPE)
+        if b'Already up-to-date' not in p.stdout:
             cmd = ['git', 'submodule', 'update', '--init', '--recursive']
-            p = Popen(cmd, cwd=location)
-            _build(entry)
+            run(cmd, cwd=location)
+            _exec_cmds(cmds)
     else:
-        source = entry['git']
+        source = git
         cmd = ['git', 'clone', '--depth', '1', '--recursive']
-        branch = entry.get('branch', None)
         if branch:
             cmd += ['-b', branch]
         cmd += [source, location]
-        p = Popen(cmd)
-        p.wait()
-        _build(entry)
+        run(cmd)
+        _exec_cmds(cmds)
 
 
-def github(entry):
+def github(location, github, cmds=None):
     """ shortcut for git """
-    entry['git'] = 'https://github.com/{0}.git'.format(entry['github'])
-    del entry['github']
-    git(entry)
-
+    url = 'https://github.com/{0}.git'.format(github)
+    git(location=location, git=url, cmds=cmds)
 
 
 loaders = {
@@ -113,16 +130,22 @@ loaders = {
 
 def try_load_entry(entry):
     if 'location' in entry:
-        entry['location'] = os.path.expanduser(entry['location'])
+        entry['location'] = os.path.abspath(os.path.expanduser(entry['location']))
     for key in entry:
         if key in loaders:
-            return loaders[key](entry)
+            return loaders[key](**entry)
     print('Could not load ' + str(entry))
 
 
 def main():
-    f = os.path.join(os.curdir, 'hopp.json')
-    entries = json.load(open(f, 'r'))
+    p = ArgumentParser('hopp.py', 'bootstrap stuff')
+    p.add_argument('-c', '--config', type=str, default='hopp.json',
+                   help=('path to the bootstrap json config file.\n'
+                         'Default is hopp.json'))
+    args = p.parse_args()
+
+    with open(args.config, 'r') as f:
+        entries = json.load(f)
 
     with Pool(16) as pool:
         pool.map(try_load_entry, entries)

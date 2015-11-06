@@ -10,22 +10,12 @@
     {
         "location": "vim/.vim/bundle/fzf",
         "github": "junegunn/fzf",
-        "build": "yes | sh install"
+        "cmds": "yes | sh install"
     },
     {
         "location": "vim/.vim/bundle/fzf.vim",
         "github": "junegunn/fzf.vim"
     },
-    {
-        "location": "vim/.vim/bundle/vimproc",
-        "git": "https://github.com/Shougo/vimproc.vim.git",
-        "build": "make -f make_unix.mak"
-    },
-    {
-        "github": "Shougo/neomru.vim",
-        "location": "vim/.vim/bundle/neomru"
-    },
-
     {
         "github": "tpope/vim-sensible",
         "location": "vim/.vim/bundle/vim-sensible"
@@ -49,7 +39,7 @@
     {
         "location": "vim/.vim/bundle/ycm",
         "github": "Valloric/YouCompleteMe",
-        "build": "python2 install.py"
+        "cmds": "python2 install.py"
     },
     {
         "github": "mattn/webapi-vim",
@@ -76,11 +66,19 @@
         "location": "vim/.vim/bundle/vim-gnupg"
     },
     {
+        "github": "cespare/vim-toml",
+        "location": "vim/.vim/bundle/vim-toml"
+    },
+    {
         "virtualenv": ["i3pystatus", "psutil", "netifaces", "colour", "basiciw"],
         "location": "~/.virtualenvs/i3pystatus"
     },
     {
-        "github": "cespare/vim-toml",
-        "location": "vim/.vim/bundle/vim-toml"
+        "virtualenv": ["httpie", "pew"],
+        "location": "~/.virtualenvs/tools",
+        "cmds": [
+            "ln -sf ~/.virtualenvs/tools/bin/http ~/bin/http",
+            "ln -sf ~/.virtualenvs/tools/bin/pew ~/bin/pew"
+        ]
     }
 ]
