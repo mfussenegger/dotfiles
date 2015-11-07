@@ -39,7 +39,7 @@ alias la='ll -A'
 alias lt='ll -tr'
 alias lu='lt -u'
 
-eval $(dircolors ~/.dircolors)
+[[ -f ~/.dircolors ]] && eval $(dircolors ~/.dircolors)
 
 function mcd() {
     [[ -n "$1" ]] && mkdir -p "$1" && builtin cd "$1"
