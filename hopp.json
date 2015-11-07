@@ -8,6 +8,14 @@
         "curl": "https://raw.githubusercontent.com/rupa/z/master/z.sh"
     },
     {
+        "location": "/tmp/",
+        "curl": "https://github.com/github/hub/releases/download/v2.2.2/hub-linux-amd64-2.2.2.tgz",
+        "cmds": [
+            "tar xvzf /tmp/hub-linux*.tgz",
+            "cp /tmp/hub-linux*/bin/hub ~/bin/gh"
+        ]
+    },
+    {
         "location": "vim/.vim/bundle/fzf",
         "github": "junegunn/fzf",
         "cmds": "yes | sh install"
