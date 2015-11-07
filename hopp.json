@@ -12,7 +12,8 @@
         "curl": "https://github.com/github/hub/releases/download/v2.2.2/hub-linux-amd64-2.2.2.tgz",
         "cmds": [
             "tar xvzf /tmp/hub-linux*.tgz",
-            "cp /tmp/hub-linux*/bin/hub ~/bin/gh"
+            "cp /tmp/hub-linux*/bin/hub ~/bin/gh",
+            "rm -rf /tmp/hub-linux*"
         ]
     },
     {

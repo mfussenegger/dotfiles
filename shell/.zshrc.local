@@ -168,7 +168,7 @@ if [[ -x '/usr/bin/virtualenvwrapper.sh' ]]; then
 fi
 
 
-if [[ $TERM == xterm-termite ]]; then
+if [[ $TERM == xterm-termite && -f '/etc/profile.d/vte.sh' ]]; then
     . /etc/profile.d/vte.sh
     __vte_osc7
 fi
