@@ -1,0 +1,27 @@
+[
+    {
+        "location": "~/.zsh/z.sh",
+        "curl": "https://raw.githubusercontent.com/rupa/z/master/z.sh"
+    },
+    {
+        "location": "/tmp/",
+        "curl": "https://github.com/github/hub/releases/download/v2.2.2/hub-linux-amd64-2.2.2.tgz",
+        "cmds": [
+            "tar xvzf /tmp/hub-linux*.tgz",
+            "cp /tmp/hub-linux*/bin/hub ~/bin/gh",
+            "rm -rf /tmp/hub-linux*"
+        ]
+    },
+    {
+        "virtualenv": ["i3pystatus", "psutil", "netifaces", "colour", "basiciw"],
+        "location": "~/.virtualenvs/i3pystatus"
+    },
+    {
+        "virtualenv": ["httpie", "pew"],
+        "location": "~/.virtualenvs/tools",
+        "cmds": [
+            "ln -sf ~/.virtualenvs/tools/bin/http ~/bin/http",
+            "ln -sf ~/.virtualenvs/tools/bin/pew ~/bin/pew"
+        ]
+    }
+]

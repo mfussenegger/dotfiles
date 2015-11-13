@@ -14,7 +14,7 @@ Inspired by https://github.com/buildinspace/peru but with some differences:
 
 Usage::
 
-    hopp.py -c hopp.json
+    hopp.py -c hopp.json [ , ... ]
 
 (There is an example hopp.json file in this repo as example)
 """
@@ -139,13 +139,19 @@ def try_load_entry(entry):
 
 def main():
     p = ArgumentParser('hopp.py', 'bootstrap stuff')
-    p.add_argument('-c', '--config', type=str, default='hopp.json',
+    p.add_argument('-c', '--config', type=str, nargs='+', default='hopp.json',
                    help=('path to the bootstrap json config file.\n'
                          'Default is hopp.json'))
     args = p.parse_args()
+    if isinstance(args.config, list):
+        configs = args.config
+    else:
+        configs = [args.config]
 
-    with open(args.config, 'r') as f:
-        entries = json.load(f)
+    entries = []
+    for config in configs:
+        with open(config, 'r') as f:
+            entries += json.load(f)
 
     with Pool(16) as pool:
         pool.map(try_load_entry, entries)

@@ -11,7 +11,7 @@ stow git
 stow mplayer
 stow termite
 
-$HOME/bin/hopp.py
+$HOME/bin/hopp.py -c hopp/vim.json hopp/misc.json
 
 if [[ -x '/usr/bin/cabal' ]]; then
     cabal update
