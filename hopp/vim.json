@@ -64,5 +64,13 @@
     {
         "github": "tpope/vim-eunuch",
         "location": "vim/.vim/bundle/vim-eunuch"
+    },
+    {
+        "github": "SirVer/ultisnips",
+        "location": "vim/.vim/bundle/ultisnips"
+    },
+    {
+        "github": "honza/vim-snippets",
+        "location": "vim/.vim/bundle/vim-snippets"
     }
 ]
