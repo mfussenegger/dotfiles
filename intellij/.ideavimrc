@@ -1,0 +1,7 @@
+
+let mapleader = ","
+set rnu numberwidth=4
+
+nmap <leader>ff :action GotoFile<cr>
+nmap <leader>fc :action GotoClass<cr>
+nmap <leader>ft :action GotoSymbol<cr>

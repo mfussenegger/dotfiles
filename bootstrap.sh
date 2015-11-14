@@ -6,6 +6,7 @@ stow bin
 stow python
 stow shell
 stow vim
+stow intellij
 stow i3
 stow git
 stow mplayer
