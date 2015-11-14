@@ -72,3 +72,6 @@
         | xargs git checkout $1 -- ' -"
 [instaweb]
     httpd = webrick
+
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
