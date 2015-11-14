@@ -1,0 +1,3 @@
+*.png diff=image
+*.gif diff=image
+*.jpg diff=image

@@ -1,11 +1,12 @@
 [user]
     name = Mathias Fussenegger
-    email = f.mathias@zignar.net
+    email = f.mathias@zign"ar.n"et
 
 [core]
     editor = vim
     autocrlf = input
-    excludesfile = ~/.gitignore
+    excludesfile = ~/.config/git/gitignore
+    attributesfile = ~/.config/git/gitattributes
 
 [color]
     diff = auto
@@ -16,11 +17,20 @@
 [github]
     user = mfussenegger
 
+[pull]
+    rebase = true
+
 [push]
     default = current
 
+[rebase]
+    autosquash = true
+
+[rerere]
+    enabled = true
+
 [merge]
-    tool = gvimdiff
+    tool = vimdiff
     conflictstyle = diff3
 
 [mergetool]
@@ -28,6 +38,9 @@
 
 [diff]
     tool = vimdiff
+
+[diff "image"]
+    textconv = identify
 
 [alias]
     lg = log --color --graph \
@@ -59,7 +72,3 @@
         | xargs git checkout $1 -- ' -"
 [instaweb]
     httpd = webrick
-[rebase]
-	autosquash = true
-[rerere]
-	enabled = true
