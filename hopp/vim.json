@@ -50,10 +50,6 @@
         "location": "vim/.vim/bundle/linediff"
     },
     {
-        "github": "davidhalter/jedi-vim",
-        "location": "vim/.vim/bundle/jedi-vim"
-    },
-    {
         "github": "hynek/vim-python-pep8-indent",
         "location": "vim/.vim/bundle/vim-python-pep8-indent"
     },
@@ -64,5 +60,9 @@
     {
         "github": "cespare/vim-toml",
         "location": "vim/.vim/bundle/vim-toml"
+    },
+    {
+        "github": "tpope/vim-eunuch",
+        "location": "vim/.vim/bundle/vim-eunuch"
     }
 ]
