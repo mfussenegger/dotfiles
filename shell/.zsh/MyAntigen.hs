@@ -1,14 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE ExtendedDefaultRules #-}
 module MyAntigen where
 
 import Antigen (
                 -- Rudimentary imports
-                AntigenConfiguration (..)
+                AntigenConfig (..)
+              , defaultConfig
               , bundle
               , antigen
               )
-import Shelly (shelly)
 
 bundles =
   [ bundle "mafredri/zsh-async"
@@ -17,7 +16,7 @@ bundles =
   , bundle "zsh-users/zsh-history-substring-search"
   ]
 
-config = AntigenConfiguration bundles
+config = defaultConfig { plugins = bundles }
 
 main :: IO ()
-main = shelly $ antigen config
+main = antigen config
