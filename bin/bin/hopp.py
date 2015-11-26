@@ -100,10 +100,10 @@ def git(location, git, branch=None, cmds=None):
     if os.path.exists(location):
         cmd = ['git', 'pull', 'origin', 'master']
         p = run(cmd, cwd=location, stdout=PIPE)
-        if b'Already up-to-date' not in p.stdout:
+        if b'is up to date' not in p.stdout:
             cmd = ['git', 'submodule', 'update', '--init', '--recursive']
             run(cmd, cwd=location)
-            _exec_cmds(cmds)
+            _exec_cmds(location, cmds)
     else:
         source = git
         cmd = ['git', 'clone', '--depth', '1', '--recursive']
@@ -111,7 +111,7 @@ def git(location, git, branch=None, cmds=None):
             cmd += ['-b', branch]
         cmd += [source, location]
         run(cmd)
-        _exec_cmds(cmds)
+        _exec_cmds(location, cmds)
 
 
 def github(location, github, cmds=None):
@@ -130,7 +130,10 @@ loaders = {
 
 def try_load_entry(entry):
     if 'location' in entry:
+        before = entry['location']
         entry['location'] = os.path.abspath(os.path.expanduser(entry['location']))
+        if before.endswith('/'):
+            entry['location'] += '/'
     for key in entry:
         if key in loaders:
             return loaders[key](**entry)
