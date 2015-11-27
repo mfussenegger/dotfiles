@@ -1,9 +1,5 @@
 [
     {
-        "location": "~/.zsh/z.sh",
-        "curl": "https://raw.githubusercontent.com/rupa/z/master/z.sh"
-    },
-    {
         "location": "/tmp/",
         "curl": "https://github.com/github/hub/releases/download/v2.2.2/hub-linux-amd64-2.2.2.tgz",
         "cmds": [
@@ -17,11 +13,10 @@
         "location": "~/.virtualenvs/i3pystatus"
     },
     {
-        "virtualenv": ["httpie", "pew"],
+        "virtualenv": ["httpie"],
         "location": "~/.virtualenvs/tools",
         "cmds": [
-            "ln -sf ~/.virtualenvs/tools/bin/http ~/bin/http",
-            "ln -sf ~/.virtualenvs/tools/bin/pew ~/bin/pew"
+            "ln -sf ~/.virtualenvs/tools/bin/http ~/bin/http"
         ]
     }
 ]

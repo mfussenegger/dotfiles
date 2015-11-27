@@ -12,36 +12,13 @@ source ~/.zsh/history.plugin.zsh
 source ~/.zsh/completion.plugin.zsh
 source ~/.zsh/systemd.plugin.zsh
 source ~/.zsh/git.plugin.zsh
-source ~/.zsh/z.sh
-
-alias j='z'
-
-
+source ~/.zsh/utils.plugin.zsh
+source ~/.zsh/aliases.plugin.zsh
+source ~/.zsh/vi-keybindings.plugin.zsh
 source ~/.zshrc.local
 
 if (( $+commands[envoy] )); then
     source <(envoy -p)
 fi
 
-
-# Vi
-bindkey -v
-
-autoload edit-command-line; zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
-
-bindkey -M vicmd "k" history-substring-search-up
-bindkey -M vicmd "j" history-substring-search-down
-
-alias ls='ls --group-directories-first --color=auto'
-alias ll='ls -lh'
-alias la='ll -A'
-alias lt='ll -tr'
-alias lu='lt -u'
-
 [[ -f ~/.dircolors ]] && eval $(dircolors ~/.dircolors)
-
-function mcd() {
-    [[ -n "$1" ]] && mkdir -p "$1" && builtin cd "$1"
-}
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

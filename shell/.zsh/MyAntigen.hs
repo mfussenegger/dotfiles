@@ -7,6 +7,9 @@ import Antigen (
               , defaultConfig
               , bundle
               , antigen
+              , ZshPlugin (..)
+              , antigenSourcingStrategy
+              , filePathsSourcingStrategy
               )
 
 bundles =
@@ -14,6 +17,8 @@ bundles =
   , bundle "sindresorhus/pure"
   , bundle "zsh-users/zsh-syntax-highlighting"
   , bundle "zsh-users/zsh-history-substring-search"
+  , bundle "zsh-users/zsh-completions"
+  , (bundle "b4b4r07/enhancd") { sourcingStrategy = antigenSourcingStrategy }
   ]
 
 config = defaultConfig { plugins = bundles }

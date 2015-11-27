@@ -4,64 +4,6 @@ export SUDO_EDIT=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 
-# doesn't work with buildout
-#export PYTHONDONTWRITEBYTECODE=1
-
-# aliases
-
-### pacman
-
-alias p='sudo spacman'
-alias pac='pkgbuilder'
-
-### sudo make me a sandwich
-
-alias eject='sudo eject'
-
-#### lvm
-alias lvs='sudo lvs'
-alias vgs='sudo vgs'
-alias pvs='sudo pvs'
-alias lvdisplay='sudo lvdisplay'
-alias pvdisplay='sudo pvdisplay'
-alias vgdisplay='sudo vgdisplay'
-
-### systemd
-
-alias services="systemctl -t service list-unit-files | grep -v static"
-
-### yay python smtpd
-alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
-
-### shorten all the things
-alias -g L='|less'
-alias -g N='2> /dev/null'
-alias -g G='|grep'
-alias -g H='|head'
-alias -g T='|tail'
-alias -g F='|fzf'
-
-alias vi='vim'
-alias s='ssh'
-alias c="date && echo -e && cal -3m"
-alias :q="exit"
-alias v='fasd -f -e vim'
-alias rcp='rsync --progress'
-alias kvm="qemu-kvm -enable-kvm"
-alias rec="ffmpeg -f x11grab -s 2048x1152 -r 150 -i :0.0 workspace/tmp/foo.mpg"
-
-### useful defaults
-alias rsync="ionice -c 3 rsync"
-alias iostat="iostat -mtx"
-alias rdesktop="rdesktop -k de -K -z"
-
-# star trek engine noice:
-alias engage='play -n -c1 synth whitenoise band -n 100 20 band -n 50 20 gain +25  fade h 1 864000 1'
-
-
-alias benice="renice -n 19 -p $$ && ionice -c3 -p $$ && ionice -p $$"
-alias berude="sudo renice -n -19 -p $$ && sudo ionice -c1 -p $$ && ionice -p $$"
-
 
 myoutube() {
     mplayer -vo vaapi -cache 8192 -fs $(youtube-dl -g $1)
@@ -134,30 +76,8 @@ portkill() {
     lsof -i :$1 | tail -n +2 | awk '{ print $2 }' | xargs kill
 }
 
-
-waitssh() {
-    SSH_HOST=$1
-    if [[ "$1" == *@* ]]
-    then
-        SSH_HOST=$(echo $1 | cut -d'@' -f 2)
-    fi
-
-    until [ `nmap --open -p 22 $SSH_HOST | grep -c "ssh"` -eq 1 ]
-    do
-        sleep 4
-    done
-    ssh $1
-}
-
 clean_whiteboard() {
     convert "$1" -morphology Convolve DoG:15,100,0 -negate -normalize -blur 0x1 -channel
-}
-
-cdup() {
-    for i in seq $1
-    do
-        cd ..
-    done
 }
 
 PYTHONSTARTUP=~/.pythonrc.py
