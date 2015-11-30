@@ -13,10 +13,13 @@
         "location": "~/.virtualenvs/i3pystatus"
     },
     {
-        "virtualenv": ["httpie"],
+        "virtualenv": ["httpie", "crash", "twine", "pypsh"],
         "location": "~/.virtualenvs/tools",
         "cmds": [
-            "ln -sf ~/.virtualenvs/tools/bin/http ~/bin/http"
+            "ln -sf ~/.virtualenvs/tools/bin/http ~/bin/http",
+            "ln -sf ~/.virtualenvs/tools/bin/crash ~/bin/crash",
+            "ln -sf ~/.virtualenvs/tools/bin/twine ~/bin/twine",
+            "ln -sf ~/.virtualenvs/tools/bin/pypsh ~/bin/pypsh"
         ]
     }
 ]
