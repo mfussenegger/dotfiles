@@ -72,5 +72,9 @@
     {
         "github": "honza/vim-snippets",
         "location": "vim/.vim/bundle/vim-snippets"
+    },
+    {
+        "github": "mfussenegger/dbext.vim",
+        "location": "vim/.vim/bundle/dbext.vim"
     }
 ]
