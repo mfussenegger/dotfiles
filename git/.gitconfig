@@ -48,7 +48,6 @@
         --abbrev-commit --
     killbranches = !git branch --merged | grep -v '^*' \
                    | grep -v master | xargs git branch -d 2> /dev/null
-    ls = ls-files
     pr = !~/bin/git-pull-request
     fixup = !git commit --fixup $(git rev-parse HEAD)
     serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
@@ -67,9 +66,14 @@
     fixup-to = !git commit --fixup=$(git filter-commits)
     prune-all = !git remote | xargs -n1 git remote prune
     co-recurse = !sh -c 'git checkout $1 && git submodule update --recursive' -
-    co-file = "!sh -c 'git ls-tree --name-only -r $1 \
+    ls-branch = !git ls-tree --name-only -r
+    co-file = "!sh -c 'git ls-branch $1 \
         | fzf \
         | xargs git checkout $1 -- ' -"
+    cp-file = "!sh -c 'git ls-branch -r $1 \
+        | fzf \
+        | xargs -I {} git diff ..$1 -- {} \
+        | git apply -3 ' -"
 [instaweb]
     httpd = webrick
 
