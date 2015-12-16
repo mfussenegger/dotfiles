@@ -8,6 +8,9 @@
     excludesfile = ~/.config/git/gitignore
     attributesfile = ~/.config/git/gitattributes
 
+[init]
+	templatedir = ~/.config/git/git_template
+
 [color]
     diff = auto
     status = auto
@@ -74,6 +77,7 @@
         | fzf \
         | xargs -I {} git diff ..$1 -- {} \
         | git apply -3 ' -"
+    ctags = "!.git/hooks/ctags"
 [instaweb]
     httpd = webrick
 
