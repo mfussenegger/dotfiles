@@ -6,31 +6,10 @@ let mapleader = ","
 let maplocalleader = " "
 
 set lazyredraw
-
-" visual stuff
-if has('gui_running')
-    set background=dark
-    colorscheme zenburn
-    set guioptions-=m
-    set guioptions-=T
-    set guioptions-=l
-    set guioptions-=L
-    set guioptions-=r
-    set guioptions-=R
-    set gfn=Terminus\ 12
-else
-    set background=dark
-    colorscheme zenburn
-endif
-
-if has('win32')
-    inoremap <c-v> <esc>"*p<return>i
-    vnoremap <c-c> "+y
-    set gfn=Andale_Mono:h11:cANSI
-endif
-
 set ttyfast
 
+set background=dark
+colorscheme zenburn
 
 set matchtime=3 " show matching parenthesis a bit faster.
 set cmdheight=2
@@ -177,61 +156,6 @@ autocmd InsertEnter * :set nu
 autocmd InsertLeave * :set rnu
 
 " }}}
-
-
-" diff modified / current file {{{
-" thanks reddit/r/vim for this gem
-" shows the diff between current modified file and the original file on disk
-nnoremap <Leader>df :call DiffOrig()<CR>
-
-function! DiffOrig()
-    if !exists("b:diff_active") && &buftype == "nofile"
-        echoerr "E: Cannot diff a scratch buffer"
-        return -1
-    elseif expand("%") == ""
-        echoerr "E: Buffer doesn't exist on disk"
-        return -1
-    endif
-
-    if !exists("b:diff_active") || b:diff_active == 0
-        let b:diff_active = 1
-        let l:orig_filetype = &l:filetype
-
-        leftabove vnew
-        let t:diff_buffer = bufnr("%")
-        set buftype=nofile
-
-        read #
-        0delete_
-        let &l:filetype = l:orig_filetype
-
-        diffthis
-        wincmd p
-        diffthis
-    else
-        diffoff
-        execute "bdelete " . t:diff_buffer
-        let b:diff_active = 0
-    endif
-endfunction
-" }}}
-
-" white cursor in cmd-mode, orange in insert mode {{{
-if &term =~ "rxvt"
-    "Set the cursor white in cmd-mode and orange in insert mode
-    let &t_EI = "\<Esc>]12;white\x9c"
-    let &t_SI = "\<Esc>]12;orange\x9c"
-    "We normally start in cmd-mode
-    silent !echo -e "\e]12;white\x9c"
-endif
-" }}}
-
-
-
-function! Tags()
-    silent !git ls-files | xargs ctags
-endfunction
-command! Tags call Tags()
 
 " ----- file type settings
 "
