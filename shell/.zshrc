@@ -22,3 +22,5 @@ if (( $+commands[envoy] )); then
 fi
 
 [[ -f ~/.dircolors ]] && eval $(dircolors ~/.dircolors)
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -141,7 +141,6 @@ let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
 
 let g:gist_detect_filetype = 1
 
-let g:syntastic_python_checkers=['frosted']
 let g:markdown_fenced_languages = ['python', 'html', 'javascript', 'css', 'bash=sh', 'sh']
 
 let NERDTreeIgnore = ['^develop-eggs$', '\.egg-info$']
