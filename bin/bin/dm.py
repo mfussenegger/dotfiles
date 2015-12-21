@@ -4,13 +4,28 @@
 
 import os
 import re
-from sh import dmenu, echo, vboxmanage, cut, xset, xrdb, sed, xrandr, grep
+from sh import dmenu
+from sh import echo
+from sh import cut
+from sh import xset
+from sh import xrdb
+from sh import sed
+from sh import xrandr
+try:
+    from sh import vboxmanage
+except ImportError:
+    pass
 
-grep = grep.bake('--color=never')
 dmenu = dmenu.bake(
-    '-l', 30,'-fn',
+    '-l', 30, '-fn',
     '-*-terminus-medium-*-*-*-14-140-*-*-*-*-*-*'
 )
+
+
+def grep(output, pattern):
+    for line in output:
+        if pattern in line:
+            yield line
 
 
 def output(p):
@@ -22,7 +37,7 @@ OUTPUT_ACTIVE_REX = re.compile(
 
 
 def cmd_xrandr_on():
-    outputs = output(grep(xrandr(), ' connected')).split('\n')
+    outputs = grep(xrandr(), ' connected')
     outputs = [o.split(' ')[0] for o in outputs
                if not OUTPUT_ACTIVE_REX.match(o)]
     if len(outputs) > 1:
@@ -46,7 +61,7 @@ def cmd_xrandr_on():
 
 
 def _get_active_outputs():
-    outputs = output(grep(xrandr(), ' connected')).split('\n')
+    outputs = grep(xrandr(), ' connected')
     return [o.split(' ')[0] for o in outputs
             if OUTPUT_ACTIVE_REX.match(o)]
 
