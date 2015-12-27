@@ -35,7 +35,7 @@
     {
         "location": "vim/.vim/bundle/ycm",
         "github": "Valloric/YouCompleteMe",
-        "cmds": "python2 install.py"
+        "cmds": "python2 install.py --clang-completer"
     },
     {
         "github": "mattn/webapi-vim",
