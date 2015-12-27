@@ -43,6 +43,7 @@ alias c="date && echo -e && cal -3m"
 alias :q="exit"
 alias eject='sudo eject'
 alias rcp='rsync --progress'
+alias drop_caches='echo 3 | sudo tee /proc/sys/vm/drop_caches'
 
 # useful defaults
 alias rsync="ionice -c 3 rsync"
