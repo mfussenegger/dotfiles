@@ -136,6 +136,9 @@ cnoremap <C-e> <End>
 
 " plugin settings {{{
 
+" ignore line length warnings
+let g:syntastic_python_flake8_args = '--ignore=E501'
+
 let g:tex_flavor = 'latex'
 let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
 
