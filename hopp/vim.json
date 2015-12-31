@@ -76,5 +76,10 @@
     {
         "github": "mfussenegger/dbext.vim",
         "location": "vim/.vim/bundle/dbext.vim"
+    },
+    {
+        "github": "fsharp/vim-fsharp",
+        "location": "vim/.vim/bundle/vim-fsharp",
+        "cmds": "make fsautocomplete"
     }
 ]
