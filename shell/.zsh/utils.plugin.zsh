@@ -3,7 +3,7 @@
 until-success() {
     "$@"
     while [ $? -ne 0 ]; do
-        "$*"
+        "$@"
     done
 }
 
@@ -11,7 +11,7 @@ until-success() {
 until-error() {
     "$@"
     while [ $? -eq 0 ]; do
-        "$*"
+        "$@"
     done
 }
 
