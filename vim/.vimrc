@@ -136,6 +136,10 @@ cnoremap <C-e> <End>
 
 " plugin settings {{{
 
+let g:ycm_semantic_triggers = {
+            \ 'fsharp': ['.']
+            \ }
+
 " ignore line length warnings
 let g:syntastic_python_flake8_args = '--ignore=E501'
 
