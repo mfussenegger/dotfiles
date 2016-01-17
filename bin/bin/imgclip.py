@@ -10,12 +10,19 @@ Example usage::
     scrot -s /tmp/screenshot.png -e 'imgclip.py $f'
 
 Then CTLR+v in any application to paste the image.
+
+
 """
 
-from gi.repository import Gtk, Gdk
 import sys
+try:
+    from gi.repository import Gtk, Gdk
+except ImportError:
+    sys.exit('gi.repository not found. Install python-gobject (under Archlinux)')
+
 
 count = 0
+
 
 def handle_owner_change(clipboard, event):
     global count
