@@ -58,11 +58,11 @@ ra() {
 
 share_internet() {
     if [[ -z "$1" ]] then
-        echo "share_internet <dev with clients> <dev with internet>"
+        echo "share_internet <dev with internet> <dev with clients>"
         return 1
     fi
     if [[ -z "$2" ]] then
-        echo "share_internet <dev with clients> <dev with internet>"
+        echo "share_internet <dev with internet> <dev with clients>"
         return 1
     fi
     # share_internet from(dev with clients) to (dev with internet)
