@@ -35,7 +35,7 @@
     {
         "location": "vim/.vim/bundle/ycm",
         "github": "Valloric/YouCompleteMe",
-        "cmds": "python2 install.py --clang-completer"
+        "cmds": "python2 install.py --clang-completer --omnisharp-completer"
     },
     {
         "github": "mattn/webapi-vim",
@@ -74,7 +74,7 @@
         "location": "vim/.vim/bundle/vim-snippets"
     },
     {
-        "github": "mfussenegger/dbext.vim",
+        "github": "vim-scripts/dbext.vim",
         "location": "vim/.vim/bundle/dbext.vim"
     },
     {
