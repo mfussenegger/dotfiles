@@ -10,6 +10,10 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+set $up k
+set $down j
+set $left h
+set $right l
 
 # font for window titles. ISO 10646 = Unicode
 #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -115,7 +119,23 @@ bindsym $mod+Shift+C reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+R restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+E exit
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        bindsym $left       resize shrink width 5 px or 5 ppt
+        bindsym $down       resize grow height 5 px or 5 ppt
+        bindsym $up         resize shrink height 5 px or 5 ppt
+        bindsym $right      resize grow width 5 px or 5 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -125,30 +145,22 @@ bar {
     tray_output primary
 }
 
+
+for_window [class="Termite"]        border 1pixel
+
 # window specific settings
 #
 assign [class="Gajim.py"] 9
 
 # workspace settings
 
-workspace 1 output DVI-I-3
-workspace 2 output DVI-I-3
-workspace 3 output DVI-I-3
+workspace 1 output HDMI1
+workspace 2 output HDMI1
+workspace 3 output HDMI1
 
-workspace 1 output DP1
-workspace 2 output DP1
-workspace 3 output DP1
-workspace 4 output DP1
-workspace 5 output DP1
-workspace 6 output DP1
-
-workspace 7 output DVI-I-2
-workspace 8 output DVI-I-2
-workspace 9 output DVI-I-2
-workspace 7 output eDP1
-workspace 8 output eDP1
-workspace 9 output eDP1
-workspace 0 output eDP1
+workspace 7 output HDMI2
+workspace 8 output HDMI2
+workspace 9 output HDMI2
 
 # scratchpad
 bindsym $mod+Shift+minus move scratchpad
