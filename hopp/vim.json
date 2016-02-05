@@ -81,5 +81,9 @@
         "github": "fsharp/vim-fsharp",
         "location": "vim/.vim/bundle/vim-fsharp",
         "cmds": "make fsautocomplete"
+    },
+    {
+        "github": "diepm/vim-rest-console",
+        "location": "vim/.vim/bundle/vim-rest-console"
     }
 ]
