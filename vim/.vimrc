@@ -78,6 +78,11 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>w :match Error /\v +$/<cr>
 nnoremap <leader>W :match none<cr>
 
+nnoremap <leader>ex :exec '!'.getline('.')
+
+" pre-filter history navigation in command-mode with already typed input
+cnoremap <c-n> <down>
+cnoremap <c-p> <up>
 
 " =============================================================================
 " ultiSnips
