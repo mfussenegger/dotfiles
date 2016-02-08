@@ -85,5 +85,9 @@
     {
         "github": "diepm/vim-rest-console",
         "location": "vim/.vim/bundle/vim-rest-console"
+    },
+    {
+        "github": "leafgarland/typescript-vim",
+        "location": "vim/.vim/bundle/typescript-vim"
     }
 ]
