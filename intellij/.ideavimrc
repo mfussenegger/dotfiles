@@ -2,6 +2,24 @@
 let mapleader = ","
 set rnu numberwidth=4
 
-nmap <leader>ff :action GotoFile<cr>
-nmap <leader>fc :action GotoClass<cr>
-nmap <leader>ft :action GotoSymbol<cr>
+nnoremap crr :action RenameElement<CR>
+vnoremap crm :action ExtractMethod<CR>
+vnoremap crv :action IntroduceVariable<CR>
+nnoremap crv :action IntroduceVariable<CR>
+nnoremap crf :action IntroduceField<CR>
+
+nnoremap <leader>ff :action GotoFile<cr>
+nnoremap <leader>fc :action GotoClass<cr>
+nnoremap <leader>ft :action GotoSymbol<cr>
+nnoremap <leader>d :action DebugClass<cr>
+nnoremap <leader>r :action Refactorings.QuickListPopupAction<cr>
+nnoremap <Leader>b :action ToggleLineBreakpoint<cr>
+nnoremap <Leader>e :action EvaluateExpression<cr>
+
+nnoremap <leader>tr :action RerunTests<cr>
+nnoremap <leader>tfr :action RerunFailedTests<cr>
+
+nnoremap [m :action MethodUp<cr>
+nnoremap ]m :action MethodDown<cr>
+
+nnoremap <leader>sv :source ~/.ideavimrc<CR>
