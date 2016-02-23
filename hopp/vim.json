@@ -9,73 +9,9 @@
         "cmds": "yes | sh install"
     },
     {
-        "location": "vim/.vim/bundle/fzf.vim",
-        "github": "junegunn/fzf.vim"
-    },
-    {
-        "github": "tpope/vim-sensible",
-        "location": "vim/.vim/bundle/vim-sensible"
-    },
-    {
-        "github": "tpope/vim-fugitive",
-        "location": "vim/.vim/bundle/vim-fugitive"
-    },
-    {
-        "github": "bling/vim-airline",
-        "location": "vim/.vim/bundle/vim-airline"
-    },
-    {
-        "github": "scrooloose/syntastic",
-        "location": "vim/.vim/bundle/syntastic"
-    },
-    {
-        "github": "scrooloose/nerdtree",
-        "location": "vim/.vim/bundle/nerdtree"
-    },
-    {
         "location": "vim/.vim/bundle/ycm",
         "github": "Valloric/YouCompleteMe",
         "cmds": "python2 install.py --clang-completer --omnisharp-completer"
-    },
-    {
-        "github": "mattn/webapi-vim",
-        "location": "vim/.vim/bundle/webapi-vim"
-    },
-    {
-        "github": "mattn/gist-vim",
-        "location": "vim/.vim/bundle/gist-vim"
-    },
-    {
-        "github": "vim-scripts/linediff.vim",
-        "location": "vim/.vim/bundle/linediff"
-    },
-    {
-        "github": "hynek/vim-python-pep8-indent",
-        "location": "vim/.vim/bundle/vim-python-pep8-indent"
-    },
-    {
-        "github": "jamessan/vim-gnupg",
-        "location": "vim/.vim/bundle/vim-gnupg"
-    },
-    {
-        "github": "cespare/vim-toml",
-        "location": "vim/.vim/bundle/vim-toml"
-    },
-    {
-        "github": "tpope/vim-eunuch",
-        "location": "vim/.vim/bundle/vim-eunuch"
-    },
-    {
-        "github": "SirVer/ultisnips",
-        "location": "vim/.vim/bundle/ultisnips"
-    },
-    {
-        "github": "honza/vim-snippets",
-        "location": "vim/.vim/bundle/vim-snippets"
-    },
-    {
-        "github": "vim-scripts/dbext.vim",
-        "location": "vim/.vim/bundle/dbext.vim"
     },
     {
         "github": "fsharp/vim-fsharp",
@@ -83,11 +19,26 @@
         "cmds": "make fsautocomplete"
     },
     {
-        "github": "diepm/vim-rest-console",
-        "location": "vim/.vim/bundle/vim-rest-console"
-    },
-    {
-        "github": "leafgarland/typescript-vim",
-        "location": "vim/.vim/bundle/typescript-vim"
+        "location": "vim/.vim/bundle/",
+        "github": [
+            "junegunn/fzf.vim",
+            "tpope/vim-sensible",
+            "tpope/vim-fugitive",
+            "bling/vim-airline",
+            "scrooloose/syntastic",
+            "scrooloose/nerdtree",
+            "mattn/webapi-vim",
+            "mattn/gist-vim",
+            "vim-scripts/linediff.vim",
+            "hynek/vim-python-pep8-indent",
+            "jamessan/vim-gnupg",
+            "cespare/vim-toml",
+            "tpope/vim-eunuch",
+            "SirVer/ultisnips",
+            "honza/vim-snippets",
+            "vim-scripts/dbext.vim",
+            "diepm/vim-rest-console",
+            "leafgarland/typescript-vim"
+        ]
     }
 ]

@@ -14,23 +14,21 @@ Inspired by https://github.com/buildinspace/peru but with some differences:
 
 Usage::
 
-    hopp.py -c hopp.json [ , ... ]
+    hopp.py hopp.json [ , ... ]
 
 (There is an example hopp.json file in this repo as example)
 """
-
-import sys
-
-if sys.version_info[:2] < (3, 5):
-    raise SystemExit('hopp requires at least python 3.5')
 
 import os
 import json
 import venv
 from argparse import ArgumentParser
-from subprocess import Popen, PIPE, run
+from subprocess import PIPE, run
 from urllib.request import urlopen
-from multiprocessing import Pool
+from concurrent.futures import ThreadPoolExecutor
+
+
+executor = ThreadPoolExecutor()
 
 
 def _exec_cmds(location, cmds=None):
@@ -89,6 +87,15 @@ def curl(location, curl, cmds=None):
     _exec_cmds(location, cmds)
 
 
+def _pull(location, cmds=None):
+    cmd = ['git', 'pull', 'origin', 'master']
+    p = run(cmd, cwd=location, stdout=PIPE)
+    if b'is up to date' not in p.stdout:
+        cmd = ['git', 'submodule', 'update', '--init', '--recursive']
+        run(cmd, cwd=location)
+        _exec_cmds(location, cmds)
+
+
 def git(location, git, branch=None, cmds=None):
     """ load a git entry:
 
@@ -97,27 +104,43 @@ def git(location, git, branch=None, cmds=None):
             "git": "https://github.com/Shougo/vimproc.vim.git",
         }
     """
+
+    # location:
+    # - .vim/bundle      (exists)           -> git clone (create basename of url)
+    # - .vim/bundle/foo  (with .git)        -> git pull
+    # - .vim/bundle/foo  (doesn't exist)    -> git clone (creates foo)
+
+    repo = os.path.basename(git)
+    if repo.endswith('.git'):
+        repo = repo[:-4]
     if os.path.exists(location):
-        cmd = ['git', 'pull', 'origin', 'master']
-        p = run(cmd, cwd=location, stdout=PIPE)
-        if b'is up to date' not in p.stdout:
-            cmd = ['git', 'submodule', 'update', '--init', '--recursive']
-            run(cmd, cwd=location)
-            _exec_cmds(location, cmds)
-    else:
-        source = git
-        cmd = ['git', 'clone', '--depth', '1', '--recursive']
-        if branch:
-            cmd += ['-b', branch]
-        cmd += [source, location]
-        run(cmd)
-        _exec_cmds(location, cmds)
+        if os.path.exists(os.path.join(location, '.git')):
+            return _pull(location, cmds=cmds)
+
+        location = os.path.join(location, repo)
+        if os.path.exists(os.path.join(location, '.git')):
+            return _pull(os.path.join(location, repo), cmds=cmds)
+    source = git
+    cmd = ['git', 'clone', '--depth', '1', '--recursive']
+    if branch:
+        cmd += ['-b', branch]
+    cmd += [source, location]
+    run(cmd)
+    _exec_cmds(location, cmds)
 
 
 def github(location, github, cmds=None):
     """ shortcut for git """
-    url = 'https://github.com/{0}.git'.format(github)
-    git(location=location, git=url, cmds=cmds)
+    url_tmpl = 'https://github.com/{0}.git'
+    if not isinstance(github, list):
+        url = url_tmpl.format(github)
+        git(location=location, git=url, cmds=cmds)
+    else:
+        urls = [url_tmpl.format(u) for u in github]
+
+        def g(url):
+            git(location=location, git=url, cmds=cmds)
+        executor.map(g, urls)
 
 
 loaders = {
@@ -142,9 +165,8 @@ def try_load_entry(entry):
 
 def main():
     p = ArgumentParser('hopp.py', 'bootstrap stuff')
-    p.add_argument('-c', '--config', type=str, nargs='+', default='hopp.json',
-                   help=('path to the bootstrap json config file.\n'
-                         'Default is hopp.json'))
+    p.add_argument(
+        'config', type=str, nargs='+', help=('One or more configuration files'))
     args = p.parse_args()
     if isinstance(args.config, list):
         configs = args.config
@@ -156,8 +178,7 @@ def main():
         with open(config, 'r') as f:
             entries += json.load(f)
 
-    with Pool(16) as pool:
-        pool.map(try_load_entry, entries)
+    executor.map(try_load_entry, entries)
 
 
 if __name__ == '__main__':
