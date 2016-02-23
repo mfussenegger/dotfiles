@@ -1,6 +1,5 @@
-
-if [[ -x '/usr/bin/autorandr' ]]; then
-    autorandr --change --force
+if hash randrctl 2> /dev/null; then
+    randrctl auto
 fi
 
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
