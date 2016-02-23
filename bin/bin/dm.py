@@ -97,9 +97,10 @@ def _change_vim_color_scheme(colorscheme, background):
 
 
 def _set_termite_config(config_name):
-    ln('-sf',
-       os.path.expanduser('~/dotfiles/termite/.config/termite/' + config_name),
-       os.path.expanduser('~/.config/termite/config'))
+    config_dir = os.path.expanduser('~/.config/termite/')
+    if not os.path.exists(os.path.join(config_dir, config_name)):
+        return
+    ln('-sf', config_name, 'config', _cwd=config_dir)
     killall('-s', 'USR1', 'termite')
 
 
