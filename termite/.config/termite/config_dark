@@ -1,0 +1,39 @@
+[options]
+font = Terminus (TTF) 12
+browser = /usr/bin/qutebrowser
+scrollback_lines = 40000
+allow_bold = true
+cursor_blink = off
+cursor_shape = block
+
+[colors]
+background = #1f1f1f
+foreground = #DDDDDD
+
+color0 =  #000000
+color8 =  #709080
+
+color1 =  #705050
+color9 =  #dca3a3
+
+color2 =  #60b48a
+color10 = #c3bf9f
+
+color3 =  #dfaf8f
+color11 = #f0dfaf
+
+color4 =  #506070
+color12 = #9ebadc
+
+color5 =  #dc8cc3
+color13 = #ec93d3
+
+color6 =  #8cd0d3
+color14 = #93e0e3
+
+color7 =  #dcdccc
+color15 = #ffffff
+
+colorBD = #ffcfaf
+colorUL = #ccdc90
+colorIT = #80d4aa

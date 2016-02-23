@@ -1,0 +1,37 @@
+[options]
+#font = Consolas 14
+#font = Bitstream Vera Sans Mono 14
+font = Dejavu Sans Mono 14
+browser = /usr/bin/qutebrowser
+scrollback_lines = 40000
+allow_bold = true
+cursor_blink = off
+cursor_shape = block
+
+[colors]
+background = white
+foreground = black
+
+color0 =  #000000
+color8 =  #000000
+
+color1 =  #cc0000
+color9 =  #cc0000
+
+color2 =  #009a00
+color10 = #009a00
+
+color3 =  #e0b600
+color11 = #e0b600
+
+color4 =  #0000ec
+color12 = #0000ec
+
+color5 =  #ca00ca
+color13 = #ca00ca
+
+color6 =  #00a0a0
+color14 = #00a0a0
+
+color7 =  #cccccc
+color15 = #ffffff

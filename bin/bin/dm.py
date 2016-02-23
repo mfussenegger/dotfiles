@@ -8,9 +8,11 @@ from sh import dmenu
 from sh import echo
 from sh import cut
 from sh import xset
-from sh import xrdb
 from sh import sed
 from sh import xrandr
+from sh import ln
+from sh import killall
+from sh import vim
 try:
     from sh import vboxmanage
 except ImportError:
@@ -77,22 +79,42 @@ def cmd_vbox_launch():
     vboxmanage('-q', 'startvm', o, '--type', 'gui')
 
 
-def cmd_pres_off():
+def _change_vim_color_scheme(colorscheme, background):
     vimrc_path = os.path.expanduser('~/.vimrc')
+
+    sed_cmd = 's/colorscheme {old_scheme}/colorscheme {new_scheme}/g'
+    sed_cmd = sed_cmd.format(old_scheme=colorscheme[0], new_scheme=colorscheme[1])
+    sed('-i', sed_cmd, vimrc_path)
+
+    sed_cmd = 's/background={old_bg}/background={new_bg}/g'
+    sed_cmd = sed_cmd.format(old_bg=background[0], new_bg=background[1])
+    sed('-i', sed_cmd, vimrc_path)
+
+    change_color = '<Esc>:set background={new_bg}<CR>:colorscheme {new_scheme}<CR>'
+    change_color = change_color.format(new_bg=background[1], new_scheme=colorscheme[1])
+    for server in vim('--serverlist'):
+        vim('--servername', server.strip(), '--remote-send', change_color)
+
+
+def _set_termite_config(config_name):
+    ln('-sf',
+       os.path.expanduser('~/dotfiles/termite/.config/termite/' + config_name),
+       os.path.expanduser('~/.config/termite/config'))
+    killall('-s', 'USR1', 'termite')
+
+
+def cmd_pres_off():
     xset('s', 'on')
     xset('+dpms')
-    xrdb(os.path.expanduser('~/.Xresources'))
-    sed('-i', 's/colorscheme github/colorscheme zenburn/g', vimrc_path)
-    sed('-i', 's/background=light/background=dark/g', vimrc_path)
+    _change_vim_color_scheme(('default', 'zenburn'), ('light', 'dark'))
+    _set_termite_config('config_dark')
 
 
 def cmd_pres_on():
-    vimrc_path = os.path.expanduser('~/.vimrc')
     xset('s', 'off')
     xset('-dpms')
-    xrdb(os.path.expanduser('~/dotfiles/shell/.Xresources-presentation'))
-    sed('-i', 's/colorscheme zenburn/colorscheme github/g', vimrc_path)
-    sed('-i', 's/background=dark/background=light/g', vimrc_path)
+    _change_vim_color_scheme(('zenburn', 'default'), ('dark', 'light'))
+    _set_termite_config('config_light')
 
 
 def main():
