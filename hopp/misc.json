@@ -1,11 +1,9 @@
 [
     {
         "location": "/tmp/",
-        "curl": "https://github.com/github/hub/releases/download/v2.2.2/hub-linux-amd64-2.2.2.tgz",
+        "curl": "https://github.com/github/hub/releases/download/v2.2.3/hub-linux-amd64-2.2.3.tgz",
         "cmds": [
-            "tar xvzf /tmp/hub-linux*.tgz",
-            "cp /tmp/hub-linux*/bin/hub ~/bin/gh",
-            "rm -rf /tmp/hub-linux*"
+            "tar xvzf /tmp/hub-linux-*.tgz -C ~/bin/ --wildcards 'hub-linux-*/bin/hub' --strip 2 --transform 's/hub/gh/g'"
         ]
     },
     {
