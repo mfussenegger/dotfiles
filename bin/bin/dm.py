@@ -4,6 +4,8 @@
 
 import os
 import re
+import json
+from sh import xdg_open
 from sh import dmenu
 from sh import echo
 from sh import cut
@@ -102,6 +104,14 @@ def _set_termite_config(config_name):
         return
     ln('-sf', config_name, 'config', _cwd=config_dir)
     killall('-s', 'USR1', 'termite')
+
+
+def cmd_call():
+    filename = os.path.expanduser('~/.config/dm/contacts.json')
+    with open(filename, encoding='utf-8') as f:
+        contacts = json.load(f)
+    o = output(dmenu(echo('\n'.join(contacts.keys()))))
+    xdg_open(contacts[o])
 
 
 def cmd_pres_off():
