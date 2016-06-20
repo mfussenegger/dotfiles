@@ -5,9 +5,9 @@
 import os
 import re
 import json
+import typing
 from sh import xdg_open
-from sh import dmenu
-from sh import echo
+from sh import dmenu as shdmenu
 from sh import cut
 from sh import xset
 from sh import sed
@@ -20,10 +20,17 @@ try:
 except ImportError:
     pass
 
-dmenu = dmenu.bake(
+
+shdmenu = shdmenu.bake(
     '-l', 30, '-fn',
     '-*-terminus-medium-*-*-*-14-140-*-*-*-*-*-*'
 )
+
+
+def dmenu(args):
+    if isinstance(args, typing.Iterable):
+        args = '\n'.join(args)
+    return shdmenu(_in=args)
 
 
 def grep(output, pattern):
@@ -45,7 +52,7 @@ def cmd_xrandr_on():
     outputs = [o.split(' ')[0] for o in outputs
                if not OUTPUT_ACTIVE_REX.match(o)]
     if len(outputs) > 1:
-        outputs = output(dmenu(echo('\n'.join(outputs)))).split('\n')
+        outputs = output(dmenu(outputs)).split('\n')
     if not outputs:
         return
     selected_output = outputs[0]
@@ -59,7 +66,7 @@ def cmd_xrandr_on():
         choices.append('--below ' + active_output)
         choices.append('--above ' + active_output)
         choices.append('--same-as ' + active_output)
-    choice = output(dmenu(echo('\n'.join(choices))))
+    choice = output(dmenu(choices))
     option, active_output = choice.split(' ')
     xrandr('--output', selected_output, option, active_output, '--auto')
 
@@ -72,12 +79,12 @@ def _get_active_outputs():
 
 def cmd_xrandr_off():
     outputs = _get_active_outputs()
-    o = output(dmenu(echo('\n'.join(outputs))))
+    o = output(dmenu(outputs))
     xrandr('--output', o.split(' ')[0], '--off')
 
 
 def cmd_vbox_launch():
-    o = output(dmenu(cut(vboxmanage('list', 'vms'), '-d"', '-f2')))
+    o = output(shdmenu(cut(vboxmanage('list', 'vms'), '-d"', '-f2')))
     vboxmanage('-q', 'startvm', o, '--type', 'gui')
 
 
@@ -110,7 +117,7 @@ def cmd_call():
     filename = os.path.expanduser('~/.config/dm/contacts.json')
     with open(filename, encoding='utf-8') as f:
         contacts = json.load(f)
-    o = output(dmenu(echo('\n'.join(contacts.keys()))))
+    o = output(dmenu(contacts.keys()))
     xdg_open(contacts[o])
 
 
@@ -135,7 +142,7 @@ def main():
     for k in g:
         if k.startswith(prefix):
             commands.append(k[len(prefix):].replace('_', ' '))
-    o = output(dmenu(echo('\n'.join(commands))))
+    o = output(dmenu(commands))
     g[prefix + o.replace(' ', '_')]()
 
 
