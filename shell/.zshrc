@@ -13,10 +13,6 @@ source ~/.zsh/aliases.plugin.zsh
 source ~/.zsh/vi-keybindings.plugin.zsh
 source ~/.zshrc.local
 
-if (( $+commands[envoy] )); then
-    source <(envoy -p)
-fi
-
 [[ -f ~/.dircolors ]] && eval $(dircolors ~/.dircolors)
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
