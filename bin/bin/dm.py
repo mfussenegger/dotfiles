@@ -12,7 +12,6 @@ from sh import cut
 from sh import xset
 from sh import sed
 from sh import xrandr
-from sh import ln
 from sh import killall
 from sh import vim
 try:
@@ -109,7 +108,11 @@ def _set_termite_config(config_name):
     config_dir = os.path.expanduser('~/.config/termite/')
     if not os.path.exists(os.path.join(config_dir, config_name)):
         return
-    ln('-sf', config_name, 'config', _cwd=config_dir)
+    dst = os.path.join(config_dir, 'config')
+    if os.path.exists(dst):
+        os.remove(dst)
+    dir_fd = os.open(config_dir, flags=os.O_DIRECTORY)
+    os.symlink(config_name, 'config', dir_fd=dir_fd)
     killall('-s', 'USR1', 'termite')
 
 
