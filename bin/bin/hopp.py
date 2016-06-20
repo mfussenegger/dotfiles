@@ -178,7 +178,8 @@ def main():
         with open(config, 'r') as f:
             entries += json.load(f)
 
-    executor.map(try_load_entry, entries)
+    all(executor.map(try_load_entry, entries))
+    executor.shutdown(wait=True)
 
 
 if __name__ == '__main__':
