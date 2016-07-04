@@ -1,6 +1,3 @@
-nnoremap <S-k> :YcmCompleter GetDoc<CR>
-nnoremap gd :YcmCompleter GoToDeclaration<CR>
-
 compiler pyunit
 
 " Allows to call :make in any python file that has something like
