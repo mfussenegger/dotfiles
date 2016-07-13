@@ -16,6 +16,8 @@
             "crash",
             "twine",
             "pypsh",
+            "pex",
+            "wheel",
             "git+https://github.com/edio/randrctl.git"
         ],
         "location": "~/.virtualenvs/tools",
@@ -24,6 +26,7 @@
             "ln -sf ~/.virtualenvs/tools/bin/crash ~/bin/crash",
             "ln -sf ~/.virtualenvs/tools/bin/twine ~/bin/twine",
             "ln -sf ~/.virtualenvs/tools/bin/pypsh ~/bin/pypsh",
+            "ln -sf ~/.virtualenvs/tools/bin/pex ~/bin/pex",
             "ln -sf ~/.virtualenvs/tools/bin/randrctl ~/bin/randrctl"
         ]
     }
