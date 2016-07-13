@@ -2,5 +2,6 @@ vim/.netrwhist
 vim/.vim/bundle/
 vim/.vim/autoload
 vim/.vim/.netrwhist
-.peru
+vim/.vim/spell/
 shell/.zsh/z.sh
+systemd/.config/systemd/user/default.target.wants/
