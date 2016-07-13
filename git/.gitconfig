@@ -9,7 +9,7 @@
     attributesfile = ~/.config/git/gitattributes
 
 [init]
-	templatedir = ~/.config/git/git_template
+    templatedir = ~/.config/git/git_template
 
 [color]
     diff = auto
@@ -41,6 +41,7 @@
 
 [diff]
     tool = vimdiff
+    compactionHeuristic = true
 
 [diff "image"]
     textconv = identify
