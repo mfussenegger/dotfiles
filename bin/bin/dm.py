@@ -14,6 +14,7 @@ from sh import sed
 from sh import xrandr
 from sh import killall
 from sh import vim
+from sh import ErrorReturnCode_1
 try:
     from sh import vboxmanage
 except ImportError:
@@ -100,8 +101,11 @@ def _change_vim_color_scheme(colorscheme, background):
 
     change_color = '<Esc>:set background={new_bg}<CR>:colorscheme {new_scheme}<CR>'
     change_color = change_color.format(new_bg=background[1], new_scheme=colorscheme[1])
-    for server in vim('--serverlist'):
-        vim('--servername', server.strip(), '--remote-send', change_color)
+    try:
+        for server in vim('--serverlist'):
+            vim('--servername', server.strip(), '--remote-send', change_color)
+    except ErrorReturnCode_1:
+        pass
 
 
 def _set_termite_config(config_name):
