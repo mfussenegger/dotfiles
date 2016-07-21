@@ -9,11 +9,6 @@
         "cmds": "yes | sh install"
     },
     {
-        "location": "vim/.vim/bundle/ycm",
-        "github": "Valloric/YouCompleteMe",
-        "cmds": "python2 install.py --clang-completer --omnisharp-completer"
-    },
-    {
         "github": "fsharp/vim-fsharp",
         "location": "vim/.vim/bundle/vim-fsharp",
         "cmds": "make fsautocomplete"
@@ -21,12 +16,11 @@
     {
         "location": "vim/.vim/bundle/",
         "github": [
+            "Shougo/deoplete.nvim",
             "junegunn/fzf.vim",
-            "tpope/vim-sensible",
             "tpope/vim-fugitive",
             "bling/vim-airline",
             "scrooloose/syntastic",
-            "scrooloose/nerdtree",
             "mattn/webapi-vim",
             "mattn/gist-vim",
             "vim-scripts/linediff.vim",
@@ -38,7 +32,8 @@
             "honza/vim-snippets",
             "vim-scripts/dbext.vim",
             "diepm/vim-rest-console",
-            "leafgarland/typescript-vim"
+            "zchee/deoplete-jedi",
+            "ludovicchabant/vim-gutentags"
         ]
     }
 ]
