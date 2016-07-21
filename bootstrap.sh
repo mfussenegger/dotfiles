@@ -9,7 +9,6 @@ stow vim
 stow intellij
 stow i3
 stow git
-stow mplayer
 stow termite
 stow systemd
 

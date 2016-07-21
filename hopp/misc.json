@@ -7,10 +7,6 @@
         ]
     },
     {
-        "location": "~/.zsh/z.sh",
-        "curl": "https://raw.githubusercontent.com/rupa/z/master/z.sh"
-    },
-    {
         "virtualenv": ["i3pystatus", "psutil", "netifaces", "colour", "basiciw"],
         "location": "~/.virtualenvs/i3pystatus"
     },

@@ -3,5 +3,5 @@ vim/.vim/bundle/
 vim/.vim/autoload
 vim/.vim/.netrwhist
 vim/.vim/spell/
-shell/.zsh/z.sh
+shell/.zsh/plugins/
 systemd/.config/systemd/user/default.target.wants/

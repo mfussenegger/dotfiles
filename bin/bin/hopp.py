@@ -143,11 +143,29 @@ def github(location, github, cmds=None):
         executor.map(g, urls)
 
 
+def zsh(location, zsh, cmds=None):
+    filenames = []
+    for url in zsh:
+        curl(location, url)
+        filenames.append(os.path.basename(url))
+    zshrc = os.path.expanduser('~/.zshrc')
+    entries = ['source ~/.zsh/plugins/{}'.format(fn) for fn in filenames]
+    with open(zshrc, 'r') as f:
+        for line in f:
+            for entry in entries:
+                if entry in line:
+                    entries.remove(entry)
+    with open(zshrc, 'a') as f:
+        for entry in entries:
+            f.write('{entry}\n'.format(entry=entry))
+
+
 loaders = {
     'curl': curl,
     'git': git,
     'github': github,
-    'virtualenv': virtualenv
+    'virtualenv': virtualenv,
+    'zsh': zsh
 }
 
 
