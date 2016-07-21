@@ -8,9 +8,6 @@
     excludesfile = ~/.config/git/gitignore
     attributesfile = ~/.config/git/gitattributes
 
-[init]
-    templatedir = ~/.config/git/git_template
-
 [color]
     diff = auto
     status = auto
