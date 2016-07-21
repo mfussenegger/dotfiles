@@ -11,9 +11,4 @@ xset b off
 
 redshift -l 47.22:10.09 -t 6000:4200 &
 
-
-if [[ -x '/usr/bin/syndaemon' ]]; then
-    syndaemon -t -k -i 2 -d &
-fi
-
 exec dbus-launch i3
