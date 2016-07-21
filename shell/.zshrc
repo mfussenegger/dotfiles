@@ -15,4 +15,5 @@ source ~/.zshrc.local
 
 [[ -f ~/.dircolors ]] && eval $(dircolors ~/.dircolors)
 
+[ -f ~/.zsh/z.sh ] && source ~/.zsh/z.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
