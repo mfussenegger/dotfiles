@@ -89,9 +89,6 @@ update_mirrorlist() {
     reflector -n 24 -c AT -c DE -f 10 -l 10 | sudo tee /etc/pacman.d/mirrorlist
 }
 
-PYTHONSTARTUP=~/.pythonrc.py
-export PYTHONSTARTUP
-
 if [[ -x '/usr/bin/virtualenvwrapper.sh' ]]; then
     source /usr/bin/virtualenvwrapper.sh
 fi
