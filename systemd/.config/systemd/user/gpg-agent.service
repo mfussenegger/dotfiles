@@ -6,7 +6,6 @@ IgnoreOnIsolate=true
 Type=forking
 ExecStart=/usr/bin/gpg-agent --daemon
 Restart=on-abort
-Environment=DISPLAY=:0
 
 [Install]
 WantedBy=default.target
