@@ -1,3 +1,0 @@
-[submodule "shell/.zsh/antigen-hs"]
-	path = shell/.zsh/antigen-hs
-	url = git@github.com:Tarrasch/antigen-hs.git
