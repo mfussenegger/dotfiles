@@ -3,7 +3,6 @@
 test -d $HOME/.config || mkdir $HOME/.config
 
 stow bin
-stow python
 stow shell
 stow vim
 stow intellij

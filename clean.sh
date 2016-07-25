@@ -1,7 +1,6 @@
 #!/bin/bash
 
 stow --delete bin
-stow --delete python
 stow --delete shell
 stow --delete vim
 stow --delete intellij
