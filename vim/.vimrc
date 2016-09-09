@@ -1,4 +1,6 @@
 execute pathogen#infect()
+execute deoplete#enable()
+
 
 set shortmess+=I                    " Don't show vim welcome screen
 
