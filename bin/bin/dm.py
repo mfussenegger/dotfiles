@@ -14,6 +14,7 @@ from sh import sed
 from sh import xrandr
 from sh import killall
 from sh import vim
+from sh import setxkbmap
 from sh import ErrorReturnCode_1
 try:
     from sh import vboxmanage
@@ -140,6 +141,15 @@ def cmd_pres_on():
     xset('-dpms')
     _change_vim_color_scheme(('zenburn', 'default'), ('dark', 'light'))
     _set_termite_config('config_light')
+
+
+def cmd_keyboard():
+    xset('r', 'rate', 200, 40)
+    setxkbmap(
+        '-layout', 'de',
+        '-variant', 'nodeadkeys',
+        '-option', 'caps:escape'
+    )
 
 
 def main():
