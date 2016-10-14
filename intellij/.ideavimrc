@@ -1,6 +1,6 @@
 
 let mapleader = ","
-set rnu numberwidth=4
+set nu rnu numberwidth=4
 
 nnoremap crr :action RenameElement<CR>
 vnoremap crm :action ExtractMethod<CR>
@@ -15,6 +15,7 @@ nnoremap <leader>d :action DebugClass<cr>
 nnoremap <leader>r :action Refactorings.QuickListPopupAction<cr>
 nnoremap <Leader>b :action ToggleLineBreakpoint<cr>
 nnoremap <Leader>e :action EvaluateExpression<cr>
+nnoremap <Leader>n :action Generate<cr>
 
 nnoremap <leader>tr :action RerunTests<cr>
 nnoremap <leader>tfr :action RerunFailedTests<cr>

@@ -15,7 +15,7 @@ colorscheme zenburn
 
 set matchtime=3 " show matching parenthesis a bit faster.
 set cmdheight=2
-set rnu numberwidth=4
+set nu rnu numberwidth=4
 set mouse=a
 set cursorline
 
@@ -164,9 +164,6 @@ if exists("&colorcolumn")
     autocmd InsertEnter * set colorcolumn=80
     autocmd InsertLeave * set colorcolumn=""
 endif
-
-autocmd InsertEnter * :set nu
-autocmd InsertLeave * :set rnu
 
 " }}}
 
