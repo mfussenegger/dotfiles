@@ -17,7 +17,8 @@ set $right l
 
 # font for window titles. ISO 10646 = Unicode
 #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-font -*-terminus-medium-r-*-*-12-*-*-*-*-*-*-*
+#font -*-terminus-medium-r-*-*-12-*-*-*-*-*-*-*
+font pango: Terminus (TTF) 12
 
 # colors
 #
@@ -141,7 +142,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
 	status_command ~/.virtualenvs/i3pystatus/bin/python ~/.config/i3status/config.py
-    font -*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*
+    font pango: Terminus (TTF) 12
     tray_output primary
 }
 
