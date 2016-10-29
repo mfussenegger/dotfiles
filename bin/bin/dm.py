@@ -15,12 +15,16 @@ from sh import xrandr
 from sh import killall
 from sh import vim
 from sh import setxkbmap
+from sh import virsh
 from sh import ErrorReturnCode_1
 try:
     from sh import vboxmanage
 except ImportError:
     pass
 
+
+# enable users in libvirt group to use virsh without sudo
+virsh = virsh.bake(_env={'LIBVIRT_DEFAULT_URI': 'qemu:///system'})
 
 shdmenu = shdmenu.bake(
     '-l', 30, '-fn',
@@ -87,6 +91,20 @@ def cmd_xrandr_off():
 def cmd_vbox_launch():
     o = output(shdmenu(cut(vboxmanage('list', 'vms'), '-d"', '-f2')))
     vboxmanage('-q', 'startvm', o, '--type', 'gui')
+
+
+def cmd_virsh_launch():
+    vms = output(virsh('list', '--all')).split('\n')
+    # virsh output:
+    #
+    #  Id    Name                           State
+    # ----------------------------------------------------
+    #  -     foobar                         shut off
+    vms = (vm.strip() for vm in vms[2:])
+    vms = (re.split(' {2,}', i) for i in vms)
+    names = [i[1] for i in vms]
+    name = output(dmenu(names))
+    virsh('start', name)
 
 
 def _change_vim_color_scheme(colorscheme, background):
