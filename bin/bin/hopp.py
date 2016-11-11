@@ -119,7 +119,7 @@ def git(location, git, branch=None, cmds=None):
 
         location = os.path.join(location, repo)
         if os.path.exists(os.path.join(location, '.git')):
-            return _pull(os.path.join(location, repo), cmds=cmds)
+            return _pull(location, cmds=cmds)
     source = git
     cmd = ['git', 'clone', '--depth', '1', '--recursive']
     if branch:
@@ -140,7 +140,7 @@ def github(location, github, cmds=None):
 
         def g(url):
             git(location=location, git=url, cmds=cmds)
-        executor.map(g, urls)
+        list(executor.map(g, urls))
 
 
 def zsh(location, zsh, cmds=None):
@@ -196,7 +196,7 @@ def main():
         with open(config, 'r') as f:
             entries += json.load(f)
 
-    all(executor.map(try_load_entry, entries))
+    list(executor.map(try_load_entry, entries))
     executor.shutdown(wait=True)
 
 
