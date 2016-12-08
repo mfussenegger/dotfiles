@@ -1,3 +1,20 @@
+venv() {
+    if [ -f venv/bin/activate ]
+    then
+        source venv/bin/activate
+    else
+        if [ -f .venv/bin/activate ]
+        then
+            source .venv/bin/activate
+        else
+            python -m venv venv
+            venv/bin/python -m pip install -U pip
+            source venv/bin/activate
+        fi
+    fi
+}
+
+
 pip_outdated() {
     pip freeze | cut -d = -f 1 | xargs -n 1 pip search | grep -B2 'LATEST:'
 }
