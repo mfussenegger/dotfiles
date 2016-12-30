@@ -1,4 +1,5 @@
 from i3pystatus import Status
+from pathlib import Path
 try:
     import netifaces
 except ImportError:
@@ -33,9 +34,9 @@ if netifaces:
 
 
 status.register('pulseaudio', format='♪ {volume}')
-for conf in os.listdir('/etc/openvpn'):
-    name, ext = os.path.splitext(conf)
-    if ext != '.conf':
-        continue
+vpn_conf_dir = Path('/etc/openvpn/client/')
+
+for conf in vpn_conf_dir.glob('*.conf'):
+    name, _ = os.path.splitext(conf.name)
     status.register('openvpn', vpn_name=name, format='VPN: {vpn_name}')
 status.run()
