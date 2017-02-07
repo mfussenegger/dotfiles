@@ -38,5 +38,11 @@ vpn_conf_dir = Path('/etc/openvpn/client/')
 
 for conf in vpn_conf_dir.glob('*.conf'):
     name, _ = os.path.splitext(conf.name)
-    status.register('openvpn', vpn_name=name, format='VPN: {vpn_name}')
+    status.register(
+        'openvpn',
+        vpn_name=name,
+        vpn_up_command='sudo systemctl start openvpn-client@%(vpn_name)s.service',
+        vpn_down_command='sudo systemctl stop openvpn-client@%(vpn_name)s.service',
+        status_command="bash -c 'systemctl show openvpn-client@%(vpn_name)s | grep ActiveState=active'",
+        format='VPN: {vpn_name}')
 status.run()
