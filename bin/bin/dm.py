@@ -15,16 +15,18 @@ from sh import xrandr
 from sh import killall
 from sh import vim
 from sh import setxkbmap
-from sh import virsh
 from sh import ErrorReturnCode_1
+try:
+    from sh import virsh
+    # enable users in libvirt group to use virsh without sudo
+    virsh = virsh.bake(_env={'LIBVIRT_DEFAULT_URI': 'qemu:///system'})
+except ImportError:
+    pass
 try:
     from sh import vboxmanage
 except ImportError:
     pass
 
-
-# enable users in libvirt group to use virsh without sudo
-virsh = virsh.bake(_env={'LIBVIRT_DEFAULT_URI': 'qemu:///system'})
 
 shdmenu = shdmenu.bake(
     '-l', 30, '-fn',
