@@ -76,6 +76,7 @@
         | xargs -I {} git diff ..$1 -- {} \
         | git apply -3 ' -"
     ctags = "!.git/hooks/ctags"
+    b = branch --sort=authordate -vv
 [instaweb]
     httpd = webrick
 
