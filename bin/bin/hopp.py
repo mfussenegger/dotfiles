@@ -25,10 +25,6 @@ import venv
 from argparse import ArgumentParser
 from subprocess import PIPE, run
 from urllib.request import urlopen
-from concurrent.futures import ThreadPoolExecutor
-
-
-executor = ThreadPoolExecutor()
 
 
 def _exec_cmds(location, cmds=None):
@@ -140,7 +136,8 @@ def github(location, github, cmds=None):
 
         def g(url):
             git(location=location, git=url, cmds=cmds)
-        list(executor.map(g, urls))
+        for url in urls:
+            g(url)
 
 
 def zsh(location, zsh, cmds=None):
@@ -196,8 +193,8 @@ def main():
         with open(config, 'r') as f:
             entries += json.load(f)
 
-    list(executor.map(try_load_entry, entries))
-    executor.shutdown(wait=True)
+    for entry in entries:
+        try_load_entry(entry)
 
 
 if __name__ == '__main__':
