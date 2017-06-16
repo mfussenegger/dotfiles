@@ -12,8 +12,5 @@ stow termite
 stow systemd
 stow haskell
 
-systemctl --user enable gpg-agent
-systemctl --user start gpg-agent
-
 awk '/TERM xterm$/ { print; print "TERM xterm-termite"; next }1' <(dircolors -p)  >! ~/.dircolors
 $HOME/bin/hopp.py hopp/vim.json hopp/misc.json
