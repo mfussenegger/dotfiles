@@ -10,6 +10,7 @@ stow i3
 stow git
 stow termite
 stow systemd
+stow haskell
 
 systemctl --user enable gpg-agent
 systemctl --user start gpg-agent
