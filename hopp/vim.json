@@ -9,6 +9,11 @@
         "cmds": "yes | sh install"
     },
     {
+        "location": "~/.vim/bundle/",
+        "github": "Shougo/vimproc.vim",
+        "cmds": "make"
+    },
+    {
         "github": "fsharp/vim-fsharp",
         "location": "~/.vim/bundle/vim-fsharp",
         "cmds": "make fsautocomplete"
@@ -20,7 +25,7 @@
             "junegunn/fzf.vim",
             "tpope/vim-fugitive",
             "bling/vim-airline",
-            "scrooloose/syntastic",
+            "w0rp/ale",
             "mattn/webapi-vim",
             "mattn/gist-vim",
             "vim-scripts/linediff.vim",

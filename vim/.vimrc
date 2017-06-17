@@ -148,7 +148,9 @@ let g:ycm_semantic_triggers = {
             \ }
 
 " ignore line length warnings
-let g:syntastic_python_flake8_args = '--ignore=E501'
+let g:ale_python_flake8_args = '--ignore=E501'
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_linters = {'haskell': ['ghc-mod', 'hlint']}
 
 let g:tex_flavor = 'latex'
 let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
