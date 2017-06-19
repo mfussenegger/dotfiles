@@ -119,9 +119,6 @@ noremap <F11> :setlocal spell!<CR>
 set spelllang=en,de
 autocmd FileType markdown,rst,text setlocal spell!
 
-nnoremap <silent> <F10> :NERDTreeToggle<CR>
-inoremap <silent> <F10> <esc>:NERDTreeToggle<cr>
-
 " gnupg
 nnoremap <leader>pe :GPGEditRecipients<cr>
 nnoremap <leader>pv :GPGViewRecipients<cr>
