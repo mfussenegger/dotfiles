@@ -32,6 +32,9 @@ set selection=old
 " lower the delay of escaping out of other modes
 set timeout timeoutlen=1000 ttimeoutlen=0
 
+" live preview for substitute
+set inccommand=split
+
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
