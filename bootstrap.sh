@@ -9,7 +9,6 @@ stow intellij
 stow i3
 stow git
 stow termite
-stow systemd
 stow haskell
 
 awk '/TERM xterm$/ { print; print "TERM xterm-termite"; next }1' <(dircolors -p)  >! ~/.dircolors
