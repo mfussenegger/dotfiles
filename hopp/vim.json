@@ -1,25 +1,25 @@
 [
     {
-        "location": "~/.vim/autoload/",
+        "location": "~/.config/nvim/autoload/",
         "curl": "https://tpo.pe/pathogen.vim"
     },
     {
-        "location": "~/.vim/bundle/fzf",
+        "location": "~/.config/nvim/bundle/fzf",
         "github": "junegunn/fzf",
         "cmds": "yes | sh install"
     },
     {
-        "location": "~/.vim/bundle/",
+        "location": "~/.config/nvim/bundle/",
         "github": "Shougo/vimproc.vim",
         "cmds": "make"
     },
     {
         "github": "fsharp/vim-fsharp",
-        "location": "~/.vim/bundle/vim-fsharp",
+        "location": "~/.config/nvim/bundle/vim-fsharp",
         "cmds": "make fsautocomplete"
     },
     {
-        "location": "~/.vim/bundle/",
+        "location": "~/.config/nvim/bundle/",
         "github": [
             "Shougo/deoplete.nvim",
             "junegunn/fzf.vim",

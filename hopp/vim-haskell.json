@@ -1,6 +1,6 @@
 [
     {
-        "location": "~/.vim/bundle/",
+        "location": "~/.config/nvim/bundle/",
         "github": [
             "eagletmt/ghcmod-vim",
             "eagletmt/neco-ghc"
