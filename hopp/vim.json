@@ -1,5 +1,11 @@
 [
     {
+        "virtualenv": [
+            "neovim"
+        ],
+        "location": "~/.virtualenvs/nvim"
+    },
+    {
         "location": "~/.config/nvim/autoload/",
         "curl": "https://tpo.pe/pathogen.vim"
     },
