@@ -1,9 +1,13 @@
 [
     {
         "virtualenv": [
-            "neovim"
+            "neovim",
+            "flake8"
         ],
-        "location": "~/.virtualenvs/nvim"
+        "location": "~/.virtualenvs/nvim",
+        "cmds": [
+            "ln -sf ~/.virtualenvs/nvim/bin/flake8 ~/bin/flake8"
+        ]
     },
     {
         "location": "~/.config/nvim/autoload/",
