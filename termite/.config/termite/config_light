@@ -2,7 +2,7 @@
 #font = Consolas 14
 #font = Bitstream Vera Sans Mono 14
 #font = Dejavu Sans Mono 14
-font = Monaco 14
+font = Monaco 12
 browser = /usr/bin/qutebrowser
 scrollback_lines = 40000
 allow_bold = true
@@ -10,29 +10,51 @@ cursor_blink = off
 cursor_shape = block
 
 [colors]
-background = white
-foreground = black
+# Base16 Tomorrow
+# Author: Chris Kempson (http://chriskempson.com)
 
-color0 =  #000000
-color8 =  #000000
+foreground      = #4d4d4c
+foreground_bold = #282a2e
+cursor          = #282a2e
+background      = #ffffff
 
-color1 =  #cc0000
-color9 =  #cc0000
+# 16 color space
 
-color2 =  #009a00
-color10 = #009a00
+# Black, Gray, Silver, White
+color0  = #ffffff
+color8  = #8e908c
+color7  = #4d4d4c
+color15 = #1d1f21
 
-color3 =  #e0b600
-color11 = #e0b600
+# Red
+color1  = #c82829
+color9  = #c82829
 
-color4 =  #0000ec
-color12 = #0000ec
+# Green
+color2  = #718c00
+color10 = #718c00
 
-color5 =  #ca00ca
-color13 = #ca00ca
+# Yellow
+color3  = #eab700
+color11 = #eab700
 
-color6 =  #00a0a0
-color14 = #00a0a0
+# Blue
+color4  = #4271ae
+color12 = #4271ae
 
-color7 =  #cccccc
-color15 = #ffffff
+# Purple
+color5  = #8959a8
+color13 = #8959a8
+
+# Teal
+color6  = #3e999f
+color14 = #3e999f
+
+# Extra colors
+color15 = #1d1f21
+color16 = #f5871f
+color17 = #a3685a
+color18 = #e0e0e0
+color19 = #d6d6d6
+color20 = #969896
+color21 = #282a2e
