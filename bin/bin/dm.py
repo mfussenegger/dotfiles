@@ -110,7 +110,7 @@ def cmd_virsh_launch():
 
 
 def _change_vim_color_scheme(colorscheme, background):
-    vimrc_path = os.path.expanduser('~/.vimrc')
+    vimrc_path = os.path.expanduser('~/.config/nvim/init.vim')
 
     sed_cmd = 's/colorscheme {old_scheme}/colorscheme {new_scheme}/g'
     sed_cmd = sed_cmd.format(old_scheme=colorscheme[0], new_scheme=colorscheme[1])
