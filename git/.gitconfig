@@ -77,6 +77,10 @@
         | git apply -3 ' -"
     ctags = "!.git/hooks/ctags"
     b = branch --sort=authordate -vv
+    recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"
+    overview = log --all --since='2 weeks' --oneline --no-merges
+    recap = !git log --all --oneline --no-merges --author=$(git config user.email)
+    today = !git log --since=00:00:00 --all --oneline --no-merges --author=$(git config user.email)
 [instaweb]
     httpd = webrick
 
