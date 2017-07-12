@@ -70,7 +70,7 @@ set noswapfile
 set smartindent
 
 " template support
-autocmd BufNewFile * silent! 0r $HOME/.vim/templates/%:e.tpl
+autocmd BufNewFile * silent! 0r $HOME/.config/nvim/templates/%:e.tpl
 
 " mappings {{{
 set pastetoggle=<F8>
