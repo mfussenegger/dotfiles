@@ -6,6 +6,7 @@ import os
 import re
 import json
 import typing
+from sh import i3_msg
 from sh import xdg_open
 from sh import dmenu as shdmenu
 from sh import cut
@@ -161,6 +162,14 @@ def cmd_pres_on():
     xset('-dpms')
     _change_vim_color_scheme(('zenburn', 'default'), ('dark', 'light'))
     _set_termite_config('config_light')
+
+
+def cmd_i3bar_invisible():
+    i3_msg('bar mode invisible')
+
+
+def cmd_i3bar_dock():
+    i3_msg('bar mode dock')
 
 
 def cmd_keyboard():
