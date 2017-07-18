@@ -4,7 +4,7 @@ Xcursor.theme: Vanilla-DMZ
 
 
 ! XFT and Font settings
-Xft*dpi:       96
+Xft*dpi:       144
 Xft*antialias: true
 Xft*hinting:   true
 Xft*hintstyle: hintfull

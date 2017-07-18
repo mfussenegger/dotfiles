@@ -4,6 +4,7 @@ fi
 
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
+xrandr --dpi 144
 xset +dpms
 xset dpms 0 0 180
 xset r rate 200 40
