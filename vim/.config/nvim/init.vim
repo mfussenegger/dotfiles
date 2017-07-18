@@ -185,6 +185,8 @@ autocmd BufWritePost *.sh call ModeChange()
 
 autocmd BufRead,BufNewFile Makefile* set noexpandtab
 
+noremap <F2> :w<CR> :below new term://%:p<CR>
+
 " latex file settings {{{
 augroup ft_tex
     autocmd!
