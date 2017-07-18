@@ -155,13 +155,13 @@ assign [class="Gajim.py"] 9
 
 # workspace settings
 
-workspace 1 output HDMI1
-workspace 2 output HDMI1
-workspace 3 output HDMI1
+workspace 1 output DP-1
+workspace 2 output DP-1
+workspace 3 output DP-1
 
-workspace 7 output HDMI2
-workspace 8 output HDMI2
-workspace 9 output HDMI2
+workspace 7 output HDMI-2
+workspace 8 output HDMI-2
+workspace 9 output HDMI-2
 
 # scratchpad
 bindsym $mod+Shift+minus move scratchpad
