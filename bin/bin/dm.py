@@ -14,7 +14,7 @@ from sh import xset
 from sh import sed
 from sh import xrandr
 from sh import killall
-from sh import vim
+from sh import nvr
 from sh import setxkbmap
 from sh import ErrorReturnCode_1
 try:
@@ -124,8 +124,8 @@ def _change_vim_color_scheme(colorscheme, background):
     change_color = '<Esc>:set background={new_bg}<CR>:colorscheme {new_scheme}<CR>'
     change_color = change_color.format(new_bg=background[1], new_scheme=colorscheme[1])
     try:
-        for server in vim('--serverlist'):
-            vim('--servername', server.strip(), '--remote-send', change_color)
+        for server in nvr('--serverlist'):
+            nvr('--servername', server.strip(), '--remote-send', change_color)
     except ErrorReturnCode_1:
         pass
 

@@ -37,7 +37,6 @@ alias -g V='| vim -'
 
 
 ## misc
-alias vi='vim'
 alias s='TERM=xterm ssh'
 alias c="date && echo -e && cal -3m"
 alias :q="exit"

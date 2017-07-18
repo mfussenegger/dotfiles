@@ -1,11 +1,18 @@
-export EDITOR=vim
-export VISUAL=vim
-export SUDO_EDIT=vim
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye >/dev/null
+
+if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
+  export VISUAL="nvr -cc split --remote-wait'"
+else
+  export VISUAL="nvim"
+fi
+export EDITOR=$VISUAL
+export SUDO_EDIT=$VISUAL
+alias v=$VISUAL
+alias vi=$VISUAL
 
 
 myoutube() {

@@ -3,12 +3,14 @@
         "virtualenv": [
             "neovim",
             "flake8",
-            "proselint"
+            "proselint",
+            "neovim-remote"
         ],
         "location": "~/.virtualenvs/nvim",
         "cmds": [
             "ln -sf ~/.virtualenvs/nvim/bin/flake8 ~/bin/flake8",
-            "ln -sf ~/.virtualenvs/nvim/bin/proselint ~/bin/proselint"
+            "ln -sf ~/.virtualenvs/nvim/bin/proselint ~/bin/proselint",
+            "ln -sf ~/.virtualenvs/nvim/bin/nvr ~/bin/nvr"
         ]
     },
     {
