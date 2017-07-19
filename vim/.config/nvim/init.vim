@@ -161,8 +161,6 @@ let g:gist_detect_filetype = 1
 
 let g:markdown_fenced_languages = ['python', 'html', 'javascript', 'css', 'bash=sh', 'sh']
 
-let NERDTreeIgnore = ['^develop-eggs$', '\.egg-info$']
-
 
 if exists("&colorcolumn")
     autocmd InsertEnter * set colorcolumn=80
