@@ -24,17 +24,6 @@ greph() {
 }
 
 
-# after ranger quits, cd to the chosen directory.
-ra() {
-    tempfile='/tmp/chosendir'
-   /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-   test -f "$tempfile" &&
-   if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-     cd -- "$(cat "$tempfile")"
-   fi
-   rm -f -- "$tempfile"
-}
-
 share_internet() {
     if [[ -z "$1" ]] then
         echo "share_internet <dev with internet> <dev with clients>"
