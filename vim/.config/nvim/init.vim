@@ -91,6 +91,11 @@ nnoremap <leader>ex :exec '!'.getline('.')
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
 " =============================================================================
 " ultiSnips
 " =============================================================================
