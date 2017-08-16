@@ -5,7 +5,7 @@ export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
 if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
-  export VISUAL="nvr -cc split --remote-wait'"
+  export VISUAL="nvr -cc split --remote-wait"
 else
   export VISUAL="nvim"
 fi
