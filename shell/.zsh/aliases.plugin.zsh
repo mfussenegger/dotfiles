@@ -28,7 +28,7 @@ alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
 ## global aliases
 alias -g L='| less'
 alias -g N='2> /dev/null'
-alias -g G='| grep'
+alias -g G='| rg'
 alias -g H='| head'
 alias -g T='| tail'
 alias -g F='| fzf'
