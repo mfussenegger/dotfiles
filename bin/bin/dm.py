@@ -115,11 +115,11 @@ def _change_vim_color_scheme(colorscheme, background):
 
     sed_cmd = 's/colorscheme {old_scheme}/colorscheme {new_scheme}/g'
     sed_cmd = sed_cmd.format(old_scheme=colorscheme[0], new_scheme=colorscheme[1])
-    sed('-i', sed_cmd, vimrc_path)
+    sed('--follow-symlinks', '-i', sed_cmd, vimrc_path)
 
     sed_cmd = 's/background={old_bg}/background={new_bg}/g'
     sed_cmd = sed_cmd.format(old_bg=background[0], new_bg=background[1])
-    sed('-i', sed_cmd, vimrc_path)
+    sed('--follow-symlinks', '-i', sed_cmd, vimrc_path)
 
     change_color = '<Esc>:set background={new_bg}<CR>:colorscheme {new_scheme}<CR>'
     change_color = change_color.format(new_bg=background[1], new_scheme=colorscheme[1])
