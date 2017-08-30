@@ -95,12 +95,16 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 " fzf
 " =============================================================================
 "
-nnoremap <silent><leader>fh :History<CR>
+nnoremap <silent><leader>f/ :History/<CR>
+nnoremap <silent><leader>f: :History:<CR>
 nnoremap <silent><leader>ff :Files<CR>
 nnoremap <silent><leader>fb :Buffers<CR>
 nnoremap <silent><leader>ft :BTags<CR>
 nnoremap <silent><leader>fg :GitFiles<CR>
 nnoremap <silent><leader>gl :BCommits<CR>
+
+" Fuzzy insert mode completion for lines
+imap <c-x><c-l> <plug>(fzf-complete-line)
 
 " =============================================================================
 
