@@ -66,26 +66,19 @@ set matchpairs+=<:> " pairs for % command
 set nobackup
 set noswapfile
 
-" indent settings
+" smart autoindenting when starting a new line
 set smartindent
 
 " template support
 autocmd BufNewFile * silent! 0r $HOME/.config/nvim/templates/%:e.tpl
 
-" mappings {{{
-set pastetoggle=<F8>
+" mappings
 
 " close all split windows except the one that is currently active
 noremap <leader>o :only<CR>
 
 nnoremap <leader>ev :split $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-
-" highlight trailing whitespaces
-nnoremap <leader>w :match Error /\v +$/<cr>
-nnoremap <leader>W :match none<cr>
-
-nnoremap <leader>ex :exec '!'.getline('.')
 
 " pre-filter history navigation in command-mode with already typed input
 cnoremap <c-n> <down>
@@ -96,11 +89,6 @@ if executable("rg")
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
-" =============================================================================
-" ultiSnips
-" =============================================================================
-
-" <tab> is already used by YouCompleteMe, so use <c-j> as expand trigger
 let g:UltiSnipsExpandTrigger="<c-j>"
 
 " =============================================================================
@@ -116,7 +104,6 @@ nnoremap <silent><leader>gl :BCommits<CR>
 
 " =============================================================================
 
-inoremap jj <Esc>
 
 " split navigation
 noremap <c-h> <c-w>h
@@ -139,9 +126,6 @@ nnoremap <silent><leader>te :w<CR> :below new term://%:p<CR>
 nnoremap <silent><leader>ts yy<c-w>wp<c-w>pgv
 vnoremap <silent><leader>ts y<c-w>wp<c-w>pgv
 
-
-" spellcheck
-noremap <F11> :setlocal spell!<CR>
 set spelllang=en,de
 autocmd FileType markdown,rst,text setlocal spell!
 
@@ -162,20 +146,11 @@ nnoremap <leader>gc :Gcommit<cr>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
-" }}}
 
-" plugin settings {{{
-
-" ignore line length warnings
-let g:ale_python_flake8_args = '--ignore=E501'
 let g:ale_lint_on_text_changed = 'never'
-let g:ale_linters = {'haskell': ['ghc-mod', 'hlint']}
-
-let g:tex_flavor = 'latex'
-let g:tex_viewer = {'app': 'zathura', 'target': 'pdf'}
-
 let g:gist_detect_filetype = 1
 
+" Enable syntax highlighting in fenced code blocks
 let g:markdown_fenced_languages = ['python', 'html', 'javascript', 'css', 'bash=sh', 'sh']
 
 
@@ -183,27 +158,3 @@ if exists("&colorcolumn")
     autocmd InsertEnter * set colorcolumn=80
     autocmd InsertLeave * set colorcolumn=""
 endif
-
-" }}}
-
-" ----- file type settings
-"
-" automatically give execute permissions
-" if file begins with #! and contains '/bin/'
-"
-function! ModeChange()
-    if getline(1) =~ "^#!.*/bin/*"
-        silent !chmod u+x <afile>
-    endif
-endfunction
-autocmd BufWritePost *.sh call ModeChange()
-
-autocmd BufRead,BufNewFile Makefile* set noexpandtab
-
-" latex file settings {{{
-augroup ft_tex
-    autocmd!
-    autocmd FileType tex noremap <buffer> <F5> :w<CR> :!pdflatex -shell-escape "%"<CR>
-    autocmd FileType tex noremap <buffer> <F6> :w<CR> :!zathura %:p:r.pdf<CR>
-augroup end
-" }}}

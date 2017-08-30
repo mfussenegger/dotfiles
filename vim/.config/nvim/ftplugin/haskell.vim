@@ -6,6 +6,7 @@ nnoremap <silent> <leader>ht :GhcModType<CR>
 nnoremap <silent> <leader>hT :GhcModTypeInsert<CR>
 nnoremap <silent> <leader>hc :GhcModTypeClear<CR>
 
+let g:ale_linters.haskell = ['ghc-mod', 'hlint']
 
 if executable("stylish-haskell")
     setlocal formatprg=stylish-haskell
