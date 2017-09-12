@@ -1,8 +1,5 @@
 let g:python3_host_prog = $HOME . '/.virtualenvs/nvim/bin/python'
 
-execute pathogen#infect()
-
-
 set shortmess+=I                    " Don't show vim welcome screen
 
 let mapleader = ","

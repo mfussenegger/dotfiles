@@ -18,16 +18,12 @@
         ]
     },
     {
-        "location": "~/.config/nvim/autoload/",
-        "curl": "https://tpo.pe/pathogen.vim"
-    },
-    {
-        "location": "~/.config/nvim/bundle/fzf",
+        "location": "~/.config/nvim/pack/plugins/start/fzf",
         "github": "junegunn/fzf",
         "cmds": "yes | sh install"
     },
     {
-        "location": "~/.config/nvim/bundle/",
+        "location": "~/.config/nvim/pack/plugins/start/",
         "github": [
             "roxma/nvim-completion-manager",
             "junegunn/fzf.vim",
