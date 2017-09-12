@@ -27,11 +27,6 @@
         "cmds": "yes | sh install"
     },
     {
-        "location": "~/.config/nvim/bundle/",
-        "github": "Shougo/vimproc.vim",
-        "cmds": "make"
-    },
-    {
         "github": "fsharp/vim-fsharp",
         "location": "~/.config/nvim/bundle/vim-fsharp",
         "cmds": "make fsautocomplete"
