@@ -27,11 +27,6 @@
         "cmds": "yes | sh install"
     },
     {
-        "github": "fsharp/vim-fsharp",
-        "location": "~/.config/nvim/bundle/vim-fsharp",
-        "cmds": "make fsautocomplete"
-    },
-    {
         "location": "~/.config/nvim/bundle/",
         "github": [
             "roxma/nvim-completion-manager",
