@@ -4,7 +4,11 @@
             "neovim",
             "flake8",
             "proselint",
-            "neovim-remote"
+            "neovim-remote",
+            "jedi",
+            "mistune",
+            "psutil",
+            "setproctitle"
         ],
         "location": "~/.virtualenvs/nvim",
         "cmds": [
@@ -35,7 +39,7 @@
     {
         "location": "~/.config/nvim/bundle/",
         "github": [
-            "Shougo/deoplete.nvim",
+            "roxma/nvim-completion-manager",
             "junegunn/fzf.vim",
             "tpope/vim-fugitive",
             "bling/vim-airline",
@@ -51,8 +55,10 @@
             "honza/vim-snippets",
             "vim-scripts/dbext.vim",
             "diepm/vim-rest-console",
-            "zchee/deoplete-jedi",
             "ludovicchabant/vim-gutentags"
+        ],
+        "cmds": [
+            "nvim +PluginInstall +UpdateRemotePlugins +qa"
         ]
     }
 ]
