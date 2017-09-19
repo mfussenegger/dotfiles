@@ -149,6 +149,7 @@ cnoremap <C-e> <End>
 
 let g:ale_lint_on_text_changed = 'never'
 let g:gist_detect_filetype = 1
+let g:gist_browser_command = 'echo %URL% | xclip'
 
 " Enable syntax highlighting in fenced code blocks
 let g:markdown_fenced_languages = ['python', 'html', 'javascript', 'css', 'bash=sh', 'sh']
