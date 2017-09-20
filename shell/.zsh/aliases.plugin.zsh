@@ -19,7 +19,7 @@ alias vgdisplay='sudo vgdisplay'
 ## pacman
 
 alias p='sudo pacman'
-alias pac='pkgbuilder'
+alias pac='pacaur'
 
 ## yay python smtpd
 alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
