@@ -159,3 +159,7 @@ if exists("&colorcolumn")
     autocmd InsertEnter * set colorcolumn=80
     autocmd InsertLeave * set colorcolumn=""
 endif
+
+
+" tree-view
+let g:netrw_liststyle = 3
