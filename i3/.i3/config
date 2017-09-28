@@ -28,8 +28,9 @@ client.focused_inactive #aaaaaa #000000     #aaaaaa
 client.focused          #e1aa5d #e1aa5d     #000000
 client.urgent           #a0cf5d #000000     #eeeeee
 
-new_window pixel 2
+new_window pixel 1
 workspace_auto_back_and_forth no
+hide_edge_borders smart
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -144,10 +145,10 @@ bar {
 	status_command ~/.virtualenvs/i3pystatus/bin/python ~/.config/i3status/config.py
     font pango: Terminus (TTF) 12
     tray_output primary
+    separator_symbol ":|:"
 }
 
 
-for_window [class="Termite"]        border 1pixel
 
 # window specific settings
 #
@@ -158,6 +159,7 @@ assign [class="Gajim.py"] 9
 workspace 1 output DP-1
 workspace 2 output DP-1
 workspace 3 output DP-1
+workspace 4 output DP-1
 
 workspace 7 output HDMI-2
 workspace 8 output HDMI-2
