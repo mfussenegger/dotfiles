@@ -26,6 +26,7 @@
         "location": "~/.config/nvim/pack/plugins/start/",
         "github": [
             "roxma/nvim-completion-manager",
+            "autozimu/LanguageClient-neovim",
             "junegunn/fzf.vim",
             "tpope/vim-fugitive",
             "bling/vim-airline",

@@ -2,8 +2,24 @@
     {
         "location": "~/.config/nvim/pack/plugins/start/",
         "github": [
-            "eagletmt/ghcmod-vim",
-            "eagletmt/neco-ghc"
+            "eagletmt/ghcmod-vim"
+        ],
+        "cmds": [
+            "stack install ghc-mod"
+        ]
+    },
+    {
+        "location": "~/.config/nvim/pack/plugins/start/",
+        "github": "Shougo/vimproc.vim",
+        "cmds": [
+            "make"
+        ]
+    },
+    {
+        "location": "~/workspace/code/haskell/haskell-ide-engine",
+        "github": "haskell/haskell-ide-engine",
+        "cmds": [
+            "stack install"
         ]
     }
 ]
