@@ -1,6 +1,7 @@
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
+export GOPATH="$HOME/workspace/code/go"
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
