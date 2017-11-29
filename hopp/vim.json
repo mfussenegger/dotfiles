@@ -45,7 +45,7 @@
             "ludovicchabant/vim-gutentags"
         ],
         "cmds": [
-            "nvim +PluginInstall +UpdateRemotePlugins +qa"
+            "nvim +UpdateRemotePlugins +qa"
         ]
     }
 ]
