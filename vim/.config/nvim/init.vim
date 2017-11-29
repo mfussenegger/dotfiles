@@ -96,6 +96,7 @@ nnoremap <silent><leader>f: :History:<CR>
 nnoremap <silent><leader>ff :Files<CR>
 nnoremap <silent><leader>fb :Buffers<CR>
 nnoremap <silent><leader>ft :BTags<CR>
+nnoremap <silent><leader>fT :Tags<CR>
 nnoremap <silent><leader>fg :GitFiles<CR>
 nnoremap <silent><leader>gl :BCommits<CR>
 
