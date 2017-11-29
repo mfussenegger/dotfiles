@@ -1,6 +1,8 @@
 #!/bin/zsh
 
 test -d $HOME/.config || mkdir $HOME/.config
+test -d $HOME/.config/nvim || mkdir $HOME/.config/nvim
+test -d $HOME/bin || mkdir $HOME/bin
 
 stow bin
 stow shell
