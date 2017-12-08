@@ -43,7 +43,8 @@
             "honza/vim-snippets",
             "vim-scripts/dbext.vim",
             "diepm/vim-rest-console",
-            "ludovicchabant/vim-gutentags"
+            "ludovicchabant/vim-gutentags",
+            "saltstack/salt-vim"
         ],
         "cmds": [
             "nvim +UpdateRemotePlugins +qa"
