@@ -18,7 +18,7 @@
             "pypsh",
             "pex",
             "wheel",
-            "git+https://github.com/edio/randrctl.git"
+            "randrctl"
         ],
         "location": "~/.virtualenvs/tools",
         "cmds": [
