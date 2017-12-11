@@ -30,7 +30,6 @@
             "junegunn/fzf.vim",
             "tpope/vim-fugitive",
             "junegunn/gv.vim",
-            "bling/vim-airline",
             "w0rp/ale",
             "mattn/webapi-vim",
             "mattn/gist-vim",
