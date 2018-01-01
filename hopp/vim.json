@@ -23,10 +23,17 @@
         "cmds": "yes | sh install"
     },
     {
+        "location": "~/.config/nvim/pack/plugins/start/LanguageClient-neovim",
+        "github": "autozimu/LanguageClient-neovim",
+        "cmds": [
+            "make release",
+            "nvim +UpdateRemotePlugins +qa"
+        ]
+    },
+    {
         "location": "~/.config/nvim/pack/plugins/start/",
         "github": [
             "roxma/nvim-completion-manager",
-            "autozimu/LanguageClient-neovim",
             "junegunn/fzf.vim",
             "tpope/vim-fugitive",
             "junegunn/gv.vim",
