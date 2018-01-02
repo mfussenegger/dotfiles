@@ -6,7 +6,6 @@
             "proselint",
             "neovim-remote",
             "jedi",
-            "mistune",
             "psutil",
             "setproctitle"
         ],
