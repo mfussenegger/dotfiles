@@ -84,7 +84,7 @@ def curl(location, curl, cmds=None):
 
 
 def _pull(location, cmds=None):
-    cmd = ['git', 'pull', 'origin', 'master']
+    cmd = ['git', 'pull']
     p = run(cmd, cwd=location, stdout=PIPE)
     if b'is up to date' not in p.stdout:
         cmd = ['git', 'submodule', 'update', '--init', '--recursive']
