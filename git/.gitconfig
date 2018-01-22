@@ -59,7 +59,7 @@
     cpl = "!sh -c 'git log --pretty=format:\"%h - %an: %s\" $1 \
         | fzf --no-sort \
         | cut -d \" \" -f1 \
-        | xargs git cherry-pick ' -"
+        | xargs git cherry-pick -x ' -"
     reset-file = "!sh -c 'git status --short \
         | fzf --no-sort \
         | cut -d \" \" -f3 \
