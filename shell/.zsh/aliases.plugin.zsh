@@ -5,7 +5,7 @@ alias lt='ll -tr'
 alias lu='lt -u'
 
 alias fcd='cd $(find . -type d 2> /dev/null | fzf -m --border --preview="ls {}")'
-alias fv='v $(rg --files 2> /dev/null | fzf -m --border --preview="cat {}")'
+alias fv='v $(rg --files 2> /dev/null | fzf -m --border)'
 
 # whitespace at the end causes the next command word after sudo to
 # also be checked for alias expansion
