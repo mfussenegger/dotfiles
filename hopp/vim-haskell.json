@@ -21,5 +21,13 @@
         "cmds": [
             "stack install"
         ]
+    },
+    {
+        "location": "/tmp/",
+        "github": "ndmitchell/ghcid",
+        "cmds": [
+            "stack install ghcid",
+            "cp -a /tmp/ghcid/plugins/nvim ~/.config/nvim/pack/plugins/start/ghcid"
+        ]
     }
 ]
