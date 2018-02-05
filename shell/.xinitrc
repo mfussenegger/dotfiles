@@ -12,4 +12,4 @@ xset b off
 
 redshift -l 47.22:10.09 -t 6000:4200 &
 
-exec dbus-launch i3
+exec i3
