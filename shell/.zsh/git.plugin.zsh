@@ -1,6 +1,6 @@
 alias g='git'
 alias gf='git fetch'
-alias gl='git log --topo-order --pretty=format:"%C(bold)Commit:%C(reset) %C(green)%H%C(red)%d%n%C(bold)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)Date:%C(reset) %C(blue)%ai (%ar)%C(reset)%n%+B"'
+alias gl='git log --topo-order --pretty=format:"%C(bold)%C(reset)%C(green)%H%C(red)%d%n%C(bold)%C(reset)%C(cyan)%an <%ae>%n%C(bold)%C(reset)%C(blue)%ai (%ar)%C(reset)%n%+B"'
 alias gc='git commit --verbose'
 alias gcf='git commit --amend --reuse-message HEAD'
 alias gia='git add'
