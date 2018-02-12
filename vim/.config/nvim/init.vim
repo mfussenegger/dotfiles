@@ -188,7 +188,6 @@ let g:LanguageClient_serverCommands = {
     \ 'haskell': ['hie', '--lsp'],
     \ 'java': [
     \   'java',
-    \   '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044',
     \   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     \   '-Dosgi.bundles.defaultStartLevel=4',
     \   '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -197,7 +196,7 @@ let g:LanguageClient_serverCommands = {
     \   '-noverify',
     \   '-Xmx1G',
     \   '-jar',
-    \   $HOME . '/workspace/code/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_1.4.0.v20161219-1356.jar',
+    \   $HOME . '/workspace/code/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_1.5.0.v20180119-0753.jar',
     \   '-configuration',
     \   $HOME . '/workspace/code/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux',
     \   '-data',
