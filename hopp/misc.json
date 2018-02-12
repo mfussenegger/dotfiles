@@ -7,6 +7,13 @@
         ]
     },
     {
+        "location": "~/bin/",
+        "curl": "https://raw.githubusercontent.com/Russell91/sshrc/master/sshrc",
+        "cmds": [
+            "chmod +x ~/bin/sshrc"
+        ]
+    },
+    {
         "virtualenv": ["i3pystatus", "psutil", "netifaces", "colour", "basiciw"],
         "location": "~/.virtualenvs/i3pystatus"
     },

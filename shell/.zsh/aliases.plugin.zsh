@@ -41,6 +41,8 @@ alias -g V='| vim -'
 
 ## misc
 alias s='TERM=xterm ssh'
+alias sshrc='TERM=xterm sshrc'
+compdef sshrc=ssh
 alias c="date && echo -e && cal -3m"
 alias :q="exit"
 alias eject='sudo eject'
