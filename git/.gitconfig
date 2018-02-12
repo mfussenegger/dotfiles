@@ -8,6 +8,9 @@
     excludesfile = ~/.config/git/gitignore
     attributesfile = ~/.config/git/gitattributes
 
+[advice]
+    statusHints = false
+
 [color]
     diff = auto
     status = auto
@@ -25,6 +28,9 @@
 
 [rebase]
     autosquash = true
+
+[branch]
+    autoSetupRebase = always
 
 [rerere]
     enabled = true
