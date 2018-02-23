@@ -1,9 +1,10 @@
 [
     {
         "location": "/tmp/",
-        "curl": "https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz",
+        "curl": "https://github.com/github/hub/releases/download/v2.3.0-pre10/hub-linux-amd64-2.3.0-pre10.tgz",
         "cmds": [
-            "tar xvzf /tmp/hub-linux-*.tgz -C ~/bin/ --wildcards 'hub-linux-*/bin/hub' --strip 2 --transform 's/hub/gh/g'"
+            "tar xvzf /tmp/hub-linux-*.tgz -C ~/bin/ --wildcards 'hub-linux-*/bin/hub' --strip 2 --transform 's/hub/gh/g'",
+            "rm -rf /tmp/hub-linux-*.tgz"
         ]
     },
     {
