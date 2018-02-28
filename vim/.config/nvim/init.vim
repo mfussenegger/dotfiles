@@ -185,7 +185,7 @@ let g:netrw_liststyle = 3
 
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie', '--lsp'],
+    \ 'haskell': ['stack', 'exec', 'hie', '--', '--lsp'],
     \ 'java': [
     \   'java',
     \   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
