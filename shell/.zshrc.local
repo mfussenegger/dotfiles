@@ -12,6 +12,7 @@ else
 fi
 export EDITOR=$VISUAL
 export SUDO_EDIT=$VISUAL
+export MANPAGER="nvim -c 'set ft=man' -"
 alias v=$VISUAL
 alias vi=$VISUAL
 
