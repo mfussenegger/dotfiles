@@ -94,6 +94,8 @@ noremap <leader>o :only<CR>
 nnoremap <leader>ev :split $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
+nnoremap <bs> <c-^>
+
 " pre-filter history navigation in command-mode with already typed input
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
