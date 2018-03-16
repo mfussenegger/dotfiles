@@ -10,7 +10,7 @@
         "location": "/tmp/",
         "github": "ndmitchell/ghcid",
         "cmds": [
-            "stack install ghcid",
+            "stack install ghcid hlint stylish-haskell hoogle",
             "cp -a /tmp/ghcid/plugins/nvim ~/.config/nvim/pack/plugins/start/ghcid"
         ]
     }
