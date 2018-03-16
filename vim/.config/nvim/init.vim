@@ -107,6 +107,9 @@ endif
 
 let g:UltiSnipsExpandTrigger="<c-j>"
 
+" Close popup menu *and* start a new line when pressing <Enter>
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
 " =============================================================================
 " fzf
 " =============================================================================
