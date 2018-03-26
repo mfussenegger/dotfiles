@@ -170,6 +170,8 @@ nnoremap <leader>gc :Gcommit<cr>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
+nmap ]w <Plug>(ale_next)
+nmap [w <Plug>(ale_previous)
 
 let g:ale_lint_on_text_changed = 'never'
 let g:gist_detect_filetype = 1

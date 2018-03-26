@@ -22,5 +22,8 @@ nnoremap <leader>tfr :action RerunFailedTests<cr>
 
 nnoremap [m :action MethodUp<cr>
 nnoremap ]m :action MethodDown<cr>
+nnoremap ]w :action GotoNextError<CR>
+nnoremap [w :action GotoPreviousError<CR>
 
 nnoremap <leader>sv :source ~/.ideavimrc<CR>
+
