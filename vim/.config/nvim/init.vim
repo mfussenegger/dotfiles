@@ -201,7 +201,7 @@ let g:LanguageClient_serverCommands = {
     \   '-noverify',
     \   '-Xmx1G',
     \   '-jar',
-    \   $HOME . '/workspace/code/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_1.5.0.v20180119-0753.jar',
+    \   glob($HOME . '/workspace/code/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_*.jar'),
     \   '-configuration',
     \   $HOME . '/workspace/code/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux',
     \   '-data',
