@@ -83,6 +83,16 @@ set noswapfile
 " smart autoindenting when starting a new line
 set smartindent
 
+set thesaurus=~/.local/share/nvim/mthesaur.txt
+set dictionary=/usr/share/dict/words
+
+augroup prose
+    autocmd!
+    autocmd FileType markdown,rst,text,mail setlocal keywordprg=:sp\ term://sdcv\ -n\ -c
+    autocmd FileType markdown,rst,text,mail setlocal spell
+    autocmd FileType markdown,rst,text,mail setlocal complete+=kspell
+augroup end
+
 " template support
 autocmd BufNewFile * silent! 0r $HOME/.config/nvim/templates/%:e.tpl
 
@@ -151,7 +161,6 @@ nnoremap <silent><leader>ts yy<c-w>wp<c-w>pgv
 vnoremap <silent><leader>ts y<c-w>wp<c-w>pgv
 
 set spelllang=en,de
-autocmd FileType markdown,rst,text setlocal spell!
 
 " gnupg
 nnoremap <leader>pe :GPGEditRecipients<cr>
