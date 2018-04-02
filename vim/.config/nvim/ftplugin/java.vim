@@ -1,3 +1,7 @@
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+if filereadable("./gradlew")
+    setlocal makeprg=./gradlew\ --no-daemon\ -q
+else
+    setlocal makeprg=gradle\ --no-daemon\ -q
+endif
+
+source ~/.config/nvim/lsp.vim

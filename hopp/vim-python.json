@@ -1,0 +1,12 @@
+[
+    {
+        "virtualenv": [
+            "flake8",
+            "python-language-server"
+        ],
+        "location": "~/.virtualenvs/pyls",
+        "cmds": [
+            "ln -sf ~/.virtualenvs/pyls/bin/pyls ~/bin/pyls"
+        ]
+    }
+]
