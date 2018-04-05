@@ -32,6 +32,7 @@
             "roxma/nvim-completion-manager",
             "junegunn/fzf.vim",
             "tpope/vim-fugitive",
+            "editorconfig/editorconfig-vim",
             "junegunn/gv.vim",
             "w0rp/ale",
             "mattn/webapi-vim",
