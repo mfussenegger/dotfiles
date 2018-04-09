@@ -13,6 +13,7 @@ let g:markdown_fenced_languages = ['python', 'html', 'javascript', 'css', 'bash=
 let g:netrw_liststyle = 3
 
 let g:LanguageClient_autoStart = 1
+let g:LanguageClient_diagnosticsList = "Location"
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['stack', 'exec', 'hie', '--', '--lsp'],
     \ 'python': ['pyls'],
