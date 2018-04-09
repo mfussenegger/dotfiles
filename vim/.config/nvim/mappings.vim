@@ -8,6 +8,17 @@ nnoremap <bs> <c-^>
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
+nmap ]w <Plug>(ale_next)
+nmap [w <Plug>(ale_previous)
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprevious<CR>
+nnoremap ]Q :cfirst<CR>
+nnoremap [Q :clast<CR>
+nnoremap ]l :lnext<CR>
+nnoremap [l :lprevious<CR>
+nnoremap ]L :lfirst<CR>
+nnoremap [L :llast<CR>
+
 " Close popup menu *and* start a new line when pressing <Enter>
 inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 
@@ -61,6 +72,3 @@ nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gc :Gcommit<cr>
 
 " }}}
-
-nmap ]w <Plug>(ale_next)
-nmap [w <Plug>(ale_previous)
