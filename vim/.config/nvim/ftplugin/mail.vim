@@ -1,2 +1,2 @@
 setlocal spell
-setlocal fo+=aw
+setlocal fo+=w
