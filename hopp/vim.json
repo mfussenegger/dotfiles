@@ -47,6 +47,7 @@
             "vim-scripts/dbext.vim",
             "diepm/vim-rest-console",
             "ludovicchabant/vim-gutentags",
+            "majutsushi/tagbar",
             "saltstack/salt-vim"
         ],
         "cmds": [

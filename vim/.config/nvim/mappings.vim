@@ -46,6 +46,12 @@ vnoremap <silent><leader>ts y<c-w>wp<c-w>pgv
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
+augroup outline
+  autocmd! FileType * if index(['man', 'help'], &ft)
+      \| nnoremap <buffer><silent>gO :TagbarToggle<CR>
+augroup end
+
+
 " fzf
 nnoremap <silent><leader>f/ :History/<CR>
 nnoremap <silent><leader>f: :History:<CR>
