@@ -9,6 +9,9 @@ let g:gist_browser_command = 'echo %URL% | xclip'
 let g:markdown_fenced_languages = ['python', 'html', 'javascript', 'css', 'bash=sh', 'sh']
 
 
+let test#strategy = "neovim"
+
+
 " tree-view
 let g:netrw_liststyle = 3
 

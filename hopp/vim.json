@@ -48,6 +48,7 @@
             "diepm/vim-rest-console",
             "ludovicchabant/vim-gutentags",
             "majutsushi/tagbar",
+            "janko-m/vim-test",
             "saltstack/salt-vim"
         ],
         "cmds": [
