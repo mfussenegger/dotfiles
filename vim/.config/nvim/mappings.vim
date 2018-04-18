@@ -47,8 +47,7 @@ cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
 augroup outline
-  autocmd! FileType * if index(['man', 'help'], &ft)
-      \| nnoremap <buffer><silent>gO :TagbarToggle<CR>
+  autocmd! FileType python,java nnoremap <buffer><silent>gO :TagbarToggle<CR>
 augroup end
 
 
