@@ -1,7 +1,11 @@
 [
     {
         "virtualenv": [
-            "flake8",
+            "pyflakes",
+            "pycodestyle",
+            "pydocstyle",
+            "yapf",
+            "pyls-mypy",
             "python-language-server"
         ],
         "location": "~/.virtualenvs/pyls",
