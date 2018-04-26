@@ -45,6 +45,8 @@
 [diff]
     tool = vimdiff
     compactionHeuristic = true
+    colorMoved = default
+    wordDiff = color
 
 [diff "image"]
     textconv = identify
