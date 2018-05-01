@@ -12,4 +12,5 @@ xset b off
 
 redshift -l 47.22:10.09 -t 6000:4200 &
 
+systemctl --user import-environment DISPLAY XAUTHORITY
 exec i3
