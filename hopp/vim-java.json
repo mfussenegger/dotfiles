@@ -1,9 +1,0 @@
-[
-    {
-        "location": "~/workspace/code/eclipse/eclipse.jdt.ls",
-        "github": "eclipse/eclipse.jdt.ls",
-        "cmds": [
-            "./mvnw clean install -DskipTests"
-        ]
-    }
-]
