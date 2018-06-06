@@ -53,6 +53,7 @@ alias drop_caches='echo 3 | sudo tee /proc/sys/vm/drop_caches'
 alias rsync="ionice -c 3 rsync"
 alias iostat="iostat -mtx"
 alias rdesktop="rdesktop -k de -K -z"
+alias ip="ip --color"
 
 alias benice="renice -n 19 -p $$ && ionice -c3 -p $$ && ionice -p $$"
 alias berude="sudo renice -n -19 -p $$ && sudo ionice -c1 -p $$ && ionice -p $$"
