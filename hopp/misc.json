@@ -28,7 +28,8 @@
             "wheel",
             "randrctl",
             "vdirsyncer",
-            "khard"
+            "khard",
+            "yamllint"
         ],
         "location": "~/.virtualenvs/tools",
         "cmds": [
@@ -39,7 +40,8 @@
             "ln -sf ~/.virtualenvs/tools/bin/pex ~/bin/pex",
             "ln -sf ~/.virtualenvs/tools/bin/randrctl ~/bin/randrctl",
             "ln -sf ~/.virtualenvs/tools/bin/vdirsyncer ~/bin/vdirsyncer",
-            "ln -sf ~/.virtualenvs/tools/bin/khard ~/bin/khard"
+            "ln -sf ~/.virtualenvs/tools/bin/khard ~/bin/khard",
+            "ln -sf ~/.virtualenvs/tools/bin/yamllint ~/bin/yamllint"
         ]
     }
 ]
