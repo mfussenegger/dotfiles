@@ -17,11 +17,14 @@ let g:netrw_liststyle = 3
 
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_diagnosticsList = "Location"
+let g:LanguageClient_rootMarkers = {
+    \ 'java': ['.git']
+    \ }
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['stack', 'exec', 'hie', '--', '--lsp'],
     \ 'python': ['pyls'],
     \ 'java': [
-    \   'java',
+    \   '/usr/lib/jvm/java-10-jdk/bin/java',
     \   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     \   '-Dosgi.bundles.defaultStartLevel=4',
     \   '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -34,6 +37,11 @@ let g:LanguageClient_serverCommands = {
     \   '-configuration',
     \   $HOME . '/workspace/code/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux',
     \   '-data',
-    \   $HOME . '/.local/share/eclipse'
+    \   $HOME . '/.local/share/eclipse',
+    \   '--add-modules=ALL-SYSTEM',
+    \   '--add-opens',
+    \   'java.base/java.util=ALL-UNNAMED',
+    \   '--add-opens',
+    \   'java.base/java.lang=ALL-UNNAMED'
     \ ]
     \ }
