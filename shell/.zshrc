@@ -1,6 +1,7 @@
 PURE_PROMPT_SYMBOL="↪ "
 PURE_GIT_PULL=0
 PURE_GIT_UNTRACKED_DIRTY=0
+FZF_DEFAULT_COMMAND="rg --files"
 
 source ~/.zsh/history.plugin.zsh
 source ~/.zsh/completion.plugin.zsh
