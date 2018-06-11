@@ -23,6 +23,7 @@ let g:LanguageClient_rootMarkers = {
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['stack', 'exec', 'hie', '--', '--lsp'],
     \ 'python': ['pyls'],
+    \ 'sh': ['bash-language-server', 'start'],
     \ 'java': [
     \   '/usr/lib/jvm/java-10-jdk/bin/java',
     \   '-Declipse.application=org.eclipse.jdt.ls.core.id1',

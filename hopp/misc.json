@@ -43,5 +43,14 @@
             "ln -sf ~/.virtualenvs/tools/bin/khard ~/bin/khard",
             "ln -sf ~/.virtualenvs/tools/bin/yamllint ~/bin/yamllint"
         ]
+    },
+    {
+        "location": "~/.local/share/npm_tools",
+        "npm": [
+            "bash-language-server"
+        ],
+        "cmds": [
+            "ln -sf ~/.local/share/npm_tools/node_modules/bash-language-server/bin/main.js ~/bin/bash-language-server"
+        ]
     }
 ]

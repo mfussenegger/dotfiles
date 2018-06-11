@@ -62,6 +62,17 @@ def virtualenv(location, virtualenv, cmds=None):
     _exec_cmds(location, cmds)
 
 
+def npm(location, npm, cmds=None):
+    os.makedirs(location, exist_ok=True)
+    cmd = ['npm', 'install']
+    if isinstance(npm, list):
+        cmd += npm
+    else:
+        cmd.append(npm)
+    run(cmd, cwd=location)
+    _exec_cmds(location, cmds)
+
+
 def curl(location, curl, cmds=None):
     """ load an entry like
 
@@ -162,7 +173,8 @@ loaders = {
     'git': git,
     'github': github,
     'virtualenv': virtualenv,
-    'zsh': zsh
+    'zsh': zsh,
+    'npm': npm
 }
 
 
