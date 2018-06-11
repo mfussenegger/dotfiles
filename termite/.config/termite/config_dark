@@ -1,6 +1,5 @@
 [options]
 font = Terminus (TTF) 12
-browser = /usr/bin/qutebrowser
 scrollback_lines = 40000
 allow_bold = true
 cursor_blink = off
