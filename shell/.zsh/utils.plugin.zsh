@@ -44,3 +44,7 @@ if-up() {
     fi
     $*
 }
+
+fix-term() {
+    infocmp -x | ssh -t $1 "cat > '$TERM.info' && tic -x '$TERM.info' && rm '$TERM.info'"
+}
