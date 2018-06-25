@@ -25,6 +25,7 @@ import venv
 from argparse import ArgumentParser
 from subprocess import PIPE, run
 from urllib.request import urlopen
+from urllib.error import HTTPError
 
 
 def _exec_cmds(location, cmds=None):
@@ -83,12 +84,18 @@ def curl(location, curl, cmds=None):
     """
     location = location
     source = curl
-    resp = urlopen(source)
+    try:
+        resp = urlopen(source)
+    except HTTPError:
+        print('Source not found: ', source)
+        raise
     if os.path.isdir(location):
         location = os.path.join(location, os.path.basename(source))
     elif location.endswith('/'):
         os.mkdir(location)
         location = os.path.join(location, os.path.basename(source))
+    else:
+        os.makedirs(os.path.dirname(location), exist_ok=True)
     with open(location, 'wb') as f:
         f.write(resp.read())
     _exec_cmds(location, cmds)

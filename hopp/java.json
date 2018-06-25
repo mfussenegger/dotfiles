@@ -13,12 +13,12 @@
   },
   {
     "location": "~/apps/",
-    "curl": "https://github.com/jvm-profiling-tools/async-profiler/releases/download/1.3/async-profiler-1.3-linux-x64.tar.gz",
+    "curl": "https://github.com/jvm-profiling-tools/async-profiler/releases/download/v1.4/async-profiler-1.4-linux-x64.tar.gz",
     "cmds": [
-      "rm -rf ~/apps/async-profiler-1.3-linux-x64/",
-      "aunpack ~/apps/async-profiler-1.3-linux-x64.tar.gz",
+      "rm -rf ~/apps/async-profiler-1.4-linux-x64/",
+      "aunpack ~/apps/async-profiler-1.4-linux-x64.tar.gz",
       "ln -sf ~/apps/async-profiler*/profiler.sh ~/bin/profiler.sh",
-      "rm ~/apps/async-profiler-1.3-linux-x64.tar.gz"
+      "rm ~/apps/async-profiler-1.4-linux-x64.tar.gz"
     ]
   }
 ]
