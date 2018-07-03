@@ -32,6 +32,7 @@ alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
 alias -g L='| less'
 alias -g N='2> /dev/null'
 alias -g G='| rg'
+alias -g J='| jq'
 alias -g H='| head'
 alias -g T='| tail'
 alias -g F='| fzf'
@@ -40,8 +41,8 @@ alias -g V='| vim -'
 
 
 ## misc
-alias s='TERM=xterm ssh'
-alias sshrc='TERM=xterm sshrc'
+alias s='ssh'
+alias sshrc='sshrc'
 compdef sshrc=ssh
 alias c="date && echo -e && cal -3m"
 alias :q="exit"
