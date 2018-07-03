@@ -1,7 +1,6 @@
 [
     {
         "virtualenv": [
-            "pyflakes",
             "pycodestyle",
             "pydocstyle",
             "yapf",
