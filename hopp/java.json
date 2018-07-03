@@ -17,7 +17,6 @@
     "cmds": [
       "rm -rf ~/apps/async-profiler-1.4-linux-x64/",
       "aunpack ~/apps/async-profiler-1.4-linux-x64.tar.gz",
-      "ln -sf ~/apps/async-profiler*/profiler.sh ~/bin/profiler.sh",
       "rm ~/apps/async-profiler-1.4-linux-x64.tar.gz"
     ]
   }
