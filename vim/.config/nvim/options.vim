@@ -16,7 +16,7 @@ set lazyredraw
 set ttyfast
 set scrolloff=3
 
-set completeopt=longest,menuone,preview
+set completeopt=noinsert,menuone,noselect
 set infercase
 
 set wildmode=list:longest,list:full

@@ -8,9 +8,9 @@ let g:gist_browser_command = 'echo %URL% | xclip'
 " Enable syntax highlighting in fenced code blocks
 let g:markdown_fenced_languages = ['python', 'html', 'javascript', 'css', 'bash=sh', 'sh']
 
-
 let test#strategy = "neovim"
 
+autocmd BufEnter * call ncm2#enable_for_buffer()
 
 " See vim-gutentags issue # 168
 augroup gutentags
