@@ -50,5 +50,12 @@
         "cmds": [
             "ln -sf ~/.local/share/npm_tools/node_modules/bash-language-server/bin/main.js ~/bin/bash-language-server"
         ]
+    },
+    {
+      "location": "~/bin/hadolint",
+      "curl": "https://github.com/hadolint/hadolint/releases/download/v1.10.2/hadolint-Linux-x86_64",
+      "cmds": [
+        "chmod +x ~/bin/hadolint"
+      ]
     }
 ]
