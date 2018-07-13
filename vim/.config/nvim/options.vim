@@ -76,6 +76,7 @@ if exists("&colorcolumn")
 endif
 
 " template support
+set cpoptions-=a
 autocmd BufNewFile * silent! 0r $HOME/.config/nvim/templates/%:e.tpl
 
 if executable("rg")
