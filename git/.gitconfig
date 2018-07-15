@@ -28,6 +28,7 @@
 
 [rebase]
     autosquash = true
+    autoStash = true
 
 [branch]
     autoSetupRebase = always
