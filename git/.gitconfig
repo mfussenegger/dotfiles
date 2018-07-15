@@ -42,6 +42,9 @@
 [mergetool]
     keepBackup = false
 
+[difftool]
+    prompt = false
+
 [diff]
     tool = vimdiff
     compactionHeuristic = true
