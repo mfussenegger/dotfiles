@@ -52,7 +52,7 @@ def output(p):
 
 
 OUTPUT_ACTIVE_REX = re.compile(
-    '.* connected( primary)? (\d)+x(\d)+\+\d+\+\d+ .*')
+    r'.* connected( primary)? (\d)+x(\d)+\+\d+\+\d+ .*')
 
 
 def cmd_xrandr_on():
@@ -111,7 +111,7 @@ def cmd_virsh_launch():
 
 
 def _change_vim_color_scheme(colorscheme, background):
-    vimrc_path = os.path.expanduser('~/.config/nvim/init.vim')
+    vimrc_path = os.path.expanduser('~/.config/nvim/options.vim')
 
     sed_cmd = 's/colorscheme {old_scheme}/colorscheme {new_scheme}/g'
     sed_cmd = sed_cmd.format(old_scheme=colorscheme[0], new_scheme=colorscheme[1])
