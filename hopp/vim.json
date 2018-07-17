@@ -57,7 +57,8 @@
             "ludovicchabant/vim-gutentags",
             "majutsushi/tagbar",
             "janko-m/vim-test",
-            "saltstack/salt-vim"
+            "saltstack/salt-vim",
+            "hashivim/vim-terraform"
         ],
         "cmds": [
             "nvim +UpdateRemotePlugins +qa"
