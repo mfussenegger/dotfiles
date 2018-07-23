@@ -22,7 +22,6 @@
         "virtualenv": [
             "httpie",
             "twine",
-            "pypsh",
             "shiv",
             "wheel",
             "randrctl",
@@ -34,7 +33,6 @@
         "cmds": [
             "ln -sf ~/.virtualenvs/tools/bin/http ~/bin/http",
             "ln -sf ~/.virtualenvs/tools/bin/twine ~/bin/twine",
-            "ln -sf ~/.virtualenvs/tools/bin/pypsh ~/bin/pypsh",
             "ln -sf ~/.virtualenvs/tools/bin/shiv ~/bin/shiv",
             "ln -sf ~/.virtualenvs/tools/bin/randrctl ~/bin/randrctl",
             "ln -sf ~/.virtualenvs/tools/bin/vdirsyncer ~/bin/vdirsyncer",
