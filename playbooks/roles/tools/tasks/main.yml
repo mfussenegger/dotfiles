@@ -1,0 +1,5 @@
+---
+- name: Install hub
+  import_tasks: hub.yml
+- name: Install python based tools
+  import_tasks: python_tools.yml

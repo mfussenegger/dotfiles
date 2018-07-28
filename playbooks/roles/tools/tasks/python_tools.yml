@@ -1,0 +1,27 @@
+---
+- name: Setup tools virtualenv
+  pip:
+    name:
+      - httpie
+      - twine
+      - shiv
+      - wheel
+      - randrctl
+      - vdirsyncer
+      - khard
+      - yamllint
+    virtualenv: ~/.virtualenvs/tools
+    virtualenv_command: /usr/bin/python3 -m venv
+- name: Symlink tools
+  file:
+    src: ~/.virtualenvs/tools/bin/{{ item }}
+    dest: ~/bin/{{ item }}
+    state: link
+  with_items:
+    - http
+    - twine
+    - shiv
+    - randrctl
+    - vdirsyncer
+    - khard
+    - yamllint

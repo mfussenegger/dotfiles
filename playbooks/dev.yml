@@ -5,3 +5,6 @@
     - lang-haskell
     - lang-java
     - lang-python
+    - i3pystatus
+    - tools
+    - zsh-plugins

@@ -1,0 +1,10 @@
+---
+- name: Fetch zsh plugins
+  get_url:
+    url: "{{ item }}"
+    dest: ~/.zsh/plugins/{{ item | basename }}
+  with_items:
+    - https://raw.githubusercontent.com/rupa/z/master/z.sh
+    - https://raw.githubusercontent.com/mafredri/zsh-async/master/async.zsh
+    - https://raw.githubusercontent.com/sindresorhus/pure/master/pure.zsh
+    - https://raw.githubusercontent.com/zsh-users/zsh-history-substring-search/master/zsh-history-substring-search.zsh

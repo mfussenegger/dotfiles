@@ -1,3 +1,5 @@
 ---
-- name: vim
+- name: Install common plugins
   import_tasks: common.yml
+- name: Setup prose dicts
+  import_tasks: prose.yml
