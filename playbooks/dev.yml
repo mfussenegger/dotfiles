@@ -3,3 +3,4 @@
   roles:
     - vim
     - lang-haskell
+    - lang-java

@@ -1,0 +1,29 @@
+---
+- name: Clone eclipse.jdt.ls
+  git:
+    repo: https://github.com/eclipse/eclipse.jdt.ls
+    dest: ~/dev/eclipse/eclipse.jdt.ls
+- name: Build eclipse.jdt.ls
+  command: ./mvnw clean install -DskipTests
+  args:
+    chdir: ~/dev/eclipse/eclipse.jdt.ls
+- name: Remove possible incompatible eclipse.jdt.ls state
+  file:
+    path: ~/.local/share/eclipse
+    state: absent
+- name: Fetch sjk.jar
+  get_url:
+    url: https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=org.gridkit.jvmtool&a=sjk&v=LATEST
+    dest: ~/apps/sjk.jar
+- name: Fetch async-profiler
+  get_url:
+    url: https://github.com/jvm-profiling-tools/async-profiler/releases/download/v1.4/async-profiler-1.4-linux-x64.tar.gz
+    dest: ~/apps/async-profiler-1.4-linux-x64.tar.gz
+- name: Unpack async-profiler
+  unarchive:
+    src: ~/apps/async-profiler-1.4-linux-x64.tar.gz
+    dest: ~/apps/async-profiler-1.4-linux-x64
+- name: Remove async-profiler tarball
+  file:
+    path: ~/apps/async-profiler-1.4-linux-x64.tar.gz
+    state: absent

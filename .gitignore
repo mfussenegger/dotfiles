@@ -5,3 +5,4 @@ vim/.vim/.netrwhist
 vim/.vim/spell/
 shell/.zsh/plugins/
 systemd/.config/systemd/user/default.target.wants/
+*.retry
