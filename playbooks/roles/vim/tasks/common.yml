@@ -1,0 +1,58 @@
+---
+- name: Setup neovim virtualenv
+  pip:
+    name:
+      - neovim
+      - neovim-remote
+    virtualenv: ~/.virtualenvs/nvim
+    virtualenv_command: /usr/bin/python3 -m venv
+- name: Symlink neovim remote
+  file:
+    src: ~/.virtualenvs/nvim/bin/nvr
+    dest: ~/bin/nvr
+    state: link
+- name: Checkout vim plugins
+  git:
+    repo: https://github.com/{{ item }}
+    dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
+  with_items:
+    - autozimu/LanguageClient-neovim
+    - ncm2/ncm2
+    - ncm2/ncm2-bufword
+    - ncm2/ncm2-path
+    - ncm2/ncm2-tagprefix
+    - ncm2/ncm2-ultisnips
+    - ncm2/ncm2-markdown-subscope
+    - ncm2/ncm2-rst-subscope
+    - roxma/nvim-yarp
+    - junegunn/fzf
+    - junegunn/fzf.vim
+    - junegunn/gv.vim
+    - junegunn/vim-easy-align
+    - tpope/vim-fugitive
+    - editorconfig/editorconfig-vim
+    - w0rp/ale
+    - mattn/webapi-vim
+    - mattn/gist-vim
+    - vim-scripts/linediff.vim
+    - hynek/vim-python-pep8-indent
+    - jamessan/vim-gnupg
+    - cespare/vim-toml
+    - tpope/vim-eunuch
+    - SirVer/ultisnips
+    - honza/vim-snippets
+    - vim-scripts/dbext.vim
+    - diepm/vim-rest-console
+    - ludovicchabant/vim-gutentags
+    - majutsushi/tagbar
+    - janko-m/vim-test
+    - saltstack/salt-vim
+    - hashivim/vim-terraform
+- name: Install fzf
+  command: ~/.config/nvim/pack/plugins/start/fzf/install --no-bash --no-fish
+- name: Install LanguageClient-neovim
+  command: make release
+  args:
+    chdir: ~/.config/nvim/pack/plugins/start/LanguageClient-neovim
+- name: Update Remote Plugins
+  command: nvim +UpdateRemotePlugins +qa

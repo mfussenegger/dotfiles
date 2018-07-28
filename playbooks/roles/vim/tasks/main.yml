@@ -1,0 +1,3 @@
+---
+- name: vim
+  import_tasks: common.yml
