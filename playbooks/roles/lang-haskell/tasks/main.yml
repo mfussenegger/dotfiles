@@ -1,0 +1,16 @@
+---
+- name: Clone/pull haskell-ide-engine and ghcid
+  git:
+    repo: https://github.com/{{ item }}
+    dest: ~/dev/{{ item }}
+  with_items:
+    - haskell/haskell-ide-engine
+    - ndmitchell/ghcid
+- name: Build haskell-ide-engine
+  command: stack build --copy-compiler-tool
+  args:
+    chdir: ~/dev/haskell/haskell-ide-engine
+- name: Install ghcid vim plugin
+  command: cp -a ~/dev/ndmitchell/ghcid/plugins/nvim ~/.config/nvim/pack/plugins/start/ghcid
+- name: Install haskell tooling
+  command: stack install ghcid hlint stylish-haskell hoogle
