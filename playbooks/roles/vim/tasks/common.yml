@@ -15,7 +15,7 @@
   git:
     repo: https://github.com/{{ item }}
     dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
-  with_items:
+  loop:
     - autozimu/LanguageClient-neovim
     - ncm2/ncm2
     - ncm2/ncm2-bufword

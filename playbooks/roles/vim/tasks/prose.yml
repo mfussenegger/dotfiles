@@ -12,7 +12,7 @@
     src: "{{ item }}"
     remote_src: true
     dest: /tmp/
-  with_items:
+  loop:
     - http://download.huzheng.org/dict.org/stardict-dictd_www.dict.org_gcide-2.4.2.tar.bz2
     - http://download.huzheng.org/dict.org/stardict-dictd-jargon-2.4.2.tar.bz2
 - name: Move stardict files
@@ -21,6 +21,6 @@
   file:
     path: "{{ item }}"
     state: absent
-  with_items:
+  loop:
     - /tmp/stardict-dictd_www.dict.org_gcide-2.4.2
     - /tmp/stardict-dictd-jargon-2.4.2

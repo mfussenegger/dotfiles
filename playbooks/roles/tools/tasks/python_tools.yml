@@ -17,7 +17,7 @@
     src: ~/.virtualenvs/tools/bin/{{ item }}
     dest: ~/bin/{{ item }}
     state: link
-  with_items:
+  loop:
     - http
     - twine
     - shiv

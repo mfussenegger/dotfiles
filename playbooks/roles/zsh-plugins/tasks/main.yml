@@ -3,7 +3,7 @@
   get_url:
     url: "{{ item }}"
     dest: ~/.zsh/plugins/{{ item | basename }}
-  with_items:
+  loop:
     - https://raw.githubusercontent.com/rupa/z/master/z.sh
     - https://raw.githubusercontent.com/mafredri/zsh-async/master/async.zsh
     - https://raw.githubusercontent.com/sindresorhus/pure/master/pure.zsh

@@ -3,7 +3,7 @@
   git:
     repo: https://github.com/{{ item }}
     dest: ~/dev/{{ item }}
-  with_items:
+  loop:
     - haskell/haskell-ide-engine
     - ndmitchell/ghcid
 - name: Build haskell-ide-engine
