@@ -16,15 +16,10 @@ To do so the script uses `GNU stow
 <https://www.gnu.org/software/stow/stow.html>`_. It has to be installed in
 order for the `bootstrap.sh` script to work.
 
+In order to install the tooling run the ``dev`` playbook::
 
-hopp.py
--------
+  ansible-playbook playbooks/dev.yml
 
-The ``bootstrap.sh`` script will call ``hopp.py`` (included in the ``bin/bin``
-directory) to download all vim-plugins and setup a couple of virtualenvs.
-
-If you want to know what exactly is being installed by ``hopp.py`` take a look at
-the configuration files (in the ``hopp`` folder)
 
 Uninstall
 =========
