@@ -1,4 +1,7 @@
 ---
+- name: Check stardict contents
+  command: ls ~/.local/share/stardict
+  register: stardict_contents
 - name: Fetch mthesaur words
   get_url:
     url: https://raw.githubusercontent.com/words/moby/master/words.txt
@@ -12,11 +15,13 @@
     src: "{{ item }}"
     remote_src: true
     dest: /tmp/
+  when: ('dictd_www.dict.org_gcide.idx' not in stardict_contents.stdout)
   loop:
     - http://download.huzheng.org/dict.org/stardict-dictd_www.dict.org_gcide-2.4.2.tar.bz2
     - http://download.huzheng.org/dict.org/stardict-dictd-jargon-2.4.2.tar.bz2
 - name: Move stardict files
   shell: mv /tmp/stardict-*/* ~/.local/share/stardict/
+  when: ('dictd_www.dict.org_gcide.idx' not in stardict_contents.stdout)
 - name: Cleanup tmp stardict
   file:
     path: "{{ item }}"
