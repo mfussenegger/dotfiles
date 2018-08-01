@@ -2,12 +2,11 @@
 - name: Create pyls virtualenv
   pip:
     name:
-      - pycodestyle
-      - pydocstyle
-      - yapf
-      - python-language-server
+      - pip
+      - python-language-server[pyflakes,yapf,mccabe,pycodestyle,pydocstyle]
     virtualenv: ~/.virtualenvs/pyls
     virtualenv_command: /usr/bin/python3 -m venv
+    state: latest
 - name: Symlink pyls
   file:
     src: ~/.virtualenvs/pyls/bin/pyls
