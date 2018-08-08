@@ -47,8 +47,3 @@ EOF
     .venv/bin/python -m ensurepip
     .venv/bin/python bootstrap.py
 }
-
-
-if [[ -x '/usr/bin/virtualenvwrapper.sh' ]]; then
-    source /usr/bin/virtualenvwrapper.sh
-fi
