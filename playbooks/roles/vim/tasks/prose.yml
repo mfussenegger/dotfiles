@@ -1,6 +1,6 @@
 ---
 - name: Check stardict contents
-  command: ls ~/.local/share/stardict
+  shell: ls ~/.local/share/stardict || echo ""
   register: stardict_contents
 - name: Fetch mthesaur words
   get_url:
