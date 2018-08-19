@@ -10,6 +10,7 @@
       - vdirsyncer
       - khard
       - yamllint
+      - vimg
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -25,3 +26,4 @@
     - vdirsyncer
     - khard
     - yamllint
+    - vimg
