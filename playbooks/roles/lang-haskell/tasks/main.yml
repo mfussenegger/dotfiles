@@ -13,6 +13,6 @@
 - name: Install ghcid vim plugin
   command: cp -a ~/dev/ndmitchell/ghcid/plugins/nvim ~/.config/nvim/pack/plugins/start/ghcid
 - name: Install haskell tooling
-  command: stack install ghcid hlint stylish-haskell hoogle dhall dhall-json
+  command: stack install --resolver lts-12.7 ghcid hlint stylish-haskell hoogle dhall dhall-json
   args:
     chdir: ~/
