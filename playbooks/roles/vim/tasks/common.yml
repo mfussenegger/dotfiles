@@ -47,6 +47,7 @@
     - majutsushi/tagbar
     - janko-m/vim-test
     - saltstack/salt-vim
+    - vmchale/dhall-vim
     - hashivim/vim-terraform
 - name: Install fzf
   command: ~/.config/nvim/pack/plugins/start/fzf/install --no-bash --no-fish
