@@ -1,3 +1,4 @@
+set hidden
 nnoremap <buffer> <silent> F5 :call LanguageClient_contextMenu()<CR>
 nnoremap <buffer> <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <buffer> <silent> gd :call LanguageClient_textDocument_definition()<CR>
