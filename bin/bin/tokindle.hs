@@ -1,14 +1,12 @@
 #!/usr/bin/env stack
-{- stack runghc --resolver lts-12.7 --package Unixutils --package split -}
+-- stack script --resolver lts-12.7 --package "process directory temporary split"
 
-import           Control.Exception     (finally)
-import           Data.Char             (isSpace)
-import           Data.List.Split       (splitOn)
-import           Data.Semigroup        ((<>))
-import           System.Directory      (removeFile)
-import           System.Environment    (getArgs)
-import           System.Process        (callProcess, readProcess)
-import           System.Unix.Directory (withTemporaryDirectory)
+import           Data.Char              (isSpace)
+import           Data.List.Split        (splitOn)
+import           Data.Semigroup         ((<>))
+import           System.Environment     (getArgs)
+import           System.IO.Temp         (withSystemTempDirectory)
+import           System.Process         (callProcess, readProcess)
 
 
 mailFile :: String -> String -> IO ()
@@ -34,7 +32,7 @@ sendPageToKindle url tmpDir = do
       processPage = do
         callProcess "pandoc" [url, "-t", "epub", "--output", epub]
         callProcess "ebook-convert" [epub, mobi]
-        mailFile mobi title `finally` mapM_ removeFile [epub, mobi]
+        mailFile mobi title
       processPdf = do
         callProcess "curl" [url, "--output", pdf]
         callProcess "k2pdfopt"
@@ -44,10 +42,10 @@ sendPageToKindle url tmpDir = do
           , "-o", pdfProcessed
           , "-vb", "1.25"
           , pdf ]
-        mailFile pdfProcessed title `finally` mapM_ removeFile [pdf, pdfProcessed]
+        mailFile pdfProcessed title
 
 
 main :: IO ()
 main = do
   [url] <- getArgs
-  withTemporaryDirectory "kindle" (sendPageToKindle url)
+  withSystemTempDirectory "kindle" (sendPageToKindle url)
