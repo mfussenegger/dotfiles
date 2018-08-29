@@ -1,5 +1,5 @@
 [options]
-font = Terminus (TTF) 12
+font = xos4 Terminus
 scrollback_lines = 40000
 allow_bold = true
 cursor_blink = off
