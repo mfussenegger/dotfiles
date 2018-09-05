@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
--- stack script --resolver lts-12.7 --package "process directory temporary split"
+-- stack script --resolver lts-12.9 --package "process directory temporary split"
 
 import           Data.Char              (isSpace)
 import           Data.List.Split        (splitOn)
