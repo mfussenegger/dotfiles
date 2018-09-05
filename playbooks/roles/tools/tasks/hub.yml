@@ -1,16 +1,16 @@
 ---
 - name: Fetch and unpack hub
   unarchive:
-    src: https://github.com/github/hub/releases/download/v2.5.0/hub-linux-amd64-2.5.0.tgz
+    src: https://github.com/github/hub/releases/download/v2.5.1/hub-linux-amd64-2.5.1.tgz
     dest: /tmp/
     remote_src: true
 - name: Move hub to ~/bin
   copy:
-    src: /tmp/hub-linux-amd64-2.5.0/bin/hub
+    src: /tmp/hub-linux-amd64-2.5.1/bin/hub
     dest: ~/bin/gh
     mode: 0755
     remote_src: true
 - name: Remove /tmp/hub
   file:
-    path: /tmp/hub-linux-amd64-2.5.0
+    path: /tmp/hub-linux-amd64-2.5.1
     state: absent
