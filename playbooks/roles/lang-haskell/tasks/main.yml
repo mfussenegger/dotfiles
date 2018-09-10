@@ -7,7 +7,7 @@
     - haskell/haskell-ide-engine
     - ndmitchell/ghcid
 - name: Build haskell-ide-engine
-  command: stack build --copy-compiler-tool
+  command: stack build --copy-compiler-tool --stack-yaml=stack-8.4.3.yaml
   args:
     chdir: ~/dev/haskell/haskell-ide-engine
 - name: Generate hoogle database for hie
