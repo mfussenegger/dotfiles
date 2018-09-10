@@ -183,5 +183,5 @@ bindsym XF86AudioRaiseVolume exec pactl set-sink-mute @DEFAULT_SINK@ false && pa
 bindsym XF86AudioLowerVolume exec pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ -5% && killall -USR1 i3status
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ true && killall -USR1 i3status
 
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+bindsym XF86MonBrightnessUp exec xbacklight.hs --inc 5%
+bindsym XF86MonBrightnessDown exec xbacklight.hs --dec 5%
