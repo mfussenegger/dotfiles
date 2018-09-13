@@ -30,6 +30,7 @@
     - junegunn/gv.vim
     - junegunn/vim-easy-align
     - tpope/vim-fugitive
+    - tpope/vim-rhubarb
     - editorconfig/editorconfig-vim
     - w0rp/ale
     - mattn/webapi-vim
