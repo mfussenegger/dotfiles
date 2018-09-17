@@ -53,7 +53,7 @@
 - name: Install fzf
   command: ~/.config/nvim/pack/plugins/start/fzf/install --no-bash --no-fish
 - name: Install LanguageClient-neovim
-  command: make release
+  command: bash install.sh
   args:
     chdir: ~/.config/nvim/pack/plugins/start/LanguageClient-neovim
 - name: Update Remote Plugins
