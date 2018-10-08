@@ -15,11 +15,6 @@ venv() {
 }
 
 
-pip_outdated() {
-    pip freeze | cut -d = -f 1 | xargs -n 1 pip search | grep -B2 'LATEST:'
-}
-
-
 new_buildout() {
     wget http://downloads.buildout.org/2/bootstrap.py
     echo "[versions]" > versions.cfg
