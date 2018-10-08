@@ -3,7 +3,12 @@
   pip:
     name:
       - pip
-      - python-language-server[pyflakes,yapf,mccabe,pycodestyle,pydocstyle]
+      - python-language-server
+      - pyflakes
+      - yapf
+      - mccabe
+      - pycodestyle
+      - pydocstyle
     virtualenv: ~/.virtualenvs/pyls
     virtualenv_command: /usr/bin/python3 -m venv
     state: latest
