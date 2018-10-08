@@ -50,6 +50,7 @@
     - saltstack/salt-vim
     - vmchale/dhall-vim
     - hashivim/vim-terraform
+    - sirtaj/vim-openscad
 - name: Install fzf
   command: ~/.config/nvim/pack/plugins/start/fzf/install --no-bash --no-fish
 - name: Install LanguageClient-neovim
