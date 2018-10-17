@@ -1,0 +1,6 @@
+---
+- name: Install etlas
+  get_url:
+    url: https://cdnverify.eta-lang.org/eta-binaries/etlas-1.5.0.0/binaries/x86_64-linux/etlas
+    dest: ~/bin/etlas
+    mode: 0755
