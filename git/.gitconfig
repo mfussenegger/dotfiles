@@ -39,6 +39,7 @@
 [merge]
     tool = vimdiff
     conflictstyle = diff3
+    renamelimit = 20000
 
 [mergetool]
     keepBackup = false
