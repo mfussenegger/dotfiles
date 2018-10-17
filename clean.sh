@@ -8,3 +8,4 @@ stow --delete i3
 stow --delete git
 stow --delete termite
 stow --delete haskell
+stow --delete psql

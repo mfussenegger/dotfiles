@@ -1,0 +1,14 @@
+\set QUIET 1
+\encoding unicode
+\conninfo
+\pset format wrapped
+\pset null '💩'
+\set PROMPT2 '... > '
+\timing
+\x auto
+\set client_min_messages = warning;
+\set VERBOSITY verbose
+\set HISTCONTROL ignoredups
+\set COMP_KEYWORD_CASE upper
+\set ON_ERROR_ROLLBACK interactive
+\setenv PAGER 'vim -c "set ft=man"'
