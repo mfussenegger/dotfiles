@@ -1,4 +1,8 @@
 ---
+- name: Install haskell tooling
+  command: stack install --resolver lts-12.13 ghcid hlint stylish-haskell hoogle dhall dhall-json cabal-install
+  args:
+    chdir: ~/
 - name: Clone/pull haskell-ide-engine and ghcid
   git:
     repo: https://github.com/{{ item }}
@@ -7,7 +11,7 @@
     - haskell/haskell-ide-engine
     - ndmitchell/ghcid
 - name: Build haskell-ide-engine
-  command: stack build --copy-compiler-tool --stack-yaml=stack-8.4.3.yaml
+  command: stack install --stack-yaml=stack-8.4.3.yaml
   args:
     chdir: ~/dev/haskell/haskell-ide-engine
 - name: Generate hoogle database for hie
@@ -16,7 +20,3 @@
     chdir: ~/dev/haskell/haskell-ide-engine
 - name: Install ghcid vim plugin
   command: cp -a ~/dev/ndmitchell/ghcid/plugins/nvim ~/.config/nvim/pack/plugins/start/ghcid
-- name: Install haskell tooling
-  command: stack install --resolver lts-12.9 ghcid hlint stylish-haskell hoogle dhall dhall-json cabal-install
-  args:
-    chdir: ~/
