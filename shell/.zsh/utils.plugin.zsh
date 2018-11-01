@@ -48,3 +48,7 @@ if-up() {
 fix-term() {
     infocmp -x | ssh -t $1 "cat > '$TERM.info' && tic -x '$TERM.info' && rm '$TERM.info'"
 }
+
+zebra() {
+  awk '{if (NR%2 == 0) {print "\033[32m" $0 "\033[0m"} else {print}}'
+}
