@@ -2,7 +2,7 @@
 - name: Setup neovim virtualenv
   pip:
     name:
-      - neovim
+      - pynvim
       - neovim-remote
     virtualenv: ~/.virtualenvs/nvim
     virtualenv_command: /usr/bin/python3 -m venv
