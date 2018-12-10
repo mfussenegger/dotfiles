@@ -1,0 +1,13 @@
+---
+- name: Check apps
+  shell: ls ~/apps/ || echo ""
+  register: app_contents
+- name: Get tla
+  unarchive:
+    src: https://github.com/tlaplus/tlaplus/releases/download/v1.5.7/TLAToolbox-1.5.7-linux.gtk.x86_64.zip
+    remote_src: true
+    dest: /tmp/
+  when: ('toolbox' not in app_contents.stdout)
+- name: Move toolbox
+  shell: mv /tmp/toolbox ~/apps/
+  when: ('toolbox' not in app_contents.stdout)
