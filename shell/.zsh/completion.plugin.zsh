@@ -1,3 +1,5 @@
+fpath+=(~/.zsh/completion/)
+
 autoload -Uz compinit && compinit -i
 
 setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
