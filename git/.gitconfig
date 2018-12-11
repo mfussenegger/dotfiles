@@ -16,6 +16,7 @@
     status = auto
     branch = auto
     ui = true
+    algorithm = patience
 
 [github]
     user = mfussenegger
