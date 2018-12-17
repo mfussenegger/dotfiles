@@ -23,6 +23,8 @@ set wildmode=list:longest,list:full
 set wildignore+=*.pyc,.git,.idea,*.o
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
+set path-=/usr/include
+
 " do not select the end of line
 set selection=old
 " lower the delay of escaping out of other modes
