@@ -1,6 +1,10 @@
 ---
 - name: Install haskell tooling
-  command: stack install --resolver lts-12.16 ghcid hlint stylish-haskell hoogle dhall dhall-json cabal-install
+  command: stack install --resolver lts-13.0 ghcid hlint hoogle dhall dhall-json cabal-install
+  args:
+    chdir: ~/
+- name: Install stylish-haskell
+  command: stack install --resolver lts-12.16 stylish-haskell
   args:
     chdir: ~/
 - name: Clone/pull haskell-ide-engine and ghcid
@@ -11,7 +15,7 @@
     - haskell/haskell-ide-engine
     - ndmitchell/ghcid
 - name: Build haskell-ide-engine
-  command: stack install --stack-yaml=stack-8.4.4.yaml
+  command: stack install --stack-yaml=stack-8.6.3.yaml
   args:
     chdir: ~/dev/haskell/haskell-ide-engine
 - name: Generate hoogle database for hie
