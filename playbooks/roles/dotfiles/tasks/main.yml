@@ -1,0 +1,5 @@
+---
+- name: Checkout dotfiles
+  git:
+    repo: https://github.com/mfussenegger/dotfiles.git
+    dest: ~/dotfiles

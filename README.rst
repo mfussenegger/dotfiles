@@ -36,3 +36,14 @@ To only apply specific roles you can use ``ansible -m import_role`` within the
 
    cd playbooks
    ansible localhost -m import_role -a name=vim
+
+To apply some roles on multiple remote hosts you can use ``ansible-console``.
+For example, to initialize the dotfiles on other hosts the following could be
+used::
+
+   cd playbooks
+   ansible-console yourhosts -K --ssh-extra-args="-o ForwardAgent=yes"
+   $ import_role name=dotfiles
+   $ import_role name=stow
+   $ import_role name=zsh-plugins
+   $ import_role name=vim
