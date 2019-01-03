@@ -52,7 +52,13 @@
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
 - name: Install fzf
-  command: ~/.config/nvim/pack/plugins/start/fzf/install --no-bash --no-fish
+  command: |
+    ~/.config/nvim/pack/plugins/start/fzf/install \
+      --no-bash \
+      --no-fish \
+      --key-bindings \
+      --completion \
+      --no-update-rc
 - name: Install LanguageClient-neovim
   command: bash install.sh
   args:
