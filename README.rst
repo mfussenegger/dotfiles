@@ -5,27 +5,34 @@ Installation
 
 ::
 
-    git clone --recursive https://github.com/mfussenegger/dotfiles.git
+    git clone https://github.com/mfussenegger/dotfiles.git
     cd dotfiles
-    ./bootstrap.sh
+    ansible-playbook playbooks/aur.yml
+    ansible-playbook playbooks/dev.yml -K
+
+This requires `Ansible <https://www.ansible.com/>`_ to symlink the
+configurations and install packages + vim plugins.
+
+This is tailored to my needs. For others I recommend to review & cherry-pick
+specific roles instead of applying everything.
 
 
-``bootstrap.sh`` will symlink all necessary files to the home directory.
+Stow
+====
 
-To do so the script uses `GNU stow
-<https://www.gnu.org/software/stow/stow.html>`_. It has to be installed in
-order for the `bootstrap.sh` script to work.
+The folder structure for the configurations is setup so it can be used with
+`GNU Stow <https://www.gnu.org/software/stow/>`_. For example::
 
-In order to install the tooling run the ``dev`` playbook::
+   stow psql
 
-  ansible-playbook playbooks/dev.yml
+To symlink all files within psql to your home folder.
 
 
-Uninstall
-=========
+Apply ansible roles
+===================
 
-There is another script which uses ``stow --delete`` to delete the symlinks::
+To only apply specific roles you can use ``ansible -m import_role`` within the
+``playbooks`` folder::
 
-    ./clean.sh
-
-Keep in mind that this doesn't delete the dotfiles folder itself.
+   cd playbooks
+   ansible localhost -m import_role -a name=vim

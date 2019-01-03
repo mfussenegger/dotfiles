@@ -1,0 +1,29 @@
+---
+- name: Install stow
+  become: true
+  package:
+    name: stow
+    state: present
+- name: Ensure folders exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - ~/.config/nvim
+    - ~/bin
+    - ~/.zsh/completion
+    - ~/.zsh/plugins
+- name: Ensure ~/.gnupg exists
+  file:
+    path: ~/.gnupg
+    state: directory
+    mode: 0700
+- name: Create symlinks
+  shell: stow bin shell vim intellij i3 git termite haskell psql gnupg
+  args:
+    chdir: ~/dotfiles
+- name: Init dircolors
+  shell: dircolors -p >! ~/.dircolors
+  args:
+    executable: /usr/bin/zsh
+    creates: ~/.dircolors

@@ -1,7 +1,8 @@
 ---
 - hosts: localhost
-  gather_facts: false
+  gather_facts: true
   roles:
+    - stow
     - vim
     - lang-haskell
     - lang-eta
