@@ -6,6 +6,8 @@ import os
 import re
 import json
 import typing
+from urllib.request import urlretrieve
+from time import sleep
 from sh import i3_msg
 from sh import xdg_open
 from sh import dmenu as shdmenu
@@ -17,6 +19,8 @@ from sh import killall
 from sh import nvr
 from sh import setxkbmap
 from sh import ErrorReturnCode_1
+from sh import xdotool
+from sh import xclip
 try:
     from sh import virsh
     # enable users in libvirt group to use virsh without sudo
@@ -179,6 +183,17 @@ def cmd_keyboard():
         '-variant', 'nodeadkeys',
         '-option', 'caps:escape'
     )
+
+
+def cmd_emoji():
+    emoji_json = os.path.expanduser('~/.config/dm/emoji.json')
+    emoji_source = 'https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json'
+    if not os.path.exists(emoji_json):
+        urlretrieve(emoji_source, filename=emoji_json)
+    with open(emoji_json, encoding='utf-8') as f:
+        emoji = json.load(f)
+    o = output(dmenu((i['description'] for i in emoji if 'emoji' in i)))
+    xdotool('type', next((i['emoji'] for i in emoji if i['description'] == o)))
 
 
 def main():
