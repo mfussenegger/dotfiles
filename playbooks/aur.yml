@@ -1,5 +1,7 @@
 ---
-- name: Install ansible aur helper
-  git:
-    repo: https://github.com/kewlfft/ansible-aur.git 
-    dest: ~/.ansible/plugins/modules/aur
+- hosts: localhost
+  tasks:
+  - name: Install ansible aur helper
+    git:
+      repo: https://github.com/kewlfft/ansible-aur.git
+      dest: ~/.ansible/plugins/modules/aur
