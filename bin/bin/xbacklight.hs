@@ -1,5 +1,5 @@
 #!/usr/bin/stack
--- stack script --resolver lts-12.9
+-- stack script --resolver lts-13.2
 
 import           Control.Monad       (when)
 import           Data.Char           (isDigit)
