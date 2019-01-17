@@ -4,7 +4,7 @@
     url: "{{ item }}"
     dest: ~/.zsh/plugins/{{ item | basename }}
   loop:
-    - https://raw.githubusercontent.com/rupa/z/master/z.sh
+    - https://raw.githubusercontent.com/skywind3000/z.lua/master/z.lua
     - https://raw.githubusercontent.com/mafredri/zsh-async/master/async.zsh
     - https://raw.githubusercontent.com/sindresorhus/pure/master/pure.zsh
     - https://raw.githubusercontent.com/zsh-users/zsh-history-substring-search/master/zsh-history-substring-search.zsh

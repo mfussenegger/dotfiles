@@ -15,7 +15,7 @@ source ~/.zshrc.local
 
 [[ -f ~/.dircolors ]] && eval $(dircolors ~/.dircolors)
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source ~/.zsh/plugins/z.sh
+eval "$(lua ~/.zsh/plugins/z.lua --init zsh)"
 source ~/.zsh/plugins/async.zsh
 source ~/.zsh/plugins/zsh-history-substring-search.zsh
 source ~/.zsh/plugins/pure.zsh
