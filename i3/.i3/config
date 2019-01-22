@@ -170,7 +170,7 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
 bindsym $mod+o exec --no-startup-id sleep 1 && scrot -s /tmp/screenshot.png -e '~/bin/imgclip.py $f'
-bindsym $mod+i exec passmenu
+bindsym $mod+i exec echo "" | xclip -r -sel c && passmenu
 bindsym $mod+u exec $HOME/bin/dm.py
 bindsym $mod+e exec $HOME/bin/vim-anywhere
 
