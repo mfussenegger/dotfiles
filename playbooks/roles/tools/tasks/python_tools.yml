@@ -12,6 +12,7 @@
       - yamllint
       - vimg
       - jarg
+      - proselint
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -29,3 +30,4 @@
     - yamllint
     - vimg
     - jarg
+    - proselint
