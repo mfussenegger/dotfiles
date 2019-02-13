@@ -13,9 +13,11 @@ source ~/.zsh/aliases.plugin.zsh
 source ~/.zsh/vi-keybindings.plugin.zsh
 source ~/.zshrc.local
 
-[[ -f ~/.dircolors ]] && eval $(dircolors ~/.dircolors)
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval "$(lua ~/.zsh/plugins/z.lua --init zsh)"
 source ~/.zsh/plugins/async.zsh
 source ~/.zsh/plugins/zsh-history-substring-search.zsh
 source ~/.zsh/plugins/pure.zsh
+
+[ -f ~/.config/broot/launcher/bash/br ] && source ~/.config/broot/launcher/bash/br
+[ -f ~/.dircolors ] && eval $(dircolors ~/.dircolors)
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(lua ~/.zsh/plugins/z.lua --init zsh once)"

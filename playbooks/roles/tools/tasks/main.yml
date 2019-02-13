@@ -11,6 +11,11 @@
 - name: Install TLAToolbox
   import_tasks: tla.yml
 
+- name: Install broot
+  command: cargo install broot
+  args:
+    creates: ~/.cargo/bin/broot
+
 - name: Install vscode languageserver components
   aur:
     name:
