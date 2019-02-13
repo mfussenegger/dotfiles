@@ -4,3 +4,8 @@
   roles:
     - stow
     - aur
+  tasks:
+    - name: Install dev packages
+      package:
+        name:
+          - bash-language-server
