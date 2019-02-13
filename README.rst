@@ -8,7 +8,8 @@ Installation
     git clone https://github.com/mfussenegger/dotfiles.git
     cd dotfiles
     ansible-playbook playbooks/aur.yml
-    ansible-playbook playbooks/dev.yml -K
+    ansible-playbook playbooks/system.yml -K
+    ansible-playbook playbooks/home.yml
 
 This requires `Ansible <https://www.ansible.com/>`_ to symlink the
 configurations and install packages + vim plugins.
@@ -28,7 +29,7 @@ The folder structure for the configurations is setup so it can be used with
 To symlink all files within psql to your home folder.
 
 
-Apply ansible roles
+Apply Ansible roles
 ===================
 
 To only apply specific roles you can use ``ansible -m import_role`` within the
