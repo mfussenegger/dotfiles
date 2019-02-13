@@ -1,7 +1,8 @@
 ---
-- name: Install vscode languageserver components
+- name: Install languageservers
   aur:
     name:
       - vscode-json-languageserver-bin
       - vscode-html-languageserver-bin
       - vscode-css-languageserver-bin
+      - dockerfile-language-server-bin
