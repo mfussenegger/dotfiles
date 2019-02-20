@@ -1,1 +1,1 @@
--- dbext:type=CRATE:host=localhost:port=4200:dbname=doc
+-- dbext:type=PGSQL:host=localhost:port=5432:dbname=crate:user=crate:passwd=:
