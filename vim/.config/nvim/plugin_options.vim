@@ -33,7 +33,7 @@ let g:LanguageClient_serverCommands = {
     \ 'python': ['pyls'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'java': [
-    \   '/usr/lib/jvm/java-10-jdk/bin/java',
+    \   '/usr/lib/jvm/java-11-openjdk/bin/java',
     \   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     \   '-Dosgi.bundles.defaultStartLevel=4',
     \   '-Declipse.product=org.eclipse.jdt.ls.core.product',
