@@ -21,8 +21,9 @@ sendPageToKindle url tmpDir = do
     let
       ext = last $ splitOn "." url
     case ext of
-      "pdf" -> processPdf
-      _     -> processPage
+      "epub" -> processEpub
+      "pdf"  -> processPdf
+      _      -> processPage
     where
       title = head $ splitOn "?" $ last (filter (not . null) (splitOn "/" url))
       epub = tmpDir <> title <> ".epub"
@@ -31,6 +32,10 @@ sendPageToKindle url tmpDir = do
       pdfProcessed = tmpDir <> title <> "k2opt.pdf"
       processPage = do
         callProcess "pandoc" [url, "-t", "epub", "--output", epub]
+        callProcess "ebook-convert" [epub, mobi]
+        mailFile mobi title
+      processEpub = do
+        callProcess "curl" [url, "--output", epub]
         callProcess "ebook-convert" [epub, mobi]
         mailFile mobi title
       processPdf = do
