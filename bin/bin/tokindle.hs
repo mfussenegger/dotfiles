@@ -1,19 +1,22 @@
 #!/usr/bin/env stack
 -- stack script --resolver lts-13.8 --package "process directory temporary split"
 
-import           Data.Char              (isSpace)
-import           Data.List.Split        (splitOn)
-import           Data.Semigroup         ((<>))
-import           System.Environment     (getArgs)
-import           System.IO.Temp         (withSystemTempDirectory)
-import           System.Process         (callProcess, readProcess)
+import           Control.Monad      (void)
+import           Data.Char          (isSpace)
+import           Data.List.Split    (splitOn)
+import           Data.Semigroup     ((<>))
+import           System.Environment (getArgs)
+import           System.IO.Temp     (withSystemTempDirectory)
+import           System.Process     (callProcess, readProcess)
 
 
 mailFile :: String -> String -> IO ()
 mailFile file title = do
   recipient <- takeWhile (not . isSpace) <$>
     readProcess "khard" ["email", "-p", "--remove-first-line", "kindle"] ""
-  callProcess "mutt" ["-a", file, "-s", title, "--", recipient]
+  let
+    muttArgs = ["-a", file, "-s", title, "--", recipient]
+  void $ readProcess "mutt" muttArgs "Have fun reading"
 
 
 sendPageToKindle :: String -> String -> IO ()
