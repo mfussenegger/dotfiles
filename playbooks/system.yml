@@ -6,6 +6,8 @@
     - aur
   tasks:
     - name: Install dev packages
+      become: true
       package:
         name:
           - bash-language-server
+          - hub

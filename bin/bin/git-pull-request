@@ -2,4 +2,4 @@
 
 echo "select target branch"
 TARGET_BRANCH=$(git branch | grep -v '^*' | awk '{print($1)}' | fzf)
-gh pull-request -b $TARGET_BRANCH "$@"
+hub pull-request -b $TARGET_BRANCH "$@"

@@ -1,3 +1,4 @@
+alias gh='hub'
 alias g='git'
 alias gf='git fetch'
 alias gl='git log --topo-order --pretty=format:"%C(bold)%C(reset)%C(green)%H%C(red)%d%n%C(bold)%C(reset)%C(cyan)%an <%ae>%n%C(bold)%C(reset)%C(blue)%ai (%ar)%C(reset)%n%+B"'
