@@ -64,7 +64,7 @@
         --abbrev-commit --
     killbranches = !git branch --merged | grep -v '^*' \
                    | grep -v master | xargs git branch -d 2> /dev/null
-    pr = !~/bin/git-pull-request
+    pr = !hub pull-request -b $(git branch | grep -v '^*' | awk '{print($1)}' | fzf)
     fixup = !git commit --fixup $(git rev-parse HEAD)
     serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
     br = !git ls-remote -h . | awk '{print(substr($NF, 12))}' | fzf | xargs git checkout
@@ -99,6 +99,7 @@
     overview = log --all --since='2 weeks' --oneline --no-merges
     recap = !git log --all --oneline --no-merges --author=$(git config user.email)
     today = !git log --since=00:00:00 --all --oneline --no-merges --author=$(git config user.email)
+
 [instaweb]
     httpd = webrick
 

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "select target branch"
-TARGET_BRANCH=$(git branch | grep -v '^*' | awk '{print($1)}' | fzf)
-hub pull-request -b $TARGET_BRANCH "$@"
