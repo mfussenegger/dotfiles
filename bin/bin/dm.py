@@ -7,7 +7,6 @@ import re
 import json
 import typing
 from urllib.request import urlretrieve
-from time import sleep
 from sh import i3_msg
 from sh import xdg_open
 from sh import dmenu as shdmenu
@@ -20,7 +19,6 @@ from sh import nvr
 from sh import setxkbmap
 from sh import ErrorReturnCode_1
 from sh import xdotool
-from sh import xclip
 try:
     from sh import virsh
     # enable users in libvirt group to use virsh without sudo
@@ -157,14 +155,14 @@ def cmd_call():
 def cmd_pres_off():
     xset('s', 'on')
     xset('+dpms')
-    _change_vim_color_scheme(('default', 'zenburn'), ('light', 'dark'))
+    _change_vim_color_scheme(('default', 'gruvbox'), ('light', 'dark'))
     _set_termite_config('config_dark')
 
 
 def cmd_pres_on():
     xset('s', 'off')
     xset('-dpms')
-    _change_vim_color_scheme(('zenburn', 'default'), ('dark', 'light'))
+    _change_vim_color_scheme(('gruvbox', 'default'), ('dark', 'light'))
     _set_termite_config('config_light')
 
 

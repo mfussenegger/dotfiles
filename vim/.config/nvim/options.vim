@@ -4,7 +4,7 @@ let mapleader = ","
 let maplocalleader = " "
 
 set background=dark
-colorscheme zenburn
+colorscheme gruvbox
 
 set matchtime=3 " show matching parenthesis a bit faster.
 set cmdheight=2
