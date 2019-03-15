@@ -6,3 +6,6 @@
       - vscode-html-languageserver-bin
       - vscode-css-languageserver-bin
       - dockerfile-language-server-bin
+- name: Install pg_format
+  aur:
+    name: pgformatter-git
