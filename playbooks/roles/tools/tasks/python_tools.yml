@@ -11,7 +11,6 @@
       - khard
       - yamllint
       - vimg
-      - jarg
       - proselint
       - ansible-lint
     virtualenv: ~/.virtualenvs/tools
@@ -30,6 +29,5 @@
     - khard
     - yamllint
     - vimg
-    - jarg
     - proselint
     - ansible-lint
