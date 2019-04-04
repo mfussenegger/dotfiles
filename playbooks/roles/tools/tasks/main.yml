@@ -8,7 +8,3 @@
     mode: 0755
 - name: Install TLAToolbox
   import_tasks: tla.yml
-- name: Install broot
-  command: cargo install broot
-  args:
-    creates: ~/.cargo/bin/broot
