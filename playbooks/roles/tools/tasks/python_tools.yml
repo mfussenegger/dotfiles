@@ -15,6 +15,7 @@
       - ansible-lint
       - ipython
       - ptpython
+      - memory_profiler
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -33,4 +34,9 @@
     - vimg
     - proselint
     - ansible-lint
-    - ptipython
+    - mprof
+- name: Symlink py -> ptipython
+  file:
+    src: ~/.virtualenvs/tools/bin/ptipython
+    dest: ~/bin/py
+    state: link
