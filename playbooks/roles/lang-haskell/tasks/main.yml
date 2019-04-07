@@ -1,6 +1,6 @@
 ---
 - name: Install haskell tooling
-  command: stack install --resolver lts-13.12 ghcid hlint hoogle dhall dhall-json cabal-install stylish-haskell
+  command: stack install --resolver lts-13.12 ghcid hlint hoogle dhall dhall-json cabal-install stylish-haskell hasktags
   args:
     chdir: ~/
 - name: Clone/pull haskell-ide-engine and ghcid
