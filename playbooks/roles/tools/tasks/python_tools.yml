@@ -13,6 +13,8 @@
       - vimg
       - proselint
       - ansible-lint
+      - ipython
+      - ptpython
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -31,3 +33,4 @@
     - vimg
     - proselint
     - ansible-lint
+    - ptipython
