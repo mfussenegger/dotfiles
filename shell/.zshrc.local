@@ -1,3 +1,4 @@
+export KUBECONFIG=$HOME/.kube/config:$HOME/.kube/config_user
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
