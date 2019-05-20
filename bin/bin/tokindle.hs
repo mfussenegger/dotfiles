@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
--- stack script --resolver lts-13.12 --package "process directory temporary split"
+-- stack script --resolver lts-13.22 --package "process directory temporary split"
 
 import           Control.Monad      (void)
 import           Data.Char          (isSpace)
