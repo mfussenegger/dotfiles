@@ -2,7 +2,7 @@
 " File: gruvbox.vim
 " Description: Retro groove color scheme for Vim
 " Author: morhetz <morhetz@gmail.com>
-" Source: https://github.com/morhetz/gruvbox
+" Source: https://github.com/gruvbox-community/gruvbox
 " Last Modified: 12 Aug 2017
 " -----------------------------------------------------------------------------
 
@@ -298,11 +298,47 @@ if has('nvim')
 endif
 
 " }}}
+" Setup Terminal Colors For Vim with termguicolors: {{{
+
+if exists('*term_setansicolors')
+  let g:terminal_ansi_colors = repeat([0], 16)
+
+  let g:terminal_ansi_colors[0] = s:bg0[0]
+  let g:terminal_ansi_colors[8] = s:gray[0]
+
+  let g:terminal_ansi_colors[1] = s:gb.neutral_red[0]
+  let g:terminal_ansi_colors[9] = s:red[0]
+
+  let g:terminal_ansi_colors[2] = s:gb.neutral_green[0]
+  let g:terminal_ansi_colors[10] = s:green[0]
+
+  let g:terminal_ansi_colors[3] = s:gb.neutral_yellow[0]
+  let g:terminal_ansi_colors[11] = s:yellow[0]
+
+  let g:terminal_ansi_colors[4] = s:gb.neutral_blue[0]
+  let g:terminal_ansi_colors[12] = s:blue[0]
+
+  let g:terminal_ansi_colors[5] = s:gb.neutral_purple[0]
+  let g:terminal_ansi_colors[13] = s:purple[0]
+
+  let g:terminal_ansi_colors[6] = s:gb.neutral_aqua[0]
+  let g:terminal_ansi_colors[14] = s:aqua[0]
+
+  let g:terminal_ansi_colors[7] = s:fg4[0]
+  let g:terminal_ansi_colors[15] = s:fg1[0]
+endif
+
+" }}}
 " Overload Setting: {{{
 
 let s:hls_cursor = s:orange
 if exists('g:gruvbox_hls_cursor')
   let s:hls_cursor = get(s:gb, g:gruvbox_hls_cursor)
+endif
+
+let s:hls_highlight = s:yellow
+if exists('g:gruvbox_hls_highlight')
+  let s:hls_highlight = get(s:gb, g:gruvbox_hls_highlight)
 endif
 
 let s:number_column = s:none
@@ -352,6 +388,11 @@ if exists('g:gruvbox_invert_tabline')
   if g:gruvbox_invert_tabline == 1
     let s:invert_tabline = s:inverse
   endif
+endif
+
+let s:tabline_sel = s:green
+if exists('g:gruvbox_tabline_sel')
+  let s:tabline_sel = get(s:gb, g:gruvbox_tabline_sel)
 endif
 
 let s:italicize_comments = s:italic
@@ -481,7 +522,7 @@ if version >= 700
   " Tab pages line filler
   call s:HL('TabLineFill', s:bg4, s:bg1, s:invert_tabline)
   " Active tab page label
-  call s:HL('TabLineSel', s:green, s:bg1, s:invert_tabline)
+  call s:HL('TabLineSel', s:tabline_sel, s:bg1, s:invert_tabline)
   " Not active tab page label
   hi! link TabLine TabLineFill
 
@@ -506,8 +547,10 @@ hi! link SpecialKey GruvboxBg2
 call s:HL('Visual',    s:none,  s:bg3, s:invert_selection)
 hi! link VisualNOS Visual
 
-call s:HL('Search',    s:yellow, s:bg0, s:inverse)
+call s:HL('Search', s:hls_highlight, s:bg0, s:inverse)
 call s:HL('IncSearch', s:hls_cursor, s:bg0, s:inverse)
+
+call s:HL('QuickFixLine', s:bg0, s:yellow, s:bold) 
 
 call s:HL('Underlined', s:blue, s:none, s:underline)
 
@@ -665,12 +708,12 @@ call s:HL('DiffText',   s:yellow, s:bg0, s:inverse)
 if has("spell")
   " Not capitalised word, or compile warnings
   if g:gruvbox_improved_warnings == 0
-    call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:red)
+    call s:HL('SpellCap',   s:none, s:none, s:undercurl, s:blue)
   else
     call s:HL('SpellCap',   s:green, s:none, s:bold . s:italic)
   endif
   " Not recognized word
-  call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:blue)
+  call s:HL('SpellBad',   s:none, s:none, s:undercurl, s:red)
   " Wrong spelling for selected region
   call s:HL('SpellLocal', s:none, s:none, s:undercurl, s:aqua)
   " Rare word
@@ -905,19 +948,19 @@ hi! link diffLine GruvboxBlue
 " }}}
 " Html: {{{
 
-hi! link htmlTag GruvboxBlue
-hi! link htmlEndTag GruvboxBlue
+hi! link htmlTag GruvboxAquaBold
+hi! link htmlEndTag GruvboxAquaBold
 
-hi! link htmlTagName GruvboxAquaBold
-hi! link htmlArg GruvboxAqua
+hi! link htmlTagName GruvboxBlue
+hi! link htmlArg GruvboxOrange
 
 hi! link htmlScriptTag GruvboxPurple
 hi! link htmlTagN GruvboxFg1
-hi! link htmlSpecialTagName GruvboxAquaBold
+hi! link htmlSpecialTagName GruvboxBlue
 
 call s:HL('htmlLink', s:fg4, s:none, s:underline)
 
-hi! link htmlSpecialChar GruvboxOrange
+hi! link htmlSpecialChar GruvboxRed
 
 call s:HL('htmlBold', s:vim_fg, s:vim_bg, s:bold)
 call s:HL('htmlBoldUnderline', s:vim_fg, s:vim_bg, s:bold . s:underline)
@@ -999,6 +1042,7 @@ hi! link clojureUnquote GruvboxYellow
 " C: {{{
 
 hi! link cOperator GruvboxPurple
+hi! link cppOperator GruvboxPurple
 hi! link cStructure GruvboxOrange
 
 " }}}
@@ -1156,9 +1200,11 @@ hi! link jsClassKeyword GruvboxAqua
 hi! link jsExtendsKeyword GruvboxAqua
 hi! link jsExportDefault GruvboxAqua
 hi! link jsTemplateBraces GruvboxAqua
-hi! link jsGlobalNodeObjects GruvboxFg1
-hi! link jsGlobalObjects GruvboxFg1
+hi! link jsGlobalNodeObjects GruvboxBlue
+hi! link jsGlobalObjects GruvboxBlue
+hi! link jsObjectKey GruvboxGreenBold
 hi! link jsFunction GruvboxAqua
+hi! link jsFuncCall GruvboxBlue
 hi! link jsFuncParens GruvboxFg3
 hi! link jsParens GruvboxFg3
 hi! link jsNull GruvboxPurple
@@ -1188,6 +1234,15 @@ hi! link typeScriptNull GruvboxPurple
 hi! link typeScriptInterpolationDelimiter GruvboxAqua
 
 " }}}
+" JSX: maxmellon/vim-jsx-pretty: {{{
+
+hi! link jsxTagName GruvboxAqua
+hi! link jsxComponentName GruvboxGreen
+hi! link jsxCloseString GruvboxFg4
+hi! link jsxAttrib GruvboxYellow
+hi! link jsxEqual GruvboxAqua
+
+"}}}
 " PureScript: {{{
 
 hi! link purescriptModuleKeyword GruvboxAqua
@@ -1335,36 +1390,44 @@ hi! link markdownIdDeclaration markdownLinkText
 " }}}
 " Haskell: {{{
 
-" hi! link haskellType GruvboxYellow
-" hi! link haskellOperators GruvboxOrange
-" hi! link haskellConditional GruvboxAqua
-" hi! link haskellLet GruvboxOrange
-"
-hi! link haskellType GruvboxFg1
-hi! link haskellIdentifier GruvboxFg1
-hi! link haskellSeparator GruvboxFg1
-hi! link haskellDelimiter GruvboxFg4
-hi! link haskellOperators GruvboxBlue
-"
-hi! link haskellBacktick GruvboxOrange
-hi! link haskellStatement GruvboxOrange
-hi! link haskellConditional GruvboxOrange
+hi! link haskellType GruvboxBlue
+hi! link haskellIdentifier GruvboxAqua
+hi! link haskellSeparator GruvboxFg4
+hi! link haskellDelimiter GruvboxOrange
+hi! link haskellOperators GruvboxPurple
 
-hi! link haskellLet GruvboxAqua
-hi! link haskellDefault GruvboxAqua
-hi! link haskellWhere GruvboxAqua
-hi! link haskellBottom GruvboxAqua
-hi! link haskellBlockKeywords GruvboxAqua
-hi! link haskellImportKeywords GruvboxAqua
-hi! link haskellDeclKeyword GruvboxAqua
-hi! link haskellDeriving GruvboxAqua
+hi! link haskellBacktick GruvboxOrange
+hi! link haskellStatement GruvboxPurple
+hi! link haskellConditional GruvboxPurple
+
+hi! link haskellLet GruvboxRed
+hi! link haskellDefault GruvboxRed
+hi! link haskellWhere GruvboxRed
+hi! link haskellBottom GruvboxRedBold
+hi! link haskellImportKeywords GruvboxPurpleBold
+hi! link haskellDeclKeyword GruvboxOrange
+hi! link haskellDecl GruvboxOrange
+hi! link haskellDeriving GruvboxPurple
 hi! link haskellAssocType GruvboxAqua
 
-hi! link haskellNumber GruvboxPurple
-hi! link haskellPragma GruvboxPurple
-
-hi! link haskellString GruvboxGreen
-hi! link haskellChar GruvboxGreen
+hi! link haskellNumber GruvboxAqua
+hi! link haskellPragma GruvboxRedBold
+ 
+hi! link haskellTH GruvboxAquaBold
+hi! link haskellForeignKeywords GruvboxGreen
+hi! link haskellKeyword GruvboxRed
+hi! link haskellFloat GruvboxAqua
+hi! link haskellInfix GruvboxPurple
+hi! link haskellQuote GruvboxGreenBold
+hi! link haskellShebang GruvboxYellowBold
+hi! link haskellLiquid GruvboxPurpleBold
+hi! link haskellQuasiQuoted GruvboxBlueBold
+hi! link haskellRecursiveDo GruvboxPurlpe
+hi! link haskellQuotedType GruvboxRed
+hi! link haskellPreProc GruvboxFg4
+hi! link haskellTypeRoles GruvboxRedBold
+hi! link haskellTypeForall GruvboxRed
+hi! link haskellPatternKeyword GruvboxBlue
 
 " }}}
 " Json: {{{
@@ -1373,6 +1436,40 @@ hi! link jsonKeyword GruvboxGreen
 hi! link jsonQuote GruvboxGreen
 hi! link jsonBraces GruvboxFg1
 hi! link jsonString GruvboxFg1
+
+" }}}
+" Mail: {{{
+
+" mail header
+hi! link mailHeader GruvBoxBlue
+hi! link mailHeaderKey GruvBoxBlue
+hi! link mailHeaderEmail GruvBoxBlue
+hi! link mailSubject GruvboxBlue
+
+" mail quoted text 
+hi! link mailQuoted1 GruvBoxAqua
+hi! link mailQuoted2 GruvBoxPurple
+hi! link mailQuoted3 GruvBoxYellow
+hi! link mailQuoted4 GruvBoxGreen
+hi! link mailQuoted5 GruvBoxRed
+hi! link mailQuoted6 GruvBoxOrange
+
+hi! link mailQuotedExp1 GruvBoxAqua
+hi! link mailQuotedExp2 GruvBoxPurple
+hi! link mailQuotedExp3 GruvBoxYellow
+hi! link mailQuotedExp4 GruvBoxGreen
+hi! link mailQuotedExp5 GruvBoxRed
+hi! link mailQuotedExp6 GruvBoxOrange
+
+" I did not discover yet for what this is used
+" hi! link mailVerbatim GruvBoxRed
+
+" mail signature 
+hi! link mailSignature GruvBoxFg 
+
+" mail url and emails 
+hi! link mailURL GruvBoxOrange
+hi! link mailEmail GruvBoxOrange
 
 " }}}
 
