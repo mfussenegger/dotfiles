@@ -16,6 +16,7 @@
       - ipython
       - ptpython
       - memory_profiler
+      - termgraph
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -35,6 +36,7 @@
     - proselint
     - ansible-lint
     - mprof
+    - termgraph
 - name: Symlink py -> ptipython
   file:
     src: ~/.virtualenvs/tools/bin/ptipython
