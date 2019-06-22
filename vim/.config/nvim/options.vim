@@ -63,6 +63,8 @@ set thesaurus=~/.local/share/nvim/mthesaur.txt
 set dictionary=/usr/share/dict/words
 set spelllang=en,de
 
+set diffopt+=hiddenoff,algorithm:patience
+
 augroup prose
     autocmd!
     autocmd FileType markdown,rst,text,mail setlocal keywordprg=:sp\ term://sdcv\ -n\ -c
