@@ -15,6 +15,7 @@ set hidden
 set lazyredraw
 set ttyfast
 set scrolloff=3
+set termguicolors
 
 set completeopt=noinsert,menuone,noselect
 set infercase
