@@ -45,7 +45,7 @@
     - vim-scripts/dbext.vim
     - diepm/vim-rest-console
     - ludovicchabant/vim-gutentags
-    - majutsushi/tagbar
+    - liuchengxu/vista.vim
     - janko-m/vim-test
     - saltstack/salt-vim
     - vmchale/dhall-vim

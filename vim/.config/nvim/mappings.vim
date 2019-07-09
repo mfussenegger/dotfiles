@@ -47,7 +47,7 @@ cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
 augroup outline
-  autocmd! FileType python,java nnoremap <buffer><silent>gO :TagbarToggle<CR>
+  autocmd! FileType python,java nnoremap <buffer><silent>gO :Vista!!<CR>
 augroup end
 
 
