@@ -65,6 +65,7 @@
     killbranches = !git branch --merged | grep -v '^*' \
                    | grep -v master | xargs git branch -d 2> /dev/null
     pr = !hub pull-request -b $(git branch | grep -v '^*' | awk '{print($1)}' | fzf)
+    prs = !hub pr list --format='%pC%i%Creset %au: %t %l %n ▸ %U%n%n' -o updated
     fixup = !git commit --fixup $(git rev-parse HEAD)
     serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
     br = !git ls-remote -h . | awk '{print(substr($NF, 12))}' | fzf | xargs git checkout
