@@ -19,6 +19,7 @@ from sh import nvr
 from sh import setxkbmap
 from sh import ErrorReturnCode_1
 from sh import xdotool
+from sh import mpc
 try:
     from sh import virsh
     # enable users in libvirt group to use virsh without sudo
@@ -191,7 +192,18 @@ def cmd_emoji():
     with open(emoji_json, encoding='utf-8') as f:
         emoji = json.load(f)
     o = output(dmenu((i['description'] for i in emoji if 'emoji' in i)))
-    xdotool('type', next((i['emoji'] for i in emoji if i['description'] == o)))
+    xdotool(
+        'type',
+        '--delay', '100',
+        next((i['emoji'] for i in emoji if i['description'] == o)))
+
+
+def cmd_mpc():
+    songs = output(mpc('playlist', '-f', '%position% ¦ %artist% - %title%')).split('\n')
+    song = dmenu(songs)
+    nr = song.split(' ¦ ')[0]
+    mpc('play', nr)
+
 
 
 def main():
