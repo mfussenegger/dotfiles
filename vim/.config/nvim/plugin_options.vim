@@ -20,6 +20,11 @@ augroup gutentags
 augroup end
 
 
+if !filereadable('.vim/settings.json')
+  let g:LanguageClient_settingsPath = $HOME . "/.config/nvim/lcn_settings.json"
+endif
+
+
 if executable('hasktags')
   let g:vista_ctags_cmd = {
       \ 'haskell': 'hasktags -x -o - -c',
