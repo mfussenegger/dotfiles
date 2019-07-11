@@ -9,6 +9,7 @@
       - mccabe
       - pycodestyle
       - pydocstyle
+      - pyls-mypy
     virtualenv: ~/.virtualenvs/pyls
     virtualenv_command: /usr/bin/python3 -m venv
     state: latest
