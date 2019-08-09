@@ -12,3 +12,6 @@
 - name: Install jabba
   aur:
     name: jabba
+- name: Install diffr
+  aur:
+    name: diffr

@@ -69,7 +69,7 @@
     fixup = !git commit --fixup $(git rev-parse HEAD)
     serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
     br = !git ls-remote -h . | awk '{print(substr($NF, 12))}' | fzf | xargs git checkout
-    dsf = !git diff --color "$@" | diff-so-fancy | less --tabs=4 -RFX
+    dsf = !git diff --color "$@" | diffr | less --tabs=4 -RFX
     filter-commits = "!sh -c 'git log --pretty=format:\"%h - %an: %s\" $1 \
         | fzf --no-sort \
         | cut -d \" \" -f1 ' -"
