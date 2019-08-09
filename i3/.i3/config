@@ -156,14 +156,14 @@ assign [class="Gajim.py"] 9
 
 # workspace settings
 
-workspace 1 output DP-1
-workspace 2 output DP-1
-workspace 3 output DP-1
-workspace 4 output DP-1
+workspace 1 output DP-2
+workspace 2 output DP-2
+workspace 3 output DP-2
+workspace 4 output DP-2
 
-workspace 7 output HDMI-2
-workspace 8 output HDMI-2
-workspace 9 output HDMI-2
+workspace 7 output DP-4
+workspace 8 output DP-4
+workspace 9 output DP-4
 
 # scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -173,6 +173,7 @@ bindsym $mod+o exec --no-startup-id sleep 1 && scrot -s /tmp/screenshot.png -e '
 bindsym $mod+i exec echo "" | xclip -r -sel c && passmenu
 bindsym --release $mod+u exec --no-startup-id $HOME/bin/dm.py
 bindsym --release $mod+e exec --no-startup-id $HOME/bin/vim-anywhere
+
 
 # additional keybindings
 bindcode 172 exec mpc toggle
