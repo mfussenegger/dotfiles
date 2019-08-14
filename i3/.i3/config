@@ -18,7 +18,7 @@ set $right l
 # font for window titles. ISO 10646 = Unicode
 #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 #font -*-terminus-medium-r-*-*-12-*-*-*-*-*-*-*
-font pango: xos4 Terminus
+font pango: Terminus
 
 # colors
 #
@@ -143,7 +143,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     status_command ~/.virtualenvs/i3pystatus/bin/python ~/.config/i3status/config.py
-    font pango: xos4 Terminus
+    font pango: Terminus
     tray_output primary
     separator_symbol ":|:"
 }
