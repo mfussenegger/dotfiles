@@ -44,11 +44,11 @@ sendPageToKindle url tmpDir = do
       processPdf = do
         callProcess "curl" [url, "--output", pdf]
         callProcess "k2pdfopt"
-          [ "-dev", "kp3"
+          [ "-dev", "ko2"
           , "-vls"
           , "-3"
           , "-o", pdfProcessed
-          , "-vb", "1.25"
+          , "-vb", "1.1"
           , pdf ]
         mailFile pdfProcessed title
 
