@@ -27,10 +27,10 @@
     dest: ~/apps/sjk.jar
 - name: Get and unpack async-profiler
   unarchive:
-    src: https://github.com/jvm-profiling-tools/async-profiler/releases/download/v1.5/async-profiler-1.5-linux-x64.tar.gz
+    src: https://github.com/jvm-profiling-tools/async-profiler/releases/download/v1.6/async-profiler-1.6-linux-x64.tar.gz
     dest: ~/apps/async-profiler/
     remote_src: true
 - name: Remove async-profiler tarball
   file:
-    path: ~/apps/async-profiler-1.5-linux-x64.tar.gz
+    path: ~/apps/async-profiler-1.6-linux-x64.tar.gz
     state: absent
