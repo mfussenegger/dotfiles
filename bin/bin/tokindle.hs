@@ -5,6 +5,7 @@ import           Control.Monad      (void)
 import           Data.Char          (isSpace)
 import           Data.List.Split    (splitOn)
 import           Data.Semigroup     ((<>))
+import           System.Directory   (doesFileExist)
 import           System.Environment (getArgs)
 import           System.IO.Temp     (withSystemTempDirectory)
 import           System.Process     (callProcess, readProcess)
@@ -17,6 +18,16 @@ mailFile file title = do
   let
     muttArgs = ["-a", file, "-s", title, "--", recipient]
   void $ readProcess "mutt" muttArgs "Have fun reading"
+
+
+k2pdfopt :: String -> String -> IO ()
+k2pdfopt infile outfile = callProcess "k2pdfopt"
+  [ "-dev", "ko2"
+  , "-vls"
+  , "-3"
+  , "-o", outfile
+  , "-vb", "1.1"
+  , infile ]
 
 
 sendPageToKindle :: String -> String -> IO ()
@@ -42,15 +53,15 @@ sendPageToKindle url tmpDir = do
         callProcess "ebook-convert" [epub, mobi]
         mailFile mobi title
       processPdf = do
-        callProcess "curl" [url, "--output", pdf]
-        callProcess "k2pdfopt"
-          [ "-dev", "ko2"
-          , "-vls"
-          , "-3"
-          , "-o", pdfProcessed
-          , "-vb", "1.1"
-          , pdf ]
-        mailFile pdfProcessed title
+        fileExists <- doesFileExist url
+        if fileExists
+          then do
+            k2pdfopt url pdfProcessed
+            mailFile pdfProcessed title
+          else do
+            callProcess "curl" [url, "--output", pdf]
+            k2pdfopt pdf pdfProcessed
+            mailFile pdfProcessed title
 
 
 main :: IO ()
