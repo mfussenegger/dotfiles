@@ -6,7 +6,6 @@
       - twine
       - shiv
       - wheel
-      - randrctl
       - vdirsyncer
       - khard
       - yamllint
@@ -28,7 +27,6 @@
     - http
     - twine
     - shiv
-    - randrctl
     - vdirsyncer
     - khard
     - yamllint
