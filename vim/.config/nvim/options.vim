@@ -63,7 +63,7 @@ set thesaurus=~/.local/share/nvim/mthesaur.txt
 set dictionary=/usr/share/dict/words
 set spelllang=en,de
 
-set diffopt+=hiddenoff,algorithm:patience
+set diffopt=filler,internal,hiddenoff,algorithm:histogram,indent-heuristic
 
 augroup prose
     autocmd!
