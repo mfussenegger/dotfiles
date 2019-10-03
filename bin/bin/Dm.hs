@@ -17,8 +17,8 @@ import           Data.Maybe                 (Maybe, catMaybes, fromJust,
 import           GHC.Generics               (Generic)
 import qualified Network.HTTP.Client        as HTTP
 import qualified Network.HTTP.Client.TLS    as HTTP
-import           System.Directory           (doesFileExist, getHomeDirectory,
-                                             removeFile)
+import           System.Directory           (canonicalizePath, doesFileExist,
+                                             getHomeDirectory, removeFile)
 import           System.Environment         (getArgs)
 import           System.FilePath            ((</>))
 import           System.Posix.Files         (createSymbolicLink, rename)
@@ -104,14 +104,14 @@ xset = callProcess "xset"
 presOff = do
   xset ["s", "on"]
   xset ["+dpms"]
-  changeVimColorScheme ("default", "gruvbox") ("light", "dark")
+  changeVimColorScheme ("github", "gruvbox") ("light", "dark")
   setTermiteConfig "config_dark"
 
 
 presOn = do
   xset ["s", "off"]
   xset ["-dpms"]
-  changeVimColorScheme ("gruvbox", "default") ("dark", "light")
+  changeVimColorScheme ("gruvbox", "github") ("dark", "light")
   setTermiteConfig "config_light"
 
 
@@ -134,7 +134,7 @@ expandUser xs = pure xs
 
 
 changeVimColorScheme colorscheme background = do
-  vimrc <- expandUser "~/.config/nvim/init.vim"
+  vimrc <- expandUser "~/.config/nvim/options.vim" >>= canonicalizePath
   sed vimrc ("colorscheme " ++ fst colorscheme) ("colorscheme " ++ snd colorscheme)
   sed vimrc ("background=" ++ fst background) ("background=" ++ snd background)
   instances <- lines <$> readProcess "nvr" ["--serverlist"] ""
@@ -144,7 +144,7 @@ changeVimColorScheme colorscheme background = do
 
 
 setTermiteConfig configName = do
-  configDir <- expandUser "~/.config/termite/"
+  configDir <- expandUser "~/.config/termite/" >>= canonicalizePath
   let 
     sourceConfig = configDir </> configName
     targetConfig = configDir </> "config"
