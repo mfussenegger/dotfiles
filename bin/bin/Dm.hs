@@ -136,7 +136,7 @@ expandUser xs = pure xs
 changeVimColorScheme colorscheme background = do
   vimrc <- expandUser "~/.config/nvim/options.vim" >>= canonicalizePath
   sed vimrc ("colorscheme " ++ fst colorscheme) ("colorscheme " ++ snd colorscheme)
-  sed vimrc ("background=" ++ fst background) ("background=" ++ snd background)
+  sed vimrc ("set background=" ++ fst background) ("set background=" ++ snd background)
   instances <- lines <$> readProcess "nvr" ["--serverlist"] ""
   let changeColor = "<Esc>:set background=" ++ snd background ++ "<CR>:colorscheme " ++ snd colorscheme ++ "<CR>"
   for_ instances (\x ->
