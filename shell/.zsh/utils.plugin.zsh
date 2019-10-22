@@ -46,7 +46,7 @@ if-up() {
 }
 
 fix-term() {
-    infocmp -x | ssh -t $1 "cat > '$TERM.info' && tic -x '$TERM.info' && rm '$TERM.info'"
+  infocmp | ssh -t $1 "tic -"
 }
 
 zebra() {
