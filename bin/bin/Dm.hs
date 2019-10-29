@@ -146,10 +146,9 @@ changeVimColorScheme colorscheme background = do
 setTermiteConfig configName = do
   configDir <- expandUser "~/.config/termite/" >>= canonicalizePath
   let 
-    sourceConfig = configDir </> configName
     targetConfig = configDir </> "config"
   removeFile targetConfig
-  createSymbolicLink sourceConfig targetConfig
+  createSymbolicLink configName targetConfig
   callProcess "killall" ["-s", "USR1", "termite"]
 
 
