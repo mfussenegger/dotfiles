@@ -1,6 +1,8 @@
 let g:ale_linters.haskell = ['hlint']
 
-if executable("stylish-haskell")
+if executable("ormolu")
+    setlocal formatprg=ormolu
+elseif executable("stylish-haskell")
     setlocal formatprg=stylish-haskell
 endif
 
