@@ -1,4 +1,6 @@
 ---
+- name: Gathering facts
+  gather_facts:
 - name: Install stow
   become: true
   package:
