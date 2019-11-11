@@ -24,7 +24,7 @@ if batteries:
 if netifaces:
     hidden_ifaces = set(['lo', 'docker0'])
     for iface in netifaces.interfaces():
-        if iface in hidden_ifaces:
+        if iface in hidden_ifaces or iface.startswith('tun'):
             continue
         if iface.startswith('w'):
             fmt = '{v4} {essid} {quality:03.0f}%'
