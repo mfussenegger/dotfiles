@@ -20,7 +20,7 @@ set termguicolors
 set completeopt=noinsert,menuone,noselect
 set infercase
 
-set wildmode=list:longest,list:full
+set wildmode=longest:full,full
 set wildignore+=*.pyc,.git,.idea,*.o
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
