@@ -32,7 +32,7 @@
     - tpope/vim-fugitive
     - tpope/vim-rhubarb
     - editorconfig/editorconfig-vim
-    - w0rp/ale
+    - dense-analysis/ale
     - mattn/webapi-vim
     - mattn/gist-vim
     - vim-scripts/linediff.vim
