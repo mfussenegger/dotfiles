@@ -25,6 +25,7 @@
     - ncm2/ncm2-markdown-subscope
     - ncm2/ncm2-rst-subscope
     - roxma/nvim-yarp
+    - Shougo/echodoc.vim
     - junegunn/fzf
     - junegunn/fzf.vim
     - junegunn/gv.vim

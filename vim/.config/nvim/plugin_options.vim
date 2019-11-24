@@ -1,3 +1,5 @@
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = "floating"
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
