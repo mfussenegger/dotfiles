@@ -3,3 +3,12 @@
   import_tasks: python_tools.yml
 - name: Install TLAToolbox
   import_tasks: tla.yml
+- name: Get openapi generator
+  get_url:
+    url: http://central.maven.org/maven2/org/openapitools/openapi-generator-cli/3.3.4/openapi-generator-cli-3.3.4.jar
+    dest: ~/apps/openapi-generator-cli.jar
+- name: Get jol
+  get_url:
+    url: http://central.maven.org/maven2/org/openjdk/jol/jol-cli/0.9/jol-cli-0.9-full.jar
+    dest: ~/apps/jol.jar
+    checksum: sha256:43e99ce244fcc95b14dea2e57e239f58fac217a9b98c19db19370ce942c0f09b
