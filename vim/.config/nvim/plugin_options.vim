@@ -43,7 +43,7 @@ let g:LanguageClient_rootMarkers = {
     \ 'java': ['.git']
     \ }
 let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie-wrapper'],
+    \ 'haskell': ['hie-wrapper', '--lsp'],
     \ 'python': ['pyls'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'java': ['java-lsp.sh']
