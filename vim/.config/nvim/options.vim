@@ -16,6 +16,7 @@ set lazyredraw
 set ttyfast
 set scrolloff=3
 set termguicolors
+set signcolumn=yes " avoid columns shifting when linters detect errors
 
 set completeopt=noinsert,menuone,noselect
 set infercase
