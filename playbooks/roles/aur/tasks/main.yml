@@ -15,3 +15,6 @@
 - name: Install diffr
   aur:
     name: diffr
+- name: Install vale-bin
+  aur:
+    name: vale-bin
