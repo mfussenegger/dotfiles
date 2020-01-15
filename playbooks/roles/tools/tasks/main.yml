@@ -5,8 +5,9 @@
   import_tasks: tla.yml
 - name: Get openapi generator
   get_url:
-    url: http://central.maven.org/maven2/org/openapitools/openapi-generator-cli/3.3.4/openapi-generator-cli-3.3.4.jar
+    url: https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/3.3.4/openapi-generator-cli-3.3.4.jar
     dest: ~/apps/openapi-generator-cli.jar
+    checksum: sha256:24cb04939110cffcdd7062d2f50c6f61159dc3e0ca3b8aecbae6ade53ad3dc8c
 - name: Get jol
   get_url:
     url: http://central.maven.org/maven2/org/openjdk/jol/jol-cli/0.9/jol-cli-0.9-full.jar
