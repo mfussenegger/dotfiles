@@ -17,5 +17,3 @@ setlocal suffixesadd=.hs
 
 nnoremap <buffer> <silent>gO :Vista!!<CR>
 nnoremap <buffer> <leader>hh :Hoogle <c-r>=expand("<cword>")<CR><CR>
-
-source ~/.config/nvim/lsp.vim

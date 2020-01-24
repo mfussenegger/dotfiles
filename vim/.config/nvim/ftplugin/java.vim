@@ -5,6 +5,3 @@ if filereadable("./gradlew")
 else
     setlocal makeprg=gradle\ --no-daemon\ -q
 endif
-
-
-source ~/.config/nvim/lsp.vim

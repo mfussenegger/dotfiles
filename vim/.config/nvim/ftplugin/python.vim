@@ -12,8 +12,3 @@ setlocal makeprg=python\ %
 
 " E501 = line length warning
 let g:ale_python_flake8_args = '--ignore=E501'
-
-if !filereadable('.vim/settings.json')
-  let g:LanguageClient_settingsPath = $HOME . "/.config/nvim/lcn_python_settings.json"
-endif
-source ~/.config/nvim/lsp.vim

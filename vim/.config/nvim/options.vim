@@ -89,3 +89,8 @@ if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
+
+
+if has('nvim-0.5')
+    lua require("lsp-config").setup()
+endif

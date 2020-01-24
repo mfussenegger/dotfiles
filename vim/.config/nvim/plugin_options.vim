@@ -29,22 +29,10 @@ if executable('hasktags')
 endif
 
 let g:vista_executive_for = {
-  \ 'haskell': 'lcn',
-  \ 'python': 'lcn'
+  \ 'haskell': 'nvim_lsp',
+  \ 'python': 'nvim_lsp'
   \ }
 
 
 " tree-view
 let g:netrw_liststyle = 3
-
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_diagnosticsList = "Location"
-let g:LanguageClient_rootMarkers = {
-    \ 'java': ['.git']
-    \ }
-let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['hie-wrapper', '--lsp'],
-    \ 'python': ['pyls'],
-    \ 'sh': ['bash-language-server', 'start'],
-    \ 'java': ['java-lsp.sh']
-    \ }

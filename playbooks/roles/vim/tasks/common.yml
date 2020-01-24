@@ -16,7 +16,6 @@
     repo: https://github.com/{{ item }}
     dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
   loop:
-    - autozimu/LanguageClient-neovim
     - ncm2/ncm2
     - ncm2/ncm2-bufword
     - ncm2/ncm2-path
@@ -61,9 +60,5 @@
       --key-bindings \
       --completion \
       --no-update-rc
-- name: Install LanguageClient-neovim
-  command: bash install.sh
-  args:
-    chdir: ~/.config/nvim/pack/plugins/start/LanguageClient-neovim
 - name: Update Remote Plugins
   command: nvim +UpdateRemotePlugins +qa
