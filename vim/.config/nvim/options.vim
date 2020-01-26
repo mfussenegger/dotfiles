@@ -18,7 +18,8 @@ set scrolloff=3
 set termguicolors
 set signcolumn=yes " avoid columns shifting when linters detect errors
 
-set completeopt=noinsert,menuone,noselect
+set complete=.,w,b,u,U,i,d,t
+set completeopt=longest,menuone,noselect
 set infercase
 
 set wildmode=longest:full,full
