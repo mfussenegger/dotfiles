@@ -2,7 +2,7 @@
 #font = Consolas 14
 #font = Bitstream Vera Sans Mono 14
 #font = Dejavu Sans Mono 14
-font = Monaco 12
+font = JetBrainsMono 12
 scrollback_lines = 40000
 allow_bold = true
 cursor_blink = off
