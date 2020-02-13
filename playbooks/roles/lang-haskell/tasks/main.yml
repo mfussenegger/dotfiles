@@ -1,6 +1,6 @@
 ---
 - name: Install haskell tooling
-  command: stack install --resolver lts-14.3 ghcid hlint hoogle dhall dhall-json cabal-install stylish-haskell hasktags weeder
+  command: stack install --resolver lts-14.3 ghcid hlint hoogle dhall dhall-json cabal-install hasktags weeder
   args:
     chdir: ~/
 - name: Install ormolu
