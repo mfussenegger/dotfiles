@@ -38,9 +38,8 @@ changeBrightness action = do
     diff = case action of
       (Inc step) -> diffVal step
       (Dec step) -> diffVal step * (-1)
-    diffVal step = case step of
-      (Percentage pct) -> round $ fromIntegral limit / 100.0 * fromIntegral pct
-      (Value val)      -> val
+    diffVal (Percentage pct) = round $ fromIntegral limit / 100.0 * fromIntegral pct
+    diffVal (Value val)      = val
     newVal = max 0 (min (curr + diff) limit)
   -- force lazy io to avoid openFile: resource busy error
   when (curr >= 0) $
