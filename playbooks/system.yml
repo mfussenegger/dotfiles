@@ -9,5 +9,7 @@
       become: true
       package:
         name:
+          - jq
+          - ripgrep
           - bash-language-server
           - hub
