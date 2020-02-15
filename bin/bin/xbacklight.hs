@@ -1,5 +1,13 @@
 #!/usr/bin/stack
--- stack script --resolver lts-14.3
+-- stack script --optimize --resolver lts-14.3
+--
+-- To allow users to run this, create a udev rule:
+--
+-- /etc/udev/rules.d/backlight.rules
+-- ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/bin/chgrp video /sys/class/backlight/%k/brightness"
+-- ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"
+--
+-- And add the user to the video group
 
 import           Control.Monad       (when)
 import           Data.Char           (isDigit)
