@@ -100,6 +100,7 @@
     overview = log --all --since='2 weeks' --oneline --no-merges
     recap = !git log --all --oneline --no-merges --author=$(git config user.email)
     today = !git log --since=00:00:00 --all --oneline --no-merges --author=$(git config user.email)
+    st = !nvim '+Gedit :'
 
 [instaweb]
     httpd = webrick
