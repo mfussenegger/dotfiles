@@ -67,16 +67,15 @@ set spelllang=en,de
 
 set diffopt=filler,internal,hiddenoff,algorithm:histogram,indent-heuristic
 
-augroup prose
-    autocmd!
-    autocmd FileType markdown,rst,text,mail setlocal keywordprg=:sp\ term://sdcv\ -n\ -c
-    autocmd FileType markdown,rst,text,mail setlocal spell
-    autocmd FileType markdown,rst,text,mail setlocal complete+=kspell
-augroup end
+augroup nvim_opts
+    au!
+    au FileType markdown,rst,text,mail setlocal keywordprg=:sp\ term://sdcv\ -n\ -c
+    au FileType markdown,rst,text,mail setlocal spell
+    au FileType markdown,rst,text,mail setlocal complete+=kspell
+    au TermOpen * setlocal nonumber norelativenumber signcolumn=no
 
-augroup termmode
-    autocmd!
-    autocmd termmode TermOpen * setlocal nonumber norelativenumber signcolumn=no
+    " Auto-create parent directories. But not for URIs (paths containing "://").
+    au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
 augroup end
 
 if exists("&colorcolumn")
