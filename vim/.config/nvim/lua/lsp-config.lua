@@ -8,17 +8,14 @@ local lsps_dirs = {}
 local default_diagnostics_callback = lsp.callbacks['textDocument/publishDiagnostics']
 local function diagnostics_callback(err, method, result, client_id)
     default_diagnostics_callback(err, method, result, client_id)
-    if result and result.diagnostics then
-        local diagnostics = {}
+    if result and result.diagnostics and result.uri then
         local current_buf = api.nvim_get_current_buf()
-        for k, v in ipairs(result.diagnostics) do
-            v.uri = v.uri or result.uri
-            local bufnr = vim.uri_to_bufnr(v.uri)
-            if bufnr == current_buf and myutil.exists(v.uri) then
-                diagnostics[k] = v
+        if vim.uri_to_bufnr(result.uri) == current_buf and myutil.exists(vim.uri_to_fname(result.uri)) then
+            for _, v in ipairs(result.diagnostics) do
+                v.uri = v.uri or result.uri
             end
+            util.set_loclist(result.diagnostics)
         end
-        util.set_loclist(diagnostics)
     end
 end
 
