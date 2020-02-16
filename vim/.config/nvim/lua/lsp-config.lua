@@ -10,7 +10,7 @@ local default_diagnostics_callback = lsp.callbacks['textDocument/publishDiagnost
 local function diagnostics_callback(err, method, result, client_id)
     default_diagnostics_callback(err, method, result, client_id)
     if result and result.diagnostics then
-        diagnostics = {}
+        local diagnostics = {}
         local current_buf = api.nvim_get_current_buf()
         for k, v in ipairs(result.diagnostics) do
             v.uri = v.uri or result.uri
@@ -112,10 +112,10 @@ local function setup()
     api.nvim_command("autocmd Filetype go lua start_go_ls()")
     api.nvim_command("autocmd Filetype sh lua add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})")
     api.nvim_command("autocmd Filetype rust lua add_client({'rls'}, {root={'Cargo.toml', '.git'}})")
+    api.nvim_command("autocmd Filetype lua lua add_client({'lua-lsp'})")
     if vim.fn.executable('json-languageserver') then
         api.nvim_command("autocmd Filetype html lua add_client({'json-languageserver', '--stdio'}, {name='json-ls'})")
     end
-
 end
 
 --- @export

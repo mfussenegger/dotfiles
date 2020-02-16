@@ -1,0 +1,9 @@
+---
+- name: Install lua-lsp
+  command: luarocks --local install --server=http://luarocks.org/dev lua-lsp
+  args:
+    creates: ~/.luarocks/bin/lua-lsp
+- name: Install luacheck
+  command: luarocks --local install luacheck
+  args:
+    creates: ~/.luarocks/bin/luacheck

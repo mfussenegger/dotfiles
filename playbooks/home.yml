@@ -7,6 +7,7 @@
     - lang-eta
     - lang-java
     - lang-python
+    - lang-lua
     - i3pystatus
     - tools
     - zsh-plugins

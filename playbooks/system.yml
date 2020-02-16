@@ -13,3 +13,4 @@
           - ripgrep
           - bash-language-server
           - hub
+          - luarocks
