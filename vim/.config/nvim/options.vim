@@ -74,6 +74,11 @@ augroup prose
     autocmd FileType markdown,rst,text,mail setlocal complete+=kspell
 augroup end
 
+augroup termmode
+    autocmd!
+    autocmd termmode TermOpen * setlocal nonumber norelativenumber signcolumn=no
+augroup end
+
 if exists("&colorcolumn")
     augroup colorcol
         autocmd!
