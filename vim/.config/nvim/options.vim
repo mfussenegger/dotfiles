@@ -16,7 +16,6 @@ set lazyredraw
 set ttyfast
 set scrolloff=3
 set termguicolors
-set signcolumn=yes " avoid columns shifting when linters detect errors
 
 set complete=.,w,b,u,U,i,d,t
 set completeopt=longest,menuone,noselect

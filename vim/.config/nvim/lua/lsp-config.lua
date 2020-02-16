@@ -41,6 +41,7 @@ local function enable_mappings_on_buffer(client, bufnr)
     api.nvim_buf_set_var(bufnr, "lsp_client_id", client.id)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
+    api.nvim_buf_set_option(bufnr, "signcolumn", "yes")
     api.nvim_command('ALEDisableBuffer')
 
     local function set_keymap(lhs, rhs)
