@@ -14,7 +14,7 @@ local function diagnostics_callback(err, method, result, client_id)
         for k, v in ipairs(result.diagnostics) do
             v.uri = v.uri or result.uri
             local bufnr = vim.uri_to_bufnr(v.uri)
-            if bufnr == current_buf then
+            if bufnr == current_buf and myutil.exists(v.uri) then
                 diagnostics[k] = v
             end
         end

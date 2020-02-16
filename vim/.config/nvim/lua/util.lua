@@ -19,7 +19,7 @@ else
     end
 end
 
-local function exists(filename)
+function M.exists(filename)
     local stat = vim.loop.fs_stat(filename)
     return stat and stat.type or false
 end
@@ -59,7 +59,7 @@ end
 function M.root_pattern(bufnr, patterns)
   local function matcher(path)
     for _, pattern in ipairs(patterns) do
-      if exists(path_join(path, pattern)) then
+      if M.exists(path_join(path, pattern)) then
         return path
       end
     end
