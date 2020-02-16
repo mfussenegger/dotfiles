@@ -66,61 +66,47 @@ local function enable_mappings_on_buffer(client, bufnr)
     api.nvim_buf_set_keymap(bufnr, "i", "<c-space>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>", { silent = true; })
 end
 
-local function setup()
-    local function mk_config()
-        return {
-            callbacks = {
-                ["textDocument/publishDiagnostics"] = diagnostics_callback,
-            };
-            on_attach = enable_mappings_on_buffer;
-        }
-    end
-    function add_client(cmd, opts)
-        local config = mk_config()
-        config['name'] = opts and opts.name or cmd[1]
-        config['cmd'] = cmd
-        add_client_by_cfg(config, opts and opts.root or {'.git'})
-    end
+local function mk_config()
+    return {
+        callbacks = {
+            ["textDocument/publishDiagnostics"] = diagnostics_callback,
+        };
+        on_attach = enable_mappings_on_buffer;
+    }
+end
 
-    function start_jdt()
-        local lsp4j_status_callback = vim.schedule_wrap(function(_, _, result)
-            api.nvim_command(string.format(':echohl Function | echo "%s" | echohl None', result.message))
-        end)
-        local config = mk_config()
-        config['name'] = 'eclipse.jdt.ls'
-        config['cmd'] = {'java-lsp.sh'}
-        config['callbacks']["language/status"] = lsp4j_status_callback
-        add_client_by_cfg(config, {'gradlew', '.git'})
-    end
-    function start_hie()
-        local config = mk_config()
-        config['name'] = 'hie'
-        config['cmd'] = {'hie-wrapper', '--lsp'}
-        config['init_options'] = {
-            languageServerHaskell = {
-                formattingProvider = "ormolu";
-            }
+local M = {}
+function M.add_client(cmd, opts)
+    local config = mk_config()
+    config['name'] = opts and opts.name or cmd[1]
+    config['cmd'] = cmd
+    add_client_by_cfg(config, opts and opts.root or {'.git'})
+end
+function M.start_jdt()
+    local lsp4j_status_callback = vim.schedule_wrap(function(_, _, result)
+        api.nvim_command(string.format(':echohl Function | echo "%s" | echohl None', result.message))
+    end)
+    local config = mk_config()
+    config['name'] = 'eclipse.jdt.ls'
+    config['cmd'] = {'java-lsp.sh'}
+    config['callbacks']["language/status"] = lsp4j_status_callback
+    add_client_by_cfg(config, {'gradlew', '.git'})
+end
+function M.start_hie()
+    local config = mk_config()
+    config['name'] = 'hie'
+    config['cmd'] = {'hie-wrapper', '--lsp'}
+    config['init_options'] = {
+        languageServerHaskell = {
+            formattingProvider = "ormolu";
         }
-        add_client_by_cfg(config, {'stack.yml', '.git'})
-    end
-    function start_go_ls()
-        local path = os.getenv("GOPATH") .. "/bin/go-langserver"
-        add_client({path, '-gocodecompletion'}, {name = 'gols'})
-    end
-
-    -- autocommands
-    api.nvim_command("autocmd Filetype java lua start_jdt()")
-    api.nvim_command("autocmd Filetype haskell lua start_hie()")
-    api.nvim_command("autocmd Filetype python lua add_client({'pyls'})")
-    api.nvim_command("autocmd Filetype html lua add_client({'html-languageserver', '--stdio'}, {name='html-ls'})")
-    api.nvim_command("autocmd Filetype go lua start_go_ls()")
-    api.nvim_command("autocmd Filetype sh lua add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})")
-    api.nvim_command("autocmd Filetype rust lua add_client({'rls'}, {root={'Cargo.toml', '.git'}})")
-    api.nvim_command("autocmd Filetype lua lua add_client({'lua-lsp'})")
-    api.nvim_command("autocmd Filetype html lua add_client({'json-languageserver', '--stdio'}, {name='json-ls'})")
+    }
+    add_client_by_cfg(config, {'stack.yml', '.git'})
+end
+function M.start_go_ls()
+    local path = os.getenv("GOPATH") .. "/bin/go-langserver"
+    M.add_client({path, '-gocodecompletion'}, {name = 'gols'})
 end
 
 --- @export
-return {
-    setup = setup;
-}
+return M
