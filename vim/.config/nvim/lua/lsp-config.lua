@@ -1,5 +1,4 @@
-require 'util'
-
+local myutil = require 'util'
 local util = require 'vim.lsp.util'
 local lsp = require 'vim.lsp'
 local api = vim.api
@@ -25,9 +24,15 @@ end
 
 local function add_client_by_cfg(config, root_markers)
     local bufnr = api.nvim_get_current_buf()
-    local root_dir = root_pattern(bufnr, root_markers)
+    local root_dir = myutil.root_pattern(bufnr, root_markers)
     if not root_dir then return end
 
+    local cmd = config.cmd[1]
+    if tonumber(vim.fn.executable(cmd)) == 0 then
+        api.nvim_command(string.format(
+            ':echohl WarningMsg | redraw | echo "No LSP executable: %s" | echohl None', cmd))
+        return
+    end
     config['root_dir'] = root_dir
     local client_id = lsps_dirs[root_dir]
     if not client_id then
@@ -41,7 +46,8 @@ local function enable_mappings_on_buffer(client, bufnr)
     api.nvim_buf_set_var(bufnr, "lsp_client_id", client.id)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
-    api.nvim_buf_set_option(bufnr, "signcolumn", "yes")
+    -- Can't set this via nvim_buf_set_option ?
+    api.nvim_command("setlocal signcolumn=yes")
     api.nvim_command('ALEDisableBuffer')
 
     local function set_keymap(lhs, rhs)
@@ -61,7 +67,7 @@ local function enable_mappings_on_buffer(client, bufnr)
 end
 
 local function setup()
-    local function mk_config(config)
+    local function mk_config()
         return {
             callbacks = {
                 ["textDocument/publishDiagnostics"] = diagnostics_callback,
@@ -99,9 +105,6 @@ local function setup()
     end
     function start_go_ls()
         local path = os.getenv("GOPATH") .. "/bin/go-langserver"
-        if not vim.fn.filereadable(path) then
-            return
-        end
         add_client({path, '-gocodecompletion'}, {name = 'gols'})
     end
 
@@ -114,9 +117,7 @@ local function setup()
     api.nvim_command("autocmd Filetype sh lua add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})")
     api.nvim_command("autocmd Filetype rust lua add_client({'rls'}, {root={'Cargo.toml', '.git'}})")
     api.nvim_command("autocmd Filetype lua lua add_client({'lua-lsp'})")
-    if vim.fn.executable('json-languageserver') then
-        api.nvim_command("autocmd Filetype html lua add_client({'json-languageserver', '--stdio'}, {name='json-ls'})")
-    end
+    api.nvim_command("autocmd Filetype html lua add_client({'json-languageserver', '--stdio'}, {name='json-ls'})")
 end
 
 --- @export
