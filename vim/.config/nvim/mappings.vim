@@ -19,6 +19,12 @@ nnoremap [l :lprevious<CR>
 nnoremap ]L :lfirst<CR>
 nnoremap [L :llast<CR>
 
+
+xmap gl <Plug>(EasyAlign)
+
+" Apply spell correction
+inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+
 " Close popup menu *and* start a new line when pressing <Enter>
 inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 
@@ -74,11 +80,12 @@ nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gc :Gcommit -v<cr>
 
 " }}}
 
 
+" vim-test
 nmap <silent> t<C-n> :TestNearest<CR>
 nmap <silent> t<C-f> :TestFile<CR>
 nmap <silent> t<C-s> :TestSuite --verbose<CR>
