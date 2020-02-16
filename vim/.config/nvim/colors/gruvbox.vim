@@ -980,6 +980,17 @@ hi! link CocInfoFloat GruvboxBlue
 hi! link CocHintFloat GruvboxAqua
 
 " }}}
+" Neovim LSP: {{{
+"
+hi! link LspDiagnosticsError GruvboxRedSign
+hi! link LspDiagnosticsWarning GruvboxYellowSign
+hi! link LspDiagnosticsInformation GruvboxBlueSign
+hi! link LspDiagnosticsHint GruvboxAquaSign
+
+call s:HL('LspDiagnosticsUnderlineError', s:gb.red, s:vim_bg, s:underline)
+call s:HL('LspDiagnosticsUnderlineWarning', s:gb.yellow, s:vim_bg, s:underline)
+
+" }}}
 " Dirvish: {{{
 
 hi! link DirvishPathTail GruvboxAqua
