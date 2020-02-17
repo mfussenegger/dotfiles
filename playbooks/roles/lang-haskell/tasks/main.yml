@@ -1,10 +1,10 @@
 ---
-- name: Install haskell tooling
-  command: stack install --resolver lts-14.3 ghcid hlint hoogle dhall dhall-json cabal-install hasktags weeder
+- name: Install haskell tooling lts14
+  command: stack install --resolver lts-14.3 cabal-install hasktags
   args:
     chdir: ~/
-- name: Install ormolu
-  command: stack install --resolver nightly-2020-01-08 ormolu
+- name: Install haskell tooling lts15
+  command: stack install --resolver lts-15.0 ghcid hlint hoogle dhall dhall-json weeder ormolu
   args:
     chdir: ~/
 - name: Clone/pull haskell-ide-engine and ghcid
@@ -15,7 +15,7 @@
     - haskell/haskell-ide-engine
     - ndmitchell/ghcid
 - name: Build haskell-ide-engine
-  command: stack install --stack-yaml=stack-8.6.5.yaml
+  command: stack install --stack-yaml=stack-8.8.2.yaml
   args:
     chdir: ~/dev/haskell/haskell-ide-engine
 - name: Generate hoogle database for hie
