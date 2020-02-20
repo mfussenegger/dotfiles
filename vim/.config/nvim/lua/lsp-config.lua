@@ -51,15 +51,19 @@ local function enable_mappings_on_buffer(client, bufnr)
         api.nvim_buf_set_keymap(bufnr, "n", lhs, rhs, { silent = true; })
     end
     set_keymap("gd", "<Cmd>lua vim.lsp.buf.declaration()<CR>")
+    set_keymap("<leader>d", "<Cmd>lua vim.lsp.buf.peek_definition()<CR>")
     set_keymap("<c-]>", "<Cmd>lua vim.lsp.buf.definition()<CR>")
-    set_keymap("1gD", "<Cmd>lua vim.lsp.buf.definition()<CR>")
     set_keymap("gD", "<Cmd>lua vim.lsp.buf.implementation()<CR>")
     set_keymap("K", "<Cmd>lua vim.lsp.buf.hover()<CR>")
     set_keymap("gr", "<Cmd>lua vim.lsp.buf.references()<CR>")
     set_keymap("<a-CR>", "<Cmd>lua vim.lsp.buf.code_action()<CR>")
     set_keymap("crr", "<Cmd>lua vim.lsp.buf.rename()<CR>")
-    set_keymap("gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>")
-    api.nvim_buf_set_keymap(bufnr, "v", "gq", "<Cmd>lua vim.lsp.buf.range_formatting()<CR>", { silent = true; })
+    if client.resolved.capabilities.document_formatting then
+        set_keymap("gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>")
+    end
+    if client.resolved_capabilities.document_range_formatting then
+        api.nvim_buf_set_keymap(bufnr, "v", "gq", "<Cmd>lua vim.lsp.buf.range_formatting()<CR>", { silent = true; })
+    end
     api.nvim_buf_set_keymap(bufnr, "i", "<c-space>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>", { silent = true; })
 end
 
