@@ -16,6 +16,8 @@ Then CTLR+v in any application to paste the image.
 
 import sys
 try:
+    import gi
+    gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk, Gdk
 except ImportError:
     sys.exit('gi.repository not found. Install python-gobject (under Archlinux)')
