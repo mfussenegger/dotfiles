@@ -1,0 +1,14 @@
+---
+- name: Clone neovim
+  git:
+    repo: https://github.com/mfussenegger/neovim
+    dest: ~/dev/neovim/neovim
+    update: false
+
+- name: Build neovim
+  command: make
+  environment:
+    CMAKE_BUILD_TYPE: RelWithDebInfo
+  args:
+    chdir: ~/dev/neovim/neovim
+    creates: ~/dev/neovim/neovim/build/bin/nvim

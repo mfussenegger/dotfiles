@@ -18,7 +18,12 @@ fi
 if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
   export VISUAL="nvr -cc split --remote-wait"
 else
-  export VISUAL="nvim"
+  if [ -d "$HOME/dev/neovim/neovim/build/bin" ]; then
+    export VIMRUNTIME="$HOME/dev/neovim/neovim/runtime"
+    export VISUAL="$HOME/dev/neovim/neovim/build/bin/nvim"
+  else
+    export VISUAL="nvim"
+  fi
 fi
 export EDITOR=$VISUAL
 export SUDO_EDIT=$VISUAL
