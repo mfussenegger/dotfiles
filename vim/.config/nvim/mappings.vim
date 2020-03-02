@@ -44,10 +44,10 @@ tnoremap <c-l> <C-\><C-n><C-w>l
 " tn -> terminal new
 " te -> terminal execute
 " ts -> terminal send
-nnoremap <leader>tn :below new term://
-nnoremap <silent><leader>te :w<CR> :below new term://%:p<CR>
-nnoremap <silent><leader>ts yy<c-w>wp<c-w>pgv
-vnoremap <silent><leader>ts y<c-w>wp<c-w>pgv
+nnoremap <silent><leader>tn :lua require('term').toggle()<CR>
+nnoremap <silent><leader>te :w<CR> :lua require('term').run()<CR>
+nnoremap <silent><leader>ts :lua require('term').sendLine(vim.fn.getline('.'))<CR>
+vnoremap <silent><leader>ts :lua require('term').sendSelection()<CR>
 
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
