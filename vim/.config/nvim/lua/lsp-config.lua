@@ -1,9 +1,24 @@
 local myutil = require 'util'
-local util = require 'vim.lsp.util'
 local lsp = require 'vim.lsp'
 local api = vim.api
 
 local lsps_dirs = {}
+
+
+local function diagnostics_to_items(bufnr, diagnostics)
+    local items = {}
+    if not diagnostics then return items end
+    for _, diagnostic in pairs(diagnostics) do
+        table.insert(items, {
+            bufnr = bufnr,
+            lnum = diagnostic.range.start.line + 1,
+            vcol = 1,
+            col = diagnostic.range.start.character,
+            text = diagnostic.message
+        })
+    end
+    return items
+end
 
 local default_diagnostics_callback = lsp.callbacks['textDocument/publishDiagnostics']
 local function diagnostics_callback(err, method, result, client_id)
@@ -14,7 +29,10 @@ local function diagnostics_callback(err, method, result, client_id)
             for _, v in ipairs(result.diagnostics) do
                 v.uri = v.uri or result.uri
             end
-            util.set_loclist(result.diagnostics)
+            vim.fn.setloclist(0, {}, ' ', {
+                title = 'Language Server';
+                items = diagnostics_to_items(current_buf, result.diagnostics);
+            })
         end
     end
 end
