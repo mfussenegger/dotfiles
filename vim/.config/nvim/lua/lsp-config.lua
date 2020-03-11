@@ -76,7 +76,7 @@ local function enable_mappings_on_buffer(client, bufnr)
     set_keymap("gr", "<Cmd>lua vim.lsp.buf.references()<CR>")
     set_keymap("<a-CR>", "<Cmd>lua vim.lsp.buf.code_action()<CR>")
     set_keymap("crr", "<Cmd>lua vim.lsp.buf.rename()<CR>")
-    if client.resolved.capabilities.document_formatting then
+    if client.resolved_capabilities.document_formatting then
         set_keymap("gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>")
     end
     if client.resolved_capabilities.document_range_formatting then
