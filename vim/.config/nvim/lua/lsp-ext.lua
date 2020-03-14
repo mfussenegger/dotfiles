@@ -22,7 +22,9 @@ function M._InsertCharPre()
     if func then
         timer:start(150, 0, vim.schedule_wrap(function()
             timer:stop()
-            func()
+            if api.nvim_get_mode()['mode'] == 'i' then
+                func()
+            end
         end))
     else
         timer:stop()
