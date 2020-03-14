@@ -4,7 +4,7 @@ local protocol = vim.lsp.protocol
 
 -- {<bufnr>: {<lineNr>: {diagnostics}}}
 local sign_ns = 'vim_lsp_signs'
-local timer = vim.loop.new_timer()
+local timer = nil
 local M = {}
 
 local updatedDiagnostics = false
@@ -92,8 +92,15 @@ end
 
 
 function M.show_diagnostics()
-    timer:start(250, 0, vim.schedule_wrap(function()
+    if timer then
         timer:stop()
+        timer:close()
+        timer = nil
+    end
+    timer = vim.loop.new_timer()
+    timer:start(250, 0, vim.schedule_wrap(function()
+        timer:close()
+        timer = nil
 
         local bufnr = api.nvim_get_current_buf()
         local buf_diagnostics = M.diagnostics_by_buffer[bufnr]

@@ -96,8 +96,6 @@ endif
 
 if has('nvim-0.5')
     lua LspConf = require "lsp-config"
-    lua LspExt = require "lsp-ext"
-    lua LspDiag = require "lsp-diagnostics"
     augroup lsp
       au!
       au Filetype java lua LspConf.start_jdt()
@@ -109,8 +107,5 @@ if has('nvim-0.5')
       au Filetype rust lua LspConf.add_client({'rls'}, {root={'Cargo.toml', '.git'}})
       au Filetype lua lua LspConf.add_client({'lua-lsp'})
       au Filetype json lua LspConf.add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
-      au InsertCharPre * lua LspExt._InsertCharPre()
-      au InsertLeave * lua LspExt._InsertLeave()
-      au CursorMoved,CursorMovedI * lua LspDiag.show_diagnostics()
     augroup end
 endif

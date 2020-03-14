@@ -42,6 +42,11 @@ local key_mappings = {
 }
 
 local function on_init(client, _)
+    api.nvim_command("augroup LspExt")
+    api.nvim_command("autocmd InsertCharPre * lua require'lsp-ext'._InsertCharPre()")
+    api.nvim_command("autocmd InsertLeave * lua require'lsp-ext'._InsertLeave()")
+    api.nvim_command("autocmd CursorMoved,CursorMovedI * lua require'lsp-diagnostics'.show_diagnostics()")
+    api.nvim_command("augroup end")
     lsp_ext.setup(client)
 end
 

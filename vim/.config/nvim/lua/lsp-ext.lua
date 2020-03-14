@@ -1,38 +1,39 @@
 local api = vim.api
 local myutil = require 'util'
 
-local timer = vim.loop.new_timer()
+local timer = nil
 local on_insert_with_pause = {}
 
 local M = {}
 
 
 function M._InsertCharPre()
+    if timer then
+        timer:stop()
+        timer:close()
+    end
+    timer = vim.loop.new_timer()
     local char = api.nvim_get_vvar('char')
-    local func = nil
     for _, entry in pairs(on_insert_with_pause) do
         local chars, fn = unpack(entry)
         if vim.tbl_contains(chars, char) then
-            func = fn
-        else
-            timer:stop()
+            timer:start(150, 0, vim.schedule_wrap(function()
+                if api.nvim_get_mode()['mode'] == 'i' then
+                    fn()
+                end
+            end))
+            return
         end
-    end
-    if func then
-        timer:start(150, 0, vim.schedule_wrap(function()
-            timer:stop()
-            if api.nvim_get_mode()['mode'] == 'i' then
-                func()
-            end
-        end))
-    else
-        timer:stop()
     end
 end
 
 
 function M._InsertLeave()
-    timer:stop()
+    if timer then
+        timer:stop()
+        timer:close()
+        timer = nil
+    end
 end
 
 
