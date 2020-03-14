@@ -1,5 +1,5 @@
 [options]
-font = Terminus
+font = Terminus 13
 scrollback_lines = 40000
 allow_bold = true
 cursor_blink = off
