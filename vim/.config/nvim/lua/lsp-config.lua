@@ -57,32 +57,34 @@ local function add_client_by_cfg(config, root_markers)
     lsp.buf_attach_client(bufnr, client_id)
 end
 
+
+-- array of mappings to setup; {<capability_name>, <mode>, <lhs>, <rhs>}
+local key_mappings = {
+    {"code_action", "n", "<a-CR>", "<Cmd>lua vim.lsp.buf.code_action()<CR>"},
+    {"document_formatting", "n", "gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>"},
+    {"document_range_formatting", "v", "gq", "<Cmd>lua vim.lsp.buf.range_formatting()<CR>"},
+    {"find_references", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>"},
+    {"goto_definition", "n", "<c-]>",  "<Cmd>lua vim.lsp.buf.definition()<CR>"},
+    {"hover", "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>"},
+    {"implementation", "n", "gD",  "<Cmd>lua vim.lsp.buf.implementation()<CR>"},
+    {"signature_help", "i", "<c-space>",  "<Cmd>lua vim.lsp.buf.signature_help()<CR>"}
+}
+
 local function enable_mappings_on_buffer(client, bufnr)
     api.nvim_buf_set_var(bufnr, "lsp_client_id", client.id)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
-    -- Can't set this via nvim_buf_set_option ?
     api.nvim_command("setlocal signcolumn=yes")
     api.nvim_command('ALEDisableBuffer')
 
-    local function set_keymap(lhs, rhs)
-        api.nvim_buf_set_keymap(bufnr, "n", lhs, rhs, { silent = true; })
+    local opts = { silent = true; }
+    for _, mappings in pairs(key_mappings) do
+        local capability, mode, lhs, rhs = unpack(mappings)
+        if client.resolved_capabilities[capability] then
+            api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
+        end
     end
-    set_keymap("gd", "<Cmd>lua vim.lsp.buf.declaration()<CR>")
-    set_keymap("<leader>d", "<Cmd>lua vim.lsp.buf.peek_definition()<CR>")
-    set_keymap("<c-]>", "<Cmd>lua vim.lsp.buf.definition()<CR>")
-    set_keymap("gD", "<Cmd>lua vim.lsp.buf.implementation()<CR>")
-    set_keymap("K", "<Cmd>lua vim.lsp.buf.hover()<CR>")
-    set_keymap("gr", "<Cmd>lua vim.lsp.buf.references()<CR>")
-    set_keymap("<a-CR>", "<Cmd>lua vim.lsp.buf.code_action()<CR>")
-    set_keymap("crr", "<Cmd>lua vim.lsp.buf.rename()<CR>")
-    if client.resolved_capabilities.document_formatting then
-        set_keymap("gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>")
-    end
-    if client.resolved_capabilities.document_range_formatting then
-        api.nvim_buf_set_keymap(bufnr, "v", "gq", "<Cmd>lua vim.lsp.buf.range_formatting()<CR>", { silent = true; })
-    end
-    api.nvim_buf_set_keymap(bufnr, "i", "<c-space>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>", { silent = true; })
+    api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename()<CR>", opts)
 end
 
 local function mk_config()
