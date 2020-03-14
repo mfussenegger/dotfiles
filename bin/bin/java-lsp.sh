@@ -7,7 +7,6 @@ GRADLE_HOME=$HOME/gradle /usr/lib/jvm/java-13-openjdk/bin/java \
   -Declipse.product=org.eclipse.jdt.ls.core.product \
   -Dlog.protocol=true \
   -Dlog.level=ALL \
-  -noverify \
   -Xmx1G \
   -jar $(echo "$JAR") \
   -configuration "$HOME/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux" \
