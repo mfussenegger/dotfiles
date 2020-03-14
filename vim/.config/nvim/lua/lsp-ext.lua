@@ -1,5 +1,5 @@
 local api = vim.api
-local log = vim.lsp.log
+local myutil = require 'util'
 
 local timer = vim.loop.new_timer()
 local on_insert_with_pause = {}
@@ -54,16 +54,6 @@ local function trigger_completion()
 end
 
 
-local function jump_to_buf(buf, range)
-    api.nvim_set_current_buf(buf)
-    local row = range.start.line
-    local col = range.start.character
-    local line = api.nvim_buf_get_lines(0, row, row + 1, true)[1]
-    col = vim.str_byteindex(line, col)
-    api.nvim_win_set_cursor(0, { row + 1, col })
-end
-
-
 local function openJdtLink(uri, range)
     local bufnr = api.nvim_get_current_buf()
     local params = {
@@ -74,20 +64,19 @@ local function openJdtLink(uri, range)
         local buf = api.nvim_create_buf(false, true)
         api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(content, '\n', true))
         api.nvim_buf_set_option(buf, 'filetype', 'java')
-        jump_to_buf(buf, range)
+        myutil.jump_to_buf(buf, range)
     end)
 end
 
 
 local function isJdtLinkLocation(location)
-    return location.uri and location.uri:sub(1, 6) == "jdt://"
+    return location and (location.uri and location.uri:sub(1, 6) == "jdt://")
 end
 
 
 function M.location_callback(autojump)
-    return function(_, method, result)
+    return function(_, _, result)
         if result == nil or #result == 0 then
-            local _ = log.info() and log.info(method, 'No location found')
             return nil
         end
         if not autojump or #result > 1 then
@@ -108,7 +97,7 @@ function M.location_callback(autojump)
             if location.uri:sub(1, 6) == "jdt://" then
                 openJdtLink(location.uri, location.range)
             else
-                jump_to_buf(vim.uri_to_bufnr(location.uri), location.range)
+                myutil.jump_to_buf(vim.uri_to_bufnr(location.uri), location.range)
             end
         end
     end

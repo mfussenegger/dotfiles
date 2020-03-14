@@ -60,6 +60,8 @@ local function on_attach(client, bufnr)
         end
     end
     api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua LspDiag.next_diag()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua LspDiag.prev_diag()<CR>", opts)
 end
 
 local function mk_config()

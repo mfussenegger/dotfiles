@@ -7,6 +7,9 @@ local sign_ns = 'vim_lsp_signs'
 local timer = vim.loop.new_timer()
 local M = {}
 
+local updatedDiagnostics = false
+local nextDiag = 0
+
 M.diagnostics_by_buffer = {}
 
 
@@ -57,7 +60,7 @@ local function set_signs(bufnr, buf_diagnostics)
 end
 
 
-local function save_diagnostics(bufnr, diagnostics)
+local function save_diagnostics(bufnr, diagnostics, uri)
     if not diagnostics then return end
     local buf_diagnostics = {}
     M.diagnostics_by_buffer[bufnr] = buf_diagnostics
@@ -68,6 +71,7 @@ local function save_diagnostics(bufnr, diagnostics)
             line_diagnostics = {}
             buf_diagnostics[start.line] = line_diagnostics
         end
+        diagnostic.uri = uri
         table.insert(line_diagnostics, diagnostic)
     end
 end
@@ -81,7 +85,8 @@ function M.publishDiagnostics(_, _, result)
         myutil.err_message("LSP.publishDiagnostics: Couldn't find buffer for ", uri)
         return
     end
-    save_diagnostics(bufnr, result.diagnostics)
+    save_diagnostics(bufnr, result.diagnostics, result.uri)
+    updatedDiagnostics = true
     M.show_diagnostics()
 end
 
@@ -89,14 +94,86 @@ end
 function M.show_diagnostics()
     timer:start(250, 0, vim.schedule_wrap(function()
         timer:stop()
+
         local bufnr = api.nvim_get_current_buf()
         local buf_diagnostics = M.diagnostics_by_buffer[bufnr]
+        if buf_diagnostics and api.nvim_get_mode()['mode'] == 'n' then
+            local row = api.nvim_win_get_cursor(0)[1]
+            local d = buf_diagnostics[row - 1]
+            if d and #d > 0 and d[1].message then
+                print(d[1].message)
+            end
+        end
+
+        if not updatedDiagnostics then
+            return
+        end
+        updatedDiagnostics = false
+        nextDiag = 0
+
         vim.fn.setloclist(0, {}, ' ', {
             title = 'Language Server';
             items = diagnostics_to_items(bufnr, buf_diagnostics)
         })
         set_signs(bufnr, buf_diagnostics)
     end))
+end
+
+
+local function diagnostics_sorted_by_severity()
+    local all_diagnostics = {}
+    for _, buf_diagnostics in pairs(M.diagnostics_by_buffer) do
+        for _, line_diagnostics in pairs(buf_diagnostics) do
+            local last_col = nil
+            for _, d in pairs(line_diagnostics) do
+                local fname = vim.uri_to_fname(d.uri)
+                local stat = vim.loop.fs_stat(fname)
+                local is_dir = stat and stat.type == 'directory'
+                if not is_dir and (last_col == nil or last_col ~= d.range.start.character) then
+                    last_col = d.range.start.character
+                    table.insert(all_diagnostics, d)
+                end
+            end
+        end
+    end
+    table.sort(all_diagnostics, function(a, b)
+        if a.severity == b.severity then
+            return a.range.start.line < b.range.start.line
+        else
+            return a.severity < b.severity
+        end
+    end)
+    return all_diagnostics
+end
+
+
+function M.next_diag()
+    local diagnostics = diagnostics_sorted_by_severity()
+    if #diagnostics == 0 then
+        return
+    end
+    nextDiag = nextDiag + 1
+    if nextDiag > #diagnostics then
+        nextDiag = 1
+    end
+    local d = diagnostics[nextDiag]
+    local bufnr = vim.uri_to_bufnr(d.uri)
+    myutil.jump_to_buf(bufnr, d.range)
+end
+
+
+function M.prev_diag()
+    local diagnostics = diagnostics_sorted_by_severity()
+    if #diagnostics == 0 then
+        return
+    end
+    nextDiag = nextDiag - 1
+    if nextDiag < 1 then
+        nextDiag = #diagnostics
+    end
+    local d = diagnostics[nextDiag]
+    local bufnr = vim.uri_to_bufnr(d.uri)
+    myutil.jump_to_buf(bufnr, d.range)
 end
 
 
