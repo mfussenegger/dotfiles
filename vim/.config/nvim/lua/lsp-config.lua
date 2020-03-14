@@ -1,5 +1,6 @@
 local myutil = require 'util'
 local lsp = require 'vim.lsp'
+local lsp_ext = require 'lsp-ext'
 local api = vim.api
 
 local lsps_dirs = {}
@@ -71,7 +72,7 @@ local key_mappings = {
 }
 
 local function on_init(client, _)
-    require('lsp-ext').setup(client)
+    lsp_ext.setup(client)
 end
 
 local function on_attach(client, bufnr)
@@ -95,11 +96,17 @@ local function mk_config()
     return {
         callbacks = {
             ["textDocument/publishDiagnostics"] = diagnostics_callback,
+            ['textDocument/declaration'] = lsp_ext.location_callback(true),
+            ['textDocument/definition'] = lsp_ext.location_callback(true),
+            ['textDocument/typeDefinition'] = lsp_ext.location_callback(true),
+            ['textDocument/implementation'] = lsp_ext.location_callback(true),
+            ['textDocument/references'] = lsp_ext.location_callback(false),
         };
         on_init = on_init;
         on_attach = on_attach;
     }
 end
+
 
 local M = {}
 function M.add_client(cmd, opts)
@@ -116,6 +123,11 @@ function M.start_jdt()
     config['name'] = 'eclipse.jdt.ls'
     config['cmd'] = {'java-lsp.sh'}
     config['callbacks']["language/status"] = lsp4j_status_callback
+    config['init_options'] = {
+        extendedClientCapabilities = {
+            classFileContentsSupport = true
+        }
+    }
     add_client_by_cfg(config, {'gradlew', '.git'})
 end
 function M.start_hie()
