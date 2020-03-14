@@ -19,6 +19,13 @@ else
     end
 end
 
+
+function M.err_message(...)
+  vim.api.nvim_err_writeln(table.concat(vim.tbl_flatten{...}))
+  vim.api.nvim_command("redraw")
+end
+
+
 function M.exists(filename)
     local stat = vim.loop.fs_stat(filename)
     return stat and stat.type or false

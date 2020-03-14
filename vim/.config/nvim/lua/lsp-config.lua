@@ -1,42 +1,12 @@
 local myutil = require 'util'
 local lsp = require 'vim.lsp'
 local lsp_ext = require 'lsp-ext'
+local lsp_diag = require 'lsp-diagnostics'
 local api = vim.api
 
 local lsps_dirs = {}
 
 
-local function diagnostics_to_items(bufnr, diagnostics)
-    local items = {}
-    if not diagnostics then return items end
-    for _, diagnostic in pairs(diagnostics) do
-        table.insert(items, {
-            bufnr = bufnr,
-            lnum = diagnostic.range.start.line + 1,
-            vcol = 1,
-            col = diagnostic.range.start.character,
-            text = diagnostic.message
-        })
-    end
-    return items
-end
-
-local default_diagnostics_callback = lsp.callbacks['textDocument/publishDiagnostics']
-local function diagnostics_callback(err, method, result, client_id)
-    default_diagnostics_callback(err, method, result, client_id)
-    if result and result.diagnostics and result.uri then
-        local current_buf = api.nvim_get_current_buf()
-        if vim.uri_to_bufnr(result.uri) == current_buf and myutil.exists(vim.uri_to_fname(result.uri)) then
-            for _, v in ipairs(result.diagnostics) do
-                v.uri = v.uri or result.uri
-            end
-            vim.fn.setloclist(0, {}, ' ', {
-                title = 'Language Server';
-                items = diagnostics_to_items(current_buf, result.diagnostics);
-            })
-        end
-    end
-end
 
 local function add_client_by_cfg(config, root_markers)
     local bufnr = api.nvim_get_current_buf()
@@ -95,7 +65,7 @@ end
 local function mk_config()
     return {
         callbacks = {
-            ["textDocument/publishDiagnostics"] = diagnostics_callback,
+            ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
             ['textDocument/declaration'] = lsp_ext.location_callback(true),
             ['textDocument/definition'] = lsp_ext.location_callback(true),
             ['textDocument/typeDefinition'] = lsp_ext.location_callback(true),

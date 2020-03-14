@@ -1,8 +1,7 @@
-local uv = vim.loop
 local api = vim.api
 local log = vim.lsp.log
 
-local timer = uv.new_timer()
+local timer = vim.loop.new_timer()
 local on_insert_with_pause = {}
 
 local M = {}
@@ -130,8 +129,6 @@ function M.setup(client)
             on_insert_with_pause, { completion_triggers, trigger_completion }
         )
     end
-    api.nvim_command("autocmd InsertCharPre * lua require'lsp-ext'._InsertCharPre()")
-    api.nvim_command("autocmd InsertLeave * lua require'lsp-ext'._InsertLeave()")
 end
 
 return M
