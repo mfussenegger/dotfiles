@@ -70,7 +70,11 @@ local key_mappings = {
     {"signature_help", "i", "<c-space>",  "<Cmd>lua vim.lsp.buf.signature_help()<CR>"}
 }
 
-local function enable_mappings_on_buffer(client, bufnr)
+local function on_init(client, _)
+    require('lsp-ext').setup(client)
+end
+
+local function on_attach(client, bufnr)
     api.nvim_buf_set_var(bufnr, "lsp_client_id", client.id)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
@@ -92,7 +96,8 @@ local function mk_config()
         callbacks = {
             ["textDocument/publishDiagnostics"] = diagnostics_callback,
         };
-        on_attach = enable_mappings_on_buffer;
+        on_init = on_init;
+        on_attach = on_attach;
     }
 end
 
