@@ -23,7 +23,7 @@ nnoremap [L :llast<CR>
 xmap gl <Plug>(EasyAlign)
 
 inoremap <expr> <ESC> (pumvisible() ? "\<c-e>" : "\<ESC>")
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>" : "\<CR>")
+inoremap <expr> <CR> (luaeval("require'lsp-ext'.accept_pum()") ? "\<c-y>" : "\<CR>")
 
 " split navigation
 noremap <c-h> <c-w>h

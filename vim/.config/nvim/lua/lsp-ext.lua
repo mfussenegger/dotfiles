@@ -3,6 +3,7 @@ local myutil = require 'util'
 
 local timer = nil
 local on_insert_with_pause = {}
+local expand_snippet = false
 
 local M = {}
 
@@ -109,12 +110,12 @@ function M._CompleteDone()
         return
     end
     local item = vim.fn.json_decode(completed_item.user_data)
-    -- TODO: If the user didn't accept the choice explicitly using <c-y>, but continued typing, don't expand the snippet
 
     -- 2 is snippet
-    if item.insertTextFormat ~= 2 then
+    if item.insertTextFormat ~= 2 or not expand_snippet then
         return
     end
+    expand_snippet = false
     local row, pos = unpack(api.nvim_win_get_cursor(0))
     -- Create textEdit to remove the already inserted word
     local text_edit = {
@@ -186,6 +187,16 @@ local function text_document_completion_list_to_complete_items(result, prefix)
         })
     end
     return matches
+end
+
+
+function M.accept_pum()
+    if tonumber(vim.fn.pumvisible()) == 0 then
+        return false
+    else
+        expand_snippet = true
+        return true
+    end
 end
 
 
