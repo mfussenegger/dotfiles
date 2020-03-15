@@ -22,11 +22,8 @@ nnoremap [L :llast<CR>
 
 xmap gl <Plug>(EasyAlign)
 
-" Apply spell correction
-inoremap <c-l> <c-g>u<Esc>[s1z=`]a<c-g>u
-
-" Close popup menu *and* start a new line when pressing <Enter>
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+inoremap <expr> <ESC> (pumvisible() ? "\<c-e>" : "\<ESC>")
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>" : "\<CR>")
 
 " split navigation
 noremap <c-h> <c-w>h

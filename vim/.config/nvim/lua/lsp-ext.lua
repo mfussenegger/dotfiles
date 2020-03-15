@@ -45,12 +45,10 @@ local function trigger_completion()
     local textMatch = vim.fn.match(line_to_cursor, '\\k*$')
     local prefix = line_to_cursor:sub(textMatch+1)
     local params = vim.lsp.util.make_position_params()
-    local items = {}
     vim.lsp.buf_request(bufnr, 'textDocument/completion', params, function(err, _, result)
         if err or not result then return end
         local matches = vim.lsp.util.text_document_completion_list_to_complete_items(result, prefix)
-        vim.list_extend(items, matches)
-        vim.fn.complete(textMatch + 1, items)
+        vim.fn.complete(textMatch + 1, matches)
   end)
 end
 
@@ -105,6 +103,92 @@ function M.location_callback(autojump)
 end
 
 
+function M._CompleteDone()
+    local completed_item = api.nvim_get_vvar('completed_item')
+    if not completed_item or not completed_item.user_data or completed_item.user_data == '' then
+        return
+    end
+    local item = vim.fn.json_decode(completed_item.user_data)
+    -- TODO: If the user didn't accept the choice explicitly using <c-y>, but continued typing, don't expand the snippet
+
+    -- 2 is snippet
+    if item.insertTextFormat ~= 2 then
+        return
+    end
+    local row, pos = unpack(api.nvim_win_get_cursor(0))
+    -- Create textEdit to remove the already inserted word
+    local text_edit = {
+        range = {
+            ["start"] = {
+                line = row - 1;
+                character = (pos - #completed_item.word);
+            };
+            ["end"] = {
+                line = row - 1;
+                character = pos;
+            }
+        };
+        newText = "";
+    }
+    vim.lsp.util.apply_text_edits({text_edit}, api.nvim_get_current_buf())
+
+    if item.textEdit then
+        api.nvim_call_function("UltiSnips#Anon", {item.textEdit.newText})
+    else
+        api.nvim_call_function("UltiSnips#Anon", {item.insertText})
+    end
+end
+
+
+local function text_document_completion_list_to_complete_items(result, prefix)
+    local items = vim.tbl_filter(function(item)
+        return (item.insertText and vim.startswith(item.insertText, prefix))
+            or (item.label and vim.startswith(item.label, prefix))
+            or (item.textEdit and item.textEdit.newText and vim.startswith(item.textEdit.newText, prefix))
+    end, vim.lsp.util.extract_completion_items(result))
+    if #items == 0 then
+        return {}
+    end
+    if items[1] and items[1].sortText then
+        table.sort(items, function(a, b) return a.sortText < b.sortText end)
+    end
+
+    local matches = {}
+    for _, item in ipairs(items) do
+        local info = ' '
+        local documentation = item.documentation
+        if documentation then
+            if type(documentation) == 'string' and documentation ~= '' then
+                info = documentation
+            elseif type(documentation) == 'table' and type(documentation.value) == 'string' then
+                info = documentation.value
+            end
+        end
+        local kind = vim.lsp.protocol.CompletionItemKind[item.kind] or ''
+        local word
+        if kind == 'Snippet' then
+            word = item.label
+        elseif item.insertTextFormat == 2 then -- 2 == snippet
+            word = item.insertText
+        else
+            word = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
+        end
+        table.insert(matches, {
+            word = word,
+            abbr = item.label,
+            kind = kind,
+            menu = item.detail or '',
+            info = info,
+            icase = 1,
+            dup = 1,
+            empty = 1,
+            user_data = vim.fn.json_encode(item)
+        })
+    end
+    return matches
+end
+
+
 function M.setup(client)
     local signature_triggers = client.resolved_capabilities.signature_help_trigger_characters
     if signature_triggers and #signature_triggers > 0 then
@@ -119,6 +203,7 @@ function M.setup(client)
             on_insert_with_pause, { completion_triggers, trigger_completion }
         )
     end
+    vim.lsp.util.text_document_completion_list_to_complete_items = text_document_completion_list_to_complete_items
 end
 
 return M

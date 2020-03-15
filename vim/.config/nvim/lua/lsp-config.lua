@@ -46,6 +46,7 @@ local function on_init(client, _)
     api.nvim_command("autocmd InsertCharPre * lua require'lsp-ext'._InsertCharPre()")
     api.nvim_command("autocmd InsertLeave * lua require'lsp-ext'._InsertLeave()")
     api.nvim_command("autocmd CursorMoved,CursorMovedI * lua require'lsp-diagnostics'.show_diagnostics()")
+    api.nvim_command("autocmd CompleteDone * lua require'lsp-ext'._CompleteDone()")
     api.nvim_command("augroup end")
     lsp_ext.setup(client)
 end
@@ -65,11 +66,13 @@ local function on_attach(client, bufnr)
         end
     end
     api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename()<CR>", opts)
-    api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua LspDiag.next_diag()<CR>", opts)
-    api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua LspDiag.prev_diag()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua require'lsp-diagnostics'.next_diag()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua require'lsp-diagnostics'.prev_diag()<CR>", opts)
 end
 
 local function mk_config()
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
     return {
         callbacks = {
             ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
@@ -79,6 +82,7 @@ local function mk_config()
             ['textDocument/implementation'] = lsp_ext.location_callback(true),
             ['textDocument/references'] = lsp_ext.location_callback(false),
         };
+        capabilities = capabilities;
         on_init = on_init;
         on_attach = on_attach;
     }
