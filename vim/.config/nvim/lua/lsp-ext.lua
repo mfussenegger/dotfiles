@@ -1,11 +1,14 @@
 local api = vim.api
 local myutil = require 'util'
+local lsp_diagnostics = require 'lsp-diagnostics'
 
 local timer = nil
 local on_insert_with_pause = {}
 local expand_snippet = false
 
 local M = {}
+
+M.ticks = {}
 
 
 function M._InsertCharPre()
@@ -200,6 +203,73 @@ function M.accept_pum()
 end
 
 
+-- Until https://github.com/neovim/neovim/pull/11607 is merged
+local function execute_command(command)
+    vim.lsp.buf_request(0, 'workspace/executeCommand', command, function(err, _, _)
+        if err then
+            print("Could not execute code action: " .. err.message)
+        end
+    end)
+end
+
+
+-- Until https://github.com/neovim/neovim/pull/11607 is merged
+function M.code_action()
+    local params = vim.lsp.util.make_position_params()
+    local row, pos = unpack(api.nvim_win_get_cursor(0))
+    params.range = {
+        ["start"] = { line = row - 1; character = pos };
+        ["end"] = { line = row - 1; character = pos };
+    }
+    local bufnr = api.nvim_get_current_buf()
+    local buf_diagnostics = lsp_diagnostics.diagnostics_by_buffer[bufnr] or {}
+    params.context = {
+        diagnostics = buf_diagnostics[row - 1] or {}
+    }
+    vim.lsp.buf_request(0, 'textDocument/codeAction', params, function(err, _, actions)
+        if err then return end
+        if #actions == 0 then
+            print("No code actions available")
+            return
+        end
+        local option_strings = {"Code Actions:"}
+        for i, action in ipairs(actions) do
+            local title = action.title:gsub('\r\n', '\\r\\n')
+            title = title:gsub('\n', '\\n')
+            table.insert(option_strings, string.format("%d. %s", i, title))
+        end
+        local choice = vim.fn.inputlist(option_strings)
+        if choice < 1 or choice > #actions then
+            return
+        end
+        local action_chosen = actions[choice]
+        local action = action_chosen
+        if type(action_chosen.command) == table then
+            action = action_chosen.command
+        end
+        if action.command == 'java.apply.workspaceEdit' then
+            for _, argument in ipairs(action.arguments) do
+                vim.lsp.util.apply_workspace_edit(argument)
+            end
+        else
+            execute_command(action)
+        end
+    end)
+end
+
+
+-- Until https://github.com/neovim/neovim/pull/11927 is merged
+local function apply_text_document_edit(edit)
+    local text_document = edit.textDocument
+    local bufnr = vim.uri_to_bufnr(text_document.uri)
+    if M.ticks[bufnr] > text_document.version then
+        print("Buffer ", text_document.uri, " newer than edits.")
+        return
+    end
+    vim.lsp.util.apply_text_edits(edit.edits, bufnr)
+end
+
+
 function M.setup(client)
     local signature_triggers = client.resolved_capabilities.signature_help_trigger_characters
     if signature_triggers and #signature_triggers > 0 then
@@ -215,6 +285,9 @@ function M.setup(client)
         )
     end
     vim.lsp.util.text_document_completion_list_to_complete_items = text_document_completion_list_to_complete_items
+
+    -- Until https://github.com/neovim/neovim/pull/11927 is merged
+    vim.lsp.util.apply_text_document_edit = apply_text_document_edit
 end
 
 return M

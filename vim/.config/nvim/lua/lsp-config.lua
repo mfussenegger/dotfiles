@@ -26,12 +26,20 @@ local function add_client_by_cfg(config, root_markers)
         lsps_dirs[root_dir] = client_id
     end
     lsp.buf_attach_client(bufnr, client_id)
+    api.nvim_buf_attach(bufnr, false, {
+        on_changedtick=function(_, changedtick)
+            lsp_ext.ticks[bufnr] = changedtick
+        end;
+        on_detach=function(_)
+            lsp_ext.ticks[bufnr] = nil
+        end;
+    })
 end
 
 
 -- array of mappings to setup; {<capability_name>, <mode>, <lhs>, <rhs>}
 local key_mappings = {
-    {"code_action", "n", "<a-CR>", "<Cmd>lua vim.lsp.buf.code_action()<CR>"},
+    {"code_action", "n", "<a-CR>", "<Cmd>lua require'lsp-ext'.code_action()<CR>"},
     {"document_formatting", "n", "gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>"},
     {"document_range_formatting", "v", "gq", "<Cmd>lua vim.lsp.buf.range_formatting()<CR>"},
     {"find_references", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>"},
