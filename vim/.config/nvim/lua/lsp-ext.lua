@@ -173,7 +173,21 @@ local function text_document_completion_list_to_complete_items(result, prefix)
         if kind == 'Snippet' then
             word = item.label
         elseif item.insertTextFormat == 2 then -- 2 == snippet
-            word = item.insertText
+            --[[
+            -- eclipse.jdt.ls has
+            --      insertText = "wait",
+            --      label = "wait() : void"
+            --      textEdit = { ... }
+            --
+            -- haskell-ide-engine has
+            --      insertText = "testSuites ${1:Env}"
+            --      label = "testSuites"
+            --]]
+            if item.textEdit then
+                word = item.insertText
+            else
+                word = item.label
+            end
         else
             word = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
         end
