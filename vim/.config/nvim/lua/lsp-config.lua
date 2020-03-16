@@ -113,9 +113,21 @@ function M.start_jdt()
     config['cmd'] = {'java-lsp.sh'}
     config['callbacks']["language/status"] = lsp4j_status_callback
     config['init_options'] = {
+        settings = {
+            java = {
+                signatureHelp = { enabled = true };
+                completion = {
+                    favoriteStaticMembers = {
+                        "org.hamcrest.MatcherAssert.assertThat",
+                        "org.hamcrest.Matchers.*",
+                        "org.hamcrest.CoreMatchers.*",
+                    }
+                }
+            };
+        };
         extendedClientCapabilities = {
             classFileContentsSupport = true
-        }
+        };
     }
     add_client_by_cfg(config, {'gradlew', '.git'})
 end

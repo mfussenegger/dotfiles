@@ -28,7 +28,8 @@ endif
 
 let g:vista_executive_for = {
   \ 'haskell': 'nvim_lsp',
-  \ 'python': 'nvim_lsp'
+  \ 'python': 'nvim_lsp',
+  \ 'java': 'nvim_lsp'
   \ }
 
 

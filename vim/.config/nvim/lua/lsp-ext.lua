@@ -154,7 +154,7 @@ local function text_document_completion_list_to_complete_items(result, prefix)
         return {}
     end
     if items[1] and items[1].sortText then
-        table.sort(items, function(a, b) return a.sortText < b.sortText end)
+        table.sort(items, function(a, b) return (a.sortText or 0) < (b.sortText or 0) end)
     end
 
     local matches = {}

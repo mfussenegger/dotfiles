@@ -98,7 +98,7 @@ function M.show_diagnostics()
         timer = nil
     end
     timer = vim.loop.new_timer()
-    timer:start(250, 0, vim.schedule_wrap(function()
+    timer:start(150, 0, vim.schedule_wrap(function()
         timer:close()
         timer = nil
 
