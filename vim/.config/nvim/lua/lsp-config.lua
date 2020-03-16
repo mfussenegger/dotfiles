@@ -76,11 +76,26 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua require'lsp-diagnostics'.next_diag()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua require'lsp-diagnostics'.prev_diag()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "<leader>fs", "<Cmd>lua require'lsp-ext'.workspace_symbol()<CR>", opts)
 end
 
 local function mk_config()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities.textDocument.completion.completionItem.snippetSupport = true
+    capabilities.workspace = {
+        symbol = {
+            dynamicRegistration = false;
+            symbolKind = {
+            valueSet = (function()
+                local res = {}
+                for k in pairs(vim.lsp.protocol.SymbolKind) do
+                if type(k) == 'number' then table.insert(res, k) end
+                end
+                return res
+            end)();
+            };
+        }
+    }
     return {
         callbacks = {
             ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
