@@ -62,6 +62,11 @@ end
 
 local function save_diagnostics(bufnr, diagnostics, uri)
     if not diagnostics then return end
+    if not M.diagnostics_by_buffer[bufnr] then
+        api.nvim_buf_attach(bufnr, false, {
+            on_detach = function(b) M.diagnostics_by_buffer[b] = nil end
+        })
+    end
     local buf_diagnostics = {}
     M.diagnostics_by_buffer[bufnr] = buf_diagnostics
     for _, diagnostic in ipairs(diagnostics) do
@@ -83,6 +88,9 @@ function M.publishDiagnostics(_, _, result)
     local bufnr = vim.uri_to_bufnr(uri)
     if not bufnr then
         myutil.err_message("LSP.publishDiagnostics: Couldn't find buffer for ", uri)
+        return
+    end
+    if not api.nvim_buf_is_loaded(bufnr) then
         return
     end
     save_diagnostics(bufnr, result.diagnostics, result.uri)
