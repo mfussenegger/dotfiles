@@ -19,6 +19,10 @@ alias lvdisplay='sudo lvdisplay'
 alias pvdisplay='sudo pvdisplay'
 alias vgdisplay='sudo vgdisplay'
 
+# z.lua
+alias zh='z -I -t .'
+alias zb='z -b'
+
 ## pacman
 
 alias p='sudo pacman'
