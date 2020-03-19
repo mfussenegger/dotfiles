@@ -1,5 +1,3 @@
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = "floating"
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
@@ -32,6 +30,7 @@ let g:vista_executive_for = {
   \ 'java': 'nvim_lsp'
   \ }
 
+let g:fzf_preview_window = ''
 
 " tree-view
 let g:netrw_liststyle = 3
