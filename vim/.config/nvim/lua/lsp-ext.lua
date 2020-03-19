@@ -218,12 +218,35 @@ end
 
 
 -- Until https://github.com/neovim/neovim/pull/11607 is merged
-local function execute_command(command)
+function M.execute_command(command)
     vim.lsp.buf_request(0, 'workspace/executeCommand', command, function(err, _, _)
         if err then
             print("Could not execute code action: " .. err.message)
         end
     end)
+end
+
+
+function M.organize_imports()
+    M.execute_command({
+        command = "java.edit.organizeImports";
+        arguments = { vim.uri_from_bufnr(0) }
+    })
+end
+
+
+function M.workspace_apply_edit(err, _, result)
+    -- result:
+    --   label?: string;
+    --   edit: WorkspaceEdit;
+    --
+    if err then
+        print("Received error for workspace/applyEdit: " .. err.message)
+    end
+    vim.lsp.util.apply_workspace_edit(result.edit)
+    return {
+        applied = true;
+    }
 end
 
 

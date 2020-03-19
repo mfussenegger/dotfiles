@@ -95,7 +95,8 @@ local function mk_config()
                 return res
             end)();
             };
-        }
+        };
+        applyEdit = true;
     }
     return {
         callbacks = {
@@ -105,6 +106,7 @@ local function mk_config()
             ['textDocument/typeDefinition'] = lsp_ext.location_callback(true),
             ['textDocument/implementation'] = lsp_ext.location_callback(true),
             ['textDocument/references'] = lsp_ext.location_callback(false),
+            ['workspace/applyEdit'] = lsp_ext.workspace_apply_edit,
         };
         capabilities = capabilities;
         on_init = on_init;
@@ -137,6 +139,8 @@ function M.start_jdt()
                         "org.hamcrest.MatcherAssert.assertThat",
                         "org.hamcrest.Matchers.*",
                         "org.hamcrest.CoreMatchers.*",
+                        "java.util.Objects.requireNonNull",
+                        "java.util.Objects.requireNonNullElse"
                     }
                 }
             };
