@@ -80,6 +80,12 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>fs", "<Cmd>lua require'lsp-ext'.workspace_symbol()<CR>", opts)
 end
 
+local function jdtls_on_attach(client, bufnr)
+    on_attach(client, bufnr)
+    local opts = { silent = true; }
+    api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'lsp-ext'.organize_imports()<CR>", opts)
+end
+
 local function mk_config()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -127,7 +133,7 @@ function M.start_jdt()
         api.nvim_command(string.format(':echohl Function | echo "%s" | echohl None', result.message))
     end)
     local config = mk_config()
-    config['name'] = 'eclipse.jdt.ls'
+    config['name'] = 'jdt.ls'
     config['cmd'] = {'java-lsp.sh'}
     config['callbacks']["language/status"] = lsp4j_status_callback
     config['init_options'] = {
@@ -149,6 +155,7 @@ function M.start_jdt()
             classFileContentsSupport = true
         };
     }
+    config['on_attach'] = jdtls_on_attach
     add_client_by_cfg(config, {'gradlew', '.git'})
 end
 function M.start_hie()
