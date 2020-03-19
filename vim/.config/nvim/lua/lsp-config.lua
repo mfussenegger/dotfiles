@@ -4,8 +4,8 @@ local lsp_ext = require 'lsp-ext'
 local lsp_diag = require 'lsp-diagnostics'
 local api = vim.api
 
-local lsps_dirs = {}
-
+-- id is filetype│root_dir
+local lsps = {}
 
 
 local function add_client_by_cfg(config, root_markers)
@@ -20,10 +20,11 @@ local function add_client_by_cfg(config, root_markers)
         return
     end
     config['root_dir'] = root_dir
-    local client_id = lsps_dirs[root_dir]
+    local lsp_id = tostring(vim.bo.filetype) .. "│" .. root_dir
+    local client_id = lsps[lsp_id]
     if not client_id then
         client_id = lsp.start_client(config)
-        lsps_dirs[root_dir] = client_id
+        lsps[lsp_id] = client_id
     end
     lsp.buf_attach_client(bufnr, client_id)
     api.nvim_buf_attach(bufnr, false, {
