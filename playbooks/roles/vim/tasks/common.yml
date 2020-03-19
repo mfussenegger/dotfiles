@@ -43,13 +43,5 @@
     - vmchale/dhall-vim
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
-- name: Install fzf
-  command: |
-    ~/.config/nvim/pack/plugins/start/fzf/install \
-      --no-bash \
-      --no-fish \
-      --key-bindings \
-      --completion \
-      --no-update-rc
 - name: Update Remote Plugins
   command: nvim +UpdateRemotePlugins +qa

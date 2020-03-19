@@ -7,6 +7,9 @@ alias lu='lt -u'
 alias fcd='cd $(find . -type d 2> /dev/null | fzf -m --border --preview="ls {}")'
 alias fv='v $(rg --files 2> /dev/null | fzf -m --border)'
 
+alias fpacman="pacman -Slq | fzf -m --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+alias p='sudo pacman'
+
 # whitespace at the end causes the next command word after sudo to
 # also be checked for alias expansion
 alias sudo='sudo '
@@ -23,9 +26,6 @@ alias vgdisplay='sudo vgdisplay'
 alias zh='z -I -t .'
 alias zb='z -b'
 
-## pacman
-
-alias p='sudo pacman'
 
 ## yay python smtpd
 alias smtpd="python -m smtpd -n -c DebuggingServer localhost:1025"
