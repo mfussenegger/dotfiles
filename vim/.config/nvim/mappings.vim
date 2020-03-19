@@ -81,9 +81,9 @@ nnoremap <leader>gc :Gcommit -v<cr>
 " }}}
 
 
-" vim-test
-nmap <silent> t<C-n> :TestNearest<CR>
-nmap <silent> t<C-f> :TestFile<CR>
-nmap <silent> t<C-s> :TestSuite --verbose<CR>
-nmap <silent> t<C-l> :TestLast<CR>
-nmap <silent> t<C-g> :TestVisit<CR>
+" vim-test 
+nmap <silent> t<C-n> :w <BAR> TestNearest<CR>
+nmap <silent> t<C-f> :w <BAR> TestFile<CR>
+nmap <silent> t<C-s> :w <BAR> TestSuite --verbose<CR>
+nmap <silent> t<C-l> :w <BAR> TestLast<CR>
+nmap <silent> t<C-g> :w <BAR> TestVisit<CR>
