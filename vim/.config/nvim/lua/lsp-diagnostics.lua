@@ -107,8 +107,10 @@ function M.show_diagnostics()
     end
     timer = vim.loop.new_timer()
     timer:start(150, 0, vim.schedule_wrap(function()
-        timer:close()
-        timer = nil
+        if timer then
+            timer:close()
+            timer = nil
+        end
 
         local bufnr = api.nvim_get_current_buf()
         local buf_diagnostics = M.diagnostics_by_buffer[bufnr]
