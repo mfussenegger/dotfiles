@@ -89,6 +89,16 @@ end
 local function mk_config()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities.textDocument.completion.completionItem.snippetSupport = true
+    capabilities.textDocument.codeAction = {
+        dynamicRegistration = false;
+        codeActionLiteralSupport = {
+            codeActionKind = {
+                valueSet = {
+                    "source.generate.toString"
+                };
+            };
+        };
+    }
     capabilities.workspace = {
         symbol = {
             dynamicRegistration = false;
@@ -152,15 +162,21 @@ function M.start_jdt()
                         "java.util.Objects.requireNonNull",
                         "java.util.Objects.requireNonNullElse"
                     }
+                };
+                codeGeneration = {
+                    toString = {
+                        template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
+                    }
                 }
             };
         };
         extendedClientCapabilities = {
-            classFileContentsSupport = true
+            classFileContentsSupport = true;
+            generateToStringPromptSupport = true;
         };
     }
     config['on_attach'] = jdtls_on_attach
-    add_client_by_cfg(config, {'gradlew', '.git'})
+    add_client_by_cfg(config, root_markers)
 end
 function M.start_hie()
     local config = mk_config()

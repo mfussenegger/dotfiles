@@ -9,6 +9,52 @@ local expand_snippet = false
 local M = {}
 
 M.ticks = {}
+M.commands = {
+    ['java.apply.workspaceEdit'] = function(command)
+        for _, argument in ipairs(command.arguments) do
+            vim.lsp.util.apply_workspace_edit(argument)
+        end
+    end;
+    ['java.action.generateToStringPrompt'] = function(_, params)
+        vim.lsp.buf_request(0, 'java/checkToStringStatus', params, function(err, _, result)
+            if err then
+                print("Could not execute java/checkToStringStatus: " .. err.message)
+            end
+            if not result then return end
+            if result.exists then
+                local choice = vim.fn.inputlist({
+                    string.format("Method 'toString()' already exists in '%s'. Do you want to replace it?", result.type),
+                    "1. Replace",
+                    "2. Cancel"
+                })
+                if choice < 1 or choice == 2 then
+                    return
+                end
+            end
+            local fields = {}
+            if result.fields and #result.fields > 0 then
+                for _, field in ipairs(result.fields) do
+                    local choice = vim.fn.inputlist({
+                        string.format("Include `%s: %s` in toString?", field.name, field.type),
+                        "1. Yes",
+                        "2. No"
+                    })
+                    if choice == 1 then
+                        table.insert(fields, field)
+                    end
+                end
+            end
+            vim.lsp.buf_request(0, 'java/generateToString', { context = params; fields = fields; }, function(e, _, edit)
+                if e then
+                    print("Could not execute java/generateToString: " .. e.message)
+                end
+                if result then
+                    vim.lsp.util.apply_workspace_edit(edit)
+                end
+            end)
+        end)
+    end;
+}
 
 
 function M._InsertCharPre()
@@ -235,6 +281,7 @@ function M.organize_imports()
 end
 
 
+-- Not needed anymore after https://github.com/neovim/neovim/pull/11607
 function M.workspace_apply_edit(err, _, result)
     -- result:
     --   label?: string;
@@ -243,15 +290,15 @@ function M.workspace_apply_edit(err, _, result)
     if err then
         print("Received error for workspace/applyEdit: " .. err.message)
     end
-    vim.lsp.util.apply_workspace_edit(result.edit)
+    local status, failure = pcall(vim.lsp.util.apply_workspace_edit, result.edit)
     return {
-        applied = true;
+        applied = status;
+        failureReason = failure;
     }
 end
 
 
--- Until https://github.com/neovim/neovim/pull/11607 is merged
-function M.code_action()
+local function make_code_action_params()
     local params = vim.lsp.util.make_position_params()
     local row, pos = unpack(api.nvim_win_get_cursor(0))
     params.range = {
@@ -263,9 +310,29 @@ function M.code_action()
     params.context = {
         diagnostics = buf_diagnostics[row - 1] or {}
     }
-    vim.lsp.buf_request(0, 'textDocument/codeAction', params, function(err, _, actions)
+    return params
+end
+
+
+-- Until https://github.com/neovim/neovim/pull/11607 is merged
+function M.code_action()
+    local code_action_params = make_code_action_params()
+    vim.lsp.buf_request(0, 'textDocument/codeAction', code_action_params, function(err, _, actions)
         if err then return end
-        if #actions == 0 then
+        -- actions is (Command | CodeAction)[] | null
+        -- CodeAction
+        --      title: String
+        --      kind?: CodeActionKind
+        --      diagnostics?: Diagnostic[]
+        --      isPreferred?: boolean
+        --      edit?: WorkspaceEdit
+        --      command?: Command
+        --
+        -- Command
+        --      title: String
+        --      command: String
+        --      arguments?: any[]
+        if not actions or #actions == 0 then
             print("No code actions available")
             return
         end
@@ -279,17 +346,22 @@ function M.code_action()
         if choice < 1 or choice > #actions then
             return
         end
-        local action_chosen = actions[choice]
-        local action = action_chosen
-        if type(action_chosen.command) == table then
-            action = action_chosen.command
+        local action = actions[choice]
+        if action.edit then
+            vim.lsp.util.apply_workspace_edit(action.edit)
+            return
         end
-        if action.command == 'java.apply.workspaceEdit' then
-            for _, argument in ipairs(action.arguments) do
-                vim.lsp.util.apply_workspace_edit(argument)
-            end
+        local command
+        if type(action.command) == "table" then
+            command = action.command
         else
-            execute_command(action)
+            command = action
+        end
+        local fn = M.commands[command.command]
+        if fn then
+            fn(command, code_action_params)
+        else
+            M.execute_command(command)
         end
     end)
 end
