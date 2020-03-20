@@ -10,7 +10,7 @@ GRADLE_HOME=$HOME/gradle /usr/lib/jvm/java-13-openjdk/bin/java \
   -Xmx1G \
   -jar $(echo "$JAR") \
   -configuration "$HOME/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux" \
-  -data "$HOME/.local/share/eclipse" \
+  -data "$1" \
   --add-modules=ALL-SYSTEM \
   --add-opens java.base/java.util=ALL-UNNAMED \
   --add-opens java.base/java.lang=ALL-UNNAMED

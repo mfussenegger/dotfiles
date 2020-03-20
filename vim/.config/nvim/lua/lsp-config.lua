@@ -134,7 +134,11 @@ function M.start_jdt()
     end)
     local config = mk_config()
     config['name'] = 'jdt.ls'
-    config['cmd'] = {'java-lsp.sh'}
+    local root_markers = {'gradlew', '.git'}
+    local bufnr = api.nvim_get_current_buf()
+    local root_dir = myutil.root_pattern(bufnr, root_markers)
+    local workspace_folder = root_dir .. "/.jdt.ls"
+    config['cmd'] = {'java-lsp.sh', workspace_folder}
     config['callbacks']["language/status"] = lsp4j_status_callback
     config['init_options'] = {
         settings = {
