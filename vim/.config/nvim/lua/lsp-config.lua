@@ -94,7 +94,8 @@ local function mk_config()
         codeActionLiteralSupport = {
             codeActionKind = {
                 valueSet = {
-                    "source.generate.toString"
+                    "source.generate.toString",
+                    "source.generate.hashCodeEquals"
                 };
             };
         };
@@ -173,6 +174,7 @@ function M.start_jdt()
         extendedClientCapabilities = {
             classFileContentsSupport = true;
             generateToStringPromptSupport = true;
+            hashCodeEqualsPromptSupport = true;
         };
     }
     config['on_attach'] = jdtls_on_attach

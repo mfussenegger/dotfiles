@@ -48,7 +48,34 @@ M.commands = {
                 if e then
                     print("Could not execute java/generateToString: " .. e.message)
                 end
-                if result then
+                if edit then
+                    vim.lsp.util.apply_workspace_edit(edit)
+                end
+            end)
+        end)
+    end;
+    ['java.action.hashCodeEqualsPrompt'] = function(_, params)
+        vim.lsp.buf_request(0, 'java/checkHashCodeEqualsStatus', params, function(_, _, result)
+            if not result or not result.fields or #result.fields == 0 then
+                print(string.format("The operation is not applicable to the type %", result.type))
+            end
+
+            local fields = {}
+            for _, field in ipairs(result.fields) do
+                local choice = vim.fn.inputlist({
+                    string.format("Include `%s: %s` in equals/hashCode?", field.name, field.type),
+                    "1. Yes",
+                    "2. No"
+                })
+                if choice == 1 then
+                    table.insert(fields, field)
+                end
+            end
+            vim.lsp.buf_request(0, 'java/generateHashCodeEquals', { context = params; fields = fields; }, function(e, _, edit)
+                if e then
+                    print("Could not execute java/generateHashCodeEquals: " .. e.message)
+                end
+                if edit then
                     vim.lsp.util.apply_workspace_edit(edit)
                 end
             end)
