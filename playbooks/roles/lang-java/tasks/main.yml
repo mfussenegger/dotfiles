@@ -27,3 +27,21 @@
     dest: ~/apps/async-profiler/
     remote_src: true
     creates: ~/apps/async-profiler/profiler.sh
+- name: Create jmc folder
+  file:
+    path: ~/apps/jmc/
+    state: directory
+    mode: 0700
+- name: Get and unpack jmc
+  unarchive:
+    src: https://download.java.net/java/GA/jmc7/14/jmc-7_linux-x64_bin.tar.gz
+    dest: ~/apps/jmc/
+    remote_src: true
+    creates: ~/apps/jmc/bin/jmc
+    extra_opts:
+      - --strip-components=1
+- name: Create symlink for jmc
+  file:
+    src: ~/apps/jmc/bin/jmc
+    dest: ~/bin/jmc
+    state: link
