@@ -148,7 +148,10 @@ function M.start_jdt()
     local root_markers = {'gradlew', '.git'}
     local bufnr = api.nvim_get_current_buf()
     local root_dir = myutil.root_pattern(bufnr, root_markers)
-    local workspace_folder = root_dir .. "/.jdt.ls"
+    if not root_dir then
+        return
+    end
+    local workspace_folder = os.getenv("HOME") .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
     config['cmd'] = {'java-lsp.sh', workspace_folder}
     config['callbacks']["language/status"] = lsp4j_status_callback
     config['init_options'] = {
