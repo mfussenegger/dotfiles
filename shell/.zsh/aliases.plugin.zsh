@@ -4,9 +4,6 @@ alias la='ll -A'
 alias lt='ll -tr'
 alias lu='lt -u'
 
-alias fcd='cd $(find . -type d 2> /dev/null | fzf -m --border --preview="ls {}")'
-alias fv='v $(rg --files 2> /dev/null | fzf -m --border)'
-
 alias fpacman="pacman -Slq | fzf -m --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
 alias p='sudo pacman'
 
