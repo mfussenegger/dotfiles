@@ -101,6 +101,7 @@
     recap = !git log --all --oneline --no-merges --author=$(git config user.email)
     today = !git log --since=00:00:00 --all --oneline --no-merges --author=$(git config user.email)
     st = !nvim '+Gedit :'
+    fa = "!git ls-files -m -o --exclude-standard | fzf --print0 -m | xargs -0 -t -o git add"
 
 [instaweb]
     httpd = webrick
