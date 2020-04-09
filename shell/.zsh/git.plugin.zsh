@@ -7,3 +7,45 @@ alias gia='git add'
 alias gws='git status --ignore-submodules=all --short'
 alias gwR='git reset --hard'
 alias gir='git reset'
+
+
+gb() {
+  git rev-parse HEAD > /dev/null 2>&1 || return
+  git branch | grep -v '/HEAD\s' |
+    fzf \
+      --multi \
+      --height 50% \
+      --no-sort \
+      --preview-window right:60%:noborder \
+      --preview 'git log --oneline --pretty="format:%s" $(sed s/^..// <<< {} | cut -d" " -f1) | head -'$LINES | 
+    sed 's/^..//' | cut -d' ' -f1
+}
+
+gt() {
+  git rev-parse HEAD > /dev/null 2>&1 || return
+  git tag |
+    fzf \
+      --multi \
+      --height 50% \
+      --no-sort \
+      --preview-window right:70%:noborder \
+      --preview 'git show --color=always {} | head -'$LINES
+}
+
+join-lines() {
+  local item
+  while read item; do
+    echo -n "${(q)item} "
+  done
+}
+
+bind-git-helper() {
+  local c
+  for c in $@; do
+    eval "fzf-g$c-widget() { local result=\$(g$c | join-lines); zle reset-prompt; LBUFFER+=\$result }"
+    eval "zle -N fzf-g$c-widget"
+    eval "bindkey '^g^$c' fzf-g$c-widget"
+  done
+}
+bind-git-helper b t
+unset -f bind-git-helper

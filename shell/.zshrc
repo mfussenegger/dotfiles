@@ -6,11 +6,11 @@ FZF_DEFAULT_COMMAND="rg --files"
 source ~/.zsh/history.plugin.zsh
 source ~/.zsh/completion.plugin.zsh
 source ~/.zsh/systemd.plugin.zsh
-source ~/.zsh/git.plugin.zsh
 source ~/.zsh/utils.plugin.zsh
 source ~/.zsh/python.plugin.zsh
 source ~/.zsh/aliases.plugin.zsh
 source ~/.zsh/vi-keybindings.plugin.zsh
+source ~/.zsh/git.plugin.zsh
 source ~/.zshrc.local
 
 source ~/.zsh/plugins/async.zsh
