@@ -43,5 +43,6 @@
     - vmchale/dhall-vim
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
+    - mfussenegger/nvim-jdtls
 - name: Update Remote Plugins
   command: nvim +UpdateRemotePlugins +qa

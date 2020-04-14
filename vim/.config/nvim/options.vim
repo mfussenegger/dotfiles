@@ -95,6 +95,7 @@ if executable("rg")
 endif
 
 if has('nvim-0.5')
+    packadd nvim-jdtls
     lua LspConf = require "lsp-config"
     augroup lsp
       au!

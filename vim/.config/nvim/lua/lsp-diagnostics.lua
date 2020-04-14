@@ -1,6 +1,7 @@
 local myutil = require 'util'
 local api = vim.api
 local protocol = vim.lsp.protocol
+local jdtls = require'jdtls'
 
 -- {<bufnr>: {<lineNr>: {diagnostics}}}
 local sign_ns = 'vim_lsp_signs'
@@ -62,6 +63,7 @@ end
 
 local function save_diagnostics(bufnr, diagnostics, uri)
     if not diagnostics then return end
+    jdtls.save_diagnostics(bufnr, diagnostics)
     if not M.diagnostics_by_buffer[bufnr] then
         api.nvim_buf_attach(bufnr, false, {
             on_detach = function(b) M.diagnostics_by_buffer[b] = nil end

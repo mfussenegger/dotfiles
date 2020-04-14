@@ -2,6 +2,7 @@ local myutil = require 'util'
 local lsp = require 'vim.lsp'
 local lsp_ext = require 'lsp-ext'
 local lsp_diag = require 'lsp-diagnostics'
+local jdtls = require 'jdtls'
 local api = vim.api
 
 -- id is filetype│root_dir
@@ -27,20 +28,12 @@ local function add_client_by_cfg(config, root_markers)
         lsps[lsp_id] = client_id
     end
     lsp.buf_attach_client(bufnr, client_id)
-    api.nvim_buf_attach(bufnr, false, {
-        on_changedtick=function(_, changedtick)
-            lsp_ext.ticks[bufnr] = changedtick
-        end;
-        on_detach=function(_)
-            lsp_ext.ticks[bufnr] = nil
-        end;
-    })
 end
 
 
 -- array of mappings to setup; {<capability_name>, <mode>, <lhs>, <rhs>}
 local key_mappings = {
-    {"code_action", "n", "<a-CR>", "<Cmd>lua require'lsp-ext'.code_action()<CR>"},
+    {"code_action", "n", "<a-CR>", "<Cmd>lua require'jdtls'.code_action()<CR>"},
     {"document_formatting", "n", "gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>"},
     {"document_range_formatting", "v", "gq", "<Cmd>lua vim.lsp.buf.range_formatting()<CR>"},
     {"find_references", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>"},
@@ -83,7 +76,7 @@ end
 local function jdtls_on_attach(client, bufnr)
     on_attach(client, bufnr)
     local opts = { silent = true; }
-    api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'lsp-ext'.organize_imports()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts)
 end
 
 local function mk_config()
@@ -118,12 +111,12 @@ local function mk_config()
     return {
         callbacks = {
             ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
-            ['textDocument/declaration'] = lsp_ext.location_callback(true),
-            ['textDocument/definition'] = lsp_ext.location_callback(true),
-            ['textDocument/typeDefinition'] = lsp_ext.location_callback(true),
-            ['textDocument/implementation'] = lsp_ext.location_callback(true),
-            ['textDocument/references'] = lsp_ext.location_callback(false),
-            ['workspace/applyEdit'] = lsp_ext.workspace_apply_edit,
+            ['textDocument/declaration'] = jdtls.location_callback(true),
+            ['textDocument/definition'] = jdtls.location_callback(true),
+            ['textDocument/typeDefinition'] = jdtls.location_callback(true),
+            ['textDocument/implementation'] = jdtls.location_callback(true),
+            ['textDocument/references'] = jdtls.location_callback(false),
+            ['workspace/applyEdit'] = jdtls.workspace_apply_edit,
         };
         capabilities = capabilities;
         on_init = on_init;
