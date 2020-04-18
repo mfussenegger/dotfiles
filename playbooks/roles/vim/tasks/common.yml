@@ -44,5 +44,6 @@
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
     - mfussenegger/nvim-jdtls
+    - mfussenegger/nvim-dap
 - name: Update Remote Plugins
   command: nvim +UpdateRemotePlugins +qa

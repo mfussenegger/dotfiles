@@ -16,6 +16,7 @@
       - ptpython
       - memory_profiler
       - termgraph
+      - debugpy
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools

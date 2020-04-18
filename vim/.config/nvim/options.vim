@@ -109,4 +109,34 @@ if has('nvim-0.5')
       au Filetype lua lua LspConf.add_client({'lua-lsp'})
       au Filetype json lua LspConf.add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
     augroup end
+
+    packadd nvim-dap
+lua << EOF
+local dap = require('dap')
+dap.adapters.python = {
+  type = 'executable';
+  command = os.getenv('HOME') .. '/.virtualenvs/tools/bin/python';
+  args = { '-m', 'debugpy.adapter' };
+}
+dap.configurations.python = {
+  {
+    type = 'python';
+    request = 'launch';
+    name = "Launch file";
+    program = "${file}";
+    -- console = "integratedTerminal"; -- requires https://github.com/neovim/neovim/pull/11839
+    pythonPath = function()
+      local cwd = vim.fn.getcwd()
+      if vim.fn.executable(cwd .. '/venv/bin/python') then
+        return cwd .. '/venv/bin/python'
+      elseif vim.fn.executable(cwd .. '/.venv/bin/python') then
+        return cwd .. '/.venv/bin/python'
+      else
+        return '/usr/bin/python'
+      end
+    end;
+  },
+}
+EOF
+
 endif
