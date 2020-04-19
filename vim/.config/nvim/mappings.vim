@@ -90,12 +90,15 @@ nmap <silent> t<C-g> :w <BAR> TestVisit<CR>
 
 if has('nvim-0.5')
     packadd nvim-dap
+    nnoremap <silent> <F3> :lua require'dap'.stop()<CR>
     nnoremap <silent> <F5> :lua require'dap'.continue()<CR>
     nnoremap <silent> <F10> :lua require'dap'.step_over()<CR>
     nnoremap <silent> <F11> :lua require'dap'.step_into()<CR>
     nnoremap <silent> <F12> :lua require'dap'.step_out()<CR>
     nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
     nnoremap <silent> <leader>dr :lua require'dap'.repl()<CR>
+
+    command -nargs=0 Into :lua require('dap').step_into()
 
     nnoremap <silent> <leader>q :lua require('quickfix').toggle()<CR>
 endif

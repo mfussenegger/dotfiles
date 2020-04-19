@@ -17,6 +17,20 @@
   args:
     chdir: ~/dev/microsoft/java-debug
 
+- name: Clone vscode-java-test
+  git:
+    repo: https://github.com/microsoft/vscode-java-test
+    dest: ~/dev/microsoft/vscode-java-test
+    force: true  # npm commands below modify the package.json
+
+- name: Build vscode-java-test
+  command: "{{ item }}"
+  args:
+    chdir: ~/dev/microsoft/vscode-java-test
+  loop:
+    - npm install
+    - npm run build-plugin
+
 - name: Create apps folder
   file:
     path: ~/apps/

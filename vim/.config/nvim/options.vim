@@ -99,15 +99,15 @@ if has('nvim-0.5')
     lua LspConf = require "lsp-config"
     augroup lsp
       au!
-      au Filetype java lua LspConf.start_jdt()
-      au Filetype haskell lua LspConf.start_hie()
-      au Filetype python lua LspConf.add_client({'pyls'})
-      au Filetype html lua LspConf.add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
-      au Filetype go lua LspConf.start_go_ls()
-      au Filetype sh lua LspConf.add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
-      au Filetype rust lua LspConf.add_client({'rls'}, {root={'Cargo.toml', '.git'}})
-      au Filetype lua lua LspConf.add_client({'lua-lsp'})
-      au Filetype json lua LspConf.add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
+      au FileType java lua LspConf.start_jdt()
+      au FileType haskell lua LspConf.start_hie()
+      au FileType python lua LspConf.add_client({'pyls'})
+      au FileType html lua LspConf.add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
+      au FileType go lua LspConf.start_go_ls()
+      au FileType sh lua LspConf.add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
+      au FileType rust lua LspConf.add_client({'rls'}, {root={'Cargo.toml', '.git'}})
+      au FileType lua lua LspConf.add_client({'lua-lsp'})
+      au FileType json lua LspConf.add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
     augroup end
 
     packadd nvim-dap
@@ -135,6 +135,15 @@ dap.configurations.python = {
         return '/usr/bin/python'
       end
     end;
+  },
+}
+dap.configurations.java = {
+  {
+    type = 'java';
+    request = 'attach';
+    name = "Debug (Attach) - Remote";
+    hostName = "127.0.0.1";
+    port = 5005;
   },
 }
 EOF

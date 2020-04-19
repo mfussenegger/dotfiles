@@ -78,6 +78,7 @@ local function jdtls_on_attach(client, bufnr)
     local opts = { silent = true; }
     jdtls.setup_dap()
     api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "<leader>df", "<Cmd>lua require'jdtls'.test_class()<CR>", opts)
 end
 
 local function mk_config()
@@ -143,6 +144,12 @@ function M.start_jdt()
     local workspace_folder = os.getenv("HOME") .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
     config['cmd'] = {'java-lsp.sh', workspace_folder}
     config['callbacks']["language/status"] = lsp4j_status_callback
+
+    local home = os.getenv('HOME')
+    local bundles = {
+        vim.fn.glob(home .. '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
+    }
+    vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/dev/microsoft/vscode-java-test/server/*.jar"), "\n"))
     config['init_options'] = {
         settings = {
             java = {
@@ -163,9 +170,7 @@ function M.start_jdt()
                 }
             };
         };
-        bundles = {
-            vim.fn.glob(os.getenv('HOME') .. '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar')
-        };
+        bundles = bundles;
         extendedClientCapabilities = {
             classFileContentsSupport = true;
             generateToStringPromptSupport = true;
