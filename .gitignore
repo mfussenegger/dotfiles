@@ -10,4 +10,6 @@ bin/bin/Dm
 bin/bin/Dm.hi
 bin/bin/xbacklight
 bin/bin/xbacklight.hi
+bin/bin/term2mp4
+bin/bin/term2mp4.hi
 .mypy_cache/
