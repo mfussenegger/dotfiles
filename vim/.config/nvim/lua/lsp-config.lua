@@ -76,6 +76,7 @@ end
 local function jdtls_on_attach(client, bufnr)
     on_attach(client, bufnr)
     local opts = { silent = true; }
+    jdtls.setup_dap()
     api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts)
 end
 
@@ -166,6 +167,9 @@ function M.start_jdt()
                     }
                 }
             };
+        };
+        bundles = {
+            vim.fn.glob(os.getenv('HOME') .. '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar')
         };
         extendedClientCapabilities = {
             classFileContentsSupport = true;

@@ -7,6 +7,16 @@
   command: ./mvnw clean install -DskipTests
   args:
     chdir: ~/dev/eclipse/eclipse.jdt.ls
+
+- name: Clone java-debug
+  git:
+    repo: https://github.com/microsoft/java-debug
+    dest: ~/dev/microsoft/java-debug
+- name: Build java-debug
+  command: ./mvnw clean install
+  args:
+    chdir: ~/dev/microsoft/java-debug
+
 - name: Create apps folder
   file:
     path: ~/apps/
