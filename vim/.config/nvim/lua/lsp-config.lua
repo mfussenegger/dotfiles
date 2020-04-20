@@ -112,11 +112,6 @@ local function mk_config()
     return {
         callbacks = {
             ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
-            ['textDocument/declaration'] = jdtls.location_callback(true),
-            ['textDocument/definition'] = jdtls.location_callback(true),
-            ['textDocument/typeDefinition'] = jdtls.location_callback(true),
-            ['textDocument/implementation'] = jdtls.location_callback(true),
-            ['textDocument/references'] = jdtls.location_callback(false),
             ['workspace/applyEdit'] = jdtls.workspace_apply_edit,
         };
         capabilities = capabilities;
