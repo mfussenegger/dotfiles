@@ -17,9 +17,7 @@ function M._InsertCharPre()
         local chars, fn = unpack(entry)
         if vim.tbl_contains(chars, char) then
             timer:start(150, 0, vim.schedule_wrap(function()
-                if api.nvim_get_mode()['mode'] == 'i' then
-                    fn()
-                end
+                fn()
             end))
             return
         end
@@ -46,8 +44,10 @@ local function trigger_completion()
     local params = vim.lsp.util.make_position_params()
     vim.lsp.buf_request(bufnr, 'textDocument/completion', params, function(err, _, result)
         if err or not result then return end
-        local matches = vim.lsp.util.text_document_completion_list_to_complete_items(result, prefix)
-        vim.fn.complete(textMatch + 1, matches)
+        if api.nvim_get_mode()['mode'] == 'i' then
+            local matches = vim.lsp.util.text_document_completion_list_to_complete_items(result, prefix)
+            vim.fn.complete(textMatch + 1, matches)
+        end
   end)
 end
 
