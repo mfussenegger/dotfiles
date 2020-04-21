@@ -96,4 +96,6 @@ if has('nvim-0.5')
     nnoremap <silent> <F12> :lua require'dap'.step_out()<CR>
     nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
     nnoremap <silent> <leader>dr :lua require'dap'.repl()<CR>
+
+    nnoremap <silent> <leader>q :lua require('quickfix').toggle()<CR>
 endif
