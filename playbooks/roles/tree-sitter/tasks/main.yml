@@ -1,0 +1,20 @@
+---
+- name: Clone tree-sitter language repos
+  git:
+    repo: https://github.com/tree-sitter/{{ item }}
+    dest: ~/dev/tree-sitter/{{ item }}
+  loop:
+    - tree-sitter-java
+    - tree-sitter-python
+- name: Generate parsers
+  command: tree-sitter test
+  args:
+    chdir: ~/dev/tree-sitter/{{ item }}
+  loop:
+    - tree-sitter-java
+    - tree-sitter-python
+- name: Create symlink for neovim to pick up tree-sitter parsers
+  file:
+    src: ~/.tree-sitter/bin
+    dest: ~/.config/nvim/parser
+    state: link
