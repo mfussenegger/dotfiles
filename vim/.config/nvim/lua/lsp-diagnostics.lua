@@ -7,7 +7,7 @@ local updatedDiagnostics = false
 local nextDiag = 0
 
 
-local function diagnostics_to_items(bufnr, diagnostics)
+local function diagnostics_to_items(diagnostics)
   local items = {}
   if not diagnostics then return items end
   local diagnostics_by_line = vim.lsp.util.diagnostics_group_by_line(diagnostics)
@@ -15,7 +15,7 @@ local function diagnostics_to_items(bufnr, diagnostics)
     if #line_diagnostics > 0 then
       local d = line_diagnostics[1]
       table.insert(items, {
-        bufnr = bufnr,
+        bufnr = d.bufnr,
         lnum = linenr + 1,
         vcol = 1,
         col = d.range.start.character + 1,
@@ -27,53 +27,95 @@ local function diagnostics_to_items(bufnr, diagnostics)
 end
 
 
-function M.publishDiagnostics(_, _, result)
+do
+  local function refresh_diagnostics()
+    if timer then
+      timer:stop()
+      timer:close()
+      timer = nil
+    end
+    timer = vim.loop.new_timer()
+    timer:start(450, 0, vim.schedule_wrap(function()
+      if timer then
+        timer:close()
+        timer = nil
+      end
+      if updatedDiagnostics then
+        updatedDiagnostics = false
+        nextDiag = 0
+      end
+    end))
+  end
+
+  function M.publishDiagnostics(_, _, result)
     if not result then return end
     local uri = result.uri
     local bufnr = vim.uri_to_bufnr(uri)
     if not bufnr then
-        myutil.err_message("LSP.publishDiagnostics: Couldn't find buffer for ", uri)
-        return
+      myutil.err_message("LSP.publishDiagnostics: Couldn't find buffer for ", uri)
+      return
     end
     vim.lsp.util.buf_clear_diagnostics(bufnr)
     if not api.nvim_buf_is_loaded(bufnr) then
-        return
+      return
     end
+    local has_errors = false
     for _, diagnostic in ipairs(result.diagnostics) do
       diagnostic.severity = diagnostic.severity or vim.lsp.protocol.DiagnosticSeverity.Error
+      diagnostic.bufnr = bufnr
       diagnostic.uri = uri
+      has_errors = has_errors or diagnostic.severity == vim.lsp.protocol.DiagnosticSeverity.Error
     end
     vim.lsp.util.buf_diagnostics_save_positions(bufnr, result.diagnostics)
     vim.lsp.util.buf_diagnostics_signs(bufnr, result.diagnostics)
-    vim.fn.setloclist(0, {}, ' ', {
-      title = 'Language Server';
-      items = diagnostics_to_items(bufnr, result.diagnostics)
-    })
+    if bufnr == api.nvim_get_current_buf() then
+      local diagnostics
+      if has_errors then
+        diagnostics = vim.tbl_filter(
+          function(x) return x.severity == vim.lsp.protocol.DiagnosticSeverity.Error end,
+          result.diagnostics
+        )
+      else
+        diagnostics = result.diagnostics
+      end
+      vim.fn.setloclist(0, {}, 'r', {
+        title = 'Language Server';
+        items = diagnostics_to_items(diagnostics)
+      })
+    end
     updatedDiagnostics = true
-    M.show_diagnostics()
+    refresh_diagnostics()
+  end
 end
 
-
-function M.show_diagnostics()
-  if timer then
-    timer:stop()
-    timer:close()
-    timer = nil
+function M.errors_to_quickfix()
+  local diagnostics = {}
+  for _, bufdiagnostics in pairs(vim.lsp.util.diagnostics_by_buf) do
+    for _, d in pairs(bufdiagnostics) do
+      if d.severity == vim.lsp.protocol.DiagnosticSeverity.Error then
+        table.insert(diagnostics, d)
+      end
+    end
   end
-  timer = vim.loop.new_timer()
-  timer:start(450, 0, vim.schedule_wrap(function()
-    if timer then
-      timer:close()
-      timer = nil
+  vim.fn.setqflist({}, 'r', {
+    title = 'Language Server';
+    items = diagnostics_to_items(diagnostics)
+  })
+end
+
+function M.warnings_to_quickfix()
+  local diagnostics = {}
+  for _, bufdiagnostics in pairs(vim.lsp.util.diagnostics_by_buf) do
+    for _, d in pairs(bufdiagnostics) do
+      if d.severity == vim.lsp.protocol.DiagnosticSeverity.Warning then
+        table.insert(diagnostics, d)
+      end
     end
-    if api.nvim_get_mode()['mode'] == 'n' then
-      vim.lsp.util.show_line_diagnostics()
-    end
-    if updatedDiagnostics then
-      updatedDiagnostics = false
-      nextDiag = 0
-    end
-  end))
+  end
+  vim.fn.setqflist({}, 'r', {
+    title = 'Language Server';
+    items = diagnostics_to_items(diagnostics)
+  })
 end
 
 

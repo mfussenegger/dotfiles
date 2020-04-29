@@ -47,7 +47,6 @@ local function on_init(client, _)
     api.nvim_command("augroup LspExt")
     api.nvim_command("autocmd InsertCharPre * lua require'lsp-ext'._InsertCharPre()")
     api.nvim_command("autocmd InsertLeave * lua require'lsp-ext'._InsertLeave()")
-    api.nvim_command("autocmd BufEnter,CursorMoved,CursorMovedI * lua require'lsp-diagnostics'.show_diagnostics()")
     api.nvim_command("autocmd CompleteDone * lua require'lsp-ext'._CompleteDone()")
     api.nvim_command("augroup end")
     lsp_ext.setup(client)
@@ -67,6 +66,7 @@ local function on_attach(client, bufnr)
             api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
         end
     end
+    api.nvim_buf_set_keymap(bufnr, "n", "<space>", "<Cmd>lua vim.lsp.util.show_line_diagnostics()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua require'lsp-diagnostics'.next_diag()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua require'lsp-diagnostics'.prev_diag()<CR>", opts)
@@ -79,6 +79,7 @@ local function jdtls_on_attach(client, bufnr)
     jdtls.setup_dap()
     api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>df", "<Cmd>lua require'jdtls'.test_class()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "<leader>dn", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts)
 end
 
 local function mk_config()

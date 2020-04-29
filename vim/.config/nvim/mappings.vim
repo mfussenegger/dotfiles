@@ -22,7 +22,9 @@ nnoremap [L :llast<CR>
 
 xmap gl <Plug>(EasyAlign)
 
-inoremap <expr> <CR> (luaeval("require'lsp-ext'.accept_pum()") ? "\<c-y>" : "\<CR>")
+if has('nvim-0.5')
+  inoremap <expr> <CR> (luaeval("require'lsp-ext'.accept_pum()") ? "\<c-y>" : "\<CR>")
+end
 
 " split navigation
 noremap <c-h> <c-w>h
@@ -99,6 +101,8 @@ if has('nvim-0.5')
     nnoremap <silent> <leader>dr :lua require'dap'.repl()<CR>
 
     command -nargs=0 Into :lua require('dap').step_into()
+    command -nargs=0 LspErrors :lua require('lsp-diagnostics').errors_to_quickfix()
+    command -nargs=0 LspWarnings :lua require('lsp-diagnostics').warnings_to_quickfix()
 
     nnoremap <silent> <leader>q :lua require('quickfix').toggle()<CR>
 endif
