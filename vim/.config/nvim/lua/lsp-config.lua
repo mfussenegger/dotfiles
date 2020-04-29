@@ -130,14 +130,44 @@ function M.add_client(cmd, opts)
     config['cmd'] = cmd
     add_client_by_cfg(config, opts and opts.root or {'.git'})
 end
+
+
+local function attach_to_active_buf(bufnr)
+  local client
+  for _, buf in pairs(vim.fn.getbufinfo({bufloaded=true})) do
+    if api.nvim_buf_get_option(buf.bufnr, 'filetype') == 'java' then
+      local clients = vim.lsp.buf_get_clients(buf.bufnr)
+      if #clients > 0 then
+        client = clients[1]
+        break
+      end
+    end
+  end
+  if not client then
+    print('No active LSP client found to use for jdt:// document')
+    return false
+  end
+  lsp.buf_attach_client(bufnr, client.id)
+  return true
+end
+
+
 function M.start_jdt()
+    local bufnr = api.nvim_get_current_buf()
+    local bufname = api.nvim_buf_get_name(bufnr)
+    -- jdt paths are returned by eclipse.jdt.ls and can be opened using the nvim-jdtls plugin
+    -- Just attach to the already running client, otherwise the root_pattern logic below would bail out
+    if vim.startswith(bufname, 'jdt://') then
+      if attach_to_active_buf(bufnr) then
+        return
+      end
+    end
     local lsp4j_status_callback = vim.schedule_wrap(function(_, _, result)
         api.nvim_command(string.format(':echohl Function | echo "%s" | echohl None', result.message))
     end)
     local config = mk_config()
     config['name'] = 'jdt.ls'
     local root_markers = {'gradlew', '.git'}
-    local bufnr = api.nvim_get_current_buf()
     local root_dir = myutil.root_pattern(bufnr, root_markers)
     if not root_dir then
         return
