@@ -213,8 +213,8 @@ function M.start_jdt()
 end
 function M.start_hie()
     local config = mk_config()
-    config['name'] = 'hie'
-    config['cmd'] = {'hie-wrapper', '--lsp'}
+    config['name'] = 'hls'
+    config['cmd'] = {'haskell-language-server-wrapper', '--lsp'}
     config['init_options'] = {
         languageServerHaskell = {
             formattingProvider = "ormolu";
