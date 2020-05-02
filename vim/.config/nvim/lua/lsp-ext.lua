@@ -161,38 +161,6 @@ function M.accept_pum()
     end
 end
 
-
-function M.workspace_symbol()
-  local query = vim.fn.input("Symbol: ")
-  local params = {
-    query = query
-  }
-  local bufnr = api.nvim_get_current_buf()
-  vim.lsp.buf_request(bufnr, 'workspace/symbol', params, function(err, _, result)
-    if err then return end
-    if not result then
-      print("No symbols matching " .. query .. " found")
-    end
-    local items = {}
-    for _, s in ipairs(result) do
-      table.insert(items, {
-        filename = vim.uri_to_fname(s.location.uri),
-        lnum = s.location.range.start.line + 1,
-        vcol = 1,
-        col = s.location.range.start.character + 1,
-        text = s.name
-      })
-    end
-    vim.fn.setqflist({}, ' ', {
-      title = 'Workspace Symbols';
-      items = items;
-    })
-    api.nvim_command("copen")
-    api.nvim_command("wincmd p")
-  end)
-end
-
-
 function M.setup(client)
     local signature_triggers = client.resolved_capabilities.signature_help_trigger_characters
     if signature_triggers and #signature_triggers > 0 then

@@ -40,7 +40,8 @@ local key_mappings = {
     {"goto_definition", "n", "<c-]>",  "<Cmd>lua vim.lsp.buf.definition()<CR>"},
     {"hover", "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>"},
     {"implementation", "n", "gD",  "<Cmd>lua vim.lsp.buf.implementation()<CR>"},
-    {"signature_help", "i", "<c-space>",  "<Cmd>lua vim.lsp.buf.signature_help()<CR>"}
+    {"signature_help", "i", "<c-space>",  "<Cmd>lua vim.lsp.buf.signature_help()<CR>"},
+    {"workspace_symbol", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>"}
 }
 
 local function on_init(client, _)
@@ -70,7 +71,6 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua require'lsp-diagnostics'.next_diag()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua require'lsp-diagnostics'.prev_diag()<CR>", opts)
-    api.nvim_buf_set_keymap(bufnr, "n", "<leader>fs", "<Cmd>lua require'lsp-ext'.workspace_symbol()<CR>", opts)
 end
 
 local function jdtls_on_attach(client, bufnr)
