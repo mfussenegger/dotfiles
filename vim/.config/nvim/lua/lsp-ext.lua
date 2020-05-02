@@ -57,7 +57,7 @@ function M._CompleteDone()
     if not completed_item or not completed_item.user_data or completed_item.user_data == '' then
         return
     end
-    local item = vim.fn.json_decode(completed_item.user_data)
+    local item = completed_item.user_data
 
     -- 2 is snippet
     if item.insertTextFormat ~= 2 or not expand_snippet then
@@ -145,7 +145,7 @@ local function text_document_completion_list_to_complete_items(result, prefix)
             icase = 1,
             dup = 1,
             empty = 1,
-            user_data = vim.fn.json_encode(item)
+            user_data = item
         })
     end
     return matches
