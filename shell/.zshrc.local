@@ -72,8 +72,3 @@ screen_record() {
 update_mirrorlist() {
     reflector -n 24 -c AT -c DE -f 10 -l 10 | sudo tee /etc/pacman.d/mirrorlist
 }
-
-if [[ $TERM == xterm-termite && -f '/etc/profile.d/vte.sh' ]]; then
-    . /etc/profile.d/vte.sh
-    __vte_osc7
-fi

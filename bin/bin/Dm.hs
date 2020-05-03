@@ -105,14 +105,14 @@ presOff = do
   xset ["s", "on"]
   xset ["+dpms"]
   changeVimColorScheme ("github", "gruvbox") ("light", "dark")
-  setTermiteConfig "config_dark"
+  setAlacrittyConfig "alacritty_dark.yml"
 
 
 presOn = do
   xset ["s", "off"]
   xset ["-dpms"]
   changeVimColorScheme ("gruvbox", "github") ("dark", "light")
-  setTermiteConfig "config_light"
+  setAlacrittyConfig "alacritty_light.yml"
 
 
 sed :: FilePath -> String -> String -> IO ()
@@ -143,13 +143,12 @@ changeVimColorScheme colorscheme background = do
     callProcess "nvr" ["--servername", x, "--remote-send", changeColor])
 
 
-setTermiteConfig configName = do
-  configDir <- expandUser "~/.config/termite/" >>= canonicalizePath
+setAlacrittyConfig configName = do
+  configDir <- expandUser "~/.config/alacritty/" >>= canonicalizePath
   let 
-    targetConfig = configDir </> "config"
+    targetConfig = configDir </> "alacritty.yml"
   removeFile targetConfig
   createSymbolicLink configName targetConfig
-  callProcess "killall" ["-s", "USR1", "termite"]
 
 
 callContacts = do
