@@ -45,6 +45,14 @@ if-up() {
     $*
 }
 
+sudo-scp() {
+  # On remote machine:
+  # - Install `x11-ssh-askpass`
+  # - Add `Path askpass /usr/lib/ssh/x11-ssh-askpass` in `/etc/sudo.conf`
+  # - Set `X11Forwarding yes` in `/etc/ssh/sshd_config`
+  rsync --progress -e "ssh -Y" --rsync-path="sudo rsync" "$@"
+}
+
 fix-term() {
   infocmp | ssh -t $1 "tic -"
 }
