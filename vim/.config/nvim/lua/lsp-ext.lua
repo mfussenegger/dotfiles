@@ -176,7 +176,6 @@ function M.setup(client)
         )
     end
     vim.lsp.util.text_document_completion_list_to_complete_items = text_document_completion_list_to_complete_items
-    vim.lsp.util.make_text_document_params = require('jdtls').make_text_document_params
 end
 
 return M
