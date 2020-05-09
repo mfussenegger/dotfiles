@@ -96,6 +96,7 @@ endif
 
 if has('nvim-0.5')
     packadd nvim-jdtls
+    lua require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
     lua LspConf = require "lsp-config"
     augroup lsp
       au!
