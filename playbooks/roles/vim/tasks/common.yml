@@ -16,6 +16,7 @@
     repo: https://github.com/{{ item }}
     dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
   loop:
+    - lifepillar/vim-gruvbox8
     - junegunn/fzf
     - junegunn/fzf.vim
     - monkoose/fzf-hoogle.vim

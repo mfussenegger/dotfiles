@@ -104,14 +104,14 @@ xset = callProcess "xset"
 presOff = do
   xset ["s", "on"]
   xset ["+dpms"]
-  changeVimColorScheme ("github", "gruvbox") ("light", "dark")
+  changeVimColorScheme ("light", "dark")
   setAlacrittyConfig "alacritty_dark.yml"
 
 
 presOn = do
   xset ["s", "off"]
   xset ["-dpms"]
-  changeVimColorScheme ("gruvbox", "github") ("dark", "light")
+  changeVimColorScheme ("dark", "light")
   setAlacrittyConfig "alacritty_light.yml"
 
 
@@ -133,12 +133,11 @@ expandUser ('~' : xs) = do
 expandUser xs = pure xs
 
 
-changeVimColorScheme colorscheme background = do
+changeVimColorScheme background = do
   vimrc <- expandUser "~/.config/nvim/options.vim" >>= canonicalizePath
-  sed vimrc ("colorscheme " ++ fst colorscheme) ("colorscheme " ++ snd colorscheme)
   sed vimrc ("set background=" ++ fst background) ("set background=" ++ snd background)
   instances <- lines <$> readProcess "nvr" ["--serverlist"] ""
-  let changeColor = "<Esc>:set background=" ++ snd background ++ "<CR>:colorscheme " ++ snd colorscheme ++ "<CR>"
+  let changeColor = "<Esc>:set background=" ++ snd background ++ "<CR>"
   for_ instances (\x ->
     callProcess "nvr" ["--servername", x, "--remote-send", changeColor])
 

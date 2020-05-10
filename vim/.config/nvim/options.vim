@@ -3,8 +3,8 @@ set shortmess+=wI
 let mapleader = ","
 let maplocalleader = " "
 
-set background=dark
-colorscheme gruvbox
+set background=light
+colorscheme gruvbox8_hard
 
 set matchtime=3 " show matching parenthesis a bit faster.
 set cmdheight=2
