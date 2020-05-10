@@ -90,6 +90,18 @@ nmap <silent> t<C-s> :w <BAR> TestSuite --verbose<CR>
 nmap <silent> t<C-l> :w <BAR> TestLast<CR>
 nmap <silent> t<C-g> :w <BAR> TestVisit<CR>
 
+
+" for :R digraphs
+func! ReadExCommandOutput(newbuf, cmd) abort
+  redir => l:message
+  silent! execute a:cmd
+  redir END
+  if a:newbuf | wincmd n | endif
+  silent put=l:message
+endf
+command! -nargs=+ -bang -complete=command R call ReadExCommandOutput(<bang>0, <q-args>)
+
+
 if has('nvim-0.5')
     packadd nvim-dap
     nnoremap <silent> <F3> :lua require'dap'.stop()<CR>
