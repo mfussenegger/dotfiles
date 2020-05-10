@@ -34,6 +34,7 @@ end
 -- array of mappings to setup; {<capability_name>, <mode>, <lhs>, <rhs>}
 local key_mappings = {
     {"code_action", "n", "<a-CR>", "<Cmd>lua require'jdtls'.code_action()<CR>"},
+    {"code_action", "v", "<a-CR>", "<Esc><Cmd>lua require'jdtls'.code_action(true)<CR>"},
     {"document_formatting", "n", "gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>"},
     {"document_range_formatting", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>"},
     {"find_references", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>"},
@@ -80,6 +81,9 @@ local function jdtls_on_attach(client, bufnr)
     api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>df", "<Cmd>lua require'jdtls'.test_class()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>dn", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "v", "crv", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "crv", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "v", "crm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts)
 end
 
 local function mk_config()
@@ -206,6 +210,7 @@ function M.start_jdt()
             classFileContentsSupport = true;
             generateToStringPromptSupport = true;
             hashCodeEqualsPromptSupport = true;
+            advancedExtractRefactoringSupport = true;
         };
     }
     config['on_attach'] = jdtls_on_attach
