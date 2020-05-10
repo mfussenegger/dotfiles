@@ -4,26 +4,37 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 
-import           Data.Aeson                 (FromJSON, ToJSON, decode,
-                                             eitherDecode)
-import qualified Data.ByteString.Lazy       as BL
+import Data.Aeson
+  ( FromJSON,
+    ToJSON,
+    decode,
+    eitherDecode,
+  )
+import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as B8
-import           Data.Char                  (isSpace)
-import           Data.Foldable              (for_)
-import           Data.List                  (isInfixOf, permutations)
-import qualified Data.Map.Strict            as M
-import           Data.Maybe                 (Maybe, catMaybes, fromJust,
-                                             fromMaybe)
-import           GHC.Generics               (Generic)
-import qualified Network.HTTP.Client        as HTTP
-import qualified Network.HTTP.Client.TLS    as HTTP
-import           System.Directory           (canonicalizePath, doesFileExist,
-                                             getHomeDirectory, removeFile)
-import           System.Environment         (getArgs)
-import           System.FilePath            ((</>))
-import           System.Posix.Files         (createSymbolicLink, rename)
-import           System.Process             (callProcess, readProcess)
-import           Text.Regex.PCRE            ((=~))
+import Data.Char (isSpace)
+import Data.Foldable (for_)
+import Data.List (isInfixOf, permutations)
+import qualified Data.Map.Strict as M
+import Data.Maybe
+  ( Maybe,
+    catMaybes,
+    fromJust,
+    fromMaybe,
+  )
+import GHC.Generics (Generic)
+import qualified Network.HTTP.Client as HTTP
+import qualified Network.HTTP.Client.TLS as HTTP
+import System.Directory
+  ( canonicalizePath,
+    doesFileExist,
+    getHomeDirectory,
+  )
+import System.Environment (getArgs)
+import System.FilePath ((</>))
+import System.Posix.Files (rename)
+import System.Process (callProcess, readProcess)
+import Text.Regex.PCRE ((=~))
 
 
 selection :: [String] -> IO String
@@ -105,14 +116,14 @@ presOff = do
   xset ["s", "on"]
   xset ["+dpms"]
   changeVimColorScheme ("light", "dark")
-  setAlacrittyConfig "alacritty_dark.yml"
+  changeAlacrittyColor "*light" "*dark"
 
 
 presOn = do
   xset ["s", "off"]
   xset ["-dpms"]
   changeVimColorScheme ("dark", "light")
-  setAlacrittyConfig "alacritty_light.yml"
+  changeAlacrittyColor "*dark" "*light"
 
 
 sed :: FilePath -> String -> String -> IO ()
@@ -142,12 +153,9 @@ changeVimColorScheme background = do
     callProcess "nvr" ["--servername", x, "--remote-send", changeColor])
 
 
-setAlacrittyConfig configName = do
-  configDir <- expandUser "~/.config/alacritty/" >>= canonicalizePath
-  let 
-    targetConfig = configDir </> "alacritty.yml"
-  removeFile targetConfig
-  createSymbolicLink configName targetConfig
+changeAlacrittyColor from to = do
+  config <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
+  sed config ("colors: " ++ from) ("colors: " ++ to)
 
 
 callContacts = do
