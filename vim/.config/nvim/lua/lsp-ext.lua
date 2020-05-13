@@ -2,6 +2,7 @@ local api = vim.api
 local timer = nil
 local on_insert_with_pause = {}
 local expand_snippet = false
+local ns = api.nvim_create_namespace('lsp-ext')
 
 local M = {}
 
@@ -54,27 +55,36 @@ end
 
 function M._CompleteDone()
     local completed_item = api.nvim_get_vvar('completed_item')
-    if not completed_item or not completed_item.user_data or completed_item.user_data == '' then
+    if not completed_item or not completed_item.user_data then
         return
     end
+    local lnum, col = unpack(api.nvim_win_get_cursor(0))
     local item = completed_item.user_data
+    local bufnr = api.nvim_get_current_buf()
+    if item.additionalTextEdits then
+      -- Text edit in the same line would mess with the cursor position
+      local edits = vim.tbl_filter(
+        function(x) return x.range.start.line ~= (lnum - 1) end,
+        item.additionalTextEdits
+      )
+      vim.lsp.util.apply_text_edits(edits, bufnr)
+    end
 
     -- 2 is snippet
     if item.insertTextFormat ~= 2 or not expand_snippet then
         return
     end
     expand_snippet = false
-    local row, pos = unpack(api.nvim_win_get_cursor(0))
     -- Create textEdit to remove the already inserted word
     local text_edit = {
         range = {
             ["start"] = {
-                line = row - 1;
-                character = (pos - #completed_item.word);
+                line = lnum - 1;
+                character = (col - #completed_item.word);
             };
             ["end"] = {
-                line = row - 1;
-                character = pos;
+                line = lnum - 1;
+                character = col;
             }
         };
         newText = "";
