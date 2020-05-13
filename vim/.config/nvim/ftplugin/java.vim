@@ -1,6 +1,6 @@
 if filereadable("./gradlew")
     let test#java#runner = 'gradletest'
-    let test#java#gradletest#executable = './gradlew test'
+    let test#java#gradletest#executable = './gradlew --parallel test'
     setlocal makeprg=./gradlew\ --no-daemon\ -q
 else
     setlocal makeprg=gradle\ --no-daemon\ -q
