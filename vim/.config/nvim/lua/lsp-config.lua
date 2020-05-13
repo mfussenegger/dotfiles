@@ -100,25 +100,9 @@ local function mk_config()
             };
         };
     }
-    capabilities.workspace = {
-        symbol = {
-            dynamicRegistration = false;
-            symbolKind = {
-            valueSet = (function()
-                local res = {}
-                for k in pairs(vim.lsp.protocol.SymbolKind) do
-                if type(k) == 'number' then table.insert(res, k) end
-                end
-                return res
-            end)();
-            };
-        };
-        applyEdit = true;
-    }
     return {
         callbacks = {
             ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
-            ['workspace/applyEdit'] = jdtls.workspace_apply_edit,
         };
         capabilities = capabilities;
         on_init = on_init;
