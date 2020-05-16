@@ -18,7 +18,7 @@ set scrolloff=3
 set termguicolors
 
 set complete=.,w,b,u,U,i,d,t
-set completeopt=longest,menuone,noselect
+set completeopt=menuone,noinsert,noselect
 set infercase
 
 set wildmode=longest:full,full

@@ -1,110 +1,18 @@
 local api = vim.api
 local timer = nil
 local on_insert_with_pause = {}
-local expand_snippet = false
-local ns = api.nvim_create_namespace('lsp-ext')
+
+local completion_ctx = {
+  expand_snippet = false,
+  col = nil
+}
+
 
 local M = {}
 
 
-function M._InsertCharPre()
-    if timer then
-        timer:stop()
-        timer:close()
-    end
-    timer = vim.loop.new_timer()
-    local char = api.nvim_get_vvar('char')
-    for _, entry in pairs(on_insert_with_pause) do
-        local chars, fn = unpack(entry)
-        if vim.tbl_contains(chars, char) then
-            timer:start(150, 0, vim.schedule_wrap(function()
-                fn()
-            end))
-            return
-        end
-    end
-end
-
-
-function M._InsertLeave()
-    if timer then
-        timer:stop()
-        timer:close()
-        timer = nil
-    end
-end
-
-
-local function trigger_completion()
-    local bufnr = api.nvim_get_current_buf()
-    local pos = api.nvim_win_get_cursor(0)
-    local line = api.nvim_get_current_line()
-    local line_to_cursor = line:sub(1, pos[2])
-    local textMatch = vim.fn.match(line_to_cursor, '\\k*$')
-    local prefix = line_to_cursor:sub(textMatch+1)
-    local params = vim.lsp.util.make_position_params()
-    vim.lsp.buf_request(bufnr, 'textDocument/completion', params, function(err, _, result)
-        if err or not result then return end
-        if api.nvim_get_mode()['mode'] == 'i' then
-            local matches = vim.lsp.util.text_document_completion_list_to_complete_items(result, prefix)
-            vim.fn.complete(textMatch + 1, matches)
-        end
-  end)
-end
-
-
-function M._CompleteDone()
-    local completed_item = api.nvim_get_vvar('completed_item')
-    if not completed_item or not completed_item.user_data then
-        return
-    end
-    local lnum, col = unpack(api.nvim_win_get_cursor(0))
-    local item = completed_item.user_data
-    local bufnr = api.nvim_get_current_buf()
-    if item.additionalTextEdits then
-      -- Text edit in the same line would mess with the cursor position
-      local edits = vim.tbl_filter(
-        function(x) return x.range.start.line ~= (lnum - 1) end,
-        item.additionalTextEdits
-      )
-      vim.lsp.util.apply_text_edits(edits, bufnr)
-    end
-
-    -- 2 is snippet
-    if item.insertTextFormat ~= 2 or not expand_snippet then
-        return
-    end
-    expand_snippet = false
-    -- Create textEdit to remove the already inserted word
-    local text_edit = {
-        range = {
-            ["start"] = {
-                line = lnum - 1;
-                character = (col - #completed_item.word);
-            };
-            ["end"] = {
-                line = lnum - 1;
-                character = col;
-            }
-        };
-        newText = "";
-    }
-    vim.lsp.util.apply_text_edits({text_edit}, api.nvim_get_current_buf())
-
-    if item.textEdit then
-        api.nvim_call_function("UltiSnips#Anon", {item.textEdit.newText})
-    else
-        api.nvim_call_function("UltiSnips#Anon", {item.insertText})
-    end
-end
-
-
-local function text_document_completion_list_to_complete_items(result, prefix)
-    local items = vim.tbl_filter(function(item)
-        return (item.insertText and vim.startswith(item.insertText, prefix))
-            or (item.label and vim.startswith(item.label, prefix))
-            or (item.textEdit and item.textEdit.newText and vim.startswith(item.textEdit.newText, prefix))
-    end, vim.lsp.util.extract_completion_items(result))
+local function text_document_completion_list_to_complete_items(result, _)
+    local items = vim.lsp.util.extract_completion_items(result)
     if #items == 0 then
         return {}
     end
@@ -114,7 +22,7 @@ local function text_document_completion_list_to_complete_items(result, prefix)
 
     local matches = {}
     for _, item in ipairs(items) do
-        local info = ' '
+        local info = ''
         local documentation = item.documentation
         if documentation then
             if type(documentation) == 'string' and documentation ~= '' then
@@ -155,6 +63,7 @@ local function text_document_completion_list_to_complete_items(result, prefix)
             icase = 1,
             dup = 1,
             empty = 1,
+            equal = 1,
             user_data = item
         })
     end
@@ -162,11 +71,119 @@ local function text_document_completion_list_to_complete_items(result, prefix)
 end
 
 
+function M.trigger_completion()
+  local bufnr = api.nvim_get_current_buf()
+  local _, col = unpack(api.nvim_win_get_cursor(0))
+  if completion_ctx.col then
+    col = completion_ctx.col
+  else
+    local line = api.nvim_get_current_line()
+    local line_to_cursor = line:sub(1, col)
+    local text_match = vim.fn.match(line_to_cursor, '\\k*$')
+    col = text_match + 1
+    completion_ctx.col = col
+  end
+  local params = vim.lsp.util.make_position_params()
+  vim.lsp.buf_request(bufnr, 'textDocument/completion', params, function(err, _, result)
+    if err then
+      print('Error getting completions: ' .. err.message)
+      return
+    end
+    if not result then
+      print('no completion result')
+      return
+    end
+    local mode = api.nvim_get_mode()['mode']
+    if mode == 'i' or mode == 'ic' then
+      local matches = text_document_completion_list_to_complete_items(result)
+      vim.fn.complete(col, matches)
+    end
+  end)
+end
+
+
+function M._InsertCharPre()
+    if timer then
+        timer:stop()
+        timer:close()
+        timer = nil
+    end
+    local char = api.nvim_get_vvar('char')
+    timer = vim.loop.new_timer()
+    for _, entry in pairs(on_insert_with_pause) do
+        local chars, fn = unpack(entry)
+        if vim.tbl_contains(chars, char) then
+            timer:start(150, 0, vim.schedule_wrap(function() fn() end))
+            return
+        end
+    end
+    if tonumber(vim.fn.pumvisible()) == 1 then
+      timer:start(150, 0, vim.schedule_wrap(function() M.trigger_completion() end))
+    end
+end
+
+
+function M._InsertLeave()
+    if timer then
+        timer:stop()
+        timer:close()
+        timer = nil
+    end
+    completion_ctx.col = nil
+end
+
+
+function M._CompleteDone()
+    local completed_item = api.nvim_get_vvar('completed_item')
+    if not completed_item or not completed_item.user_data then
+      return
+    end
+    completion_ctx.col = nil
+    local lnum, col = unpack(api.nvim_win_get_cursor(0))
+    local item = completed_item.user_data
+    local bufnr = api.nvim_get_current_buf()
+    if item.additionalTextEdits then
+      -- Text edit in the same line would mess with the cursor position
+      local edits = vim.tbl_filter(
+        function(x) return x.range.start.line ~= (lnum - 1) end,
+        item.additionalTextEdits
+      )
+      vim.lsp.util.apply_text_edits(edits, bufnr)
+    end
+    -- 2 is snippet
+    if item.insertTextFormat ~= 2 or not completion_ctx.expand_snippet then
+      return
+    end
+    -- Create textEdit to remove the already inserted word
+    local text_edit = {
+      range = {
+        ["start"] = {
+          line = lnum - 1;
+          character = (col - #completed_item.word);
+        };
+        ["end"] = {
+          line = lnum - 1;
+          character = col;
+        }
+      };
+      newText = "";
+    }
+    vim.lsp.util.apply_text_edits({text_edit}, bufnr)
+    completion_ctx.expand_snippet = false
+    if item.textEdit then
+      api.nvim_call_function("UltiSnips#Anon", {item.textEdit.newText})
+    else
+      api.nvim_call_function("UltiSnips#Anon", {item.insertText})
+    end
+end
+
+
+
 function M.accept_pum()
     if tonumber(vim.fn.pumvisible()) == 0 then
         return false
     else
-        expand_snippet = true
+        completion_ctx.expand_snippet = true
         return true
     end
 end
@@ -182,7 +199,7 @@ function M.setup(client)
     local completion_triggers = completionProvider.triggerCharacters
     if completion_triggers and #completion_triggers > 0 then
         table.insert(
-            on_insert_with_pause, { completion_triggers, trigger_completion }
+            on_insert_with_pause, { completion_triggers, M.trigger_completion }
         )
     end
     vim.lsp.util.text_document_completion_list_to_complete_items = text_document_completion_list_to_complete_items
