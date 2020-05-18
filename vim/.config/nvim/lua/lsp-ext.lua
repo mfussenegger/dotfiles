@@ -150,12 +150,13 @@ function M._CompleteDone()
     local completion_start_idx = completion_ctx.col
     completion_ctx.col = nil
     local lnum, col = unpack(api.nvim_win_get_cursor(0))
+    lnum = lnum - 1
     local item = completed_item.user_data
     local bufnr = api.nvim_get_current_buf()
     if item.additionalTextEdits then
       -- Text edit in the same line would mess with the cursor position
       local edits = vim.tbl_filter(
-        function(x) return x.range.start.line ~= (lnum - 1) end,
+        function(x) return x.range.start.line ~= lnum end,
         item.additionalTextEdits
       )
       vim.lsp.util.apply_text_edits(edits, bufnr)
@@ -166,25 +167,27 @@ function M._CompleteDone()
     end
     -- Create textEdit to remove the already inserted word
     local start_char = completion_start_idx and (completion_start_idx - 1) or (col - #completed_item.word)
+    local line = api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, true)[1]
     local text_edit = {
       range = {
         ["start"] = {
-          line = lnum - 1;
+          line = lnum;
           character = start_char;
         };
         ["end"] = {
-          line = lnum - 1;
-          character = col;
+          line = lnum;
+          character = #line;
         }
       };
       newText = "";
     }
+    local suffix = line:sub(col + 1)
     vim.lsp.util.apply_text_edits({text_edit}, bufnr)
     completion_ctx.expand_snippet = false
     if item.textEdit then
-      api.nvim_call_function("UltiSnips#Anon", {item.textEdit.newText})
+      api.nvim_call_function("UltiSnips#Anon", {item.textEdit.newText .. suffix})
     else
-      api.nvim_call_function("UltiSnips#Anon", {item.insertText})
+      api.nvim_call_function("UltiSnips#Anon", {item.insertText .. suffix})
     end
 end
 
