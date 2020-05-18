@@ -17,7 +17,7 @@ local function text_document_completion_list_to_complete_items(result, _)
         return {}
     end
     if items[1] and items[1].sortText then
-        table.sort(items, function(a, b) return (a.sortText or 0) < (b.sortText or 0) end)
+        table.sort(items, function(a, b) return (a.sortText or '0') < (b.sortText or '0') end)
     end
 
     local matches = {}
@@ -79,8 +79,16 @@ function M.trigger_completion()
   else
     local line = api.nvim_get_current_line()
     local line_to_cursor = line:sub(1, col)
-    local text_match = vim.fn.match(line_to_cursor, '\\k*$')
-    col = text_match + 1
+    local idx = 0
+    while true do
+      local i = string.find(line_to_cursor, '[^a-zA-Z0-9]', idx + 1)
+      if i == nil then
+        break
+      else
+        idx = i
+      end
+    end
+    col = (idx or col) + 1
     completion_ctx.col = col
   end
   local params = vim.lsp.util.make_position_params()
@@ -113,6 +121,7 @@ function M._InsertCharPre()
     for _, entry in pairs(on_insert_with_pause) do
         local chars, fn = unpack(entry)
         if vim.tbl_contains(chars, char) then
+            completion_ctx.col = nil
             timer:start(150, 0, vim.schedule_wrap(function() fn() end))
             return
         end
@@ -138,6 +147,7 @@ function M._CompleteDone()
     if not completed_item or not completed_item.user_data then
       return
     end
+    local completion_start_idx = completion_ctx.col
     completion_ctx.col = nil
     local lnum, col = unpack(api.nvim_win_get_cursor(0))
     local item = completed_item.user_data
@@ -155,11 +165,12 @@ function M._CompleteDone()
       return
     end
     -- Create textEdit to remove the already inserted word
+    local start_char = completion_start_idx and (completion_start_idx - 1) or (col - #completed_item.word)
     local text_edit = {
       range = {
         ["start"] = {
           line = lnum - 1;
-          character = (col - #completed_item.word);
+          character = start_char;
         };
         ["end"] = {
           line = lnum - 1;
