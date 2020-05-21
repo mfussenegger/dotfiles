@@ -107,7 +107,8 @@ local function mk_config()
             codeActionKind = {
                 valueSet = {
                     "source.generate.toString",
-                    "source.generate.hashCodeEquals"
+                    "source.generate.hashCodeEquals",
+                    "source.organizeImports",
                 };
             };
         };
@@ -202,12 +203,7 @@ function M.start_jdt()
             };
         };
         bundles = bundles;
-        extendedClientCapabilities = {
-            classFileContentsSupport = true;
-            generateToStringPromptSupport = true;
-            hashCodeEqualsPromptSupport = true;
-            advancedExtractRefactoringSupport = true;
-        };
+        extendedClientCapabilities = require('jdtls').extendedClientCapabilities;
     }
     config['on_attach'] = jdtls_on_attach
     add_client_by_cfg(config, root_markers)
