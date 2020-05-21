@@ -3,7 +3,7 @@ set shortmess+=wI
 let mapleader = ","
 let maplocalleader = " "
 
-set background=light
+set background=dark
 colorscheme gruvbox8_hard
 
 set matchtime=3 " show matching parenthesis a bit faster.
@@ -16,6 +16,8 @@ set lazyredraw
 set ttyfast
 set scrolloff=3
 set termguicolors
+
+set updatetime=500
 
 set complete=.,w,b,u,U,i,d,t
 set completeopt=menuone,noinsert,noselect
@@ -114,3 +116,8 @@ if has('nvim-0.5')
     packadd nvim-dap
     lua require('dap-config')
 endif
+
+
+highlight! link LspReferenceText Search
+highlight! link LspReferenceRead Search
+highlight! link LspReferenceWrite Search
