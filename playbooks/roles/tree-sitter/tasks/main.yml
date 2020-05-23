@@ -7,16 +7,22 @@
     - tree-sitter/tree-sitter-java
     - tree-sitter/tree-sitter-python
     - Azganoth/tree-sitter-lua
-- name: Generate parsers
-  command: tree-sitter test
-  args:
-    chdir: ~/dev/{{ item }}
-  loop:
-    - tree-sitter/tree-sitter-java
-    - tree-sitter/tree-sitter-python
-    - Azganoth/tree-sitter-lua
-- name: Create symlink for neovim to pick up tree-sitter parsers
+- name: Ensure nvim parser folder exists
   file:
-    src: ~/.tree-sitter/bin
-    dest: ~/.config/nvim/parser
-    state: link
+    path: ~/.config/nvim/parser/
+    state: directory
+    mode: '0755'
+- name: Generate java parser
+  command: cc -O2 -o ~/.config/nvim/parser/java.so -shared src/parser.c -I./src
+  args:
+    chdir: ~/dev/tree-sitter/tree-sitter-java
+
+- name: Generate python parser
+  command: cc -O2 -o ~/.config/nvim/parser/python.so -shared src/parser.c -I./src
+  args:
+    chdir: ~/dev/tree-sitter/tree-sitter-python
+
+- name: Generate lua parser
+  command: cc -O2 -o ~/.config/nvim/parser/lua.so -shared src/parser.c -I./src
+  args:
+    chdir: ~/dev/Azganoth/tree-sitter-lua/

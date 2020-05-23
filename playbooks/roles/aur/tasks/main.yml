@@ -18,6 +18,3 @@
 - name: Install vale-bin
   aur:
     name: vale-bin
-- name: Install tree-sitter-cli
-  aur:
-    name: tree-sitter-cli-bin
