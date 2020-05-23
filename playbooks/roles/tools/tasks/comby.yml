@@ -1,0 +1,15 @@
+---
+- name: Fetch and unpack opam
+  unarchive:
+    src: https://github.com/comby-tools/comby/releases/download/0.15.0/comby-0.15.0-x86_64-linux.tar.gz
+    dest: ~/bin/
+    remote_src: true
+    creates: ~/bin/comby
+- name: Rename extracted file
+  command: mv ~/bin/comby-0.15.0-x86_64-linux ~/bin/comby
+  args:
+    creates: ~/bin/comby
+- name: Make comby executable
+  file:
+    path: ~/bin/comby
+    mode: '0755'

@@ -27,3 +27,10 @@
     - name: Install asciicast2gif
       aur:
         name: nodejs-asciicast2gif
+
+    - name: Symlink libpcre for comby
+      become: true
+      file:
+        src: /usr/lib/libpcre.so
+        dest: /usr/lib/libpcre.so.3
+        state: link

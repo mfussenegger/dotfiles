@@ -3,6 +3,10 @@
   import_tasks: python_tools.yml
 - name: Install TLAToolbox
   import_tasks: tla.yml
+
+- name: Install comby
+  import_tasks: comby.yml
+
 - name: Get openapi generator
   get_url:
     url: https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/3.3.4/openapi-generator-cli-3.3.4.jar
