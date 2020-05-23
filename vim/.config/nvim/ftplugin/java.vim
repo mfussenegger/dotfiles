@@ -5,4 +5,7 @@ if filereadable("./gradlew")
 else
     setlocal makeprg=gradle\ --no-daemon\ -q
 endif
-lua require('ft.java').attach()
+
+if has('nvim-0.5')
+  lua require('ft.java').attach()
+endif
