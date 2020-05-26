@@ -111,6 +111,7 @@ if has('nvim-0.5')
       au FileType rust lua LspConf.add_client({'rls'}, {root={'Cargo.toml', '.git'}})
       au FileType lua lua LspConf.add_client({'lua-lsp'})
       au FileType json lua LspConf.add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
+      au FileType css lua LspConf.add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
     augroup end
 
     packadd nvim-dap
