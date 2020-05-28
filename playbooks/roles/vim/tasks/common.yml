@@ -44,6 +44,12 @@
     - vmchale/dhall-vim
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
+- name: Checkout vim dev plugins
+  git:
+    repo: https://github.com/{{ item }}
+    dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
+    update: false
+  loop:
     - mfussenegger/nvim-jdtls
     - mfussenegger/nvim-dap
 - name: Update Remote Plugins
