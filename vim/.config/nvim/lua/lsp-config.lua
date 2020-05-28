@@ -94,9 +94,9 @@ local function jdtls_on_attach(client, bufnr)
     api.nvim_buf_set_keymap(bufnr, "n", "crv", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "v", "crm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts)
 
-    api.nvim_command [[command! -buffer JdtCompile lua require('jdtls').compile()]]
+    api.nvim_command [[command! -buffer -nargs=? JdtCompile lua require('jdtls').compile(<f-args>)]]
     api.nvim_command [[command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()]]
-    api.nvim_command [[command! -buffer JdtJol lua require('jdtls').jol()]]
+    api.nvim_command [[command! -buffer -nargs=* JdtJol lua require('jdtls').jol(<f-args>)]]
     api.nvim_command [[command! -buffer JdtBytecode lua require('jdtls').javap()]]
     api.nvim_command [[command! -buffer JdtJshell lua require('jdtls').jshell()]]
 end
