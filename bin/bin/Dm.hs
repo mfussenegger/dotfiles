@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-15.0  -}
+{- stack script --optimize --resolver lts-16.0  -}
 
 {-# LANGUAGE DeriveGeneric #-}
 
