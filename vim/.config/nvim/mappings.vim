@@ -112,6 +112,7 @@ if has('nvim-0.5')
     nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
     nnoremap <silent> <leader>B :lua require'dap'.toggle_breakpoint(vim.fn.input('Breakpoint Condition: '))<CR>
     nnoremap <silent> <leader>dr :lua require'dap'.repl.open()<CR>
+    nnoremap <silent> <leader>dl :lua require('dap').run_last()<CR>
 
     command -nargs=0 Into :lua require('dap').step_into()
     command -nargs=0 LspErrors :lua require('lsp-diagnostics').errors_to_quickfix()
