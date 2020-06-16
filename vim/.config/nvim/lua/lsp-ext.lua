@@ -81,7 +81,7 @@ function M.trigger_completion()
     local line_to_cursor = line:sub(1, col)
     local idx = 0
     while true do
-      local i = string.find(line_to_cursor, '[^a-zA-Z0-9]', idx + 1)
+      local i = string.find(line_to_cursor, '[^a-zA-Z0-9_]', idx + 1)
       if i == nil then
         break
       else
@@ -143,51 +143,58 @@ end
 
 
 function M._CompleteDone()
+    local completion_start_idx = completion_ctx.col
+    completion_ctx.col = nil
     local completed_item = api.nvim_get_vvar('completed_item')
     if not completed_item or not completed_item.user_data then
       return
     end
-    local completion_start_idx = completion_ctx.col
-    completion_ctx.col = nil
     local lnum, col = unpack(api.nvim_win_get_cursor(0))
     lnum = lnum - 1
     local item = completed_item.user_data
     local bufnr = api.nvim_get_current_buf()
+    local expand_snippet = item.insertTextFormat == 2 and completion_ctx.expand_snippet
+    completion_ctx.expand_snippet = false
+    local suffix = nil
+
+    if expand_snippet then
+      -- Create textEdit to remove the already inserted word
+      local start_char = completion_start_idx and (completion_start_idx - 1) or (col - #completed_item.word)
+      local line = api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, true)[1]
+      suffix = line:sub(col + 1)
+      local text_edit = {
+        range = {
+          ["start"] = {
+            line = lnum;
+            character = start_char;
+          };
+          ["end"] = {
+            line = lnum;
+            character = #line;
+          }
+        };
+        newText = "";
+      }
+      vim.lsp.util.apply_text_edits({text_edit}, bufnr)
+    end
+
     if item.additionalTextEdits then
       -- Text edit in the same line would mess with the cursor position
       local edits = vim.tbl_filter(
         function(x) return x.range.start.line ~= lnum end,
         item.additionalTextEdits
       )
-      vim.lsp.util.apply_text_edits(edits, bufnr)
+      local ok, err = pcall(vim.lsp.util.apply_text_edits, edits, bufnr)
+      if not ok then
+        print(err, vim.inspect(edits))
+      end
     end
-    -- 2 is snippet
-    if item.insertTextFormat ~= 2 or not completion_ctx.expand_snippet then
-      return
-    end
-    -- Create textEdit to remove the already inserted word
-    local start_char = completion_start_idx and (completion_start_idx - 1) or (col - #completed_item.word)
-    local line = api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, true)[1]
-    local text_edit = {
-      range = {
-        ["start"] = {
-          line = lnum;
-          character = start_char;
-        };
-        ["end"] = {
-          line = lnum;
-          character = #line;
-        }
-      };
-      newText = "";
-    }
-    local suffix = line:sub(col + 1)
-    vim.lsp.util.apply_text_edits({text_edit}, bufnr)
-    completion_ctx.expand_snippet = false
-    if item.textEdit then
-      api.nvim_call_function("UltiSnips#Anon", {item.textEdit.newText .. suffix})
-    else
-      api.nvim_call_function("UltiSnips#Anon", {item.insertText .. suffix})
+    if expand_snippet then
+      if item.textEdit then
+        api.nvim_call_function("UltiSnips#Anon", {item.textEdit.newText .. suffix})
+      else
+        api.nvim_call_function("UltiSnips#Anon", {item.insertText .. suffix})
+      end
     end
 end
 
