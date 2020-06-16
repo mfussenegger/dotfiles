@@ -9,10 +9,10 @@ export STARDICT_DATA_DIR="$HOME/.local/share/stardict/"
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
-if [[ -n "$DISPLAY" ]]; then
-  export BROWSER=/usr/bin/qutebrowser
-else
+if [[ -n "$SSH_CLIENT" ]]; then
   export BROWSER=/usr/bin/lynx
+else
+  export BROWSER=/usr/bin/qutebrowser
 fi
 
 if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
