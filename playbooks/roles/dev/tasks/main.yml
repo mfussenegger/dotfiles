@@ -12,3 +12,4 @@
       - luarocks
       - ninja
       - fzf
+      - htop

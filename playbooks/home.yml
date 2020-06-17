@@ -9,6 +9,5 @@
     - lang-python
     - lang-lua
     - tree-sitter
-    - i3pystatus
     - tools
     - zsh-plugins

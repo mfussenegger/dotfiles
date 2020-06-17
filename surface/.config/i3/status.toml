@@ -1,0 +1,72 @@
+[theme]
+name = "plain"
+
+[theme.overrides]
+separator = "│ "
+separator_fg = "#333333"
+
+good_fg = "#cccccc"
+
+[icons.overrides]
+volume_full = "♫ "
+volume_half = "♫ "
+volume_empty = "♫ "
+volume_muted = "♫✗"
+
+backlight_empty = "☼ "
+backlight_partial1 = "☼ "
+backlight_partial2 = "☼ "
+backlight_partial3 = "☼ "
+backlight_full = "☼ "
+
+bat = " "
+bat_full = "■■■■ "
+bat_three_quarters = "■■■□ "
+bat_half = "■■□□ "
+bat_quarter = "■□□□ "
+
+bat_charging = "↑"
+bat_discharging = "↓"
+
+net_wireless = "≡"
+cpu = ""
+
+
+[[block]]
+block = "sound"
+
+
+[[block]]
+block = "backlight"
+device = "intel_backlight"
+
+
+[[block]]
+block = "net"
+device = "wlan0"
+ssid = true
+signal_strength = true
+ip = true
+speed_up = false
+speed_down = false
+graph_up = false
+interval = 5
+use_bits = false
+
+
+[[block]]
+block = "cpu"
+interval = 1
+
+
+[[block]]
+block = "battery"
+interval = 30
+format = "{percentage}% {time}"
+device = "BAT1"
+
+
+[[block]]
+block = "time"
+format = "%m-%d %H:%M"
+on_click = "onboard"

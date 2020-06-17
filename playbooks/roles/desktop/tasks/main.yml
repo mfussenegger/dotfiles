@@ -21,6 +21,14 @@
       - redshift
       - libnitrokey
 
+- name: Install audio packages
+  become: true
+  package:
+    name:
+      - alsa-utils
+      - pulseaudio
+      - pavucontrol
+
 - name: Install fonts
   become: true
   package:
@@ -30,3 +38,8 @@
       - ttf-croscore
       - ttf-hack
       - ttf-jetbrains-mono
+
+- name: Install i3status-rust
+  become: false
+  aur:
+    name: i3status-rust-git
