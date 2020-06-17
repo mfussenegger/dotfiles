@@ -9,6 +9,7 @@
       - xorg-xrandr
       - i3-wm
       - i3lock
+      - xdotool
 
 - name: Install desktop essentials
   become: true
@@ -34,6 +35,7 @@
   package:
     name:
       - noto-fonts
+      - noto-fonts-emoji
       - ttf-cascadia-code
       - ttf-croscore
       - ttf-hack
