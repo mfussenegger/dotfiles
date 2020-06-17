@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  gather_facts: true
+  roles:
+    - x11-touchpad

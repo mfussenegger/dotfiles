@@ -1,0 +1,6 @@
+---
+- name: Enable tap to click
+  become: true
+  copy:
+    src: 40-libinput.conf
+    dest: /etc/X11/xorg.conf.d/40-libinput.conf
