@@ -1,4 +1,7 @@
 ---
+- name: Install yay
+  aur:
+    name: yay
 - name: Install languageservers
   aur:
     name:
@@ -18,3 +21,6 @@
 - name: Install vale-bin
   aur:
     name: vale-bin
+- name: Install stack
+  aur:
+    name: stack-static

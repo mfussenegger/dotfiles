@@ -1,0 +1,14 @@
+---
+- name: Install dev packages
+  become: true
+  package:
+    state: present
+    name:
+      - base-devel
+      - jq
+      - ripgrep
+      - bash-language-server
+      - hub
+      - luarocks
+      - ninja
+      - fzf

@@ -1,0 +1,32 @@
+---
+- name: Install xorg
+  become: true
+  package:
+    state: present
+    name:
+      - xorg-server
+      - xorg-xinit
+      - xorg-xrandr
+      - i3-wm
+      - i3lock
+
+- name: Install desktop essentials
+  become: true
+  package:
+    state: present
+    name:
+      - openssh
+      - alacritty
+      - qutebrowser
+      - redshift
+      - libnitrokey
+
+- name: Install fonts
+  become: true
+  package:
+    name:
+      - noto-fonts
+      - ttf-cascadia-code
+      - ttf-croscore
+      - ttf-hack
+      - ttf-jetbrains-mono

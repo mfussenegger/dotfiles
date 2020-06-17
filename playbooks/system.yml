@@ -3,20 +3,10 @@
   gather_facts: true
   roles:
     - stow
+    - dev
+    - desktop
     - aur
   tasks:
-    - name: Install dev packages
-      become: true
-      package:
-        name:
-          - jq
-          - ripgrep
-          - bash-language-server
-          - hub
-          - luarocks
-          - ninja
-          - fzf
-
     - name: Install packages for term2mp4.hs
       become: true
       package:
