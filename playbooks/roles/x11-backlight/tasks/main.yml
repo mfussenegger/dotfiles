@@ -1,0 +1,6 @@
+---
+- name: Setup udev rules for backlight control
+  become: true
+  copy:
+    src: backlight.rules
+    dest: /etc/udev/rules.d/backlight.rules
