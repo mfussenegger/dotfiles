@@ -198,11 +198,17 @@ function M.start_jdt()
                         "java.util.Objects.requireNonNullElse"
                     }
                 };
+                sources = {
+                  organizeImports = {
+                    starThreshold = 9999;
+                    staticStarThreshold = 9999;
+                  };
+                };
                 codeGeneration = {
                     toString = {
                         template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
                     }
-                }
+                };
             };
         };
         bundles = bundles;
