@@ -5,6 +5,13 @@
     dest: ~/dev/neovim/neovim
     update: false
 
+- name: Install neovim build dependencies
+  become: true
+  pacman:
+    name:
+      - cmake
+      - ninja
+
 - name: Build neovim
   command: make
   environment:
