@@ -142,8 +142,29 @@ function M._InsertLeave()
 end
 
 
+function M._CompleteChanged()
+  -- No-op by default. Activated in setup if client supports completionItem/resolve
+end
+
+local function complete_changed()
+  completion_ctx.additionalTextEdits = nil
+  local completed_item = api.nvim_get_vvar('completed_item')
+  if not completed_item or not completed_item.user_data then
+    return
+  end
+  vim.lsp.buf_request(0, 'completionItem/resolve', completed_item.user_data, function(err, _, result)
+    if err then
+      print('Error on completionItem/resolve: ', err.message)
+      return
+    end
+    completion_ctx.additionalTextEdits = result and result.additionalTextEdits
+  end)
+end
+
 function M._CompleteDone()
     local completion_start_idx = completion_ctx.col
+    local resolved_additionalTextEdits = completion_ctx.additionalTextEdits
+    completion_ctx.additionalTextEdits = nil
     completion_ctx.col = nil
     local completed_item = api.nvim_get_vvar('completed_item')
     if not completed_item or not completed_item.user_data then
@@ -178,6 +199,9 @@ function M._CompleteDone()
       vim.lsp.util.apply_text_edits({text_edit}, bufnr)
     end
 
+    if not item.additionalTextEdits then
+      item.additionalTextEdits = resolved_additionalTextEdits
+    end
     if item.additionalTextEdits then
       -- Text edit in the same line would mess with the cursor position
       local edits = vim.tbl_filter(
@@ -224,6 +248,9 @@ function M.setup(client)
         )
     end
     vim.lsp.util.text_document_completion_list_to_complete_items = text_document_completion_list_to_complete_items
+    if (client.server_capabilities.completionProvider or {}).resolveProvider then
+      M._CompleteChanged = complete_changed
+    end
 end
 
 return M

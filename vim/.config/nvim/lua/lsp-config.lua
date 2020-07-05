@@ -53,6 +53,7 @@ local function on_init(client, _)
     api.nvim_command("autocmd InsertCharPre * lua require'lsp-ext'._InsertCharPre()")
     api.nvim_command("autocmd InsertLeave * lua require'lsp-ext'._InsertLeave()")
     api.nvim_command("autocmd CompleteDone * lua require'lsp-ext'._CompleteDone()")
+    api.nvim_command("autocmd CompleteChanged * lua require'lsp-ext'._CompleteChanged()")
     api.nvim_command("augroup end")
     lsp_ext.setup(client)
 end
@@ -185,6 +186,8 @@ function M.start_jdt()
         vim.fn.glob(home .. '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
     }
     vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/dev/microsoft/vscode-java-test/server/*.jar"), "\n"))
+    local extendedClientCapabilities = require('jdtls').extendedClientCapabilities;
+    extendedClientCapabilities['resolveAdditionalTextEditsSupport'] = true;
     config['init_options'] = {
         settings = {
             java = {
@@ -212,7 +215,7 @@ function M.start_jdt()
             };
         };
         bundles = bundles;
-        extendedClientCapabilities = require('jdtls').extendedClientCapabilities;
+        extendedClientCapabilities = extendedClientCapabilities;
     }
     config['on_attach'] = jdtls_on_attach
     add_client_by_cfg(config, root_markers)
