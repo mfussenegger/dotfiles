@@ -173,6 +173,9 @@ function M._CompleteDone()
     local lnum, col = unpack(api.nvim_win_get_cursor(0))
     lnum = lnum - 1
     local item = completed_item.user_data
+    if type(item) == 'string' then
+      return
+    end
     local bufnr = api.nvim_get_current_buf()
     local expand_snippet = item.insertTextFormat == 2 and completion_ctx.expand_snippet
     completion_ctx.expand_snippet = false
