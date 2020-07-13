@@ -55,19 +55,31 @@ function M.sendSelection()
     if not jobid then return end
     local start_row, start_col = unpack(api.nvim_buf_get_mark(0, '<'))
     local end_row, end_col = unpack(api.nvim_buf_get_mark(0, '>'))
+    local mode = vim.fn.visualmode()
+    local offset
+    if mode == '' then -- in block mode all following lines are indented
+      offset = start_col
+    elseif mode == 'V' then
+      end_row = end_row + 1
+      offset = 0
+    else
+      offset = 0
+    end
     local lines = api.nvim_buf_get_lines(0, start_row - 1, end_row, false)
     for idx, line in pairs(lines) do
-        local l
-        if idx == 1 and idx == #lines then
-            l = line:sub(start_col + 1, end_col + 1)
-        elseif idx == 1 then
-            l = line:sub(start_col + 1)
-        elseif idx == #lines then
-            l = line:sub(1, end_col > #line and #line or end_col + 1)
-        else
-            l = line
-        end
-        vim.fn.chansend(jobid, l .. '\n')
+      local l
+      if idx == 1 and idx == #lines then
+        l = line:sub(start_col + 1, end_col + 1)
+      elseif idx == 1 then
+        l = line:sub(start_col + 1)
+      elseif idx == #lines then
+        l = line:sub(offset + 1, end_col > #line and #line or end_col + 1)
+      elseif offset > 0 then
+        l = line:sub(offset + 1)
+      else
+        l = line
+      end
+      vim.fn.chansend(jobid, l .. '\n')
     end
 end
 

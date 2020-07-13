@@ -45,7 +45,7 @@ tnoremap <c-l> <C-\><C-n><C-w>l
 nnoremap <silent><leader>tn :lua require('term').toggle()<CR>
 nnoremap <silent><leader>te :w<CR> :lua require('term').run()<CR>
 nnoremap <silent><leader>ts :lua require('term').sendLine(vim.fn.getline('.'))<CR>
-vnoremap <silent><leader>ts :lua require('term').sendSelection()<CR>
+vnoremap <silent><leader>ts <ESC>:lua require('term').sendSelection()<CR>
 
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
