@@ -14,6 +14,6 @@
     checksum: sha256:24cb04939110cffcdd7062d2f50c6f61159dc3e0ca3b8aecbae6ade53ad3dc8c
 - name: Get jol
   get_url:
-    url: https://repo1.maven.org/maven2/org/openjdk/jol/jol-cli/0.10/jol-cli-0.10-full.jar
+    url: https://repo1.maven.org/maven2/org/openjdk/jol/jol-cli/0.11/jol-cli-0.11-full.jar
     dest: ~/apps/jol.jar
-    checksum: sha256:092f29f2034e423c0dba33952afc4211bcba6b5acc01660b3e67e656fc50e82a
+    checksum: sha256:c9dae7544b75ca3532e4898c559ea41081e8d6243f28e0a2cebd844eb9e6641f
