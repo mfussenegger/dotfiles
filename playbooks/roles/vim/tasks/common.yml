@@ -25,7 +25,6 @@
     - tpope/vim-fugitive
     - tpope/vim-rhubarb
     - editorconfig/editorconfig-vim
-    - dense-analysis/ale
     - mattn/webapi-vim
     - mattn/gist-vim
     - vim-scripts/linediff.vim

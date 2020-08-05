@@ -1,5 +1,3 @@
-let g:ale_linters.haskell = ['hlint']
-
 if executable("ormolu")
     setlocal formatprg=ormolu
 elseif executable("stylish-haskell")

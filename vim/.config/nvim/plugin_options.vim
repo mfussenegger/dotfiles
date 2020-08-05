@@ -1,7 +1,6 @@
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
-let g:ale_lint_on_text_changed = 'never'
 let g:gist_detect_filetype = 1
 let g:gist_browser_command = 'echo %URL% | xclip'
 

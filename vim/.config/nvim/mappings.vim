@@ -8,8 +8,6 @@ nnoremap <bs> <c-^>
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
-nmap ]w <Plug>(ale_next)
-nmap [w <Plug>(ale_previous)
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprevious<CR>
 nnoremap ]Q :cfirst<CR>

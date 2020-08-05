@@ -63,7 +63,6 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
     api.nvim_command("setlocal signcolumn=yes")
-    api.nvim_command('ALEDisableBuffer')
 
     local opts = { silent = true; }
     for _, mappings in pairs(key_mappings) do
