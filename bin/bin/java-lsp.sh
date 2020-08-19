@@ -8,7 +8,7 @@ GRADLE_HOME=$HOME/gradle /usr/lib/jvm/java-14-openjdk/bin/java \
   -Dlog.protocol=true \
   -Dlog.level=ALL \
   -Xms1g \
-  -Xmx1G \
+  -Xmx2G \
   -jar $(echo "$JAR") \
   -configuration "$HOME/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux" \
   -data "$1" \
