@@ -116,14 +116,18 @@ presOff = do
   xset ["s", "on"]
   xset ["+dpms"]
   changeVimColorScheme ("tempus_totus", "gruvbox8_hard") ("light", "dark")
-  changeAlacrittyColor "*light" "*dark"
+  alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
+  sed alacrittyConfig ("colors: *light") ("colors: *dark")
+  sed alacrittyConfig ("    family: JetBrains Mono") ("    family: JetBrains Mono Light")
 
 
 presOn = do
   xset ["s", "off"]
   xset ["-dpms"]
   changeVimColorScheme ("gruvbox8_hard", "tempus_totus") ("dark", "light")
-  changeAlacrittyColor "*dark" "*light"
+  alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
+  sed alacrittyConfig ("colors: *dark") ("colors: *light")
+  sed alacrittyConfig ("    family: JetBrains Mono Light") ("    family: JetBrains Mono")
 
 
 sed :: FilePath -> String -> String -> IO ()
@@ -152,11 +156,6 @@ changeVimColorScheme colorscheme background = do
   let changeColor = "<Esc>:set background=" ++ snd background ++ "<CR>:colorscheme " ++ snd colorscheme ++ "<CR>"
   for_ instances (\x ->
     callProcess "nvr" ["--servername", x, "--remote-send", changeColor])
-
-
-changeAlacrittyColor from to = do
-  config <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
-  sed config ("colors: " ++ from) ("colors: " ++ to)
 
 
 callContacts = do
