@@ -197,7 +197,8 @@ function M.start_jdt()
                         "org.hamcrest.Matchers.*",
                         "org.hamcrest.CoreMatchers.*",
                         "java.util.Objects.requireNonNull",
-                        "java.util.Objects.requireNonNullElse"
+                        "java.util.Objects.requireNonNullElse",
+                        "org.mockito.*"
                     }
                 };
                 sources = {
