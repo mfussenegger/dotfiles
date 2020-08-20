@@ -36,7 +36,6 @@
     - honza/vim-snippets
     - vim-scripts/dbext.vim
     - diepm/vim-rest-console
-    - ludovicchabant/vim-gutentags
     - liuchengxu/vista.vim
     - janko-m/vim-test
     - saltstack/salt-vim
