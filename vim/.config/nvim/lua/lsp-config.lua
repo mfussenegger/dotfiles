@@ -198,7 +198,7 @@ function M.start_jdt()
                         "org.hamcrest.CoreMatchers.*",
                         "java.util.Objects.requireNonNull",
                         "java.util.Objects.requireNonNullElse",
-                        "org.mockito.*"
+                        "org.mockito.Mockito.*"
                     }
                 };
                 sources = {
