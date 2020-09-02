@@ -67,7 +67,7 @@ local query = [[
 local M = {}
 
 function M.attach()
-  vim.treesitter.TSHighlighter.new(query)
+  vim.treesitter.highlighter.new(query)
 end
 
 return M
