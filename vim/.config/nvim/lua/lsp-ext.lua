@@ -17,7 +17,7 @@ local function text_document_completion_list_to_complete_items(result, _)
         return {}
     end
     if items[1] and items[1].sortText then
-        table.sort(items, function(a, b) return (a.sortText or '0') < (b.sortText or '0') end)
+        table.sort(items, function(a, b) return (a.sortText or a.label) < (b.sortText or b.label) end)
     end
 
     local matches = {}
