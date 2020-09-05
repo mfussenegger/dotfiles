@@ -4,7 +4,7 @@
   args:
     chdir: ~/
 - name: Install haskell tooling lts16
-  command: stack install --resolver lts-16.5 ghcid hlint hoogle dhall dhall-json weeder ormolu
+  command: stack install --resolver lts-16.12 ghcid hlint hoogle dhall dhall-json weeder ormolu
   args:
     chdir: ~/
 - name: Clone/pull haskell-language-server and ghcid
@@ -15,7 +15,7 @@
     - haskell/haskell-language-server
     - ndmitchell/ghcid
 - name: Build haskell-language-server
-  command: stack install --stack-yaml=stack-8.8.3.yaml
+  command: stack install --stack-yaml=stack-8.8.4.yaml
   args:
     chdir: ~/dev/haskell/haskell-language-server
 - name: Generate hoogle database for hie
