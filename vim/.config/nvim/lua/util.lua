@@ -9,6 +9,17 @@ local is_fs_root
 
 local M = {}
 
+function M.reload(name)
+  package.loaded[name] = nil
+  return require(name)
+end
+
+M.RE = setmetatable({}, {
+  __index = function(_, k)
+    return M.reload(k)
+  end
+})
+
 if is_windows then
     is_fs_root = function(path)
         return path:match("^%a:$")
