@@ -87,6 +87,7 @@ local function jdtls_on_attach(client, bufnr)
     on_attach(client, bufnr)
     local opts = { silent = true; }
     jdtls.setup_dap()
+    jdtls.setup.add_commands()
     api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>df", "<Cmd>lua require'jdtls'.test_class()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>dn", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts)
@@ -94,28 +95,11 @@ local function jdtls_on_attach(client, bufnr)
     api.nvim_buf_set_keymap(bufnr, "n", "crv", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "v", "crm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts)
 
-    api.nvim_command [[command! -buffer -nargs=? JdtCompile lua require('jdtls').compile(<f-args>)]]
-    api.nvim_command [[command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()]]
-    api.nvim_command [[command! -buffer -nargs=* JdtJol lua require('jdtls').jol(<f-args>)]]
-    api.nvim_command [[command! -buffer JdtBytecode lua require('jdtls').javap()]]
-    api.nvim_command [[command! -buffer JdtJshell lua require('jdtls').jshell()]]
 end
 
 local function mk_config()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities.textDocument.completion.completionItem.snippetSupport = true
-    capabilities.textDocument.codeAction = {
-        dynamicRegistration = false;
-        codeActionLiteralSupport = {
-            codeActionKind = {
-                valueSet = {
-                    "source.generate.toString",
-                    "source.generate.hashCodeEquals",
-                    "source.organizeImports",
-                };
-            };
-        };
-    }
     return {
         callbacks = {
             ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
@@ -136,90 +120,58 @@ function M.add_client(cmd, opts)
 end
 
 
-local function attach_to_active_buf(bufnr)
-  local client
-  for _, buf in pairs(vim.fn.getbufinfo({bufloaded=true})) do
-    if api.nvim_buf_get_option(buf.bufnr, 'filetype') == 'java' then
-      local clients = vim.lsp.buf_get_clients(buf.bufnr)
-      if #clients > 0 then
-        client = clients[1]
-        break
-      end
-    end
-  end
-  if not client then
-    print('No active LSP client found to use for jdt:// document')
-    return false
-  end
-  lsp.buf_attach_client(bufnr, client.id)
-  return true
-end
-
-
 function M.start_jdt()
-    local bufnr = api.nvim_get_current_buf()
-    local bufname = api.nvim_buf_get_name(bufnr)
-    -- jdt paths are returned by eclipse.jdt.ls and can be opened using the nvim-jdtls plugin
-    -- Just attach to the already running client, otherwise the root_pattern logic below would bail out
-    if vim.startswith(bufname, 'jdt://') then
-      if attach_to_active_buf(bufnr) then
-        return
-      end
-    end
-    local lsp4j_status_callback = vim.schedule_wrap(function(_, _, result)
-        api.nvim_command(string.format(':echohl Function | echo "%s" | echohl None', result.message))
-    end)
-    local config = mk_config()
-    config['name'] = 'jdt.ls'
-    local root_markers = {'gradlew', '.git'}
-    local root_dir = myutil.root_pattern(bufnr, root_markers)
-    if not root_dir then
-        return
-    end
-    local workspace_folder = os.getenv("HOME") .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
-    config['cmd'] = {'java-lsp.sh', workspace_folder}
-    config['callbacks']["language/status"] = lsp4j_status_callback
+  local root_markers = {'gradlew', '.git'}
+  local bufnr = api.nvim_get_current_buf()
+  local root_dir = myutil.root_pattern(bufnr, root_markers)
+  local home = os.getenv('HOME')
+  local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
+  local config = mk_config()
+  config.cmd = {'java-lsp.sh', workspace_folder}
+  config.on_attach = jdtls_on_attach
 
-    local home = os.getenv('HOME')
-    local bundles = {
-        vim.fn.glob(home .. '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
-    }
-    vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/dev/microsoft/vscode-java-test/server/*.jar"), "\n"))
-    local extendedClientCapabilities = require('jdtls').extendedClientCapabilities;
-    extendedClientCapabilities['resolveAdditionalTextEditsSupport'] = true;
-    config['init_options'] = {
-        settings = {
-            java = {
-                signatureHelp = { enabled = true };
-                completion = {
-                    favoriteStaticMembers = {
-                        "org.hamcrest.MatcherAssert.assertThat",
-                        "org.hamcrest.Matchers.*",
-                        "org.hamcrest.CoreMatchers.*",
-                        "java.util.Objects.requireNonNull",
-                        "java.util.Objects.requireNonNullElse",
-                        "org.mockito.Mockito.*"
-                    }
-                };
-                sources = {
-                  organizeImports = {
-                    starThreshold = 9999;
-                    staticStarThreshold = 9999;
-                  };
-                };
-                codeGeneration = {
-                    toString = {
-                        template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
-                    }
-                };
-            };
+  local bundles = {
+    vim.fn.glob(home .. '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
+  }
+  vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/dev/microsoft/vscode-java-test/server/*.jar"), "\n"))
+
+  local extendedClientCapabilities = jdtls.extendedClientCapabilities;
+  extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
+  config.init_options = {
+    settings = {
+      java = {
+        signatureHelp = { enabled = true };
+        completion = {
+          favoriteStaticMembers = {
+            "org.hamcrest.MatcherAssert.assertThat",
+            "org.hamcrest.Matchers.*",
+            "org.hamcrest.CoreMatchers.*",
+            "org.junit.jupiter.api.Assertions.*",
+            "java.util.Objects.requireNonNull",
+            "java.util.Objects.requireNonNullElse",
+            "org.mockito.Mockito.*"
+          }
         };
-        bundles = bundles;
-        extendedClientCapabilities = extendedClientCapabilities;
-    }
-    config['on_attach'] = jdtls_on_attach
-    add_client_by_cfg(config, root_markers)
+        sources = {
+          organizeImports = {
+            starThreshold = 9999;
+            staticStarThreshold = 9999;
+          };
+        };
+        codeGeneration = {
+          toString = {
+            template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
+          }
+        };
+      };
+    };
+    bundles = bundles;
+    extendedClientCapabilities = extendedClientCapabilities;
+  }
+  jdtls.start_or_attach(config)
 end
+
+
 function M.start_hie()
     local config = mk_config()
     config['name'] = 'hls'
