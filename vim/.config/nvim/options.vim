@@ -82,7 +82,7 @@ augroup end
 if exists("&colorcolumn")
     augroup colorcol
         autocmd!
-        autocmd InsertEnter * set colorcolumn=80
+        autocmd InsertEnter * set colorcolumn=80,120
         autocmd InsertLeave * set colorcolumn=""
     augroup end
 endif
