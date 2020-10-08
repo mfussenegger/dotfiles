@@ -42,6 +42,7 @@
     - vmchale/dhall-vim
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
+    - rhysd/vim-grammarous
 - name: Checkout vim dev plugins
   git:
     repo: https://github.com/{{ item }}
