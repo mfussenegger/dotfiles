@@ -13,3 +13,4 @@
       - ninja
       - fzf
       - htop
+      - delve

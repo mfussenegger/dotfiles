@@ -1,0 +1,9 @@
+---
+- name: Clone golang/vscode-go
+  git:
+    repo: https://github.com/golang/vscode-go
+    dest: ~/dev/golang/vscode-go
+- name: Build vscode-go
+  command: npm run compile
+  args:
+    chdir: ~/dev/golang/vscode-go

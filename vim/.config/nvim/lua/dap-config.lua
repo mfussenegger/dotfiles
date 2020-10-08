@@ -1,7 +1,9 @@
 local dap = require('dap')
+local HOME = os.getenv('HOME')
+
 dap.adapters.python = {
   type = 'executable';
-  command = os.getenv('HOME') .. '/.virtualenvs/tools/bin/python';
+  command = HOME .. '/.virtualenvs/tools/bin/python';
   args = { '-m', 'debugpy.adapter' };
 }
 dap.configurations.python = {
@@ -30,6 +32,27 @@ dap.configurations.java = {
     name = "Debug (Attach) - Remote";
     hostName = "127.0.0.1";
     port = 5005;
+  },
+}
+
+dap.adapters.go = {
+  type = 'executable';
+  command = 'node';
+  args = {HOME .. '/dev/golang/vscode-go/dist/debugAdapter.js'};
+  enrich_config = function(conf, on_config)
+    if not conf.dlvToolPath then
+      conf.dlvToolPath = '/usr/bin/dlv'
+    end
+    on_config(conf)
+  end;
+}
+dap.configurations.go = {
+  {
+    type = 'go';
+    name = 'Debug';
+    request = 'launch';
+    showLog = true;
+    program = "${file}";
   },
 }
 
@@ -63,6 +86,10 @@ dap.configurations.cpp = {
     args = {}
   },
 }
+
+
+require('dap.ext.vscode').load_launchjs()
+
 
 vim.cmd [[
     command! -complete=file -nargs=* DebugC lua require "dap-config".start_c_debugger({<f-args>}, "gdb")
