@@ -28,6 +28,7 @@
   args:
     chdir: ~/dev/microsoft/vscode-java-test
   loop:
+    - git clean -xdff
     - npm install
     - npm run build-plugin
 
