@@ -53,6 +53,8 @@
     compactionHeuristic = true
     colorMoved = default
     wordDiff = color
+    algorithm = patience
+    context = 5
 
 [diff "image"]
     textconv = identify
