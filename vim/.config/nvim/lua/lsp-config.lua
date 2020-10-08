@@ -134,6 +134,7 @@ function M.start_jdt()
     vim.fn.glob(home .. '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
   }
   vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/dev/microsoft/vscode-java-test/server/*.jar"), "\n"))
+  vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/dev/dgileadi/vscode-java-decompiler/server/*.jar"), "\n"))
 
   local extendedClientCapabilities = jdtls.extendedClientCapabilities;
   extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
@@ -141,6 +142,7 @@ function M.start_jdt()
     settings = {
       java = {
         signatureHelp = { enabled = true };
+        contentProvider = { preferred = 'fernflower' };
         completion = {
           favoriteStaticMembers = {
             "org.hamcrest.MatcherAssert.assertThat",

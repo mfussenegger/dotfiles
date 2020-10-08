@@ -72,3 +72,8 @@
     src: ~/apps/jmc/bin/jmc
     dest: ~/bin/jmc
     state: link
+
+- name: Clone vscode-java-decompiler
+  git:
+    repo: https://github.com/dgileadi/vscode-java-decompiler
+    dest: ~/dev/dgileadi/vscode-java-decompiler
