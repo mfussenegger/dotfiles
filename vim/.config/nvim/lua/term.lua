@@ -17,7 +17,11 @@ local function launch_term(cmd)
     bo('bufhidden', 'wipe')
     bo('buflisted', false)
     bo('swapfile', false)
-    jobid = vim.fn.termopen(cmd)
+    jobid = vim.fn.termopen(cmd, {
+      on_exit = function()
+        jobid = nil
+      end
+    })
 end
 
 local function close_term()
@@ -26,7 +30,6 @@ local function close_term()
     if api.nvim_win_is_valid(winid) then
         api.nvim_win_close(winid, true)
     end
-    jobid = nil
     winid = nil
 end
 
