@@ -1,0 +1,11 @@
+templates:
+  params:
+    author-name: Mathias Fußenegger
+    github-username: mfussenegger
+
+setup-info:
+  ghc:
+    linux-armv7-tinfo6:
+      8.10.2:
+        url: "https://downloads.haskell.org/~ghc/8.10.2/ghc-8.10.2-armv7-deb10-linux.tar.xz"
+        sha256: bb9c97826b1f4d7a8ef8bce0616b612f1ded10480ef10fcf7fb4e6d10a6681c8

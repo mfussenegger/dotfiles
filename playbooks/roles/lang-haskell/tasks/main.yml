@@ -1,10 +1,6 @@
 ---
-- name: Install haskell tooling lts14
-  command: stack install --resolver lts-14.3 cabal-install hasktags
-  args:
-    chdir: ~/
 - name: Install haskell tooling lts16
-  command: stack install --resolver lts-16.12 ghcid hlint hoogle dhall dhall-json weeder ormolu
+  command: stack install --resolver lts-16.12 cabal-install ghcid hlint hoogle dhall dhall-json ormolu
   args:
     chdir: ~/
 - name: Clone/pull haskell-language-server and ghcid

@@ -16,6 +16,8 @@
     - ~/apps
     - ~/.zsh/completion
     - ~/.zsh/plugins
+    - ~/.stack
+    - ~/.stack/global-project
 - name: Ensure ~/.gnupg exists
   file:
     path: ~/.gnupg
