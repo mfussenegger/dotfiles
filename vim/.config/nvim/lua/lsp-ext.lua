@@ -117,17 +117,18 @@ function M._InsertCharPre()
         timer = nil
     end
     local char = api.nvim_get_vvar('char')
-    timer = vim.loop.new_timer()
     for _, entry in pairs(on_insert_with_pause) do
         local chars, fn = unpack(entry)
         if vim.tbl_contains(chars, char) then
             completion_ctx.col = nil
-            timer:start(150, 0, vim.schedule_wrap(function() fn() end))
+            timer = vim.loop.new_timer()
+            timer:start(150, 0, vim.schedule_wrap(fn))
             return
         end
     end
     if tonumber(vim.fn.pumvisible()) == 1 then
-      timer:start(150, 0, vim.schedule_wrap(function() M.trigger_completion() end))
+      timer = vim.loop.new_timer()
+      timer:start(250, 0, vim.schedule_wrap(M.trigger_completion))
     end
 end
 
