@@ -4,7 +4,8 @@ local highlights = os.getenv('HOME') .. '/dev/tree-sitter/tree-sitter-java/queri
 local query = table.concat(vim.fn.readfile(highlights), '\n')
 
 function M.attach()
-  vim.treesitter.highlighter.new(query)
+  vim.treesitter.highlighter.new(0, 'java', query)
 end
+
 
 return M

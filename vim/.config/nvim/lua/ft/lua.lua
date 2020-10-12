@@ -67,7 +67,7 @@ local query = [[
 local M = {}
 
 function M.attach()
-  vim.treesitter.highlighter.new(query)
+  vim.treesitter.highlighter.new(0, 'lua', query)
 end
 
 return M
