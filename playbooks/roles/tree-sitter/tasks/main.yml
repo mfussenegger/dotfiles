@@ -1,19 +1,13 @@
 ---
-- name: Clone tree-sitter-java repo
+- name: Clone tree-sitter repos
   git:
-    repo: https://github.com/tree-sitter/tree-sitter-java
-    dest: ~/dev/tree-sitter/tree-sitter-java
-    version: ee0a2a076785145e350fbd413775d1e003f79315
-- name: Clone tree-sitter-python repo
-  git:
-    repo: https://github.com/tree-sitter/tree-sitter-python
-    dest: ~/dev/tree-sitter/tree-sitter-python
-    version: 58f57240834d6b88624e32ad0ab9531d55fb7a5d
-- name: Clone tree-sitter-lua repo
-  git:
-    repo: https://github.com/Azganoth/tree-sitter-lua
-    dest: ~/dev/Azganoth/tree-sitter-lua
-    version: d835774e14fd7073567358cdb8900c6012ea5eef
+    repo: https://github.com/{{ item.repo }}
+    dest: ~/dev/{{ item.repo }}
+    version: '{{ item.version }}'
+  loop:
+    -  { repo: 'tree-sitter/tree-sitter-java', version: 'ee0a2a076785145e350fbd413775d1e003f79315' }
+    -  { repo: 'tree-sitter/tree-sitter-python', version: '58f57240834d6b88624e32ad0ab9531d55fb7a5d' }
+    -  { repo: 'Azganoth/tree-sitter-lua', version: 'd835774e14fd7073567358cdb8900c6012ea5eef' }
 - name: Ensure nvim parser folder exists
   file:
     path: ~/.config/nvim/parser/
@@ -25,11 +19,11 @@
     chdir: ~/dev/tree-sitter/tree-sitter-java
 
 - name: Generate python parser
-  command: cc -O2 -o ~/.config/nvim/parser/python.so -shared src/parser.c -I./src
+  command: cc -O2 -o ~/.config/nvim/parser/python.so -I./src src/parser.c src/scanner.cc -shared -Os -lstdc++
   args:
     chdir: ~/dev/tree-sitter/tree-sitter-python
 
 - name: Generate lua parser
-  command: cc -O2 -o ~/.config/nvim/parser/lua.so -shared src/parser.c -I./src
+  command: cc -O2 -o ~/.config/nvim/parser/lua.so -I./src src/parser.c src/scanner.cc -shared -Os -lstdc++
   args:
     chdir: ~/dev/Azganoth/tree-sitter-lua/
