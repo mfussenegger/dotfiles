@@ -1,10 +1,10 @@
 local M = {}
 
-local highlights = os.getenv('HOME') .. '/dev/tree-sitter/tree-sitter-java/queries/highlights.scm'
-local query = table.concat(vim.fn.readfile(highlights), '\n')
-
 function M.attach()
-  vim.treesitter.highlighter.new(0, 'java', query)
+  local query = require('vim.treesitter.query').get_query('java', 'highlights')
+  if query then
+    vim.treesitter.highlighter.new(0, 'java', query)
+  end
 end
 
 
