@@ -1,10 +1,21 @@
 ---
+- name: Ensure jdks folder exists
+  file:
+    path: ~/.local/jdks/
+    state: directory
+- name: Install openjdk 15
+  unarchive:
+    src: https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15%2B36/OpenJDK15U-jdk_x64_linux_hotspot_15_36.tar.gz
+    dest: ~/.local/jdks/
+    remote_src: true
 - name: Clone eclipse.jdt.ls
   git:
     repo: https://github.com/eclipse/eclipse.jdt.ls
     dest: ~/dev/eclipse/eclipse.jdt.ls
 - name: Build eclipse.jdt.ls
   command: ./mvnw clean install -DskipTests
+  environment:
+    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
   args:
     chdir: ~/dev/eclipse/eclipse.jdt.ls
 
@@ -14,6 +25,8 @@
     dest: ~/dev/microsoft/java-debug
 - name: Build java-debug
   command: ./mvnw clean install
+  environment:
+    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
   args:
     chdir: ~/dev/microsoft/java-debug
 
@@ -25,6 +38,8 @@
 
 - name: Build vscode-java-test
   command: "{{ item }}"
+  environment:
+    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
   args:
     chdir: ~/dev/microsoft/vscode-java-test
   loop:

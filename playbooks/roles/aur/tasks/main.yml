@@ -12,9 +12,6 @@
 - name: Install pg_format
   aur:
     name: pgformatter-git
-- name: Install jabba
-  aur:
-    name: jabba
 - name: Install diffr
   aur:
     name: diffr
