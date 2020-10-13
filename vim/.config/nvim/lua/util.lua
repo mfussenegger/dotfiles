@@ -99,4 +99,13 @@ function M.root_pattern(bufnr, patterns)
 end
 
 
+function M.init_hl(ft)
+  local parser = vim.treesitter.get_parser(0, ft)
+  local query = require('vim.treesitter.query').get_query(ft, 'highlights')
+  if query then
+    vim.treesitter.highlighter.new(parser, query)
+  end
+end
+
+
 return M

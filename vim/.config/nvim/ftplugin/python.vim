@@ -10,4 +10,6 @@ compiler pyunit
 " with which it is possible to navigate to the failing tests
 setlocal makeprg=python\ %
 
-lua require('ft.python').attach()
+if has('nvim-0.5')
+  lua require('util').init_hl('python')
+endif
