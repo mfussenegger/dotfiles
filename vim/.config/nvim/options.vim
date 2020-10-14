@@ -98,6 +98,9 @@ endif
 
 if has('nvim-0.5')
     packadd nvim-jdtls
+    packadd nvim-dap
+    packadd nvim-fzy
+
     lua require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
     lua LspConf = require "lsp-config"
     augroup lsp
@@ -114,7 +117,6 @@ if has('nvim-0.5')
       au FileType css lua LspConf.add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
     augroup end
 
-    packadd nvim-dap
     lua require('dap-config')
 endif
 

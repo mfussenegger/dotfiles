@@ -54,14 +54,26 @@ augroup end
 
 
 " fzf
-nnoremap <silent><leader>f/ :History/<CR>
-nnoremap <silent><leader>f: :History:<CR>
-nnoremap <silent><leader>ff :Files<CR>
-nnoremap <silent><leader>fb :Buffers<CR>
-nnoremap <silent><leader>ft :BTags<CR>
-nnoremap <silent><leader>fT :Tags<CR>
-nnoremap <silent><leader>fg :GitFiles<CR>
-nnoremap <silent><leader>gl :BCommits<CR>
+if has('nvim-0.5')
+  lua fzy = require('fzy')
+  nnoremap <silent><leader>f/ :History/<CR>
+  nnoremap <silent><leader>f: :History:<CR>
+  nnoremap <silent><leader>ff :lua fzy.execute('fd', fzy.sinks.edit_file)<CR>
+  nnoremap <silent><leader>fb :lua fzy.actions.buffers()<CR>
+  nnoremap <silent><leader>ft :lua fzy.actions.buf_tags()<CR>
+  nnoremap <silent><leader>fg :lua fzy.execute('git ls-files', fzy.sinks.edit_file)<CR>
+  nnoremap <silent><leader>fT :Tags<CR>
+  nnoremap <silent><leader>gl :BCommits<CR>
+else
+  nnoremap <silent><leader>f/ :History/<CR>
+  nnoremap <silent><leader>f: :History:<CR>
+  nnoremap <silent><leader>ff :Files<CR>
+  nnoremap <silent><leader>fb :Buffers<CR>
+  nnoremap <silent><leader>ft :BTags<CR>
+  nnoremap <silent><leader>fT :Tags<CR>
+  nnoremap <silent><leader>fg :GitFiles<CR>
+  nnoremap <silent><leader>gl :BCommits<CR>
+endif
 
 " Fuzzy insert mode completion for lines
 imap <c-x><c-l> <plug>(fzf-complete-line)

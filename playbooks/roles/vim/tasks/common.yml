@@ -51,5 +51,6 @@
   loop:
     - mfussenegger/nvim-jdtls
     - mfussenegger/nvim-dap
+    - mfussenegger/nvim-fzy
 - name: Update Remote Plugins
   command: nvim +UpdateRemotePlugins +qa
