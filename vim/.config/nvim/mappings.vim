@@ -24,6 +24,9 @@ if has('nvim-0.5')
   inoremap <expr> <CR> (luaeval("require'lsp-ext'.accept_pum()") ? "\<c-y>" : "\<CR>")
 end
 
+nnoremap gf gfzv
+nnoremap gF gFzv
+
 " split navigation
 noremap <c-h> <c-w>h
 noremap <c-j> <c-w>j
