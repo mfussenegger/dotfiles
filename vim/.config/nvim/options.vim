@@ -102,6 +102,8 @@ if has('nvim-0.5')
     packadd nvim-fzy
 
     lua require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
+    lua require('jdtls.ui').pick_one_async = require('fzy').pick_one
+    lua require('dap.ui').pick_one = require('fzy').pick_one
     lua LspConf = require "lsp-config"
     augroup lsp
       au!
