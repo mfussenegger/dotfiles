@@ -130,12 +130,19 @@ function M.start_jdt()
   config.cmd = {'java-lsp.sh', workspace_folder}
   config.on_attach = jdtls_on_attach
 
-  local bundles = {
-    vim.fn.glob(home .. '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
+  local jar_patterns = {
+    '/dev/microsoft/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar',
+    '/dev/dgileadi/vscode-java-decompiler/server/*.jar',
+    '/dev/microsoft/vscode-java-test/server/*.jar',
   }
-  vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/dev/microsoft/vscode-java-test/server/*.jar"), "\n"))
-  vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/dev/dgileadi/vscode-java-decompiler/server/*.jar"), "\n"))
-
+  local bundles = {}
+  for _, jar_pattern in ipairs(jar_patterns) do
+    for _, bundle in ipairs(vim.split(vim.fn.glob(home .. jar_pattern), '\n')) do
+      if not vim.endswith(bundle, 'com.microsoft.java.test.runner.jar') then
+        table.insert(bundles, bundle)
+      end
+    end
+  end
   local extendedClientCapabilities = jdtls.extendedClientCapabilities;
   extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
   config.init_options = {
