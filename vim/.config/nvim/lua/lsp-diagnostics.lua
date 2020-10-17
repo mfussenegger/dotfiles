@@ -35,7 +35,7 @@ do
       timer = nil
     end
     timer = vim.loop.new_timer()
-    timer:start(450, 0, vim.schedule_wrap(function()
+    timer:start(1000, 0, vim.schedule_wrap(function()
       if timer then
         timer:close()
         timer = nil
@@ -56,9 +56,6 @@ do
       return
     end
     vim.lsp.util.buf_clear_diagnostics(bufnr)
-    if not api.nvim_buf_is_loaded(bufnr) then
-      return
-    end
     local has_errors = false
     for _, diagnostic in ipairs(result.diagnostics) do
       diagnostic.severity = diagnostic.severity or vim.lsp.protocol.DiagnosticSeverity.Error
@@ -67,7 +64,9 @@ do
       has_errors = has_errors or diagnostic.severity == vim.lsp.protocol.DiagnosticSeverity.Error
     end
     vim.lsp.util.buf_diagnostics_save_positions(bufnr, result.diagnostics)
-    vim.lsp.util.buf_diagnostics_signs(bufnr, result.diagnostics)
+    if api.nvim_buf_is_loaded(bufnr) then
+      vim.lsp.util.buf_diagnostics_signs(bufnr, result.diagnostics)
+    end
     if bufnr == api.nvim_get_current_buf() then
       local diagnostics
       if has_errors then
