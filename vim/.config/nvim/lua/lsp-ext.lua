@@ -1,14 +1,21 @@
 local api = vim.api
 local timer = nil
 local on_insert_with_pause = {}
+local M = {}
 
 local completion_ctx = {
   expand_snippet = false,
-  col = nil
+  col = nil,
+  cancel = {},
 }
 
 
-local M = {}
+local function cancel_completion_requests()
+  for _, cancel in ipairs(completion_ctx.cancel) do
+    cancel()
+  end
+  completion_ctx.cancel = {}
+end
 
 
 local function text_document_completion_list_to_complete_items(result, _)
@@ -72,6 +79,7 @@ end
 
 
 function M.trigger_completion()
+  cancel_completion_requests()
   local bufnr = api.nvim_get_current_buf()
   local _, col = unpack(api.nvim_win_get_cursor(0))
   if completion_ctx.col then
@@ -92,21 +100,27 @@ function M.trigger_completion()
     completion_ctx.col = col
   end
   local params = vim.lsp.util.make_position_params()
-  vim.lsp.buf_request(bufnr, 'textDocument/completion', params, function(err, _, result)
-    if err then
-      print('Error getting completions: ' .. err.message)
-      return
+  local _, cancel_completions = vim.lsp.buf_request(
+    bufnr,
+    'textDocument/completion',
+    params,
+    function(err, _, result)
+      if err then
+        print('Error getting completions: ' .. err.message)
+        return
+      end
+      if not result then
+        print('no completion result')
+        return
+      end
+      local mode = api.nvim_get_mode()['mode']
+      if mode == 'i' or mode == 'ic' then
+        local matches = text_document_completion_list_to_complete_items(result)
+        vim.fn.complete(col, matches)
+      end
     end
-    if not result then
-      print('no completion result')
-      return
-    end
-    local mode = api.nvim_get_mode()['mode']
-    if mode == 'i' or mode == 'ic' then
-      local matches = text_document_completion_list_to_complete_items(result)
-      vim.fn.complete(col, matches)
-    end
-  end)
+  )
+  table.insert(completion_ctx.cancel, cancel_completions)
 end
 
 
@@ -139,6 +153,7 @@ function M._InsertLeave()
         timer:close()
         timer = nil
     end
+    cancel_completion_requests()
     completion_ctx.col = nil
 end
 
@@ -149,17 +164,24 @@ end
 
 local function complete_changed()
   completion_ctx.additionalTextEdits = nil
+  cancel_completion_requests()
   local completed_item = api.nvim_get_vvar('completed_item')
   if not completed_item or not completed_item.user_data then
     return
   end
-  vim.lsp.buf_request(0, 'completionItem/resolve', completed_item.user_data, function(err, _, result)
-    if err then
-      print('Error on completionItem/resolve: ', err.message)
-      return
+  local _, cancel_req = vim.lsp.buf_request(
+    0,
+    'completionItem/resolve',
+    completed_item.user_data,
+    function(err, _, result)
+      if err then
+        print('Error on completionItem/resolve: ', err.message)
+        return
+      end
+      completion_ctx.additionalTextEdits = result and result.additionalTextEdits
     end
-    completion_ctx.additionalTextEdits = result and result.additionalTextEdits
-  end)
+  )
+  table.insert(completion_ctx.cancel, cancel_req)
 end
 
 function M._CompleteDone()
@@ -167,6 +189,7 @@ function M._CompleteDone()
     local resolved_additionalTextEdits = completion_ctx.additionalTextEdits
     completion_ctx.additionalTextEdits = nil
     completion_ctx.col = nil
+    cancel_completion_requests()
     local completed_item = api.nvim_get_vvar('completed_item')
     if not completed_item or not completed_item.user_data then
       return
