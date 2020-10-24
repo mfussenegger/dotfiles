@@ -1,8 +1,0 @@
-#!/bin/sh
-
-file=$(mktemp)
-alacritty -e "nvim -c 'startinsert | set spell' '$file'"
-
-xdotool type --clearmodifiers --delay 0 --file $file
-
-rm $file

@@ -171,7 +171,6 @@ bindsym $mod+minus scratchpad show
 bindsym $mod+o exec --no-startup-id sleep 1 && scrot /tmp/screenshot.png --quality 90 -o -f -s -e 'xclip -sel c -t image/png $f'
 bindsym $mod+i exec echo "" | xclip -r -sel c && passmenu
 bindsym --release $mod+u exec --no-startup-id $HOME/bin/Dm.hs
-bindsym --release $mod+e exec --no-startup-id $HOME/bin/vim-anywhere
 
 
 # additional keybindings
