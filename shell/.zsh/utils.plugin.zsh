@@ -60,12 +60,3 @@ fix-term() {
 zebra() {
   awk '{if (NR%2 == 0) {print "\033[32m" $0 "\033[0m"} else {print}}'
 }
-
-export NNN_TMPFILE="/tmp/nnn"
-n() {
-  nnn "$@"
-  if [ -f $NNN_TMPFILE ]; then
-    . $NNN_TMPFILE
-    rm $NNN_TMPFILE
-  fi
-}
