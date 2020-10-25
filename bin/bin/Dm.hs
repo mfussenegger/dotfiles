@@ -2,6 +2,8 @@
 {- stack script --optimize --resolver lts-16.12  -}
 
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TupleSections #-}
 
 
 import Data.Aeson
@@ -11,14 +13,12 @@ import Data.Aeson
     eitherDecode,
   )
 import qualified Data.ByteString.Lazy as BL
-import qualified Data.ByteString.Lazy.Char8 as B8
 import Data.Char (isSpace)
 import Data.Foldable (for_)
-import Data.List (isInfixOf, permutations)
+import Data.List (isInfixOf)
 import qualified Data.Map.Strict as M
 import Data.Maybe
-  ( Maybe,
-    catMaybes,
+  ( catMaybes,
     fromJust,
     fromMaybe,
   )
@@ -31,10 +31,13 @@ import System.Directory
     getHomeDirectory,
   )
 import System.Environment (getArgs)
-import System.FilePath ((</>))
 import System.Posix.Files (rename)
 import System.Process (callProcess, readProcess)
 import Text.Regex.PCRE ((=~))
+import qualified Data.Text as T
+import qualified Data.Text.Read as T
+import Data.Either.Combinators (rightToMaybe)
+import Text.Printf (printf)
 
 
 selection :: [String] -> IO String
@@ -51,7 +54,19 @@ selection input = do
   where
     dmenuArgs = [ "-l", "30"
                 , "-fn", "-*-terminus-medium-*-*-*-14-140-*-*-*-*-*-*" ]
-  
+
+
+pickOne :: [a] -> (a -> String) -> IO (Maybe a)
+pickOne xs formatX = do
+  selected <- selection formattedXs
+  case T.splitOn " ¦ " (T.pack selected) of
+    (idx : _) -> pure . fmap (xs !!) . rightToMaybe $ fst <$> T.decimal idx
+    _         -> pure Nothing
+  where
+    formattedXs = fmap renderX (zip [(0 :: Int)..] xs)
+    renderX (idx, x) = printf "%03d ¦ %s" idx (formatX x)
+
+
 
 trim :: String -> String
 trim = f . f
@@ -73,7 +88,7 @@ i3barMode mode = callProcess "i3-msg" (["bar", "mode"] ++ [mode])
 
 
 isActiveOutput :: String -> Bool
-isActiveOutput = (=~ ".* connected( primary)? (\\d)+x(\\d)+\\+\\d+\\+\\d+ .*")
+isActiveOutput = (=~ (".* connected( primary)? (\\d)+x(\\d)+\\+\\d+\\+\\d+ .*" :: String))
 
 isAvailableOutput line = not (isActiveOutput line) && " connected" `isInfixOf` line
 
@@ -219,6 +234,64 @@ selectSong = do
     songNr = reverse . drop 1 . reverse . takeWhile (/= '¦')
 
 
+data SinkInput = SinkInput
+  { inputNumber :: Int,
+    inputAppName :: T.Text
+  }
+  deriving (Eq, Show)
+
+
+data Sink = Sink 
+  { sinkName :: T.Text,
+    sinkDescription :: T.Text
+  }
+  deriving (Eq, Show)
+
+
+-- > parseSinkInputs "Sink Input #135\nGarbage\n      application.name = \"Music Player Daemon\""
+-- [ SinkInput
+--    { inputNumber = 135
+--    , inputAppName = ""Music Player Daemon""
+--    }
+-- ]
+parseSinkInputs :: String -> [SinkInput]
+parseSinkInputs text = snd $ foldr step (Nothing, []) (reverse $ lines text)
+  where
+    step line r@(Nothing, inputs) = case T.splitOn "Sink Input #" (T.pack line) of
+      ["", number] -> (, inputs) . rightToMaybe $ fst <$> T.decimal number
+      _ -> r
+    step line r@(Just num, inputs) = case T.splitOn "application.name = " (T.stripStart $ T.pack line) of
+      [_, appName] -> (Nothing, SinkInput num (appName) : inputs)
+      _ -> r
+
+
+parseSink :: String -> [Sink]
+parseSink text = snd $ foldr step (Nothing, []) (fmap T.pack $ reverse $ lines text)
+  where
+    step line r@(Nothing, sinks) = case T.splitOn "Name: " (T.stripStart line) of
+      ["", sinkName] -> (Just sinkName, sinks)
+      _ -> r
+    step line r@(Just sinkName, sinks) = case T.splitOn "Description: " (T.stripStart line) of
+      ["", sinkDescription] -> (Nothing, Sink sinkName sinkDescription : sinks)
+      _ -> r
+
+
+pulseMove :: IO ()
+pulseMove = do
+  inputs <- parseSinkInputs <$> listInputs
+  sinkInput <- pickOne inputs (T.unpack . inputAppName)
+  case sinkInput of
+    Nothing -> pure ()
+    Just sinkInput' -> do
+      sink <- (parseSink <$> listSinks) >>= flip pickOne (T.unpack . sinkDescription)
+      case sink of
+        Nothing    -> pure()
+        Just sink' -> callProcess "pactl" ["move-sink-input", show (inputNumber sinkInput'), T.unpack (sinkName sink')]
+  where
+    listInputs = readProcess "pactl" ["list", "sink-inputs"] ""
+    listSinks = readProcess "pactl" ["list", "sinks"] ""
+
+
 main :: IO ()
 main = do
     let choices = [ "keyboard"
@@ -231,6 +304,7 @@ main = do
                   , "call" 
                   , "emoji"
                   , "mpc"
+                  , "pulse move"
                   ]
     out <- selection choices
     case out of
@@ -244,4 +318,5 @@ main = do
         "call"            -> callContacts
         "emoji"           -> selectEmoji
         "mpc"             -> selectSong
+        "pulse move"      -> pulseMove
         _                 -> putStrLn $ "Invalid selection " ++ out
