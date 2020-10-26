@@ -59,14 +59,11 @@ augroup end
 " fzf
 if has('nvim-0.5')
   lua fzy = require('fzy')
-  nnoremap <silent><leader>f/ :History/<CR>
-  nnoremap <silent><leader>f: :History:<CR>
+  nnoremap <silent><leader>fq :lua fzy.actions.quickfix()<CR>
   nnoremap <silent><leader>ff :lua fzy.execute('fd', fzy.sinks.edit_file)<CR>
   nnoremap <silent><leader>fb :lua fzy.actions.buffers()<CR>
   nnoremap <silent><leader>ft :lua fzy.try(fzy.actions.lsp_tags, fzy.actions.buf_tags)<CR>
   nnoremap <silent><leader>fg :lua fzy.execute('git ls-files', fzy.sinks.edit_file)<CR>
-  nnoremap <silent><leader>fT :Tags<CR>
-  nnoremap <silent><leader>gl :BCommits<CR>
 else
   nnoremap <silent><leader>f/ :History/<CR>
   nnoremap <silent><leader>f: :History:<CR>
@@ -78,8 +75,8 @@ else
   nnoremap <silent><leader>gl :BCommits<CR>
 endif
 
-" Fuzzy insert mode completion for lines
-imap <c-x><c-l> <plug>(fzf-complete-line)
+inoremap <silent><c-e> <ESC>:lua require('util').emoji()<CR>
+
 
 " gnupg
 nnoremap <leader>pe :GPGEditRecipients<cr>
