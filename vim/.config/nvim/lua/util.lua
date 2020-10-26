@@ -71,4 +71,13 @@ function M.init_hl(ft)
 end
 
 
+--- Like :only but delete other buffers
+function M.only()
+  local cur_buf = vim.api.nvim_get_current_buf()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if cur_buf ~= buf then
+      pcall(vim.cmd, 'bd ' .. buf)
+    end
+  end
+end
 return M

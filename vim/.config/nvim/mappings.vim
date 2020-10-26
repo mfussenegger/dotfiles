@@ -1,7 +1,7 @@
 nnoremap <leader>ev :split $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
-noremap <leader>o :only<CR>
+noremap <silent><leader>o :lua require('util').only()<CR>
 nnoremap <bs> <c-^>
 
 " pre-filter history navigation in command-mode with already typed input
