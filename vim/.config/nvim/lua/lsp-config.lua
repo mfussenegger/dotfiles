@@ -97,17 +97,48 @@ local function jdtls_on_attach(client, bufnr)
 
 end
 
-local function mk_config()
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities.textDocument.completion.completionItem.snippetSupport = true
-    return {
-        callbacks = {
-            ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
-        };
-        capabilities = capabilities;
-        on_init = on_init;
-        on_attach = on_attach;
+local function mk_config(settings)
+  settings = settings or {}
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities.workspace.configuration = true
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+  capabilities.textDocument.codeAction = {
+    dynamicRegistration = false,
+    codeActionLiteralSupport = {
+      codeActionKind = {
+        valueSet = {
+          'quickfix',
+          'refactor',
+          'refactor.extract',
+          'refactor.inline',
+          'refactor.rewrite',
+          'source',
+          'source.organizeImports'
+        }
+      }
     }
+  }
+  return {
+    callbacks = {
+      ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
+      ['workspace/configuration'] = function(err, _, params)
+        assert(not err, vim.inspect(err))
+        local result = {}
+        for _, item in ipairs(params.items) do
+          if item.section then
+            local setting = settings[item.section]
+            if setting then
+              table.insert(result, setting)
+            end
+          end
+        end
+        return result
+      end
+    };
+    capabilities = capabilities;
+    on_init = on_init;
+    on_attach = on_attach;
+  }
 end
 
 
@@ -192,10 +223,36 @@ function M.start_hie()
     }
     add_client_by_cfg(config, {'stack.yml', '.git'})
 end
+
+
 function M.start_go_ls()
     local path = os.getenv("GOPATH") .. "/bin/go-langserver"
     M.add_client({path, '-gocodecompletion'}, {name = 'gols'})
 end
+
+
+function M.start_lua_ls()
+  local settings = {
+    Lua = {
+      diagnostics = {
+        globals = {'vim', 'it', 'describe'}
+      },
+      runtime = {version = "LuaJIT"},
+      workspace = {
+        library = {
+          [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+          [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+        }
+      },
+    }
+  }
+  local config = mk_config(settings)
+  local server_dir = vim.fn.expand('~/dev/sumneko/lua-language-server/')
+  config['name'] = 'luals'
+  config['cmd'] = {server_dir .. 'bin/Linux/lua-language-server', server_dir .. 'main.lua'}
+  add_client_by_cfg(config, {'.git'})
+end
+
 
 --- @export
 return M

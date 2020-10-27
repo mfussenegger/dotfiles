@@ -104,19 +104,18 @@ if has('nvim-0.5')
     lua require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
     lua require('jdtls.ui').pick_one_async = require('fzy').pick_one
     lua require('dap.ui').pick_one = require('fzy').pick_one
-    lua LspConf = require "lsp-config"
     augroup lsp
       au!
-      au FileType java lua LspConf.start_jdt()
-      au FileType haskell lua LspConf.start_hie()
-      au FileType python lua LspConf.add_client({'pyls'})
-      au FileType html lua LspConf.add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
-      au FileType go lua LspConf.start_go_ls()
-      au FileType sh lua LspConf.add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
-      au FileType rust lua LspConf.add_client({'rls'}, {root={'Cargo.toml', '.git'}})
-      au FileType lua lua LspConf.add_client({'lua-lsp'})
-      au FileType json lua LspConf.add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
-      au FileType css lua LspConf.add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
+      au FileType java lua require('lsp-config').start_jdt()
+      au FileType haskell lua require('lsp-config').start_hie()
+      au FileType python lua require('lsp-config').add_client({'pyls'})
+      au FileType html lua require('lsp-config').add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
+      au FileType go lua require('lsp-config').start_go_ls()
+      au FileType sh lua require('lsp-config').add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
+      au FileType rust lua require('lsp-config').add_client({'rls'}, {root={'Cargo.toml', '.git'}})
+      au FileType lua lua require('lsp-config').start_lua_ls()
+      au FileType json lua require('lsp-config').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
+      au FileType css lua require('lsp-config').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
     augroup end
 
     lua require('dap-config')
