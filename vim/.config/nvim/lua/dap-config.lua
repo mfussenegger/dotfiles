@@ -1,11 +1,21 @@
 local dap = require('dap')
 local HOME = os.getenv('HOME')
 
-dap.adapters.python = {
-  type = 'executable';
-  command = HOME .. '/.virtualenvs/tools/bin/python';
-  args = { '-m', 'debugpy.adapter' };
-}
+dap.adapters.python = function(cb, config)
+  if config.request == 'attach' then
+    cb({
+      type = 'server';
+      port = config.port or 0;
+      host = config.host or '127.0.0.1';
+    })
+  else
+    cb({
+      type = 'executable';
+      command = HOME .. '/.virtualenvs/tools/bin/python';
+      args = { '-m', 'debugpy.adapter' };
+    })
+  end
+end
 dap.configurations.python = {
   {
     type = 'python';
@@ -23,6 +33,17 @@ dap.configurations.python = {
         return '/usr/bin/python'
       end
     end;
+  },
+  {
+    type = 'python',
+    request = 'attach',
+    name = 'Attach remote',
+    host = function()
+      return vim.fn.input('Host: ', '127.0.0.1')
+    end,
+    port = function()
+      return tonumber(vim.fn.input('Port: '))
+    end
   },
 }
 dap.configurations.java = {
