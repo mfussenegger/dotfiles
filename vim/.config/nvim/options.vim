@@ -104,6 +104,7 @@ if has('nvim-0.5')
     lua require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
     lua require('jdtls.ui').pick_one_async = require('fzy').pick_one
     lua require('dap.ui').pick_one = require('fzy').pick_one
+    lua lsp_ext = require('lsp-ext')
     augroup lsp
       au!
       au FileType java lua require('lsp-config').start_jdt()

@@ -41,7 +41,6 @@ local key_mappings = {
     {"document_formatting", "n", "gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>"},
     {"document_range_formatting", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>"},
     {"find_references", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>"},
-    {"goto_definition", "n", "<c-]>",  "<Cmd>lua vim.lsp.buf.definition()<CR>"},
     {"hover", "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>"},
     {"implementation", "n", "gD",  "<Cmd>lua vim.lsp.buf.implementation()<CR>"},
     {"signature_help", "i", "<c-space>",  "<Cmd>lua vim.lsp.buf.signature_help()<CR>"},
@@ -64,6 +63,9 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
     api.nvim_command("setlocal signcolumn=yes")
 
+    if client.resolved_capabilities.goto_definition then
+      api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.lsp_ext.tagfunc")
+    end
     local opts = { silent = true; }
     for _, mappings in pairs(key_mappings) do
         local capability, mode, lhs, rhs = unpack(mappings)
