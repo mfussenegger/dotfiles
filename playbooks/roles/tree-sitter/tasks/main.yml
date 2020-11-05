@@ -5,8 +5,8 @@
     dest: ~/dev/{{ item.repo }}
     version: '{{ item.version }}'
   loop:
-    -  { repo: 'tree-sitter/tree-sitter-java', version: 'ee0a2a076785145e350fbd413775d1e003f79315' }
-    -  { repo: 'tree-sitter/tree-sitter-python', version: '58f57240834d6b88624e32ad0ab9531d55fb7a5d' }
+    -  { repo: 'tree-sitter/tree-sitter-java', version: 'f7b62ac33d63bea56ce202ace107aaa4285e50af' }
+    -  { repo: 'tree-sitter/tree-sitter-python', version: 'd245768132eb6cb74d8a394ca4d29dc57169b096' }
     -  { repo: 'Azganoth/tree-sitter-lua', version: 'd835774e14fd7073567358cdb8900c6012ea5eef' }
 - name: Ensure nvim parser and query folders exists
   file:
@@ -33,13 +33,15 @@
   args:
     chdir: ~/dev/Azganoth/tree-sitter-lua/
 
-- name: Copy highlights
+- name: Copy queries
   copy:
-    src: ~/dev/{{ item.src }}
+    src: ~/dev/{{ item.src_dir }}/{{ item.file }}
     dest: ~/.config/nvim/queries/{{ item.ft }}/{{ item.file }}
   loop:
-    - { ft: 'java', file: 'highlights.scm', src: 'tree-sitter/tree-sitter-java/queries/highlights.scm' }
-    - { ft: 'python', file: 'highlights.scm', src: 'tree-sitter/tree-sitter-python/queries/highlights.scm' }
+    - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'highlights.scm' }
+    - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'tags.scm' }
+    - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'highlights.scm' }
+    - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'tags.scm' }
 - name: Fetch lua highlights
   get_url:
     url: https://raw.githubusercontent.com/nvim-treesitter/nvim-treesitter/master/queries/lua/highlights.scm
