@@ -302,7 +302,7 @@ function M.tagfunc(pattern, flags)
       })
     end
   end
-  return #results > 0 and results or vim.NIL
+  return results
 end
 
 return M
