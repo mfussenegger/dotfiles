@@ -1,7 +1,7 @@
 ---
 - name: Clone neovim
   git:
-    repo: https://github.com/mfussenegger/neovim
+    repo: https://github.com/neovim/neovim
     dest: ~/dev/neovim/neovim
     update: false
 
