@@ -9,14 +9,6 @@ let g:markdown_fenced_languages = ['python', 'html', 'javascript', 'css', 'bash=
 
 let test#strategy = "neovim"
 
-" See vim-gutentags issue # 168
-augroup gutentags
-  autocmd!
-  autocmd FileType gitcommit,gitrebase let g:gutentags_enabled=0
-  autocmd BufEnter .git/PULLREQ_EDITMSG let g:gutentags_enabled=0
-augroup end
-
-
 if executable('hasktags')
   let g:vista_ctags_cmd = {
       \ 'haskell': 'hasktags -x -o - -c',
