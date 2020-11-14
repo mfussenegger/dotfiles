@@ -73,10 +73,10 @@ local function on_attach(client, bufnr)
             api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
         end
     end
-    api.nvim_buf_set_keymap(bufnr, "n", "<space>", "<Cmd>lua vim.lsp.util.show_line_diagnostics()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "<space>", "<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", opts)
-    api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua require'lsp-diagnostics'.next_diag()<CR>", opts)
-    api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua require'lsp-diagnostics'.prev_diag()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp-ext').trigger_completion()<CR>", opts)
     if client.resolved_capabilities['document_highlight'] then
       api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
@@ -101,27 +101,11 @@ end
 
 local function mk_config(settings)
   settings = settings or {}
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  local capabilities = lsp.protocol.make_client_capabilities()
   capabilities.workspace.configuration = true
   capabilities.textDocument.completion.completionItem.snippetSupport = true
-  capabilities.textDocument.codeAction = {
-    dynamicRegistration = false,
-    codeActionLiteralSupport = {
-      codeActionKind = {
-        valueSet = {
-          'quickfix',
-          'refactor',
-          'refactor.extract',
-          'refactor.inline',
-          'refactor.rewrite',
-          'source',
-          'source.organizeImports'
-        }
-      }
-    }
-  }
   return {
-    callbacks = {
+    handlers = {
       ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
       ['workspace/configuration'] = function(err, _, params)
         assert(not err, vim.inspect(err))
