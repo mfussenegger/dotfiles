@@ -97,10 +97,6 @@ if executable("rg")
 endif
 
 if has('nvim-0.5')
-    packadd nvim-jdtls
-    packadd nvim-dap
-    packadd nvim-fzy
-
     lua require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
     lua require('jdtls.ui').pick_one_async = require('fzy').pick_one
     lua require('dap.ui').pick_one = require('fzy').pick_one
@@ -117,6 +113,7 @@ if has('nvim-0.5')
       au FileType lua lua require('lsp-config').start_lua_ls()
       au FileType json lua require('lsp-config').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
       au FileType css lua require('lsp-config').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
+      au FileType cs lua require('lsp-config').start_omnisharp()
     augroup end
 
     lua require('dap-config')

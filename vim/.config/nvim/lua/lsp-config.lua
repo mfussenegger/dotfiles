@@ -240,5 +240,16 @@ function M.start_lua_ls()
 end
 
 
+function M.start_omnisharp()
+  local pid = vim.fn.getpid()
+  local path = vim.fn.expand('~/apps/omnisharp/run')
+  local opts = {
+    name = 'omnisharp',
+    root = {'.csproj', '.git', '.sln'},
+  }
+  M.add_client({path, '--languageserver', '--hostPID', tostring(pid)}, opts)
+end
+
+
 --- @export
 return M
