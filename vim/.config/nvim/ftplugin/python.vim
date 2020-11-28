@@ -14,4 +14,5 @@ if has('nvim-0.5')
   lua require('util').init_hl('python')
 
   nnoremap <silent> <leader>dn :lua require('dap-python').test_method()<CR>
+  vnoremap <silent> <leader>ds <ESC>:lua require('dap-python').debug_selection()<CR>
 endif
