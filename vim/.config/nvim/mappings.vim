@@ -27,6 +27,9 @@ end
 nnoremap gf gfzv
 nnoremap gF gFzv
 
+nnoremap L Lzz
+nnoremap H Hzz
+
 " split navigation
 noremap <c-h> <c-w>h
 noremap <c-j> <c-w>j
