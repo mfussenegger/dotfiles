@@ -47,17 +47,12 @@ local key_mappings = {
     {"workspace_symbol", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>"}
 }
 
-local function on_init(client, _)
-    api.nvim_command("augroup LspExt")
-    api.nvim_command("autocmd InsertCharPre * lua require'lsp-ext'._InsertCharPre()")
-    api.nvim_command("autocmd InsertLeave * lua require'lsp-ext'._InsertLeave()")
-    api.nvim_command("autocmd CompleteDone * lua require'lsp-ext'._CompleteDone()")
-    api.nvim_command("autocmd CompleteChanged * lua require'lsp-ext'._CompleteChanged()")
-    api.nvim_command("augroup end")
-    lsp_ext.setup(client)
+local function on_init()
+  lsp_ext.setup()
 end
 
 local function on_attach(client, bufnr)
+    lsp_ext.attach(client, bufnr)
     api.nvim_buf_set_var(bufnr, "lsp_client_id", client.id)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     api.nvim_buf_set_option(bufnr, "bufhidden", "hide")

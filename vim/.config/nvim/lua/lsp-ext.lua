@@ -1,6 +1,6 @@
 local api = vim.api
 local timer = nil
-local on_insert_with_pause = {}
+local triggers_by_buf = {}
 local M = {}
 
 local completion_ctx = {
@@ -125,25 +125,26 @@ end
 
 
 function M._InsertCharPre()
-    if timer then
-        timer:stop()
-        timer:close()
-        timer = nil
-    end
-    local char = api.nvim_get_vvar('char')
-    for _, entry in pairs(on_insert_with_pause) do
-        local chars, fn = unpack(entry)
-        if vim.tbl_contains(chars, char) then
-            completion_ctx.col = nil
-            timer = vim.loop.new_timer()
-            timer:start(150, 0, vim.schedule_wrap(fn))
-            return
-        end
-    end
-    if tonumber(vim.fn.pumvisible()) == 1 then
+  if timer then
+    timer:stop()
+    timer:close()
+    timer = nil
+  end
+  local char = api.nvim_get_vvar('char')
+  local triggers = triggers_by_buf[api.nvim_get_current_buf()] or {}
+  for _, entry in pairs(triggers) do
+    local chars, fn = unpack(entry)
+    if vim.tbl_contains(chars, char) then
+      completion_ctx.col = nil
       timer = vim.loop.new_timer()
-      timer:start(250, 0, vim.schedule_wrap(M.trigger_completion))
+      timer:start(150, 0, vim.schedule_wrap(fn))
+      return
     end
+  end
+  if tonumber(vim.fn.pumvisible()) == 1 then
+    timer = vim.loop.new_timer()
+    timer:start(250, 0, vim.schedule_wrap(M.trigger_completion))
+  end
 end
 
 
@@ -159,10 +160,6 @@ end
 
 
 function M._CompleteChanged()
-  -- No-op by default. Activated in setup if client supports completionItem/resolve
-end
-
-local function complete_changed()
   completion_ctx.additionalTextEdits = nil
   cancel_completion_requests()
   local completed_item = api.nvim_get_vvar('completed_item')
@@ -183,6 +180,7 @@ local function complete_changed()
   )
   table.insert(completion_ctx.cancel, cancel_req)
 end
+
 
 function M._CompleteDone()
     local completion_start_idx = completion_ctx.col
@@ -260,24 +258,42 @@ function M.accept_pum()
     end
 end
 
-function M.setup(client)
-    local signature_triggers = client.resolved_capabilities.signature_help_trigger_characters
-    if signature_triggers and #signature_triggers > 0 then
-        table.insert(
-            on_insert_with_pause, { signature_triggers, vim.lsp.buf.signature_help }
-        )
-    end
-    local completionProvider = client.server_capabilities.completionProvider or {}
-    local completion_triggers = completionProvider.triggerCharacters
-    if completion_triggers and #completion_triggers > 0 then
-        table.insert(
-            on_insert_with_pause, { completion_triggers, M.trigger_completion }
-        )
-    end
-    vim.lsp.util.text_document_completion_list_to_complete_items = text_document_completion_list_to_complete_items
-    if (client.server_capabilities.completionProvider or {}).resolveProvider then
-      M._CompleteChanged = complete_changed
-    end
+
+function M.setup()
+  vim.lsp.util.text_document_completion_list_to_complete_items = text_document_completion_list_to_complete_items
+end
+
+
+function M.attach(client, bufnr)
+  vim.cmd(string.format("autocmd InsertCharPre <buffer=%d> lua require'lsp-ext'._InsertCharPre()", bufnr))
+  vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'lsp-ext'._InsertLeave()", bufnr))
+  vim.cmd(string.format("autocmd CompleteDone <buffer=%d> lua require'lsp-ext'._CompleteDone()", bufnr))
+  if (client.server_capabilities.completionProvider or {}).resolveProvider then
+    vim.cmd(string.format("autocmd CompleteChanged <buffer=%d> lua require'lsp-ext'._CompleteChanged()", bufnr))
+  end
+  local triggers = triggers_by_buf[bufnr]
+  if not triggers then
+    triggers = {}
+    triggers_by_buf[bufnr] = triggers
+    api.nvim_buf_attach(bufnr, false, {
+      on_detach = function(_, b)
+        triggers_by_buf[b] = nil
+      end
+    })
+  end
+  local signature_triggers = client.resolved_capabilities.signature_help_trigger_characters
+  if signature_triggers and #signature_triggers > 0 then
+    table.insert(
+      triggers, { signature_triggers, vim.lsp.buf.signature_help }
+    )
+  end
+  local completionProvider = client.server_capabilities.completionProvider or {}
+  local completion_triggers = completionProvider.triggerCharacters
+  if completion_triggers and #completion_triggers > 0 then
+    table.insert(
+      triggers, { completion_triggers, M.trigger_completion }
+    )
+  end
 end
 
 
