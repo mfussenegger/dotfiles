@@ -1,6 +1,7 @@
 ---
 - name: Setup tools virtualenv
   pip:
+    state: latest
     name:
       - httpie
       - twine
