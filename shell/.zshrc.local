@@ -21,13 +21,14 @@ else
   if [ -d "$HOME/dev/neovim/neovim/build/bin" ]; then
     export VIMRUNTIME="$HOME/dev/neovim/neovim/runtime"
     export VISUAL="$HOME/dev/neovim/neovim/build/bin/nvim"
+    export MANPAGER="$VISUAL -c 'set ft=man' -"
   else
     export VISUAL="nvim"
+    export MANPAGER="nvim -c 'set ft=man' -"
   fi
 fi
 export EDITOR=$VISUAL
 export SUDO_EDIT=$VISUAL
-export MANPAGER="nvim -c 'set ft=man' -"
 alias v=$VISUAL
 alias vi=$VISUAL
 
