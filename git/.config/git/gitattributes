@@ -1,3 +1,4 @@
 *.png diff=image
 *.gif diff=image
 *.jpg diff=image
+*.java diff=java
