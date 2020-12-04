@@ -3,17 +3,23 @@ local api = vim.api
 local M = {}
 
 
-local function diagnostics_to_items(diagnostics)
+local function diagnostics_to_items(diagnostics_by_buf, predicate)
+  if not diagnostics_by_buf then
+    return {}
+  end
   local items = {}
-  if not diagnostics then return items end
-  for _, d in pairs(diagnostics) do
-    table.insert(items, {
-      bufnr = d.bufnr,
-      lnum = d.range.start.line + 1,
-      vcol = 1,
-      col = d.range.start.character + 1,
-      text = d.message
-    })
+  for bufnr, diagnostics in pairs(diagnostics_by_buf) do
+    for _, d in pairs(diagnostics) do
+      if not predicate or predicate(d) then
+        table.insert(items, {
+          bufnr = bufnr,
+          lnum = d.range.start.line + 1,
+          col = d.range.start.character + 1,
+          text = d.message,
+          vcol = 1,
+        })
+      end
+    end
   end
   table.sort(items, function(a, b) return a.lnum < b.lnum end)
   return items
@@ -33,8 +39,6 @@ do
     local has_errors = false
     for _, diagnostic in ipairs(result.diagnostics) do
       diagnostic.severity = diagnostic.severity or vim.lsp.protocol.DiagnosticSeverity.Error
-      diagnostic.bufnr = bufnr
-      diagnostic.uri = uri
       has_errors = has_errors or diagnostic.severity == vim.lsp.protocol.DiagnosticSeverity.Error
     end
     vim.lsp.diagnostic.save(result.diagnostics, bufnr, client_id)
@@ -53,17 +57,18 @@ do
       end
       vim.fn.setloclist(0, {}, 'r', {
         title = 'Language Server';
-        items = diagnostics_to_items(diagnostics)
+        items = diagnostics_to_items({bufnr = diagnostics})
       })
     end
   end
 end
 
+
 function M.errors_to_quickfix()
-  local items = diagnostics_to_items(vim.tbl_filter(
-    function(d) return d.severity == vim.lsp.protocol.DiagnosticSeverity.Error end,
-    vim.lsp.diagnostic.get_all()
-  ))
+  local items = diagnostics_to_items(
+    vim.lsp.diagnostic.get_all(),
+    function(d) return d.severity == vim.lsp.protocol.DiagnosticSeverity.Error end
+  )
   vim.fn.setqflist({}, 'r', {
     title = 'Language Server';
     items = items
@@ -71,10 +76,10 @@ function M.errors_to_quickfix()
 end
 
 function M.warnings_to_quickfix()
-  local items = diagnostics_to_items(vim.tbl_filter(
-    function(d) return d.severity == vim.lsp.protocol.DiagnosticSeverity.Warning end,
-    vim.lsp.diagnostic.get_all()
-  ))
+  local items = diagnostics_to_items(
+    vim.lsp.diagnostic.get_all(),
+    function(d) return d.severity == vim.lsp.protocol.DiagnosticSeverity.Warning end
+  )
   vim.fn.setqflist({}, 'r', {
     title = 'Language Server';
     items = items
