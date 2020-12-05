@@ -78,6 +78,11 @@ local function on_attach(client, bufnr)
       api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
       api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
     end
+    local codelens = client.server_capabilities.codeLensProvider
+    if codelens then
+      api.nvim_command [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua require('lsp-codelens').refresh()]]
+      api.nvim_buf_set_keymap(bufnr, "n", "<leader>l", "<Cmd>lua require('lsp-codelens').run()<CR>", opts)
+    end
 end
 
 local function jdtls_on_attach(client, bufnr)
@@ -162,6 +167,8 @@ function M.start_jdt()
       java = {
         signatureHelp = { enabled = true };
         contentProvider = { preferred = 'fernflower' };
+        referenceCodeLens = { enabled = true };
+        implementationsCodeLens = { enabled = true };
         completion = {
           favoriteStaticMembers = {
             "org.hamcrest.MatcherAssert.assertThat",
