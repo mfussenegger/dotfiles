@@ -4,6 +4,7 @@
   roles:
     - vim
     - lang-haskell
+    - jdks
     - lang-java
     - lang-python
     - lang-lua
