@@ -184,6 +184,22 @@ function M.start_jdt()
             template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
           }
         };
+        configuration = {
+          runtimes = {
+            {
+              name = "JavaSE-11",
+              path = "/usr/lib/jvm/java-11-openjdk/",
+            },
+            {
+              name = "JavaSE-15",
+              path = home .. '/.local/jdks/jdk-15.0.1+9'
+            },
+            {
+              name = "JavaSE-16",
+              path = home .. '/.local/jdks/jdk-16'
+            },
+          }
+        };
       };
     };
     bundles = bundles;
