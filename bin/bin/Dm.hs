@@ -46,14 +46,13 @@ selection input = do
   let
     runTool tool args = trim <$> readProcess tool args (unlines input)
     tool = case args of
-      [] -> "dmenu"
+      [] -> "bemenu"
       [arg] -> arg
-  if tool == "dmenu"
-    then runTool "dmenu" dmenuArgs
+  if tool == "bemenu"
+    then runTool "bemenu" dmenuArgs
     else runTool tool []
   where
-    dmenuArgs = [ "-l", "30"
-                , "-fn", "-*-terminus-medium-*-*-*-14-140-*-*-*-*-*-*" ]
+    dmenuArgs = [ "-l", "30" ]
 
 
 pickOne :: [a] -> (a -> String) -> IO (Maybe a)
@@ -83,8 +82,8 @@ keyboard = do
       ]
 
 
-i3barMode :: String -> IO ()
-i3barMode mode = callProcess "i3-msg" (["bar", "mode"] ++ [mode])
+barMode :: String -> IO ()
+barMode mode = callProcess "swaymsg" (["bar", "mode"] ++ [mode])
 
 
 isActiveOutput :: String -> Bool
@@ -110,7 +109,7 @@ xrandrOn = do
 
 
 activeOutput xrandrOutput newOutput = do
-  let 
+  let
     activeOutputs = getOutputs isActiveOutput xrandrOutput
     makeChoices output = map (\x -> x ++ " " ++ output) ["--left-of", "--right-of", "--below", "--above", "--same-as"]
     choices = concatMap makeChoices activeOutputs
@@ -119,8 +118,7 @@ activeOutput xrandrOutput newOutput = do
 
 
 xrandrOff = do
-  output <- getOutputs isActiveOutput <$> readProcess "xrandr" [] ""
-            >>= selection
+  output <- readProcess "xrandr" [] "" >>= selection . getOutputs isActiveOutput
   callProcess "xrandr" ["--output", output, "--off"]
 
 
@@ -128,21 +126,19 @@ xset = callProcess "xset"
 
 
 presOff = do
-  xset ["s", "on"]
-  xset ["+dpms"]
+  callProcess "systemctl" ["--user", "start", "swayidle.service"]
   changeVimColorScheme ("tempus_totus", "gruvbox8_hard") ("light", "dark")
   alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
-  sed alacrittyConfig ("colors: *light") ("colors: *dark")
-  sed alacrittyConfig ("    family: JetBrains Mono") ("    family: JetBrains Mono Light")
+  sed alacrittyConfig "colors: *light" "colors: *dark"
+  sed alacrittyConfig "    family: JetBrains Mono" "    family: JetBrains Mono Light"
 
 
 presOn = do
-  xset ["s", "off"]
-  xset ["-dpms"]
+  callProcess "systemctl" ["--user", "stop", "swayidle.service"]
   changeVimColorScheme ("gruvbox8_hard", "tempus_totus") ("dark", "light")
   alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
-  sed alacrittyConfig ("colors: *dark") ("colors: *light")
-  sed alacrittyConfig ("    family: JetBrains Mono Light") ("    family: JetBrains Mono")
+  sed alacrittyConfig "colors: *dark" "colors: *light"
+  sed alacrittyConfig "    family: JetBrains Mono Light" "    family: JetBrains Mono"
 
 
 sed :: FilePath -> String -> String -> IO ()
@@ -227,7 +223,7 @@ selectEmoji = do
 
 selectSong :: IO ()
 selectSong = do
-  song <- showPlaylist >>= selection 
+  song <- showPlaylist >>= selection
   callProcess "mpc" ["play", songNr song]
   where
     showPlaylist = lines <$> readProcess "mpc" ["playlist", "-f", "%position% ¦ %artist% - %title%"] ""
@@ -241,7 +237,7 @@ data SinkInput = SinkInput
   deriving (Eq, Show)
 
 
-data Sink = Sink 
+data Sink = Sink
   { sinkName :: T.Text,
     sinkDescription :: T.Text
   }
@@ -261,7 +257,7 @@ parseSinkInputs text = snd $ foldr step (Nothing, []) (reverse $ lines text)
       ["", number] -> (, inputs) . rightToMaybe $ fst <$> T.decimal number
       _ -> r
     step line r@(Just num, inputs) = case T.splitOn "application.name = " (T.stripStart $ T.pack line) of
-      [_, appName] -> (Nothing, SinkInput num (appName) : inputs)
+      [_, appName] -> (Nothing, SinkInput num appName : inputs)
       _ -> r
 
 
@@ -295,28 +291,28 @@ pulseMove = do
 main :: IO ()
 main = do
     let choices = [ "keyboard"
-                  , "i3bar invisible"
-                  , "i3bar dock"
+                  , "bar invisible"
+                  , "bar dock"
                   , "xrandr off"
                   , "xrandr on"
                   , "pres on"
                   , "pres off"
-                  , "call" 
+                  , "call"
                   , "emoji"
                   , "mpc"
                   , "pulse move"
                   ]
     out <- selection choices
     case out of
-        "keyboard"        -> keyboard
-        "i3bar invisible" -> i3barMode "invisible"
-        "i3bar dock"      -> i3barMode "dock"
-        "xrandr off"      -> xrandrOff
-        "xrandr on"       -> xrandrOn
-        "pres on"         -> presOn
-        "pres off"        -> presOff
-        "call"            -> callContacts
-        "emoji"           -> selectEmoji
-        "mpc"             -> selectSong
-        "pulse move"      -> pulseMove
-        _                 -> putStrLn $ "Invalid selection " ++ out
+        "keyboard"      -> keyboard
+        "bar invisible" -> barMode "invisible"
+        "bar dock"      -> barMode "dock"
+        "xrandr off"    -> xrandrOff
+        "xrandr on"     -> xrandrOn
+        "pres on"       -> presOn
+        "pres off"      -> presOff
+        "call"          -> callContacts
+        "emoji"         -> selectEmoji
+        "mpc"           -> selectSong
+        "pulse move"    -> pulseMove
+        _               -> putStrLn $ "Invalid selection " ++ out

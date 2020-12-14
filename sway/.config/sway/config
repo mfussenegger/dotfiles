@@ -1,0 +1,194 @@
+set $mod Mod4
+set $up k
+set $down j
+set $left h
+set $right l
+
+font pango: JuliaMono 10
+
+# colors
+#
+# colorclass            border  background  text
+client.unfocused        #606060 #303030     #707070
+client.focused_inactive #aaaaaa #000000     #aaaaaa
+client.focused          #e1aa5d #e1aa5d     #000000
+client.urgent           #a0cf5d #000000     #eeeeee
+
+default_border pixel 1
+workspace_auto_back_and_forth no
+hide_edge_borders smart
+smart_borders on
+titlebar_border_thickness 0
+titlebar_padding 1
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec alacritty
+
+# kill focused window
+bindsym $mod+Shift+Q kill
+
+# start program launcher
+bindsym $mod+p exec launcher 'compgen -c | fzy | xargs -r swaymsg -t command exec' 
+for_window [app_id="^launcher$"] floating enable, border none, resize set width 50 ppt height 50 ppt, move position 0 px 0 px
+
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Left move container to output left
+bindsym $mod+Right move container to output right
+bindsym $mod+Shift+Left move workspace to output left
+bindsym $mod+Shift+Right move workspace to output right
+
+# move focused window
+bindsym $mod+Shift+J move down
+bindsym $mod+Shift+K move up
+bindsym $mod+Shift+L move right
+bindsym $mod+Shift+H move left
+
+# split in horizontal orientation
+bindsym $mod+m split h
+
+# split in vertical orientation
+bindsym $mod+n split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# change container layout (stacked, tabbed, default)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+d layout default
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# lock screen
+bindsym $mod+Ctrl+l exec swaymsg workspace 0 && swaylock
+
+# focus the child container
+#bindcode $mod+d focus child
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+bindsym $mod+Shift+R reload
+bindsym $mod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway?' -b 'Yes, exit sway' 'swaymsg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+    # These bindings trigger as soon as you enter the resize mode
+
+    bindsym $left       resize shrink width 5 px or 5 ppt
+    bindsym $down       resize grow height 5 px or 5 ppt
+    bindsym $up         resize shrink height 5 px or 5 ppt
+    bindsym $right      resize grow width 5 px or 5 ppt
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    status_command i3status-rs ~/.config/i3/status.toml
+    font pango: JuliaMono
+    tray_output primary
+}
+
+
+output 'Dell Inc. DELL P2416D 07C5367S0RKU' {
+  scale 1.50
+  position 0 0
+  scale_filter nearest
+  subpixel rgb
+}
+output 'Dell Inc. DELL P2416D 07C5367S0R4U' {
+  scale 1.50
+  position 1706 0
+  scale_filter nearest
+  subpixel rgb
+}
+
+workspace 1 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
+workspace 2 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
+workspace 3 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
+workspace 4 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
+
+workspace 7 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
+workspace 8 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
+workspace 9 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
+
+
+# scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
+bindsym $mod+o exec --no-startup-id sleep 1 && grim -g "$(slurp)" /tmp/screenshot.png && wl-copy < /tmp/screenshot.png
+bindsym $mod+i exec wl-copy --clear && wl-passmenu
+bindsym $mod+u exec --no-startup-id $HOME/bin/Dm.hs
+
+
+# additional keybindings
+bindcode 172 exec mpc toggle
+bindcode 167 exec mpc next
+bindcode 166 exec mpc prev
+
+bindsym XF86AudioRaiseVolume exec pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ +5% && killall -USR1 i3status
+bindsym XF86AudioLowerVolume exec pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ -5% && killall -USR1 i3status
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ true && killall -USR1 i3status
+
+bindsym XF86MonBrightnessUp exec xbacklight.hs --inc 5%
+bindsym XF86MonBrightnessDown exec xbacklight.hs --dec 5%
+
+input * {
+    xkb_layout "de"
+    xkb_variant "nodeadkeys"
+    xkb_options "caps:escape"
+
+    repeat_delay 200
+    repeat_rate 40
+}
+
+input type:touchpad {
+  tap enabled
+}
+
+
+exec systemctl --user start swayidle.service
