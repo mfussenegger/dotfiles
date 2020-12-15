@@ -10,12 +10,13 @@ import Data.Aeson
   ( FromJSON,
     ToJSON,
     decode,
-    eitherDecode,
+    eitherDecode
   )
 import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Lazy.UTF8 as BL
 import Data.Char (isSpace)
 import Data.Foldable (for_)
-import Data.List (isInfixOf)
+import Data.List (findIndex, isInfixOf)
 import qualified Data.Map.Strict as M
 import Data.Maybe
   ( catMaybes,
@@ -40,6 +41,17 @@ import Data.Either.Combinators (rightToMaybe)
 import Text.Printf (printf)
 
 
+data SwayOutput = SwayOutput
+  { id :: Maybe Int,
+    name :: T.Text,
+    focused :: Maybe Bool
+  }
+  deriving (Eq, Show, Generic)
+
+instance ToJSON SwayOutput
+instance FromJSON SwayOutput
+
+
 selection :: [String] -> IO String
 selection input = do
   args <- getArgs
@@ -49,10 +61,21 @@ selection input = do
       [] -> "bemenu"
       [arg] -> arg
   if tool == "bemenu"
-    then runTool "bemenu" dmenuArgs
+    then do
+      idx <- getDisplayIdx
+      runTool "bemenu" ["-m", show idx, "-l", "30"]
     else runTool tool []
   where
-    dmenuArgs = [ "-l", "30" ]
+    getDisplayIdx :: IO Int
+    getDisplayIdx = do
+      outputs <- readProcess "swaymsg" ["-r", "-t", "get_outputs"] ""
+      let
+        swayOutputs :: Either String [SwayOutput]
+        swayOutputs = eitherDecode (BL.fromString outputs)
+        idx = case swayOutputs of
+          Left err -> error $ "Couldn't decode output of swaymsg -t get_outputs: " <> err
+          Right swayOutputs' -> fromMaybe 0 (findIndex (fromMaybe False . focused) . reverse $ swayOutputs')
+      pure idx
 
 
 pickOne :: [a] -> (a -> String) -> IO (Maybe a)
