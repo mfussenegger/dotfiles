@@ -1,6 +1,11 @@
 local dap = require('dap')
 local HOME = os.getenv('HOME')
 
+dap.defaults.fallback.external_terminal = {
+  command = '/usr/bin/alacritty';
+  args = {'-e'};
+}
+
 require('dap-python').setup('~/.virtualenvs/tools/bin/python')
 
 dap.configurations.java = {
