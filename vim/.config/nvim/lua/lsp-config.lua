@@ -218,7 +218,7 @@ function M.start_hie()
             formattingProvider = "ormolu";
         }
     }
-    add_client_by_cfg(config, {'stack.yml', '.git'})
+    add_client_by_cfg(config, {'hie.yaml', 'stack.yml', '.git'})
 end
 
 
