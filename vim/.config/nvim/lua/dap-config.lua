@@ -92,6 +92,9 @@ dap.configurations.cpp = {
   },
 }
 
+dap.adapters.c = dap.adapters.cpp
+dap.configurations.c = dap.configurations.cpp
+
 
 require('dap.ext.vscode').load_launchjs()
 
