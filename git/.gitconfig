@@ -102,7 +102,7 @@
     overview = log --all --since='2 weeks' --oneline --no-merges
     recap = !git log --all --oneline --no-merges --author=$(git config user.email)
     today = !git log --since=00:00:00 --all --oneline --no-merges --author=$(git config user.email)
-    st = !nvim '+Gedit :'
+    st = !$EDITOR '+Gedit :'
     fa = "!git ls-files -m -o --exclude-standard | fzf --print0 -m | xargs -0 -t -o git add"
 
 [instaweb]
