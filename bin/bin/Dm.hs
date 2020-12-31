@@ -237,7 +237,7 @@ selectEmoji = do
       let
         selectedEmoji = emoji . head $ filter (\x -> description x == selected) emojis'
       putStrLn selectedEmoji
-      callProcess "xdotool" ["type", "--delay", "100", selectedEmoji]
+      callProcess "wl-copy" [selectedEmoji]
 
   where
     source = "https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json"
