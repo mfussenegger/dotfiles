@@ -233,11 +233,14 @@ selectEmoji = do
   case emojis of
     (Left err)-> error $ "Couldn't decode " <> cachePath <> ": " <> err
     (Right emojis') -> do
-      selected <- selection (fmap description emojis')
-      let
-        selectedEmoji = emoji . head $ filter (\x -> description x == selected) emojis'
-      putStrLn selectedEmoji
-      callProcess "wl-copy" [selectedEmoji]
+      selected <- pickOne emojis' (\e -> emoji e <> " " <> description e)
+      case selected of
+        Nothing -> return ()
+        (Just selected') -> do
+          let
+            emoji' = emoji selected'
+          putStrLn emoji'
+          callProcess "wl-copy" [emoji']
 
   where
     source = "https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json"
