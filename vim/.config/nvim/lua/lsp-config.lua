@@ -47,8 +47,9 @@ local key_mappings = {
     {"workspace_symbol", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>"}
 }
 
-local function on_init()
+local function on_init(client)
   lsp_ext.setup()
+  client.notify('workspace/didChangeConfiguration', { settings = {} })
 end
 
 local function on_attach(client, bufnr)
@@ -94,27 +95,16 @@ local function jdtls_on_attach(client, bufnr)
 
 end
 
-local function mk_config(settings)
-  settings = settings or {}
+local function mk_config()
   local capabilities = lsp.protocol.make_client_capabilities()
   capabilities.workspace.configuration = true
   capabilities.textDocument.completion.completionItem.snippetSupport = true
   return {
+    flags = {
+      allow_incremental_sync = true,
+    };
     handlers = {
       ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
-      ['workspace/configuration'] = function(err, _, params)
-        assert(not err, vim.inspect(err))
-        local result = {}
-        for _, item in ipairs(params.items) do
-          if item.section then
-            local setting = settings[item.section]
-            if setting then
-              table.insert(result, setting)
-            end
-          end
-        end
-        return result
-      end
     };
     capabilities = capabilities;
     on_init = on_init;
@@ -125,10 +115,10 @@ end
 
 local M = {}
 function M.add_client(cmd, opts)
-    local config = mk_config()
-    config['name'] = opts and opts.name or cmd[1]
-    config['cmd'] = cmd
-    add_client_by_cfg(config, opts and opts.root or {'.git'})
+  local config = mk_config()
+  config['name'] = opts and opts.name or cmd[1]
+  config['cmd'] = cmd
+  add_client_by_cfg(config, opts and opts.root or {'.git'})
 end
 
 
@@ -139,6 +129,50 @@ function M.start_jdt()
   local home = os.getenv('HOME')
   local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
   local config = mk_config()
+  config.settings = {
+    java = {
+      signatureHelp = { enabled = true };
+      contentProvider = { preferred = 'fernflower' };
+      completion = {
+        favoriteStaticMembers = {
+          "org.hamcrest.MatcherAssert.assertThat",
+          "org.hamcrest.Matchers.*",
+          "org.hamcrest.CoreMatchers.*",
+          "org.junit.jupiter.api.Assertions.*",
+          "java.util.Objects.requireNonNull",
+          "java.util.Objects.requireNonNullElse",
+          "org.mockito.Mockito.*"
+        }
+      };
+      sources = {
+        organizeImports = {
+          starThreshold = 9999;
+          staticStarThreshold = 9999;
+        };
+      };
+      codeGeneration = {
+        toString = {
+          template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
+        }
+      };
+      configuration = {
+        runtimes = {
+          {
+            name = "JavaSE-11",
+            path = "/usr/lib/jvm/java-11-openjdk/",
+          },
+          {
+            name = "JavaSE-15",
+            path = home .. '/.local/jdks/jdk-15.0.1+9'
+          },
+          {
+            name = "JavaSE-16",
+            path = home .. '/.local/jdks/jdk-16'
+          },
+        }
+      };
+    };
+  }
   config.cmd = {'java-lsp.sh', workspace_folder}
   config.on_attach = jdtls_on_attach
 
@@ -158,50 +192,6 @@ function M.start_jdt()
   local extendedClientCapabilities = jdtls.extendedClientCapabilities;
   extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
   config.init_options = {
-    settings = {
-      java = {
-        signatureHelp = { enabled = true };
-        contentProvider = { preferred = 'fernflower' };
-        completion = {
-          favoriteStaticMembers = {
-            "org.hamcrest.MatcherAssert.assertThat",
-            "org.hamcrest.Matchers.*",
-            "org.hamcrest.CoreMatchers.*",
-            "org.junit.jupiter.api.Assertions.*",
-            "java.util.Objects.requireNonNull",
-            "java.util.Objects.requireNonNullElse",
-            "org.mockito.Mockito.*"
-          }
-        };
-        sources = {
-          organizeImports = {
-            starThreshold = 9999;
-            staticStarThreshold = 9999;
-          };
-        };
-        codeGeneration = {
-          toString = {
-            template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
-          }
-        };
-        configuration = {
-          runtimes = {
-            {
-              name = "JavaSE-11",
-              path = "/usr/lib/jvm/java-11-openjdk/",
-            },
-            {
-              name = "JavaSE-15",
-              path = home .. '/.local/jdks/jdk-15.0.1+9'
-            },
-            {
-              name = "JavaSE-16",
-              path = home .. '/.local/jdks/jdk-16'
-            },
-          }
-        };
-      };
-    };
     bundles = bundles;
     extendedClientCapabilities = extendedClientCapabilities;
   }
@@ -229,7 +219,8 @@ end
 
 
 function M.start_lua_ls()
-  local settings = {
+  local config = mk_config()
+  config.settings = {
     Lua = {
       diagnostics = {
         globals = {'vim', 'it', 'describe'}
@@ -243,7 +234,6 @@ function M.start_lua_ls()
       },
     }
   }
-  local config = mk_config(settings)
   local server_dir = vim.fn.expand('~/dev/sumneko/lua-language-server/')
   config['name'] = 'luals'
   config['cmd'] = {server_dir .. 'bin/Linux/lua-language-server', server_dir .. 'main.lua'}
