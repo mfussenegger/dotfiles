@@ -26,3 +26,10 @@
     extra_opts:
       - --transform
       - s/-linux-amd64//
+
+- name: Get neuron
+  unarchive:
+    src: https://github.com/srid/neuron/releases/download/1.0.1.0/neuron-1.0.1.0-linux.tar.gz
+    dest: ~/bin/
+    remote_src: true
+    creates: ~/bin/neuron
