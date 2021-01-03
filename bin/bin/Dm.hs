@@ -4,11 +4,13 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TupleSections #-}
+{-# LANGUAGE FlexibleInstances #-}
+
+module Main where
 
 
 import Data.Aeson
   ( FromJSON,
-    ToJSON,
     decode,
     eitherDecode
   )
@@ -44,13 +46,34 @@ import Text.Printf (printf)
 data SwayOutput = SwayOutput
   { id :: Maybe Int,
     name :: T.Text,
+    active :: Bool,
     focused :: Maybe Bool
   }
   deriving (Eq, Show, Generic)
 
-instance ToJSON SwayOutput
 instance FromJSON SwayOutput
 
+
+class ToString a where
+  str :: a -> String
+
+instance ToString T.Text where
+  str = T.unpack
+
+instance ToString String where
+  str = Prelude.id
+
+
+getOutputs :: IO [SwayOutput]
+getOutputs = do
+  outputs <- readProcess "swaymsg" ["-r", "-t", "get_outputs"] ""
+  let
+    swayOutputs :: Either String [SwayOutput]
+    swayOutputs = eitherDecode (BL.fromString outputs)
+  case swayOutputs of
+    Left err -> error $ "Couldn't decode output of swaymsg -t get_outputs:" <> err
+    Right outputs' -> pure outputs'
+  
 
 selection :: [String] -> IO String
 selection input = do
@@ -68,17 +91,11 @@ selection input = do
   where
     getDisplayIdx :: IO Int
     getDisplayIdx = do
-      outputs <- readProcess "swaymsg" ["-r", "-t", "get_outputs"] ""
-      let
-        swayOutputs :: Either String [SwayOutput]
-        swayOutputs = eitherDecode (BL.fromString outputs)
-        idx = case swayOutputs of
-          Left err -> error $ "Couldn't decode output of swaymsg -t get_outputs: " <> err
-          Right swayOutputs' -> fromMaybe 0 (findIndex (fromMaybe False . focused) . reverse $ swayOutputs')
-      pure idx
+      outputs <- getOutputs
+      pure $ fromMaybe 0 (findIndex (fromMaybe False . focused) . reverse $ outputs)
 
 
-pickOne :: [a] -> (a -> String) -> IO (Maybe a)
+pickOne :: ToString b => [a] -> (a -> b) -> IO (Maybe a)
 pickOne xs formatX = do
   selected <- selection formattedXs
   case T.splitOn " ¦ " (T.pack selected) of
@@ -86,7 +103,7 @@ pickOne xs formatX = do
     _         -> pure Nothing
   where
     formattedXs = fmap renderX (zip [(0 :: Int)..] xs)
-    renderX (idx, x) = printf "%03d ¦ %s" idx (formatX x)
+    renderX (idx, x) = printf "%03d ¦ %s" idx (str $ formatX x)
 
 
 
@@ -109,45 +126,40 @@ barMode :: String -> IO ()
 barMode mode = callProcess "swaymsg" (["bar", "mode"] ++ [mode])
 
 
-isActiveOutput :: String -> Bool
-isActiveOutput = (=~ (".* connected( primary)? (\\d)+x(\\d)+\\+\\d+\\+\\d+ .*" :: String))
-
-isAvailableOutput line = not (isActiveOutput line) && " connected" `isInfixOf` line
-
-
-getOutputs :: (String -> Bool) -> String -> [String]
-getOutputs predicate xrandrOutput =
-  let
-    filteredOutput = filter predicate $ lines xrandrOutput
-  in
-    map (takeWhile (not . isSpace)) filteredOutput
-
-
+xrandrOn :: IO ()
 xrandrOn = do
-  xrandrOutput <- readProcess "xrandr" [] ""
-  case getOutputs isAvailableOutput xrandrOutput of
+  outputs <- getOutputs
+  case filter (not . active) outputs of
     []       -> putStrLn "No inactive output"
-    [output] -> activeOutput xrandrOutput output
-    outputs  -> selection outputs >>= activeOutput xrandrOutput
+    [output] -> activate output
+    outputs' -> pickOne outputs' name >>= maybeActivate
+  where
+    maybeActivate (Just output) = activate output
+    maybeActivate Nothing = pure ()
+    activate :: SwayOutput -> IO ()
+    activate output = callProcess "swaymsg" ["output", T.unpack $ name output, "enable"]
 
 
-activeOutput xrandrOutput newOutput = do
-  let
-    activeOutputs = getOutputs isActiveOutput xrandrOutput
-    makeChoices output = map (\x -> x ++ " " ++ output) ["--left-of", "--right-of", "--below", "--above", "--same-as"]
-    choices = concatMap makeChoices activeOutputs
-  choice <- break isSpace <$> selection choices
-  callProcess "xrandr" ["--output", newOutput, fst choice, trim $ snd choice, "--auto"]
-
-
+xrandrOff :: IO ()
 xrandrOff = do
-  output <- readProcess "xrandr" [] "" >>= selection . getOutputs isActiveOutput
-  callProcess "xrandr" ["--output", output, "--off"]
+  outputs <- getOutputs
+  case filter active outputs of
+    []       -> putStrLn "No active output"
+    [output] -> disable output
+    outputs'  -> pickOne outputs' name >>= maybeDisable
+  where
+    disable :: SwayOutput -> IO ()
+    disable output = callProcess "swaymsg" ["output", T.unpack $ name output, "disable"]
+    maybeDisable :: Maybe SwayOutput -> IO ()
+    maybeDisable (Just output) = disable output
+    maybeDisable _ = pure ()
 
 
+xset :: [String] -> IO ()
 xset = callProcess "xset"
 
 
+presOff :: IO ()
 presOff = do
   callProcess "systemctl" ["--user", "start", "swayidle.service"]
   changeVimColorScheme ("tempus_totus", "gruvbox8_hard") ("light", "dark")
@@ -156,6 +168,7 @@ presOff = do
   sed alacrittyConfig "    family: JetBrains Mono" "    family: JetBrains Mono Light"
 
 
+presOn :: IO ()
 presOn = do
   callProcess "systemctl" ["--user", "stop", "swayidle.service"]
   changeVimColorScheme ("gruvbox8_hard", "tempus_totus") ("dark", "light")
@@ -182,6 +195,7 @@ expandUser ('~' : xs) = do
 expandUser xs = pure xs
 
 
+changeVimColorScheme :: (String, String) -> (String, String) -> IO ()
 changeVimColorScheme colorscheme background = do
   vimrc <- expandUser "~/.config/nvim/options.vim" >>= canonicalizePath
   sed vimrc ("colorscheme " ++ fst colorscheme) ("colorscheme " ++ snd colorscheme)
@@ -192,6 +206,7 @@ changeVimColorScheme colorscheme background = do
     callProcess "nvr" ["--servername", x, "--remote-send", changeColor])
 
 
+callContacts :: IO ()
 callContacts = do
   contactsPath <- expandUser "~/.config/dm/contacts.json"
   contents <- BL.readFile contactsPath
@@ -221,7 +236,6 @@ data Emoji = Emoji
   deriving (Show, Generic)
 
 
-instance ToJSON Emoji
 instance FromJSON Emoji
 
 
@@ -301,11 +315,11 @@ parseSink text = snd $ foldr step (Nothing, []) (fmap T.pack $ reverse $ lines t
 pulseMove :: IO ()
 pulseMove = do
   inputs <- parseSinkInputs <$> listInputs
-  sinkInput <- pickOne inputs (T.unpack . inputAppName)
+  sinkInput <- pickOne inputs inputAppName
   case sinkInput of
     Nothing -> pure ()
     Just sinkInput' -> do
-      sink <- (parseSink <$> listSinks) >>= flip pickOne (T.unpack . sinkDescription)
+      sink <- (parseSink <$> listSinks) >>= flip pickOne sinkDescription
       case sink of
         Nothing    -> pure()
         Just sink' -> callProcess "pactl" ["move-sink-input", show (inputNumber sinkInput'), T.unpack (sinkName sink')]
