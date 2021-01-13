@@ -49,7 +49,9 @@ local key_mappings = {
 
 local function on_init(client)
   lsp_ext.setup()
-  client.notify('workspace/didChangeConfiguration', { settings = {} })
+  if client.config.settings then
+    client.notify('workspace/didChangeConfiguration', { settings = client.config.settings })
+  end
 end
 
 local function on_attach(client, bufnr)
