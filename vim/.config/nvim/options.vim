@@ -42,12 +42,6 @@ set shiftwidth=2
 set softtabstop=2
 set shiftround
 
-if has("folding")
-    set foldenable
-    set foldmethod=indent
-    set foldlevel=2
-endif
-
 " improve search
 set ignorecase
 set smartcase
