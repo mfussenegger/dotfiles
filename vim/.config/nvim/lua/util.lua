@@ -1,20 +1,4 @@
-
-local uv = vim.loop
-local is_windows = uv.os_uname().version:match("Windows")
-local path_sep = is_windows and "\\" or "/"
-
 local M = {}
-local is_fs_root
-if is_windows then
-    is_fs_root = function(path)
-        return path:match("^%a:$")
-    end
-else
-    is_fs_root = function(path)
-        return path == "/"
-    end
-end
-
 
 function M.reload(name)
   package.loaded[name] = nil
@@ -40,25 +24,6 @@ end
 function M.err_message(...)
   vim.api.nvim_err_writeln(table.concat(vim.tbl_flatten{...}))
   vim.api.nvim_command("redraw")
-end
-
-
-local function path_join(...)
-    local result = table.concat(vim.tbl_flatten {...}, path_sep):gsub(path_sep.."+", path_sep)
-    return result
-end
-
-function M.root_pattern(bufnr, patterns)
-  local bufname = vim.api.nvim_buf_get_name(bufnr)
-  local dirname = vim.fn.fnamemodify(bufname, ':p:h')
-  while not is_fs_root(dirname) do
-    for _, marker in ipairs(patterns) do
-      if uv.fs_stat(path_join(dirname, marker)) then
-        return dirname
-      end
-    end
-    dirname = vim.fn.fnamemodify(dirname, ':h')
-  end
 end
 
 

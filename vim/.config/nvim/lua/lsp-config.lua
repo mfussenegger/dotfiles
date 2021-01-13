@@ -1,4 +1,3 @@
-local myutil = require 'util'
 local lsp = require 'vim.lsp'
 local lsp_ext = require 'lsp-ext'
 local lsp_diag = require 'lsp-diagnostics'
@@ -10,8 +9,7 @@ local lsps = {}
 
 
 local function add_client_by_cfg(config, root_markers)
-    local bufnr = api.nvim_get_current_buf()
-    local root_dir = myutil.root_pattern(bufnr, root_markers)
+    local root_dir = require('jdtls.setup').find_root(root_markers)
     if not root_dir then return end
 
     local cmd = config.cmd[1]
@@ -27,6 +25,7 @@ local function add_client_by_cfg(config, root_markers)
         client_id = lsp.start_client(config)
         lsps[lsp_id] = client_id
     end
+    local bufnr = api.nvim_get_current_buf()
     lsp.buf_attach_client(bufnr, client_id)
 end
 
@@ -126,8 +125,7 @@ end
 
 function M.start_jdt()
   local root_markers = {'gradlew', '.git'}
-  local bufnr = api.nvim_get_current_buf()
-  local root_dir = myutil.root_pattern(bufnr, root_markers)
+  local root_dir = require('jdtls.setup').find_root(root_markers)
   local home = os.getenv('HOME')
   local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
   local config = mk_config()
