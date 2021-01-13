@@ -11,16 +11,6 @@ M.RE = setmetatable({}, {
   end
 })
 
-function M.jump_to_buf(buf, range)
-    vim.api.nvim_set_current_buf(buf)
-    local row = range.start.line
-    local col = range.start.character
-    local line = vim.api.nvim_buf_get_lines(0, row, row + 1, true)[1]
-    col = vim.str_byteindex(line, col)
-    vim.api.nvim_win_set_cursor(0, { row + 1, col })
-end
-
-
 function M.init_hl(ft)
   local parser = vim.treesitter.get_parser(0, ft)
   local query = require('vim.treesitter.query').get_query(ft, 'highlights')
