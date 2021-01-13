@@ -129,7 +129,6 @@ bindsym $mod+r mode "resize"
 bar {
     status_command i3status-rs ~/.config/i3/status.toml
     font pango: JuliaMono
-    tray_output primary
 }
 
 
