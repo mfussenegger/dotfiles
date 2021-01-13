@@ -21,12 +21,6 @@ function M.jump_to_buf(buf, range)
 end
 
 
-function M.err_message(...)
-  vim.api.nvim_err_writeln(table.concat(vim.tbl_flatten{...}))
-  vim.api.nvim_command("redraw")
-end
-
-
 function M.init_hl(ft)
   local parser = vim.treesitter.get_parser(0, ft)
   local query = require('vim.treesitter.query').get_query(ft, 'highlights')

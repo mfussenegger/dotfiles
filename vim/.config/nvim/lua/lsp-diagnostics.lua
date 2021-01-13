@@ -31,10 +31,7 @@ do
     if not result then return end
     local uri = result.uri
     local bufnr = vim.uri_to_bufnr(uri)
-    if not bufnr then
-      myutil.err_message("LSP.publishDiagnostics: Couldn't find buffer for ", uri)
-      return
-    end
+    assert(bufnr, "Couldn't get buffer for uri " .. uri)
     vim.lsp.diagnostic.clear(bufnr)
     local has_errors = false
     for _, diagnostic in ipairs(result.diagnostics) do
