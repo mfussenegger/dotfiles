@@ -18,7 +18,7 @@ local function cancel_completion_requests()
 end
 
 
-local function text_document_completion_list_to_complete_items(result, _)
+local function text_document_completion_list_to_complete_items(result, prefix)
     local items = vim.lsp.util.extract_completion_items(result)
     if #items == 0 then
         return {}
@@ -26,7 +26,14 @@ local function text_document_completion_list_to_complete_items(result, _)
     if items[1] and items[1].sortText then
         table.sort(items, function(a, b) return (a.sortText or a.label) < (b.sortText or b.label) end)
     end
-
+    local clients = vim.lsp.buf_get_clients(0)
+    local equal = 0
+    for _, client in ipairs(clients) do
+      if client.config.flags.server_side_fuzzy_completion then
+        equal = 1
+        break
+      end
+    end
     local matches = {}
     for _, item in ipairs(items) do
         local info = ''
@@ -61,18 +68,20 @@ local function text_document_completion_list_to_complete_items(result, _)
         else
             word = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
         end
-        table.insert(matches, {
-            word = word,
-            abbr = item.label,
-            kind = kind,
-            menu = item.detail or '',
-            info = info,
-            icase = 1,
-            dup = 1,
-            empty = 1,
-            equal = 1,
-            user_data = item
-        })
+        if equal == 1 or vim.startswith(word, prefix) then
+          table.insert(matches, {
+              word = word,
+              abbr = item.label,
+              kind = kind,
+              menu = item.detail or '',
+              info = info,
+              icase = 1,
+              dup = 1,
+              empty = 1,
+              equal = equal,
+              user_data = item
+          })
+        end
     end
     return matches
 end
@@ -81,12 +90,13 @@ end
 function M.trigger_completion()
   cancel_completion_requests()
   local bufnr = api.nvim_get_current_buf()
-  local _, col = unpack(api.nvim_win_get_cursor(0))
+  local cursor_pos = api.nvim_win_get_cursor(0)[2]
+  local line = api.nvim_get_current_line()
+  local col
   if completion_ctx.col then
     col = completion_ctx.col
   else
-    local line = api.nvim_get_current_line()
-    local line_to_cursor = line:sub(1, col)
+    local line_to_cursor = line:sub(1, cursor_pos)
     local idx = 0
     while true do
       local i = string.find(line_to_cursor, '[^a-zA-Z0-9_]', idx + 1)
@@ -99,6 +109,7 @@ function M.trigger_completion()
     col = (idx or col) + 1
     completion_ctx.col = col
   end
+  local prefix = line:sub(col, cursor_pos)
   local params = vim.lsp.util.make_position_params()
   local _, cancel_completions = vim.lsp.buf_request(
     bufnr,
@@ -115,7 +126,7 @@ function M.trigger_completion()
       end
       local mode = api.nvim_get_mode()['mode']
       if mode == 'i' or mode == 'ic' then
-        local matches = text_document_completion_list_to_complete_items(result)
+        local matches = text_document_completion_list_to_complete_items(result, prefix)
         vim.fn.complete(col, matches)
       end
     end
@@ -124,7 +135,7 @@ function M.trigger_completion()
 end
 
 
-function M._InsertCharPre()
+function M._InsertCharPre(server_side_fuzzy_completion)
   if timer then
     timer:stop()
     timer:close()
@@ -141,7 +152,7 @@ function M._InsertCharPre()
       return
     end
   end
-  if tonumber(vim.fn.pumvisible()) == 1 then
+  if server_side_fuzzy_completion and tonumber(vim.fn.pumvisible()) == 1 then
     timer = vim.loop.new_timer()
     timer:start(250, 0, vim.schedule_wrap(M.trigger_completion))
   end
@@ -265,7 +276,11 @@ end
 
 
 function M.attach(client, bufnr)
-  vim.cmd(string.format("autocmd InsertCharPre <buffer=%d> lua require'lsp-ext'._InsertCharPre()", bufnr))
+  vim.cmd(string.format(
+    "autocmd InsertCharPre <buffer=%d> lua require'lsp-ext'._InsertCharPre(%s)",
+    bufnr,
+    client.config.flags.server_side_fuzzy_completion
+  ))
   vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'lsp-ext'._InsertLeave()", bufnr))
   vim.cmd(string.format("autocmd CompleteDone <buffer=%d> lua require'lsp-ext'._CompleteDone()", bufnr))
   if (client.server_capabilities.completionProvider or {}).resolveProvider then

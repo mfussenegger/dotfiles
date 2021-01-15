@@ -129,6 +129,7 @@ function M.start_jdt()
   local home = os.getenv('HOME')
   local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
   local config = mk_config()
+  config.flags.server_side_fuzzy_completion = true
   config.settings = {
     java = {
       signatureHelp = { enabled = true };
