@@ -67,7 +67,7 @@
     mode: 0700
 - name: Get and unpack jmc
   unarchive:
-    src: https://download.java.net/java/GA/jmc7/14/jmc-7_linux-x64_bin.tar.gz
+    src: https://ci.adoptopenjdk.net/view/JMC/job/jmc-build/job/master/lastSuccessfulBuild/artifact/target/products/org.openjdk.jmc-8.0.0-SNAPSHOT-linux.gtk.x86_64.tar.gz
     dest: ~/apps/jmc/
     remote_src: true
     creates: ~/apps/jmc/bin/jmc
@@ -75,7 +75,7 @@
       - --strip-components=1
 - name: Create symlink for jmc
   file:
-    src: ~/apps/jmc/bin/jmc
+    src: ~/apps/jmc/jmc
     dest: ~/bin/jmc
     state: link
 
