@@ -2,6 +2,7 @@
 font:
   normal:
     family: JuliaMono
+  size: 15
 
 window:
   dynamic_title: true

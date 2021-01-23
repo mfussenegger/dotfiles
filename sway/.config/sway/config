@@ -4,7 +4,7 @@ set $down j
 set $left h
 set $right l
 
-font pango: JuliaMono 10
+font pango: JuliaMono 15
 
 # colors
 #
@@ -128,20 +128,16 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     status_command i3status-rs ~/.config/i3/status.toml
-    font pango: JuliaMono
+    font pango: JuliaMono 16
 }
 
 
 output 'Dell Inc. DELL P2416D 07C5367S0RKU' {
-  scale 1.50
   position 0 0
-  scale_filter nearest
   subpixel rgb
 }
 output 'Dell Inc. DELL P2416D 07C5367S0R4U' {
-  scale 1.50
-  position 1706 0
-  scale_filter nearest
+  position 2560 0
   subpixel rgb
 }
 
@@ -153,6 +149,7 @@ workspace 4 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
 workspace 7 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
 workspace 8 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
 workspace 9 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
+workspace 10 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
 
 
 # scratchpad
@@ -190,4 +187,5 @@ input type:touchpad {
 }
 
 
+exec systemctl --user import-environment
 exec systemctl --user start swayidle.service

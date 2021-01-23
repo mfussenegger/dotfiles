@@ -86,7 +86,7 @@ selection input = do
   if tool == "bemenu"
     then do
       idx <- getDisplayIdx
-      runTool "bemenu" ["-m", show idx, "-l", "30"]
+      runTool "bemenu" ["-m", show idx, "-l", "30", "--fn", "JuliaMono 16"]
     else runTool tool []
   where
     getDisplayIdx :: IO Int

@@ -1,11 +1,5 @@
-! X cursor
-Xcursor.theme: Vanilla-DMZ
-! Xcursor.size: 16
-
-
 ! XFT and Font settings
-Xft*antialias: true
-Xft*hinting:   true
-Xft*hintstyle: hintfull
-Xft*rgba:      rgb
-*font:-*-terminus-medium-*-*-*-14-140-*-*-*-*-*-*
+Xft.antialias: true
+Xft.hinting:   true
+Xft.hintstyle: hintfull
+Xft.rgba:      rgb
