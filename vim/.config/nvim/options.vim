@@ -110,7 +110,7 @@ if has('nvim-0.5')
       au FileType cs lua require('lsp-config').start_omnisharp()
     augroup end
 
-    lua require('dap-config')
+    lua require('dap-config').setup()
 endif
 
 
