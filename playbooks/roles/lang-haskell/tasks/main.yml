@@ -1,6 +1,6 @@
 ---
-- name: Install haskell tooling lts16
-  command: stack install --resolver lts-16.12 cabal-install ghcid hlint hoogle dhall dhall-json ormolu
+- name: Install haskell tooling lts17
+  command: stack install --resolver lts-17.1 ghcid hlint hoogle dhall dhall-json ormolu
   args:
     chdir: ~/
 - name: Clone/pull haskell-language-server and ghcid
@@ -11,7 +11,7 @@
     - haskell/haskell-language-server
     - ndmitchell/ghcid
 - name: Build haskell-language-server
-  command: stack install --stack-yaml=stack-8.8.4.yaml
+  command: stack install --stack-yaml=stack-8.10.3.yaml
   args:
     chdir: ~/dev/haskell/haskell-language-server
 - name: Generate hoogle database for hie
