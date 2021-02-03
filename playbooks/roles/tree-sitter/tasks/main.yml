@@ -5,9 +5,12 @@
     dest: ~/dev/{{ item.repo }}
     version: '{{ item.version }}'
   loop:
-    -  { repo: 'tree-sitter/tree-sitter-java', version: 'f7b62ac33d63bea56ce202ace107aaa4285e50af' }
-    -  { repo: 'tree-sitter/tree-sitter-python', version: 'd245768132eb6cb74d8a394ca4d29dc57169b096' }
-    -  { repo: 'Azganoth/tree-sitter-lua', version: 'd835774e14fd7073567358cdb8900c6012ea5eef' }
+    - { repo: 'tree-sitter/tree-sitter-java', version: 'master' }
+    - { repo: 'tree-sitter/tree-sitter-python', version: 'master' }
+    - { repo: 'tree-sitter/tree-sitter-html', version: 'master' }
+    - { repo: 'tree-sitter/tree-sitter-json', version: 'master' }
+    - { repo: 'Azganoth/tree-sitter-lua', version: 'd835774e14fd7073567358cdb8900c6012ea5eef' }
+    - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -19,19 +22,33 @@
     - queries/java
     - queries/python
     - queries/lua
+    - queries/rst
+    - queries/html
+    - queries/json
 
-- name: Generate java parser
-  command: cc -O2 -o ~/.config/nvim/parser/java.so -shared src/parser.c -I./src
+- name: Generate parsers
+  command: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
   args:
-    chdir: ~/dev/tree-sitter/tree-sitter-java
-- name: Generate python parser
-  command: cc -O2 -o ~/.config/nvim/parser/python.so -I./src src/parser.c src/scanner.cc -shared -Os -lstdc++
-  args:
-    chdir: ~/dev/tree-sitter/tree-sitter-python
-- name: Generate lua parser
-  command: cc -O2 -o ~/.config/nvim/parser/lua.so -I./src src/parser.c src/scanner.cc -shared -Os -lstdc++
-  args:
-    chdir: ~/dev/Azganoth/tree-sitter-lua/
+    chdir: ~/dev/{{ item.repo }}
+  loop:
+    - repo: 'tree-sitter/tree-sitter-java'
+      ft: 'java'
+      files: src/parser.c
+    - repo: 'tree-sitter/tree-sitter-python'
+      ft: 'python'
+      files: src/parser.c src/scanner.cc 
+    - repo: 'tree-sitter/tree-sitter-html'
+      ft: 'html'
+      files: src/parser.c src/scanner.cc
+    - repo: 'Azganoth/tree-sitter-lua'
+      ft: 'lua'
+      files: src/parser.c src/scanner.cc
+    - repo: 'stsewd/tree-sitter-rst'
+      ft: 'rst'
+      files: src/parser.c src/scanner.c
+    - repo: 'tree-sitter/tree-sitter-json'
+      ft: 'json'
+      files: src/parser.c
 
 - name: Copy queries
   copy:
@@ -42,7 +59,13 @@
     - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'tags.scm' }
     - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'highlights.scm' }
     - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'tags.scm' }
-- name: Fetch lua highlights
+    - { ft: 'rst', src_dir: 'stsewd/tree-sitter-rst/queries', file: 'highlights.scm' }
+    - { ft: 'html', src_dir: 'tree-sitter/tree-sitter-html/queries', file: 'highlights.scm' }
+
+- name: Fetch highlights
   get_url:
-    url: https://raw.githubusercontent.com/nvim-treesitter/nvim-treesitter/master/queries/lua/highlights.scm
-    dest: ~/.config/nvim/queries/lua/highlights.scm
+    url: https://raw.githubusercontent.com/nvim-treesitter/nvim-treesitter/master/queries/{{ item }}/highlights.scm
+    dest: ~/.config/nvim/queries/{{ item }}/highlights.scm
+  loop:
+    - lua
+    - json

@@ -9,7 +9,3 @@ endif
 setlocal path=.,src/main/java/**,src/test/java/**,**/src/main/java/**,**/src/test/java/**
 setlocal include=^\s*import
 setlocal includeexpr=substitute(v:fname,'\\.','/','g')
-
-if has('nvim-0.5')
-  lua require('util').init_hl('java')
-endif

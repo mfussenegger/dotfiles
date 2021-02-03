@@ -11,10 +11,13 @@ M.RE = setmetatable({}, {
   end
 })
 
-function M.init_hl(ft)
-  local parser = vim.treesitter.get_parser(0, ft)
-  local query = require('vim.treesitter.query').get_query(ft, 'highlights')
-  if query then
+function M.init_hl()
+  local ft = vim.api.nvim_buf_get_option(0, 'filetype')
+  local ok, parser = pcall(vim.treesitter.get_parser, 0, ft)
+  if not ok then return end
+  local get_query = require('vim.treesitter.query').get_query
+  local ok, query = pcall(get_query, ft, 'highlights')
+  if ok and query then
     vim.treesitter.highlighter.new(parser, query)
   end
 end

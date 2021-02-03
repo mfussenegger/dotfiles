@@ -108,6 +108,7 @@ if has('nvim-0.5')
       au FileType json lua require('lsp-config').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
       au FileType css lua require('lsp-config').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
       au FileType cs lua require('lsp-config').start_omnisharp()
+      au FileType * lua require('util').init_hl()
     augroup end
 
     lua require('dap-config').setup()
