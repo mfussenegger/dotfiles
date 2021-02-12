@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 JAR="$HOME/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_*.jar"
-GRADLE_HOME=$HOME/gradle $HOME/.local/jdks/jdk-15.0.1+9/bin/java \
+GRADLE_HOME=$HOME/gradle /usr/lib/jvm/java-15-openjdk/bin/java \
   -Declipse.application=org.eclipse.jdt.ls.core.id1 \
   -Dosgi.bundles.defaultStartLevel=4 \
   -Declipse.product=org.eclipse.jdt.ls.core.product \

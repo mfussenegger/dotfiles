@@ -164,11 +164,7 @@ function M.start_jdt()
           },
           {
             name = "JavaSE-15",
-            path = home .. '/.local/jdks/jdk-15.0.1+9'
-          },
-          {
-            name = "JavaSE-16",
-            path = home .. '/.local/jdks/jdk-16'
+            path = "/usr/lib/jvm/java-15-openjdk/",
           },
         }
       };
