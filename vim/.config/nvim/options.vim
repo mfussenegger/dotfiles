@@ -95,6 +95,7 @@ if has('nvim-0.5')
     lua require('jdtls.ui').pick_one_async = require('fzy').pick_one
     lua require('dap.ui').pick_one = require('fzy').pick_one
     lua lsp_ext = require('lsp-ext')
+    lua require('lsp-config').setup()
     augroup lsp
       au!
       au FileType java lua require('lsp-config').start_jdt()

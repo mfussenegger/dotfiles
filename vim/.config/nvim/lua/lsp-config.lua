@@ -104,9 +104,6 @@ local function mk_config()
     flags = {
       allow_incremental_sync = true,
     };
-    handlers = {
-      ["textDocument/publishDiagnostics"] = lsp_diag.publishDiagnostics,
-    };
     capabilities = capabilities;
     on_init = on_init;
     on_attach = on_attach;
@@ -246,6 +243,11 @@ function M.start_omnisharp()
     root = {'.csproj', '.git', '.sln'},
   }
   M.add_client({path, '--languageserver', '--hostPID', tostring(pid)}, opts)
+end
+
+
+function M.setup()
+  vim.lsp.handlers['textDocument/publishDiagnostics'] = lsp_diag.publishDiagnostics
 end
 
 
