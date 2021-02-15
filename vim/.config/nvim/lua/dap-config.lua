@@ -21,9 +21,12 @@ local function setup_hover_keymap()
       del_hover_keymaps(buf)
     end
     api.nvim_set_keymap(
+      'v', 'K', '<ESC><Cmd>lua require("dap.ui.variables").visual_hover()<CR>', { silent = true })
+    api.nvim_set_keymap(
       'n', 'K', '<Cmd>lua require("dap.ui.variables").hover()<CR>', { silent = true })
   end
   dap.custom_event_handlers['event_terminated']['me'] = function()
+    api.nvim_del_keymap('v', 'K')
     for _, keymap in pairs(keymap_restore) do
       if api.nvim_buf_is_valid(keymap.buffer) then
         api.nvim_buf_set_keymap(
