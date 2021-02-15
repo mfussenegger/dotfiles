@@ -55,7 +55,6 @@
     src: ~/dev/{{ item.src_dir }}/{{ item.file }}
     dest: ~/.config/nvim/queries/{{ item.ft }}/{{ item.file }}
   loop:
-    - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'highlights.scm' }
     - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'tags.scm' }
     - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'highlights.scm' }
     - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'tags.scm' }
@@ -69,3 +68,4 @@
   loop:
     - lua
     - json
+    - java
