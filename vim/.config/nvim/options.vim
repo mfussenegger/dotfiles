@@ -109,7 +109,6 @@ if has('nvim-0.5')
       au FileType css lua require('lsp-config').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
       au FileType cs lua require('lsp-config').start_omnisharp()
       au FileType * lua require('util').init_hl()
-      au FileType dap-repl lua require('dap.ext.autocompl').attach()
     augroup end
 
     lua require('dap-config').setup()
