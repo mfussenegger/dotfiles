@@ -2,6 +2,11 @@ local M = {}
 
 function M.reload(name)
   package.loaded[name] = nil
+  for pkg_name, _ in pairs(package.loaded) do
+    if vim.startswith(pkg_name, name) then
+      package.loaded[pkg_name] = nil
+    end
+  end
   return require(name)
 end
 
