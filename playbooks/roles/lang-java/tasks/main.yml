@@ -28,15 +28,11 @@
     force: true  # npm commands below modify the package.json
 
 - name: Build vscode-java-test
-  command: "{{ item }}"
+  command: ./mvnw clean verify -DskipTests
   environment:
     JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
   args:
-    chdir: ~/dev/microsoft/vscode-java-test
-  loop:
-    - git clean -xdff
-    - npm install
-    - npm run build-plugin
+    chdir: ~/dev/microsoft/vscode-java-test/java-extension
 
 - name: Create apps folder
   file:
