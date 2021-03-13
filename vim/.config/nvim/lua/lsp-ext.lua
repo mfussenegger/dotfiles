@@ -317,20 +317,36 @@ function M.tagfunc(pattern, flags)
     return vim.NIL
   end
   local params = vim.lsp.util.make_position_params()
-  local client_id_to_results, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 500)
+  local results_by_client, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
   assert(not err, vim.inspect(err))
 
   local results = {}
-  for _, lsp_results in ipairs(client_id_to_results) do
-    for _, location in ipairs(lsp_results.result or {}) do
-      local start = location.range.start
-      table.insert(results, {
-        name = pattern,
-        filename = vim.uri_to_fname(location.uri),
-        cmd = string.format(
-          'call cursor(%d, %d)', start.line + 1, start.character + 1
-        )
-      })
+  local add = function(range, uri)
+    local start = range.start
+    table.insert(results, {
+      name = pattern,
+      filename = vim.uri_to_fname(uri),
+      cmd = string.format(
+        'call cursor(%d, %d)', start.line + 1, start.character + 1
+      )
+    })
+  end
+  for _, lsp_results in ipairs(results_by_client) do
+    -- result can be Location | Location[] | LocationLink[]
+    local result = lsp_results.result or {}
+    if result.range then
+      -- Location
+      add(result.range, result.uri)
+    else
+      for _, item in ipairs(result) do
+        if item.range then
+          -- Location
+          add(item.range, item.uri)
+        else
+          -- LocationLink
+          add(item.targetSelectionRange, item.targetUri)
+        end
+      end
     end
   end
   return results
