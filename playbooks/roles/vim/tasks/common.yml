@@ -17,9 +17,6 @@
     dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
   loop:
     - lifepillar/vim-gruvbox8
-    - junegunn/fzf
-    - junegunn/fzf.vim
-    - monkoose/fzf-hoogle.vim
     - junegunn/gv.vim
     - junegunn/vim-easy-align
     - tpope/vim-fugitive

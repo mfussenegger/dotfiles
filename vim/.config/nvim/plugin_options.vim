@@ -21,7 +21,5 @@ let g:vista_executive_for = {
   \ 'java': 'nvim_lsp'
   \ }
 
-let g:fzf_preview_window = ''
-
 " tree-view
 let g:netrw_liststyle = 3

@@ -59,7 +59,6 @@ augroup outline
 augroup end
 
 
-" fzf
 if has('nvim-0.5')
   lua fzy = require('fzy')
   nnoremap <silent><leader>fq :lua fzy.actions.quickfix()<CR>
@@ -67,19 +66,8 @@ if has('nvim-0.5')
   nnoremap <silent><leader>fb :lua fzy.actions.buffers()<CR>
   nnoremap <silent><leader>ft :lua fzy.try(fzy.actions.lsp_tags, fzy.actions.buf_tags)<CR>
   nnoremap <silent><leader>fg :lua fzy.execute('git ls-files', fzy.sinks.edit_file)<CR>
-else
-  nnoremap <silent><leader>f/ :History/<CR>
-  nnoremap <silent><leader>f: :History:<CR>
-  nnoremap <silent><leader>ff :Files<CR>
-  nnoremap <silent><leader>fb :Buffers<CR>
-  nnoremap <silent><leader>ft :BTags<CR>
-  nnoremap <silent><leader>fT :Tags<CR>
-  nnoremap <silent><leader>fg :GitFiles<CR>
-  nnoremap <silent><leader>gl :BCommits<CR>
+  inoremap <silent><c-e> <ESC>:lua require('util').emoji()<CR>
 endif
-
-inoremap <silent><c-e> <ESC>:lua require('util').emoji()<CR>
-
 
 " gnupg
 nnoremap <leader>pe :GPGEditRecipients<cr>
