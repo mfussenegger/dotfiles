@@ -113,6 +113,7 @@ if has('nvim-0.5')
     augroup end
 
     lua require('dap-config').setup()
+    lua require('util').setup()
 endif
 
 
