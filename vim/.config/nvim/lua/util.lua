@@ -1,6 +1,25 @@
 local M = {}
 local api = vim.api
 
+
+function M.statusline()
+  local parts = {
+    "%<» %f %h%m%r%=",
+    "%#warningmsg#",
+    "%{&paste?'[paste] ':''}",
+    "%*",
+
+    "%#warningmsg#",
+    "%{&ff!='unix'?'['.&ff.'] ':''}",
+    "%*",
+
+    "%#warningmsg#",
+    "%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.'] ':''}",
+    "%*",
+
+    "%-14.(%l,%c%)",
+  }
+  return table.concat(parts, '')
 end
 
 
@@ -47,7 +66,7 @@ function M.emoji()
 end
 
 
-local function reload(name, children)
+function M.reload(name, children)
   children = children or false
   package.loaded[name] = nil
   if children then
@@ -60,8 +79,25 @@ local function reload(name, children)
   return require(name)
 end
 
+M.modules = setmetatable({}, {
+  __index = function(_, k)
+    return M.reload(k)
+  end
+})
+
+
+function M.activate_reload(name, children)
+  name = name or vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':t:r')
+  children = children or false
+  vim.cmd('augroup lua-debug')
+  vim.cmd('au!')
+  vim.cmd(string.format("autocmd BufWritePost <buffer> lua U.reload('%s', %s)", name, children))
+  vim.cmd('augroup end')
+end
+
 
 function M.setup()
+  U = M
   P = function(...)
     print(unpack(vim.tbl_map(vim.inspect, {...})))
   end
@@ -72,21 +108,6 @@ function M.setup()
     fp:write('[' .. os.date(log_date_format) .. '] ' .. line .. '\n')
     fp:flush()
     fp:close()
-  end
-  U = {}
-  U.reload = reload
-  U.module = setmetatable({}, {
-    __index = function(_, k)
-      return reload(k)
-    end
-  })
-  U.activate_reload = function(name, children)
-    name = name or vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':t:r')
-    children = children or false
-    vim.cmd('augroup lua-debug')
-    vim.cmd('au!')
-    vim.cmd(string.format("autocmd BufWritePost <buffer> lua U.reload('%s', %s)", name, children))
-    vim.cmd('augroup end')
   end
 end
 

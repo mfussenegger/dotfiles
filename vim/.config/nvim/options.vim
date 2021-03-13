@@ -16,6 +16,7 @@ set lazyredraw
 set ttyfast
 set scrolloff=3
 set termguicolors
+set statusline=%!v:lua.U.statusline()
 
 set updatetime=500
 
