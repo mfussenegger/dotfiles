@@ -1,7 +1,6 @@
 local M = {}
 local api = vim.api
 
-
 function M.statusline()
   local parts = {
     "%<» %f %h%m%r%=",
@@ -16,9 +15,24 @@ function M.statusline()
     "%#warningmsg#",
     "%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.'] ':''}",
     "%*",
-
-    "%-14.(%l,%c%)",
   }
+  local diagnostics
+  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
+    diagnostics = {}
+  else
+    diagnostics = {
+      '%#MyStatuslineLSP# ■ ',
+      '%#MyStatuslineLSPErrors#%{luaeval("vim.lsp.diagnostic.get_count(0, [[Error]])")}',
+      '%#MyStatuslineLSP# □ ',
+      '%#MyStaruslineLSPWarnings#%{luaeval("vim.lsp.diagnostic.get_count(0, [[Warning]])")}',
+    }
+  end
+  vim.list_extend(parts, diagnostics)
+  if vim.tbl_isempty(diagnostics) then
+    table.insert(parts, "%-14.(%l,%c%)")
+  else
+    table.insert(parts, "%-14.( | %l,%c%)")
+  end
   return table.concat(parts, '')
 end
 
