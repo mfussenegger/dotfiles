@@ -76,10 +76,10 @@ nnoremap <leader>pv :GPGViewRecipients<cr>
 " fugitive {{{
 
 nnoremap <leader>gw :Gwrite<cr>
-nnoremap <leader>gd :Git diff<cr>
+nnoremap <leader>gd :Gdiffsplit<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gb :Git blame<cr>
-nnoremap <leader>gc :Gcommit -v<cr>
+nnoremap <leader>gc :Git commit -v<cr>
 
 " }}}
 
