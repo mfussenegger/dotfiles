@@ -16,7 +16,6 @@ set lazyredraw
 set ttyfast
 set scrolloff=3
 set termguicolors
-set statusline=%!v:lua.U.statusline()
 
 set updatetime=1000
 
@@ -92,6 +91,7 @@ if executable("rg")
 endif
 
 if has('nvim-0.5')
+    set statusline=%!v:lua.U.statusline()
     lua require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
     lua require('jdtls.ui').pick_one_async = require('fzy').pick_one
     lua require('dap.ui').pick_one = require('fzy').pick_one
