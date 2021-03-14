@@ -18,7 +18,7 @@ set scrolloff=3
 set termguicolors
 set statusline=%!v:lua.U.statusline()
 
-set updatetime=500
+set updatetime=1000
 
 set complete=.,w,b,u,U,i,d,t
 set completeopt=menuone,noinsert,noselect
