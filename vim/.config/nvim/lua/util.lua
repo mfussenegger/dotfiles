@@ -1,5 +1,6 @@
 local M = {}
 local api = vim.api
+local lint_active = {}
 
 function M.statusline()
   local parts = {
@@ -17,7 +18,8 @@ function M.statusline()
     "%*",
   }
   local diagnostics
-  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
+  local bufnr = api.nvim_get_current_buf()
+  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) and not lint_active[bufnr] then
     diagnostics = {}
   else
     diagnostics = {
@@ -47,6 +49,24 @@ function M.init_hl()
   if ok and query then
     vim.treesitter.highlighter.new(parser, query)
   end
+function M.enable_lint()
+  local bufnr = api.nvim_get_current_buf()
+  lint_active[bufnr] = true
+  api.nvim_buf_attach(bufnr, false, {
+    on_detach = function(b)
+      lint_active[b] = nil
+    end,
+  })
+  vim.cmd("augroup lint")
+  vim.cmd("au!")
+  vim.cmd(string.format("au BufWritePost <buffer=%d> lua require'lint'.try_lint()", bufnr))
+  vim.cmd("augroup end")
+  local opts = {
+    silent = true;
+  }
+  api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+  api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
+  api.nvim_buf_set_keymap(bufnr, "n", "<space>", "<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
 end
 
 
