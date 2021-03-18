@@ -9,7 +9,8 @@
     - { repo: 'tree-sitter/tree-sitter-python', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-html', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-json', version: 'master' }
-    - { repo: 'Azganoth/tree-sitter-lua', version: 'd835774e14fd7073567358cdb8900c6012ea5eef' }
+    - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
+    - { repo: 'Azganoth/tree-sitter-lua', version: 'master' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
@@ -25,6 +26,7 @@
     - queries/rst
     - queries/html
     - queries/json
+    - queries/haskell
 
 - name: Generate parsers
   command: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
@@ -36,6 +38,9 @@
       files: src/parser.c
     - repo: 'tree-sitter/tree-sitter-python'
       ft: 'python'
+      files: src/parser.c src/scanner.cc
+    - repo: 'tree-sitter/tree-sitter-haskell'
+      ft: 'haskell'
       files: src/parser.c src/scanner.cc 
     - repo: 'tree-sitter/tree-sitter-html'
       ft: 'html'
@@ -58,8 +63,8 @@
     - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'tags.scm' }
     - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'highlights.scm' }
     - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'tags.scm' }
-    - { ft: 'rst', src_dir: 'stsewd/tree-sitter-rst/queries', file: 'highlights.scm' }
     - { ft: 'html', src_dir: 'tree-sitter/tree-sitter-html/queries', file: 'highlights.scm' }
+    - { ft: 'haskell', src_dir: 'tree-sitter/tree-sitter-haskell/queries', file: 'highlights.scm' }
 
 - name: Fetch highlights
   get_url:
