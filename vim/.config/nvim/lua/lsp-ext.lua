@@ -61,7 +61,7 @@ local function text_document_completion_list_to_complete_items(result, prefix)
             --      label = "testSuites"
             --]]
             if item.textEdit then
-                word = item.insertText
+                word = item.insertText or item.textEdit.newText
             else
                 word = item.label
             end
@@ -251,9 +251,9 @@ function M._CompleteDone()
     end
     if expand_snippet then
       if item.textEdit then
-        api.nvim_call_function("UltiSnips#Anon", {item.textEdit.newText .. suffix})
-      else
-        api.nvim_call_function("UltiSnips#Anon", {item.insertText .. suffix})
+        vim.fn['vsnip#anonymous'](item.textEdit.newText .. suffix)
+      elseif item.insertText then
+        vim.fn['vsnip#anonymous'](item.insertText .. suffix)
       end
     end
 end

@@ -1,4 +1,4 @@
-let g:UltiSnipsExpandTrigger="<c-j>"
+let g:vsnip_snippet_dir = expand('~/.config/vsnip/')
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 let g:gist_detect_filetype = 1
