@@ -16,7 +16,7 @@ local function del_hover_keymaps(buf)
 end
 
 local function setup_hover_keymap()
-  dap.custom_event_handlers['event_initialized']['me'] = function()
+  dap.listeners.after['event_initialized']['me'] = function()
     for _, buf in pairs(api.nvim_list_bufs()) do
       del_hover_keymaps(buf)
     end
@@ -25,7 +25,7 @@ local function setup_hover_keymap()
     api.nvim_set_keymap(
       'n', 'K', '<Cmd>lua require("dap.ui.variables").hover()<CR>', { silent = true })
   end
-  dap.custom_event_handlers['event_terminated']['me'] = function()
+  dap.listeners.after['event_terminated']['me'] = function()
     api.nvim_del_keymap('v', 'K')
     for _, keymap in pairs(keymap_restore) do
       if api.nvim_buf_is_valid(keymap.buffer) then
