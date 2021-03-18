@@ -40,15 +40,27 @@ end
 
 
 function M.init_hl()
-  local ft = api.nvim_buf_get_option(0, 'filetype')
-  local ok, parser = pcall(vim.treesitter.get_parser, 0, ft)
+  local ts = vim.treesitter
+  local bufnr = api.nvim_get_current_buf()
+  local ft = api.nvim_buf_get_option(bufnr, 'filetype')
+  local ok, parser = pcall(ts.get_parser, bufnr, ft)
   if not ok then return end
   local get_query = require('vim.treesitter.query').get_query
   local query
   ok, query = pcall(get_query, ft, 'highlights')
   if ok and query then
-    vim.treesitter.highlighter.new(parser, query)
+    ts.highlighter.new(parser, query)
   end
+  api.nvim_buf_attach(bufnr, false, {
+    on_detach = function(b)
+      if ts.highlighter.active[b] then
+        ts.highlighter.active[b]:destroy()
+      end
+    end,
+  })
+end
+
+
 function M.enable_lint()
   local bufnr = api.nvim_get_current_buf()
   lint_active[bufnr] = true
