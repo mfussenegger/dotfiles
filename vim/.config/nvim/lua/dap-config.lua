@@ -143,6 +143,42 @@ function M.setup()
       stopOnEntry = false,
       args = {}
     },
+    {
+      -- If you get an "Operation not permitted" error using this, try disabling YAMA:
+      --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+      --
+      -- Careful, don't try to attach to the neovim instance that runs *this*
+      name = "Attach to process",
+      type = 'cpp',
+      request = 'attach',
+      pid = function()
+        local output = vim.fn.system({'ps', 'a'})
+        local lines = vim.split(output, '\n')
+        local procs = {}
+        for _, line in pairs(lines) do
+          -- output format
+          --    " 107021 pts/4    Ss     0:00 /bin/zsh <args>"
+          local parts = vim.fn.split(vim.fn.trim(line), ' \\+')
+          local pid = parts[1]
+          local name = table.concat({unpack(parts, 5)}, ' ')
+          if pid and pid ~= 'PID' then
+            table.insert(procs, { pid = tonumber(pid), name = name })
+          end
+        end
+        local choices = {'Select process'}
+        for i, proc in ipairs(procs) do
+          table.insert(choices, string.format("%d: pid=%d name=%s", i, proc.pid, proc.name))
+        end
+        -- Would be cool to have a fancier selection, but needs to be sync :/
+        -- Should nvim-dap handle coroutine results?
+        local choice = vim.fn.inputlist(choices)
+        if choice < 1 or choice > #procs then
+          return nil
+        end
+        return procs[choice].pid
+      end,
+      args = {},
+    },
   }
   dap.adapters.c = dap.adapters.cpp
   dap.configurations.c = dap.configurations.cpp
