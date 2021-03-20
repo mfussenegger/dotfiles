@@ -10,7 +10,7 @@
     - { repo: 'tree-sitter/tree-sitter-html', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-json', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
-    - { repo: 'Azganoth/tree-sitter-lua', version: 'master' }
+    - { repo: 'nvim-treesitter/tree-sitter-lua', version: 'master' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
@@ -45,7 +45,7 @@
     - repo: 'tree-sitter/tree-sitter-html'
       ft: 'html'
       files: src/parser.c src/scanner.cc
-    - repo: 'Azganoth/tree-sitter-lua'
+    - repo: 'nvim-treesitter/tree-sitter-lua'
       ft: 'lua'
       files: src/parser.c src/scanner.cc
     - repo: 'stsewd/tree-sitter-rst'
