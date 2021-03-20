@@ -38,6 +38,7 @@
     - vmchale/dhall-vim
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
+    - phaazon/hop.nvim
 - name: Checkout vim dev plugins
   git:
     repo: https://github.com/{{ item }}

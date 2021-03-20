@@ -133,4 +133,12 @@ if has('nvim-0.5')
     command -nargs=0 DapBreakpoints :lua require('dap').list_breakpoints()
 
     nnoremap <silent> <leader>q :lua require('quickfix').toggle()<CR>
+
+    nnoremap <silent> <leader>hw :lua require('hop').hint_words()<CR>
+    nnoremap <silent> <leader>h/ :HopPattern<CR>
+    nnoremap <silent> <leader>hc :HopChar1<CR>
+    vnoremap <silent> <leader>hw :lua require('hop').hint_words()<CR>
+    vnoremap <silent> <leader>h/ :HopPattern<CR>
+    vnoremap <silent> <leader>hc :HopChar1<CR>
+    omap     <silent> <leader>h :HopWord<CR>
 endif
