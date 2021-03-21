@@ -80,6 +80,11 @@ local function on_attach(client, bufnr)
       api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
       api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
     end
+  vim.cmd('augroup lsp_aucmds')
+  vim.cmd(string.format('au! * <buffer=%d>', bufnr))
+  vim.cmd(string.format('au User LspDiagnosticsChanged <buffer=%d> redrawstatus!', bufnr))
+  vim.cmd(string.format('au User LspMessageUpdate <buffer=%d> redrawstatus!', bufnr))
+  vim.cmd('augroup end')
 end
 
 local function jdtls_on_attach(client, bufnr)

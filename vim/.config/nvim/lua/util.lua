@@ -19,7 +19,11 @@ function M.statusline()
   }
   local diagnostics
   local bufnr = api.nvim_get_current_buf()
-  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) and not lint_active[bufnr] then
+  local has_clients = not vim.tbl_isempty(vim.lsp.buf_get_clients(0))
+  if has_clients then
+    table.insert(parts, '%{luaeval("U.lsp_progress()")}')
+  end
+  if not has_clients and not lint_active[bufnr] then
     diagnostics = {}
   else
     diagnostics = {
@@ -36,6 +40,14 @@ function M.statusline()
     table.insert(parts, "%-14.( | %l,%c%)")
   end
   return table.concat(parts, '')
+end
+
+
+function M.lsp_progress()
+  for _, message in pairs(vim.lsp.util.get_progress_messages()) do
+    return message.title .. ' ' .. (message.percentage or '') .. ' | '
+  end
+  return ''
 end
 
 
