@@ -12,6 +12,7 @@
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
     - { repo: 'nvim-treesitter/tree-sitter-lua', version: 'master' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
+    - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -27,6 +28,7 @@
     - queries/html
     - queries/json
     - queries/haskell
+    - queries/markdown
 
 - name: Generate parsers
   command: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
@@ -54,6 +56,9 @@
     - repo: 'tree-sitter/tree-sitter-json'
       ft: 'json'
       files: src/parser.c
+    - repo: 'ikatyang/tree-sitter-markdown'
+      ft: 'markdown'
+      files: src/parser.c src/scanner.cc
 
 - name: Copy queries
   copy:
@@ -66,11 +71,13 @@
     - { ft: 'html', src_dir: 'tree-sitter/tree-sitter-html/queries', file: 'highlights.scm' }
     - { ft: 'haskell', src_dir: 'tree-sitter/tree-sitter-haskell/queries', file: 'highlights.scm' }
 
-- name: Fetch highlights
+- name: Fetch queries
   get_url:
-    url: https://raw.githubusercontent.com/nvim-treesitter/nvim-treesitter/master/queries/{{ item }}/highlights.scm
-    dest: ~/.config/nvim/queries/{{ item }}/highlights.scm
+    url: https://raw.githubusercontent.com/nvim-treesitter/nvim-treesitter/master/queries/{{ item.ft }}/{{ item.name }}.scm
+    dest: ~/.config/nvim/queries/{{ item.ft }}/{{ item.name }}.scm
   loop:
-    - lua
-    - json
-    - java
+    - { ft: 'lua', name: 'highlights' }
+    - { ft: 'json', name: 'highlights' }
+    - { ft: 'java', name: 'highlights' }
+    - { ft: 'markdown', name: 'highlights' }
+    - { ft: 'markdown', name: 'injections' }
