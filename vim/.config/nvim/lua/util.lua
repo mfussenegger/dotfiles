@@ -16,6 +16,7 @@ function M.statusline()
     "%#warningmsg#",
     "%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.'] ':''}",
     "%*",
+    "%{luaeval('U.dap_status()')}"
   }
   local diagnostics
   local bufnr = api.nvim_get_current_buf()
@@ -40,6 +41,28 @@ function M.statusline()
     table.insert(parts, "%-14.( | %l,%c%)")
   end
   return table.concat(parts, '')
+end
+
+
+function M.dap_status()
+  local ok, dap = pcall(require, 'dap')
+  if not ok then
+    return ''
+  end
+  local session = dap.session()
+  if not session then
+    return ''
+  end
+  if not (session.config.type == vim.bo.filetype and vim.bo.buftype == '') then
+    return ''
+  end
+  if session.stopped_thread_id then
+    return 'Stopped |'
+  elseif session.initialized then
+    return 'Running |'
+  else
+    return 'Initializing |'
+  end
 end
 
 
