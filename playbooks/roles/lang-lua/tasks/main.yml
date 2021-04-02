@@ -3,7 +3,19 @@
   git:
     repo: https://github.com/sumneko/lua-language-server
     dest: ~/dev/sumneko/lua-language-server
+    version: dec0117d74e7856fa9950aba7d3fb6647be29079
     recursive: true
+    force: true
+
+- name: Cleanup stale stuff
+  command: git clean -xdff
+  args:
+    chdir: ~/dev/sumneko/lua-language-server/
+
+- name: Cleanup stale stuff in submodules
+  command: git submodule foreach git clean -xdff
+  args:
+    chdir: ~/dev/sumneko/lua-language-server/
 
 - name: Make lua-language-server part1
   command: ninja -f ninja/linux.ninja
