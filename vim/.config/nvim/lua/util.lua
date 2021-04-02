@@ -67,10 +67,27 @@ end
 
 
 function M.lsp_progress()
-  for _, message in pairs(vim.lsp.util.get_progress_messages()) do
-    return message.title .. ' ' .. (message.percentage or '') .. ' | '
+  local messages = vim.lsp.util.get_progress_messages()
+  if vim.tbl_isempty(messages) then
+    return ''
   end
-  return ''
+  local percentage
+  local result = {}
+  for _, msg in pairs(messages) do
+    if msg.message then
+      table.insert(result, msg.title .. ': ' .. msg.message)
+    else
+      table.insert(result, msg.title)
+    end
+    if msg.percentage then
+      percentage = math.max(percentage or 0, msg.percentage)
+    end
+  end
+  if percentage then
+    return table.concat(result, ', ') .. ' ' .. percentage .. ' | '
+  else
+    return table.concat(result, ', ') .. ' | '
+  end
 end
 
 
