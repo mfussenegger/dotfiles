@@ -161,6 +161,10 @@ function M.start_jdt()
       configuration = {
         runtimes = {
           {
+            name = "JavaSE-8",
+            path = "/usr/lib/jvm/java-8-openjdk/",
+          },
+          {
             name = "JavaSE-11",
             path = "/usr/lib/jvm/java-11-openjdk/",
           },
