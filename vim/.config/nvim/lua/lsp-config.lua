@@ -260,6 +260,9 @@ function M.start_lua_ls()
           [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
         }
       },
+      telemetry = {
+        enable = false,
+      },
     }
   }
   local server_dir = vim.fn.expand('~/dev/sumneko/lua-language-server/')
