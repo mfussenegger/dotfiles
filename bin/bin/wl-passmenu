@@ -13,3 +13,5 @@ password=$(printf '%s\n' "${password_files[@]}" | bemenu --fn "JuliaMono 16" -m 
 [[ -n $password ]] || exit
 
 pass show "$password" 2>/dev/null | head -n 1 | wl-copy -n
+sleep 5
+wl-copy --clear
