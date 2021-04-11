@@ -39,6 +39,7 @@
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
     - phaazon/hop.nvim
+    - nvim-lua/plenary.nvim
 - name: Checkout vim dev plugins
   git:
     repo: https://github.com/{{ item }}
