@@ -61,7 +61,7 @@ local function on_attach(client, bufnr)
     api.nvim_command("setlocal signcolumn=yes")
 
     if client.resolved_capabilities.goto_definition then
-      api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.lsp_ext.tagfunc")
+      api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.require'lsp-ext'.tagfunc")
     end
     local opts = { silent = true; }
     for _, mappings in pairs(key_mappings) do

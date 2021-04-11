@@ -91,12 +91,8 @@ if executable("rg")
 endif
 
 if has('nvim-0.5')
+    lua require('util').setup()
     set statusline=%!v:lua.U.statusline()
-    lua require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
-    lua require('jdtls.ui').pick_one_async = require('fzy').pick_one
-    lua require('dap.ui').pick_one = require('fzy').pick_one
-    lua lsp_ext = require('lsp-ext')
-    lua require('lsp-config').setup()
     augroup lsp
       au!
       au FileType java lua require('lsp-config').start_jdt()
@@ -111,12 +107,8 @@ if has('nvim-0.5')
       au FileType css lua require('lsp-config').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
       au FileType cs lua require('lsp-config').start_omnisharp()
       au FileType * lua require('util').init_hl()
-      au FileType markdown lua require('util').enable_lint()
-      au FileType rst lua require('util').enable_lint()
+      au FileType * lua require('util').enable_lint()
     augroup end
-
-    lua require('dap-config').setup()
-    lua require('util').setup()
 endif
 
 

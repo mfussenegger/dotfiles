@@ -114,6 +114,9 @@ end
 
 
 function M.enable_lint()
+  if not require('lint').linters_by_ft[vim.o.filetype] then
+    return
+  end
   local bufnr = api.nvim_get_current_buf()
   lint_active[bufnr] = true
   api.nvim_buf_attach(bufnr, false, {
@@ -124,6 +127,7 @@ function M.enable_lint()
   vim.cmd("augroup lint")
   vim.cmd("au!")
   vim.cmd(string.format("au BufWritePost <buffer=%d> lua require'lint'.try_lint()", bufnr))
+  vim.cmd(string.format("au BufEnter <buffer=%d> lua require'lint'.try_lint()", bufnr))
   vim.cmd("augroup end")
   local opts = {
     silent = true;
@@ -195,6 +199,16 @@ end
 
 
 function M.setup()
+  require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
+  require('jdtls.ui').pick_one_async = require('fzy').pick_one
+  require('dap.ui').pick_one = require('fzy').pick_one
+  require('lsp-config').setup()
+  require('dap-config').setup()
+  require('lint').linters_by_ft = {
+    markdown = {'vale'},
+    rst = {'vale'},
+  }
+
   U = M
   P = function(...)
     print(unpack(vim.tbl_map(vim.inspect, {...})))
