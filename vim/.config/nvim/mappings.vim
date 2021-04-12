@@ -87,7 +87,7 @@ nnoremap <leader>pv :GPGViewRecipients<cr>
 
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gd :Gdiffsplit<cr>
-nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gs :Git<cr>
 nnoremap <leader>gb :Git blame<cr>
 nnoremap <leader>gc :Git commit -v<cr>
 
