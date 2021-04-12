@@ -81,3 +81,5 @@
     - { ft: 'java', name: 'highlights' }
     - { ft: 'markdown', name: 'highlights' }
     - { ft: 'markdown', name: 'injections' }
+    - { ft: 'rst', name: 'highlights' }
+    - { ft: 'rst', name: 'injections' }
