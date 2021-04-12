@@ -215,24 +215,11 @@ function M._CompleteDone()
     local suffix = nil
 
     if expand_snippet then
-      -- Create textEdit to remove the already inserted word
+      -- Remove the already inserted word
       local start_char = completion_start_idx and (completion_start_idx - 1) or (col - #completed_item.word)
       local line = api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, true)[1]
       suffix = line:sub(col + 1)
-      local text_edit = {
-        range = {
-          ["start"] = {
-            line = lnum;
-            character = start_char;
-          };
-          ["end"] = {
-            line = lnum;
-            character = #line;
-          }
-        };
-        newText = "";
-      }
-      vim.lsp.util.apply_text_edits({text_edit}, bufnr)
+      api.nvim_buf_set_text(bufnr, lnum, start_char, lnum, #line, {''})
     end
 
     if not item.additionalTextEdits then
@@ -268,7 +255,6 @@ function M.accept_pum()
         return true
     end
 end
-
 
 function M.setup()
   vim.lsp.util.text_document_completion_list_to_complete_items = text_document_completion_list_to_complete_items
