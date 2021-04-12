@@ -279,14 +279,14 @@ function M.attach(client, bufnr)
   vim.cmd(string.format('augroup lsp_ext_%d_%d', client.id, bufnr))
   vim.cmd('au!')
   vim.cmd(string.format(
-    "autocmd InsertCharPre <buffer=%d> lua require'lsp-ext'._InsertCharPre(%s)",
+    "autocmd InsertCharPre <buffer=%d> lua require'lsp_ext'._InsertCharPre(%s)",
     bufnr,
     client.config.flags.server_side_fuzzy_completion
   ))
-  vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'lsp-ext'._InsertLeave()", bufnr))
-  vim.cmd(string.format("autocmd CompleteDone <buffer=%d> lua require'lsp-ext'._CompleteDone()", bufnr))
+  vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'lsp_ext'._InsertLeave()", bufnr))
+  vim.cmd(string.format("autocmd CompleteDone <buffer=%d> lua require'lsp_ext'._CompleteDone()", bufnr))
   if (client.server_capabilities.completionProvider or {}).resolveProvider then
-    vim.cmd(string.format("autocmd CompleteChanged <buffer=%d> lua require'lsp-ext'._CompleteChanged()", bufnr))
+    vim.cmd(string.format("autocmd CompleteChanged <buffer=%d> lua require'lsp_ext'._CompleteChanged()", bufnr))
   end
   vim.cmd('augroup end')
 

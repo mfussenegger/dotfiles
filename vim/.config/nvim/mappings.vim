@@ -21,7 +21,7 @@ nnoremap [L :llast<CR>
 xmap gl <Plug>(EasyAlign)
 
 if has('nvim-0.5')
-  inoremap <expr> <CR> (luaeval("require'lsp-ext'.accept_pum()") ? "\<c-y>" : "\<CR>")
+  inoremap <expr> <CR> (luaeval("require'lsp_ext'.accept_pum()") ? "\<c-y>" : "\<CR>")
 end
 
 nnoremap gf gfzv

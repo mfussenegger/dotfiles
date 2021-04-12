@@ -1,5 +1,5 @@
 local lsp = require 'vim.lsp'
-local lsp_ext = require 'lsp-ext'
+local lsp_ext = require 'lsp_ext'
 local lsp_diag = require 'lsp-diagnostics'
 local jdtls = require 'jdtls'
 local api = vim.api
@@ -61,7 +61,7 @@ local function on_attach(client, bufnr)
     api.nvim_command("setlocal signcolumn=yes")
 
     if client.resolved_capabilities.goto_definition then
-      api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.require'lsp-ext'.tagfunc")
+      api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.require'lsp_ext'.tagfunc")
     end
     local opts = { silent = true; }
     for _, mappings in pairs(key_mappings) do
@@ -74,16 +74,18 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-    api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp-ext').trigger_completion()<CR>", opts)
-    if client.resolved_capabilities['document_highlight'] then
-      api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
-      api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
-      api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
+    api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp_ext').trigger_completion()<CR>", opts)
     end
   vim.cmd('augroup lsp_aucmds')
   vim.cmd(string.format('au! * <buffer=%d>', bufnr))
   vim.cmd(string.format('au User LspDiagnosticsChanged <buffer=%d> redrawstatus!', bufnr))
   vim.cmd(string.format('au User LspMessageUpdate <buffer=%d> redrawstatus!', bufnr))
+
+  if client.resolved_capabilities['document_highlight'] then
+    api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
+    api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
+    api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
+  end
   vim.cmd('augroup end')
 end
 
