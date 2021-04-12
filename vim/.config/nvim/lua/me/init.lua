@@ -202,8 +202,8 @@ function M.setup()
   require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
   require('jdtls.ui').pick_one_async = require('fzy').pick_one
   require('dap.ui').pick_one = require('fzy').pick_one
-  require('lsp-config').setup()
-  require('dap-config').setup()
+  require('me.lsp.conf').setup()
+  require('me.dap.conf').setup()
   require('lint').linters_by_ft = {
     markdown = {'vale'},
     rst = {'vale'},

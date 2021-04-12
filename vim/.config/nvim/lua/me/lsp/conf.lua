@@ -1,6 +1,4 @@
 local lsp = require 'vim.lsp'
-local lsp_ext = require 'lsp_ext'
-local lsp_diag = require 'lsp-diagnostics'
 local jdtls = require 'jdtls'
 local api = vim.api
 
@@ -47,21 +45,21 @@ local key_mappings = {
 }
 
 local function on_init(client)
-  lsp_ext.setup()
+  require('me.lsp.ext').setup()
   if client.config.settings then
     client.notify('workspace/didChangeConfiguration', { settings = client.config.settings })
   end
 end
 
 local function on_attach(client, bufnr)
-  lsp_ext.attach(client, bufnr)
+  require('me.lsp.ext').attach(client, bufnr)
   api.nvim_buf_set_var(bufnr, "lsp_client_id", client.id)
   api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
   api.nvim_command("setlocal signcolumn=yes")
 
   if client.resolved_capabilities.goto_definition then
-    api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.require'lsp_ext'.tagfunc")
+    api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.require'me.lsp.ext'.tagfunc")
   end
   local opts = { silent = true; }
   for _, mappings in pairs(key_mappings) do
@@ -74,7 +72,7 @@ local function on_attach(client, bufnr)
   api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", opts)
   api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
   api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-  api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp_ext').trigger_completion()<CR>", opts)
+  api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('me.lsp.ext').trigger_completion()<CR>", opts)
   vim.cmd('augroup lsp_aucmds')
   vim.cmd(string.format('au! * <buffer=%d>', bufnr))
   vim.cmd(string.format('au User LspDiagnosticsChanged <buffer=%d> redrawstatus!', bufnr))
@@ -289,9 +287,8 @@ end
 
 
 function M.setup()
-  vim.lsp.handlers['textDocument/publishDiagnostics'] = lsp_diag.publishDiagnostics
+  vim.lsp.handlers['textDocument/publishDiagnostics'] = require('me.lsp.diagnostic').publishDiagnostics
 end
 
 
---- @export
 return M

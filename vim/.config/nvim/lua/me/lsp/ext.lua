@@ -19,71 +19,71 @@ end
 
 
 local function text_document_completion_list_to_complete_items(result, prefix)
-    local items = vim.lsp.util.extract_completion_items(result)
-    if #items == 0 then
-        return {}
+  local items = vim.lsp.util.extract_completion_items(result)
+  if #items == 0 then
+    return {}
+  end
+  if items[1] and items[1].sortText then
+    table.sort(items, function(a, b) return (a.sortText or a.label) < (b.sortText or b.label) end)
+  end
+  local clients = vim.lsp.buf_get_clients(0)
+  local equal = 0
+  for _, client in ipairs(clients) do
+    if client.config.flags.server_side_fuzzy_completion then
+      equal = 1
+      break
     end
-    if items[1] and items[1].sortText then
-        table.sort(items, function(a, b) return (a.sortText or a.label) < (b.sortText or b.label) end)
-    end
-    local clients = vim.lsp.buf_get_clients(0)
-    local equal = 0
-    for _, client in ipairs(clients) do
-      if client.config.flags.server_side_fuzzy_completion then
-        equal = 1
-        break
+  end
+  local matches = {}
+  for _, item in ipairs(items) do
+    local info = ''
+    local documentation = item.documentation
+    if documentation then
+      if type(documentation) == 'string' and documentation ~= '' then
+        info = documentation
+      elseif type(documentation) == 'table' and type(documentation.value) == 'string' then
+        info = documentation.value
       end
     end
-    local matches = {}
-    for _, item in ipairs(items) do
-        local info = ''
-        local documentation = item.documentation
-        if documentation then
-            if type(documentation) == 'string' and documentation ~= '' then
-                info = documentation
-            elseif type(documentation) == 'table' and type(documentation.value) == 'string' then
-                info = documentation.value
-            end
-        end
-        local kind = vim.lsp.protocol.CompletionItemKind[item.kind] or ''
-        local word
-        if kind == 'Snippet' then
-            word = item.label
-        elseif item.insertTextFormat == 2 then -- 2 == snippet
-            --[[
-            -- eclipse.jdt.ls has
-            --      insertText = "wait",
-            --      label = "wait() : void"
-            --      textEdit = { ... }
-            --
-            -- haskell-ide-engine has
-            --      insertText = "testSuites ${1:Env}"
-            --      label = "testSuites"
-            --]]
-            if item.textEdit then
-                word = item.insertText or item.textEdit.newText
-            else
-                word = item.label
-            end
-        else
-            word = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
-        end
-        if equal == 1 or vim.startswith(word, prefix) then
-          table.insert(matches, {
-              word = word,
-              abbr = item.label,
-              kind = kind,
-              menu = item.detail or '',
-              info = info,
-              icase = 1,
-              dup = 1,
-              empty = 1,
-              equal = equal,
-              user_data = item
-          })
-        end
+    local kind = vim.lsp.protocol.CompletionItemKind[item.kind] or ''
+    local word
+    if kind == 'Snippet' then
+      word = item.label
+    elseif item.insertTextFormat == 2 then -- 2 == snippet
+      --[[
+      -- eclipse.jdt.ls has
+      --      insertText = "wait",
+      --      label = "wait() : void"
+      --      textEdit = { ... }
+      --
+      -- haskell-ide-engine has
+      --      insertText = "testSuites ${1:Env}"
+      --      label = "testSuites"
+      --]]
+      if item.textEdit then
+        word = item.insertText or item.textEdit.newText
+      else
+        word = item.label
+      end
+    else
+      word = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
     end
-    return matches
+    if equal == 1 or vim.startswith(word, prefix) then
+      table.insert(matches, {
+        word = word,
+        abbr = item.label,
+        kind = kind,
+        menu = item.detail or '',
+        info = info,
+        icase = 1,
+        dup = 1,
+        empty = 1,
+        equal = equal,
+        user_data = item
+      })
+    end
+  end
+  return matches
 end
 
 
@@ -160,13 +160,13 @@ end
 
 
 function M._InsertLeave()
-    if timer then
-        timer:stop()
-        timer:close()
-        timer = nil
-    end
-    cancel_completion_requests()
-    completion_ctx.col = nil
+  if timer then
+    timer:stop()
+    timer:close()
+    timer = nil
+  end
+  cancel_completion_requests()
+  completion_ctx.col = nil
 end
 
 
@@ -194,66 +194,66 @@ end
 
 
 function M._CompleteDone()
-    local completion_start_idx = completion_ctx.col
-    local resolved_additionalTextEdits = completion_ctx.additionalTextEdits
-    completion_ctx.additionalTextEdits = nil
-    completion_ctx.col = nil
-    cancel_completion_requests()
-    local completed_item = api.nvim_get_vvar('completed_item')
-    if not completed_item or not completed_item.user_data then
-      return
-    end
-    local lnum, col = unpack(api.nvim_win_get_cursor(0))
-    lnum = lnum - 1
-    local item = completed_item.user_data
-    if type(item) == 'string' then
-      return
-    end
-    local bufnr = api.nvim_get_current_buf()
-    local expand_snippet = item.insertTextFormat == 2 and completion_ctx.expand_snippet
-    completion_ctx.expand_snippet = false
-    local suffix = nil
+  local completion_start_idx = completion_ctx.col
+  local resolved_additionalTextEdits = completion_ctx.additionalTextEdits
+  completion_ctx.additionalTextEdits = nil
+  completion_ctx.col = nil
+  cancel_completion_requests()
+  local completed_item = api.nvim_get_vvar('completed_item')
+  if not completed_item or not completed_item.user_data then
+    return
+  end
+  local lnum, col = unpack(api.nvim_win_get_cursor(0))
+  lnum = lnum - 1
+  local item = completed_item.user_data
+  if type(item) == 'string' then
+    return
+  end
+  local bufnr = api.nvim_get_current_buf()
+  local expand_snippet = item.insertTextFormat == 2 and completion_ctx.expand_snippet
+  completion_ctx.expand_snippet = false
+  local suffix = nil
 
-    if expand_snippet then
-      -- Remove the already inserted word
-      local start_char = completion_start_idx and (completion_start_idx - 1) or (col - #completed_item.word)
-      local line = api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, true)[1]
-      suffix = line:sub(col + 1)
-      api.nvim_buf_set_text(bufnr, lnum, start_char, lnum, #line, {''})
-    end
+  if expand_snippet then
+    -- Remove the already inserted word
+    local start_char = completion_start_idx and (completion_start_idx - 1) or (col - #completed_item.word)
+    local line = api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, true)[1]
+    suffix = line:sub(col + 1)
+    api.nvim_buf_set_text(bufnr, lnum, start_char, lnum, #line, {''})
+  end
 
-    if not item.additionalTextEdits then
-      item.additionalTextEdits = resolved_additionalTextEdits
+  if not item.additionalTextEdits then
+    item.additionalTextEdits = resolved_additionalTextEdits
+  end
+  if item.additionalTextEdits then
+    -- Text edit in the same line would mess with the cursor position
+    local edits = vim.tbl_filter(
+      function(x) return x.range.start.line ~= lnum end,
+      item.additionalTextEdits
+    )
+    local ok, err = pcall(vim.lsp.util.apply_text_edits, edits, bufnr)
+    if not ok then
+      print(err, vim.inspect(edits))
     end
-    if item.additionalTextEdits then
-      -- Text edit in the same line would mess with the cursor position
-      local edits = vim.tbl_filter(
-        function(x) return x.range.start.line ~= lnum end,
-        item.additionalTextEdits
-      )
-      local ok, err = pcall(vim.lsp.util.apply_text_edits, edits, bufnr)
-      if not ok then
-        print(err, vim.inspect(edits))
-      end
+  end
+  if expand_snippet then
+    if item.textEdit then
+      vim.fn['vsnip#anonymous'](item.textEdit.newText .. suffix)
+    elseif item.insertText then
+      vim.fn['vsnip#anonymous'](item.insertText .. suffix)
     end
-    if expand_snippet then
-      if item.textEdit then
-        vim.fn['vsnip#anonymous'](item.textEdit.newText .. suffix)
-      elseif item.insertText then
-        vim.fn['vsnip#anonymous'](item.insertText .. suffix)
-      end
-    end
+  end
 end
 
 
 
 function M.accept_pum()
-    if tonumber(vim.fn.pumvisible()) == 0 then
-        return false
-    else
-        completion_ctx.expand_snippet = true
-        return true
-    end
+  if tonumber(vim.fn.pumvisible()) == 0 then
+    return false
+  else
+    completion_ctx.expand_snippet = true
+    return true
+  end
 end
 
 function M.setup()
@@ -265,14 +265,14 @@ function M.attach(client, bufnr)
   vim.cmd(string.format('augroup lsp_ext_%d_%d', client.id, bufnr))
   vim.cmd('au!')
   vim.cmd(string.format(
-    "autocmd InsertCharPre <buffer=%d> lua require'lsp_ext'._InsertCharPre(%s)",
+    "autocmd InsertCharPre <buffer=%d> lua require'me.lsp.ext'._InsertCharPre(%s)",
     bufnr,
     client.config.flags.server_side_fuzzy_completion
   ))
-  vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'lsp_ext'._InsertLeave()", bufnr))
-  vim.cmd(string.format("autocmd CompleteDone <buffer=%d> lua require'lsp_ext'._CompleteDone()", bufnr))
+  vim.cmd(string.format("autocmd InsertLeave <buffer=%d> lua require'me.lsp.ext'._InsertLeave()", bufnr))
+  vim.cmd(string.format("autocmd CompleteDone <buffer=%d> lua require'me.lsp.ext'._CompleteDone()", bufnr))
   if (client.server_capabilities.completionProvider or {}).resolveProvider then
-    vim.cmd(string.format("autocmd CompleteChanged <buffer=%d> lua require'lsp_ext'._CompleteChanged()", bufnr))
+    vim.cmd(string.format("autocmd CompleteChanged <buffer=%d> lua require'me.lsp.ext'._CompleteChanged()", bufnr))
   end
   vim.cmd('augroup end')
 
@@ -363,5 +363,6 @@ do
     end
   end
 end
+
 
 return M

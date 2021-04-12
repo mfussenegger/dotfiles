@@ -42,7 +42,7 @@ local function setup_hover_keymap()
   end
   vim.cmd("augroup dap-keymap")
   vim.cmd("au!")
-  vim.cmd("autocmd BufEnter * lua require('dap-config').set_hover_keymap()")
+  vim.cmd("autocmd BufEnter * lua require('me.dap.conf').set_hover_keymap()")
   vim.cmd("augroup end")
 end
 

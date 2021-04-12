@@ -1,4 +1,3 @@
-local myutil = require 'util'
 local api = vim.api
 local M = {}
 

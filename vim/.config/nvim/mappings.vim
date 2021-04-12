@@ -1,7 +1,7 @@
 nnoremap <leader>ev :split $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
-noremap <silent><leader>o :lua require('util').only()<CR>
+noremap <silent><leader>o :lua require('me').only()<CR>
 nnoremap <bs> <c-^>
 
 " pre-filter history navigation in command-mode with already typed input
@@ -21,7 +21,7 @@ nnoremap [L :llast<CR>
 xmap gl <Plug>(EasyAlign)
 
 if has('nvim-0.5')
-  inoremap <expr> <CR> (luaeval("require'lsp_ext'.accept_pum()") ? "\<c-y>" : "\<CR>")
+  inoremap <expr> <CR> (luaeval("require'me.lsp.ext'.accept_pum()") ? "\<c-y>" : "\<CR>")
 end
 
 nnoremap gf gfzv
@@ -128,10 +128,10 @@ if has('nvim-0.5')
     nnoremap <silent> <leader>ds :lua require('dap.ui.variables').scopes()<CR>
 
     command -nargs=0 Into :lua require('dap').step_into()
-    command -nargs=0 LspErrors :lua require('lsp-diagnostics').errors_to_quickfix()
-    command -nargs=0 LspWarnings :lua require('lsp-diagnostics').warnings_to_quickfix()
     command -nargs=0 DapBreakpoints :lua require('dap').list_breakpoints()
 
+    command -nargs=0 LspErrors :lua require('me.lsp.diagnostic').errors_to_quickfix()
+    command -nargs=0 LspWarnings :lua require('me.lsp.diagnostic').warnings_to_quickfix()
     nnoremap <silent> <leader>q :lua require('quickfix').toggle()<CR>
 
     nnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>

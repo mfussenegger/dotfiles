@@ -91,23 +91,23 @@ if executable("rg")
 endif
 
 if has('nvim-0.5')
-    lua require('util').setup()
+    lua require('me').setup()
     set statusline=%!v:lua.U.statusline()
     augroup lsp
       au!
-      au FileType java lua require('lsp-config').start_jdt()
-      au FileType haskell lua require('lsp-config').start_hie()
-      au FileType python lua require('lsp-config').add_client({'pyls'})
-      au FileType html lua require('lsp-config').add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
-      au FileType go lua require('lsp-config').start_go_ls()
-      au FileType sh lua require('lsp-config').add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
-      au FileType rust lua require('lsp-config').add_client({'rls'}, {root={'Cargo.toml', '.git'}})
-      au FileType lua lua require('lsp-config').start_lua_ls()
-      au FileType json lua require('lsp-config').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
-      au FileType css lua require('lsp-config').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
-      au FileType cs lua require('lsp-config').start_omnisharp()
-      au FileType * lua require('util').init_hl()
-      au FileType * lua require('util').enable_lint()
+      au FileType java lua require('me.lsp.conf').start_jdt()
+      au FileType haskell lua require('me.lsp.conf').start_hie()
+      au FileType python lua require('me.lsp.conf').add_client({'pyls'})
+      au FileType html lua require('me.lsp.conf').add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
+      au FileType go lua require('me.lsp.conf').start_go_ls()
+      au FileType sh lua require('me.lsp.conf').add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
+      au FileType rust lua require('me.lsp.conf').add_client({'rls'}, {root={'Cargo.toml', '.git'}})
+      au FileType lua lua require('me.lsp.conf').start_lua_ls()
+      au FileType json lua require('me.lsp.conf').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
+      au FileType css lua require('me.lsp.conf').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
+      au FileType cs lua require('me.lsp.conf').start_omnisharp()
+      au FileType * lua require('me').init_hl()
+      au FileType * lua require('me').enable_lint()
     augroup end
 endif
 
