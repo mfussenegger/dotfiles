@@ -40,6 +40,7 @@
     - sirtaj/vim-openscad
     - phaazon/hop.nvim
     - nvim-lua/plenary.nvim
+    - jbyuki/one-small-step-for-vimkind
 - name: Checkout vim dev plugins
   git:
     repo: https://github.com/{{ item }}

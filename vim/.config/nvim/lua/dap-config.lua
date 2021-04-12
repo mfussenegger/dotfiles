@@ -93,6 +93,41 @@ function M.setup()
     },
   }
 
+  dap.configurations.lua = {
+    {
+      type = 'nlua',
+      request = 'attach',
+      name = "Attach to running Neovim instance",
+      port = 44444,
+    }
+  }
+  dap.adapters.nlua = function(callback, config)
+    local port = config.port
+    local opts = {
+      args = {
+        '-e', vim.v.progpath,
+        '-c', string.format('lua require("osv").launch({port = %d})', port),
+      },
+      cwd = vim.fn.getcwd(),
+      detached = true
+    }
+    local handle
+    local pid_or_err
+    handle, pid_or_err = vim.loop.spawn('alacritty', opts, function(code)
+      handle:close()
+      if code ~= 0 then
+        print('nvim exited', code)
+      end
+    end)
+    assert(handle, 'Could not run alacritty:' .. pid_or_err)
+
+    -- doing a `client = new_tcp(); client:connect()` within vim.wait doesn't work
+    -- because an extra client connecting confuses `osv`, so sleep a bit instead
+    -- to wait until server is started
+    vim.cmd('sleep')
+    callback({ type = 'server', host = '127.0.0.1', port = port })
+  end
+
   dap.adapters.haskell = {
     type = 'executable';
     command = 'haskell-debug-adapter';
@@ -180,8 +215,8 @@ function M.setup()
       args = {},
     },
   }
-  dap.adapters.c = dap.adapters.cpp
   dap.configurations.c = dap.configurations.cpp
+  dap.configurations.rust = dap.configurations.cpp
 
   require('dap.ext.vscode').load_launchjs()
 end
