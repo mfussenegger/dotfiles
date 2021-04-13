@@ -139,7 +139,13 @@ function M._InsertCharPre(server_side_fuzzy_completion)
   if timer then
     timer:stop()
     timer:close()
+    cancel_completion_requests()
     timer = nil
+  end
+  if server_side_fuzzy_completion and tonumber(vim.fn.pumvisible()) == 1 then
+    timer = vim.loop.new_timer()
+    timer:start(150, 0, vim.schedule_wrap(M.trigger_completion))
+    return
   end
   local char = api.nvim_get_vvar('char')
   local triggers = triggers_by_buf[api.nvim_get_current_buf()] or {}
@@ -148,13 +154,9 @@ function M._InsertCharPre(server_side_fuzzy_completion)
     if vim.tbl_contains(chars, char) then
       completion_ctx.col = nil
       timer = vim.loop.new_timer()
-      timer:start(150, 0, vim.schedule_wrap(fn))
+      timer:start(50, 0, vim.schedule_wrap(fn))
       return
     end
-  end
-  if server_side_fuzzy_completion and tonumber(vim.fn.pumvisible()) == 1 then
-    timer = vim.loop.new_timer()
-    timer:start(250, 0, vim.schedule_wrap(M.trigger_completion))
   end
 end
 
