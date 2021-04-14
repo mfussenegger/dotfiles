@@ -2,29 +2,32 @@ local lsp = require 'vim.lsp'
 local jdtls = require 'jdtls'
 local api = vim.api
 
--- id is filetype│root_dir
-local lsps = {}
 
+local lspc = {}
+do
+  -- id is filetype│root_dir
+  local lsp_client_ids = {}
 
-local function add_client_by_cfg(config, root_markers)
-  local root_dir = require('jdtls.setup').find_root(root_markers)
-  if not root_dir then return end
+  function lspc.start(config, root_markers)
+    local root_dir = require('jdtls.setup').find_root(root_markers)
+    if not root_dir then return end
 
-  local cmd = config.cmd[1]
-  if tonumber(vim.fn.executable(cmd)) == 0 then
-    api.nvim_command(string.format(
-      ':echohl WarningMsg | redraw | echo "No LSP executable: %s" | echohl None', cmd))
-    return
+    local cmd = config.cmd[1]
+    if tonumber(vim.fn.executable(cmd)) == 0 then
+      api.nvim_command(string.format(
+        ':echohl WarningMsg | redraw | echo "No LSP executable: %s" | echohl None', cmd))
+      return
+    end
+    config['root_dir'] = root_dir
+    local lsp_id = tostring(vim.bo.filetype) .. "│" .. root_dir
+    local client_id = lsp_client_ids[lsp_id]
+    if not client_id then
+      client_id = lsp.start_client(config)
+      lsp_client_ids[lsp_id] = client_id
+    end
+    local bufnr = api.nvim_get_current_buf()
+    lsp.buf_attach_client(bufnr, client_id)
   end
-  config['root_dir'] = root_dir
-  local lsp_id = tostring(vim.bo.filetype) .. "│" .. root_dir
-  local client_id = lsps[lsp_id]
-  if not client_id then
-    client_id = lsp.start_client(config)
-    lsps[lsp_id] = client_id
-  end
-  local bufnr = api.nvim_get_current_buf()
-  lsp.buf_attach_client(bufnr, client_id)
 end
 
 
@@ -121,7 +124,7 @@ function M.add_client(cmd, opts)
   local config = mk_config()
   config['name'] = opts and opts.name or cmd[1]
   config['cmd'] = cmd
-  add_client_by_cfg(config, opts and opts.root or {'.git'})
+  lspc.start(config, opts and opts.root or {'.git'})
 end
 
 
@@ -242,7 +245,7 @@ function M.start_hie()
       formattingProvider = "ormolu";
     }
   }
-  add_client_by_cfg(config, {'hie.yaml', 'stack.yml', '.git'})
+  lspc.start(config, {'hie.yaml', 'stack.yml', '.git'})
 end
 
 
@@ -274,7 +277,7 @@ function M.start_lua_ls()
   local server_dir = vim.fn.expand('~/dev/sumneko/lua-language-server/')
   config['name'] = 'luals'
   config['cmd'] = {server_dir .. 'bin/Linux/lua-language-server', server_dir .. 'main.lua'}
-  add_client_by_cfg(config, {'.git'})
+  lspc.start(config, {'.git'})
 end
 
 
