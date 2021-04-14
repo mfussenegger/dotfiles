@@ -108,6 +108,7 @@ local function mk_config()
       debounce_text_changes = 150,
       allow_incremental_sync = true,
     };
+    handlers = {},
     capabilities = capabilities;
     on_init = on_init;
     on_attach = on_attach;
@@ -226,6 +227,8 @@ function M.start_jdt()
     bundles = bundles;
     extendedClientCapabilities = extendedClientCapabilities;
   }
+  -- mute; having progress reports is enough
+  config.handlers['language/status'] = function() end,
   jdtls.start_or_attach(config)
 end
 
