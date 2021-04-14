@@ -7,6 +7,7 @@ local lspc = {}
 do
   -- id is filetype│root_dir
   local lsp_client_ids = {}
+  local URI_SCHEME_PATTERN = '^([a-zA-Z]+[a-zA-Z0-9+-.]*)://.*'
 
   function lspc.start(config, root_markers)
     local root_dir = require('jdtls.setup').find_root(root_markers)
@@ -44,6 +45,25 @@ do
     end
   end
   M.restart = lspc.restart
+
+  function lspc.maybe_save_file()
+    -- 💀
+    -- Some servers only work well if the file exists on disk
+    -- So let's implicitly save a file before attaching the lsp client.
+    local bufnr = api.nvim_get_current_buf()
+    if vim.o.buftype == '' then
+      local uri = vim.uri_from_bufnr(bufnr)
+      local scheme = uri:match(URI_SCHEME_PATTERN)
+      if scheme ~= 'file' then
+        return
+      end
+      local stat = vim.loop.fs_stat(api.nvim_buf_get_name(bufnr))
+      if not stat then
+        vim.cmd('w')
+      end
+    end
+  end
+
 end
 
 
@@ -247,6 +267,7 @@ function M.start_jdt()
   }
   -- mute; having progress reports is enough
   config.handlers['language/status'] = function() end,
+  lspc.maybe_save_file()
   jdtls.start_or_attach(config)
 end
 
