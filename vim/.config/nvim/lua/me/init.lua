@@ -4,7 +4,7 @@ local lint_active = {}
 
 function M.statusline()
   local parts = {
-    "%<» %f %h%m%r%=",
+    "%<» %{luaeval('U.file_or_lsp_status()')} %h%m%r%=",
     "%#warningmsg#",
     "%{&paste?'[paste] ':''}",
     "%*",
@@ -21,9 +21,6 @@ function M.statusline()
   local diagnostics
   local bufnr = api.nvim_get_current_buf()
   local has_clients = not vim.tbl_isempty(vim.lsp.buf_get_clients(0))
-  if has_clients then
-    table.insert(parts, '%{luaeval("U.lsp_progress()")}')
-  end
   if not has_clients and not lint_active[bufnr] then
     diagnostics = {}
   else
@@ -66,10 +63,11 @@ function M.dap_status()
 end
 
 
-function M.lsp_progress()
+function M.file_or_lsp_status()
   local messages = vim.lsp.util.get_progress_messages()
-  if vim.tbl_isempty(messages) then
-    return ''
+  local mode = api.nvim_get_mode().mode
+  if mode ~= 'n' or vim.tbl_isempty(messages) then
+    return vim.fn.expand('%')
   end
   local percentage
   local result = {}
@@ -84,9 +82,9 @@ function M.lsp_progress()
     end
   end
   if percentage then
-    return table.concat(result, ', ') .. ' ' .. percentage .. ' | '
+    return string.format('%03d: %s', percentage, table.concat(result, ', '))
   else
-    return table.concat(result, ', ') .. ' | '
+    return table.concat(result, ', ')
   end
 end
 
