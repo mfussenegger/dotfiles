@@ -133,6 +133,8 @@ if has('nvim-0.5')
 
     command -nargs=0 LspErrors :lua require('me.lsp.diagnostic').errors_to_quickfix()
     command -nargs=0 LspWarnings :lua require('me.lsp.diagnostic').warnings_to_quickfix()
+    command -nargs=0 LspRestart :lua require('me.lsp.conf').restart()
+
     nnoremap <silent> <leader>q :lua require('quickfix').toggle()<CR>
 
     nnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>

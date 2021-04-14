@@ -1,9 +1,9 @@
 local lsp = require 'vim.lsp'
 local jdtls = require 'jdtls'
 local api = vim.api
-
-
+local M = {}
 local lspc = {}
+
 do
   -- id is filetype│root_dir
   local lsp_client_ids = {}
@@ -28,6 +28,22 @@ do
     local bufnr = api.nvim_get_current_buf()
     lsp.buf_attach_client(bufnr, client_id)
   end
+
+  function lspc.restart()
+    for id, client_id in pairs(lsp_client_ids) do
+      local client = vim.lsp.get_client_by_id(client_id)
+      if client then
+        local bufs = vim.lsp.get_buffers_by_client_id(client_id)
+        client.stop()
+        client_id = lsp.start_client(client.config)
+        lsp_client_ids[id] = client_id
+        for _, buf in pairs(bufs) do
+          lsp.buf_attach_client(buf, client_id)
+        end
+      end
+    end
+  end
+  M.restart = lspc.restart
 end
 
 
@@ -119,7 +135,6 @@ local function mk_config()
 end
 
 
-local M = {}
 function M.add_client(cmd, opts)
   local config = mk_config()
   config['name'] = opts and opts.name or cmd[1]
