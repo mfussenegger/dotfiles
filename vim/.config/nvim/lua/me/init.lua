@@ -112,7 +112,7 @@ end
 
 
 function M.enable_lint()
-  if not require('lint').linters_by_ft[vim.o.filetype] then
+  if not require('lint').linters_by_ft[vim.bo.filetype] then
     return
   end
   local bufnr = api.nvim_get_current_buf()
