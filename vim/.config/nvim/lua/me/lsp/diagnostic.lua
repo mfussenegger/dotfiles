@@ -31,7 +31,7 @@ do
     local uri = result.uri
     local bufnr = vim.uri_to_bufnr(uri)
     assert(bufnr, "Couldn't get buffer for uri " .. uri)
-    vim.lsp.diagnostic.clear(bufnr)
+    vim.lsp.diagnostic.clear(bufnr, client_id)
     local has_errors = false
     for _, diagnostic in ipairs(result.diagnostics) do
       diagnostic.severity = diagnostic.severity or vim.lsp.protocol.DiagnosticSeverity.Error
