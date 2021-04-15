@@ -14,4 +14,3 @@ setlocal includeexpr=substitute(v:fname,'\\.','/','g').'.'
 setlocal suffixesadd=.hs
 
 nnoremap <buffer> <silent>gO :Vista!!<CR>
-nnoremap <buffer> <leader>hh :Hoogle <c-r>=expand("<cword>")<CR><CR>
