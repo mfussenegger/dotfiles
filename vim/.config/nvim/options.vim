@@ -106,6 +106,7 @@ if has('nvim-0.5')
       au FileType json lua require('me.lsp.conf').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
       au FileType css lua require('me.lsp.conf').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
       au FileType cs lua require('me.lsp.conf').start_omnisharp()
+      au FileType c lua require('me.lsp.conf').add_client({'clangd'})
       au FileType * lua require('me').init_hl()
       au FileType * lua require('me').enable_lint()
     augroup end
