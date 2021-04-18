@@ -46,20 +46,11 @@ function M.dap_status()
   if not ok then
     return ''
   end
-  local session = dap.session()
-  if not session then
-    return ''
+  local status = dap.status()
+  if status ~= '' then
+    return status .. ' | '
   end
-  if not (session.config.type == vim.bo.filetype and vim.bo.buftype == '') then
-    return ''
-  end
-  if session.stopped_thread_id then
-    return 'Stopped |'
-  elseif session.initialized then
-    return 'Running |'
-  else
-    return 'Initializing |'
-  end
+  return ''
 end
 
 
@@ -67,7 +58,7 @@ function M.file_or_lsp_status()
   local messages = vim.lsp.util.get_progress_messages()
   local mode = api.nvim_get_mode().mode
   if mode ~= 'n' or vim.tbl_isempty(messages) then
-    return vim.fn.expand('%')
+    return vim.fn.expand('%:.')
   end
   local percentage
   local result = {}
