@@ -113,7 +113,7 @@ if has('nvim-0.5')
 endif
 
 
-hi! link LspReferenceText IncSearch
-hi! link LspReferenceRead IncSearch
-hi! link LspReferenceWrite IncSearch
-hi! link LspCodeLens Underlined
+hi! def link LspReferenceText IncSearch
+hi! def link LspReferenceRead IncSearch
+hi! def link LspReferenceWrite IncSearch
+hi! def link LspCodeLens Underlined
