@@ -31,8 +31,7 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+Shift+Q kill
 
 # start program launcher
-bindsym $mod+p exec launcher 'compgen -c | fzy | xargs -r swaymsg -t command exec' 
-for_window [app_id="^launcher$"] floating enable, border none, resize set width 50 ppt height 50 ppt, move position 0 px 0 px
+bindsym $mod+p exec 'wl-menu-run | xargs -r swaymsg -t command exec' 
 
 
 # change focus
