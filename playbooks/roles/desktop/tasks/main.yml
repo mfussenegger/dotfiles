@@ -1,15 +1,15 @@
 ---
-- name: Install xorg
+- name: Install sway
   become: true
   package:
     state: present
     name:
-      - xorg-server
-      - xorg-xinit
-      - xorg-xrandr
-      - i3-wm
-      - i3lock
-      - xdotool
+      - sway
+      - swayidle
+      - swaylock
+      - slurp
+      - bemenu
+      - wl-clipboard
 
 - name: Install desktop essentials
   become: true
@@ -19,7 +19,6 @@
       - openssh
       - alacritty
       - qutebrowser
-      - redshift
       - libnitrokey
 
 - name: Install audio packages
@@ -27,7 +26,7 @@
   package:
     name:
       - alsa-utils
-      - pulseaudio
+      - pipewire-pulse
       - pavucontrol
 
 - name: Install fonts
@@ -36,10 +35,8 @@
     name:
       - noto-fonts
       - noto-fonts-emoji
-      - ttf-cascadia-code
-      - ttf-croscore
+      - ttf-roboto
       - ttf-hack
-      - ttf-jetbrains-mono
 
 - name: Install i3status-rust
   become: false

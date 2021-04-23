@@ -7,17 +7,6 @@
     - desktop
     - aur
   tasks:
-    - name: Install packages for term2mp4.hs
-      become: true
-      package:
-        name:
-          - asciinema
-          - ffmpeg
-          - xclip
-    - name: Install asciicast2gif
-      aur:
-        name: nodejs-asciicast2gif
-
     - name: Symlink libpcre for comby
       become: true
       file:

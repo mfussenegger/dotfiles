@@ -2,19 +2,9 @@
 - name: Install yay
   aur:
     name: yay
-- name: Install languageservers
-  aur:
-    name:
-      - vscode-json-languageserver-bin
-      - vscode-html-languageserver-bin
-      - vscode-css-languageserver-bin
-      - dockerfile-language-server-bin
 - name: Install pg_format
   aur:
     name: pgformatter-git
-- name: Install diffr
-  aur:
-    name: diffr
 - name: Install vale-bin
   aur:
     name: vale-bin

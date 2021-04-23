@@ -12,5 +12,6 @@
       - luarocks
       - ninja
       - fzf
+      - fzy
       - htop
       - delve
