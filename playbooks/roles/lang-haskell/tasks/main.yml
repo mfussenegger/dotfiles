@@ -1,6 +1,6 @@
 ---
 - name: Install haskell tooling lts17
-  command: stack install --resolver lts-17.4 ghcid hlint hoogle dhall dhall-json ormolu
+  command: stack install --resolver lts-17.9 ghcid hlint hoogle dhall dhall-json ormolu
   args:
     chdir: ~/
 - name: Clone/pull haskell-language-server and ghcid

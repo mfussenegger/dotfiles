@@ -1,5 +1,8 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-17.4 -}
+{- stack script --optimize --resolver lts-17.9 
+ --package "aeson process bytestring regex-pcre text either utf8-string containers"
+ --package "http-client http-client-tls directory unix"
+-}
 
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
