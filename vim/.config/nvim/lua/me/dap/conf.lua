@@ -181,8 +181,6 @@ function M.setup()
     {
       -- If you get an "Operation not permitted" error using this, try disabling YAMA:
       --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-      --
-      -- Careful, don't try to attach to the neovim instance that runs *this*
       name = "Attach to process",
       type = 'cpp',
       request = 'attach',
@@ -197,7 +195,10 @@ function M.setup()
           local pid = parts[1]
           local name = table.concat({unpack(parts, 5)}, ' ')
           if pid and pid ~= 'PID' then
-            table.insert(procs, { pid = tonumber(pid), name = name })
+            pid = tonumber(pid)
+            if pid ~= vim.fn.getpid() then
+              table.insert(procs, { pid = tonumber(pid), name = name })
+            end
           end
         end
         local choices = {'Select process'}
