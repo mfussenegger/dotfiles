@@ -212,7 +212,7 @@ function M.start_jdt()
           },
           {
             name = "JavaSE-16",
-            path = home .. "/.local/jdks/jdk-16+36",
+            path = home .. "/.local/jdks/jdk-16.0.1+9/",
           },
         }
       };
