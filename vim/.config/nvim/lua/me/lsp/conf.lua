@@ -136,6 +136,8 @@ local function jdtls_on_attach(client, bufnr)
   api.nvim_buf_set_keymap(bufnr, "v", "crv", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts)
   api.nvim_buf_set_keymap(bufnr, "n", "crv", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts)
   api.nvim_buf_set_keymap(bufnr, "v", "crm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts)
+  api.nvim_buf_set_keymap(bufnr, "v", "crc", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts)
+  api.nvim_buf_set_keymap(bufnr, "n", "crc", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts)
 end
 
 local function mk_config()
@@ -266,7 +268,7 @@ function M.start_jdt()
     extendedClientCapabilities = extendedClientCapabilities;
   }
   -- mute; having progress reports is enough
-  config.handlers['language/status'] = function() end,
+  config.handlers['language/status'] = function() end
   lspc.maybe_save_file()
   jdtls.start_or_attach(config)
 end
