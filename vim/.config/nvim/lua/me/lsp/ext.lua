@@ -301,12 +301,12 @@ do
     assert(not err, vim.inspect(err))
     local results = {}
     local add = function(range, uri) table.insert(results, mk_tag_item(pattern, range, uri)) end
-    for _, lsp_results in ipairs(results_by_client) do
+    for _, lsp_results in pairs(results_by_client) do
       local result = lsp_results.result or {}
       if result.range then              -- Location
         add(result.range, result.uri)
       else                              -- Location[] or LocationLink[]
-        for _, item in ipairs(result) do
+        for _, item in pairs(result) do
           if item.range then            -- Location
             add(item.range, item.uri)
           else                          -- LocationLink
@@ -322,8 +322,8 @@ do
     local results_by_client, err = lsp.buf_request_sync(0, 'workspace/symbol', { query = pattern }, 1000)
     assert(not err, vim.inspect(err))
     local results = {}
-    for _, symbols in ipairs(results_by_client) do
-      for _, symbol in ipairs(symbols.result or {}) do
+    for _, symbols in pairs(results_by_client) do
+      for _, symbol in pairs(symbols.result or {}) do
         local loc = symbol.location
         local item = mk_tag_item(symbol.name, loc.range, loc.uri)
         item.kind = lsp.protocol.SymbolKind[symbol.kind] or 'Unknown'
