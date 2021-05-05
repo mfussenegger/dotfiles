@@ -105,7 +105,17 @@ local function find_start(line, cursor_pos)
 end
 
 
+local function reset_timer()
+  if timer then
+    timer:stop()
+    timer:close()
+    timer = nil
+  end
+end
+
+
 function M.trigger_completion()
+  reset_timer()
   completion_ctx.cancel_pending()
   local cursor_pos = api.nvim_win_get_cursor(0)[2]
   local line = api.nvim_get_current_line()
@@ -136,14 +146,13 @@ end
 
 function M._InsertCharPre(server_side_fuzzy_completion)
   if timer then
-    timer:stop()
-    timer:close()
-    timer = nil
-    completion_ctx.cancel_pending()
+    return
   end
-  if server_side_fuzzy_completion and tonumber(vim.fn.pumvisible()) == 1 then
-    timer = vim.loop.new_timer()
-    timer:start(150, 0, vim.schedule_wrap(M.trigger_completion))
+  if tonumber(vim.fn.pumvisible()) == 1 then
+    if server_side_fuzzy_completion then
+      timer = vim.loop.new_timer()
+      timer:start(150, 0, vim.schedule_wrap(M.trigger_completion))
+    end
     return
   end
   local char = api.nvim_get_vvar('char')
@@ -153,7 +162,10 @@ function M._InsertCharPre(server_side_fuzzy_completion)
     if vim.tbl_contains(chars, char) then
       completion_ctx.col = nil
       timer = vim.loop.new_timer()
-      timer:start(50, 0, vim.schedule_wrap(fn))
+      timer:start(50, 0, function()
+        reset_timer()
+        vim.schedule(fn)
+      end)
       return
     end
   end
@@ -161,11 +173,7 @@ end
 
 
 function M._InsertLeave()
-  if timer then
-    timer:stop()
-    timer:close()
-    timer = nil
-  end
+  reset_timer()
   completion_ctx.reset()
 end
 
