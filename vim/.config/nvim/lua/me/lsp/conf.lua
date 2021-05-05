@@ -95,7 +95,6 @@ local function on_attach(client, bufnr)
   api.nvim_buf_set_var(bufnr, "lsp_client_id", client.id)
   api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
-  api.nvim_command("setlocal signcolumn=yes")
 
   if client.resolved_capabilities.goto_definition then
     api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.require'me.lsp.ext'.tagfunc")

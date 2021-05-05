@@ -110,10 +110,15 @@ if has('nvim-0.5')
       au FileType * lua require('me').init_hl()
       au FileType * lua require('me').enable_lint()
     augroup end
+
+    hi! def link LspReferenceText IncSearch
+    hi! def link LspReferenceRead IncSearch
+    hi! def link LspReferenceWrite IncSearch
+    hi! def link LspCodeLens Underlined
+
+    set signcolumn=auto
+    sign define LspDiagnosticsSignError text= texthl= linehl= numhl=ErrorMsg
+    sign define LspDiagnosticsSignWarning text= texthl= linehl= numhl=WarningMsg
+    sign define LspDiagnosticsSignInformation text= texthl= linehl= numhl=Underlined
+    sign define LspDiagnosticsSignHint text= texthl= linehl= numhl=Underlined
 endif
-
-
-hi! def link LspReferenceText IncSearch
-hi! def link LspReferenceRead IncSearch
-hi! def link LspReferenceWrite IncSearch
-hi! def link LspCodeLens Underlined
