@@ -195,7 +195,8 @@ function M.start_jdt()
       codeGeneration = {
         toString = {
           template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
-        }
+        },
+        useBlocks = true,
       };
       configuration = {
         runtimes = {
