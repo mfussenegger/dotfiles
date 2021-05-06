@@ -232,6 +232,8 @@ function M._CompleteDone(resolveEdits)
       end
     end)
     table.insert(completion_ctx.pending_requests, cancel_req)
+  elseif expand_snippet then
+    apply_snippet(item, suffix)
   end
 end
 
