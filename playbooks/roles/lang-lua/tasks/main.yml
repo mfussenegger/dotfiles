@@ -3,7 +3,7 @@
   git:
     repo: https://github.com/sumneko/lua-language-server
     dest: ~/dev/sumneko/lua-language-server
-    version: dec0117d74e7856fa9950aba7d3fb6647be29079
+    version: 0ec06d32f68a010d1378adb7bb0e84d91c238786
     recursive: true
     force: true
 
@@ -18,7 +18,7 @@
     chdir: ~/dev/sumneko/lua-language-server/
 
 - name: Make lua-language-server part1
-  command: ninja -f ninja/linux.ninja
+  command: ninja -f compile/ninja/linux.ninja
   args:
     chdir: ~/dev/sumneko/lua-language-server/3rd/luamake
     creates: ~/dev/sumneko/lua-language-server/3rd/luamake/bee.so
