@@ -9,6 +9,12 @@ alias gwR='git reset --hard'
 alias gir='git reset'
 
 
+gh-cd() {
+  local path=$(gh-maybe-clone.hs "$1")
+  cd "$path"
+}
+
+
 gb() {
   git rev-parse HEAD > /dev/null 2>&1 || return
   git branch | grep -v '/HEAD\s' |
