@@ -1,66 +1,22 @@
 local dap = require('dap')
-local api = vim.api
 local HOME = os.getenv('HOME')
 local M = {}
 
-local keymap_restore = {}
 
-local function del_hover_keymaps(buf)
-  local keymaps = api.nvim_buf_get_keymap(buf, 'n')
-  for _, keymap in pairs(keymaps) do
-    if keymap.lhs == "K" then
-      table.insert(keymap_restore, keymap)
-      api.nvim_buf_del_keymap(buf, 'n', 'K')
-    end
-  end
-end
-
-local function setup_hover_keymap()
-  dap.listeners.after['event_initialized']['me'] = function()
-    for _, buf in pairs(api.nvim_list_bufs()) do
-      del_hover_keymaps(buf)
-    end
-    api.nvim_set_keymap(
-      'v', 'K', '<ESC><Cmd>lua require("dap.ui.variables").visual_hover()<CR>', { silent = true })
-    api.nvim_set_keymap(
-      'n', 'K', '<Cmd>lua require("dap.ui.variables").hover()<CR>', { silent = true })
-  end
-  dap.listeners.after['event_terminated']['me'] = function()
-    api.nvim_del_keymap('v', 'K')
-    for _, keymap in pairs(keymap_restore) do
-      if api.nvim_buf_is_valid(keymap.buffer) then
-        api.nvim_buf_set_keymap(
-          keymap.buffer,
-          keymap.mode,
-          keymap.lhs,
-          keymap.rhs,
-          { silent = keymap.silent == 1 }
-        )
-      end
-    end
-    keymap_restore = {}
-  end
-  vim.cmd("augroup dap-keymap")
-  vim.cmd("au!")
-  vim.cmd("autocmd BufEnter * lua require('me.dap.conf').set_hover_keymap()")
-  vim.cmd("augroup end")
-end
-
-function M.set_hover_keymap()
-  if dap.session() then
-    local buf = api.nvim_get_current_buf()
-    del_hover_keymaps(buf)
-  end
+local function setup_widgets()
+  local widgets = require('dap.ui.widgets')
+  M.sidebar = widgets.sidebar(widgets.scopes)
 end
 
 
 function M.setup()
+  setup_widgets()
+
   dap.defaults.fallback.external_terminal = {
     command = '/usr/bin/alacritty';
     args = {'-e'};
   }
   require('dap-python').setup('~/.virtualenvs/tools/bin/python')
-  setup_hover_keymap()
 
   dap.configurations.java = {
     {

@@ -126,10 +126,14 @@ if has('nvim-0.5')
     nnoremap <silent> <leader>lp :lua require'dap'.toggle_breakpoint(nil, nil, vim.fn.input('Log point message: '), true)<CR>
     nnoremap <silent> <leader>dr :lua require'dap'.repl.toggle({height=15})<CR>
     nnoremap <silent> <leader>dl :lua require('dap').run_last()<CR>
-    nnoremap <silent> <leader>ds :lua require('dap.ui.variables').scopes()<CR>
+    nnoremap <silent> <leader>dS :lua require('dap.ui.widgets').centered_float(require('dap.ui.widgets').frames)<CR>
+    nnoremap <silent> <leader>ds :lua require('dap.ui.widgets').centered_float(require('dap.ui.widgets').scopes)<CR>
+    nnoremap <silent> <leader>dh :lua require('dap.ui.widgets').hover()<CR>
+    vnoremap <silent> <leader>dh :lua require('dap.ui.widgets').hover(require("dap.utils").get_visual_selection_text)<CR>
 
     command -nargs=0 Into :lua require('dap').step_into()
     command -nargs=0 DapBreakpoints :lua require('dap').list_breakpoints()
+    command -nargs=0 DapSidebar :lua require('me.dap.conf').sidebar.toggle()
 
     command -nargs=0 LspErrors :lua require('me.lsp.diagnostic').errors_to_quickfix()
     command -nargs=0 LspWarnings :lua require('me.lsp.diagnostic').warnings_to_quickfix()
