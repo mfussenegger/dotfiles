@@ -14,5 +14,13 @@
 - name: Install jdk 16
   unarchive:
     src: https://github.com/AdoptOpenJDK/openjdk16-binaries/releases/download/jdk-16.0.1%2B9/OpenJDK16U-jdk_x64_linux_hotspot_16.0.1_9.tar.gz
-    dest: ~/.local/jdks/jdk-16.0.1+9/
+    dest: ~/.local/jdks/
+    creates: ~/.local/jdks/jdk-16.0.1+9
+    remote_src: true
+
+- name: Install jdk 17ea
+  unarchive:
+    src: https://download.java.net/java/early_access/jdk17/20/GPL/openjdk-17-ea+20_linux-x64_bin.tar.gz
+    dest: ~/.local/jdks/
+    creates: ~/.local/jdks/jdk-17
     remote_src: true
