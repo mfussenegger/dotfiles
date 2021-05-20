@@ -43,8 +43,6 @@ colors: *dark
 
 mouse:
   hide_when_typing: false
-  url:
-    modifiers: Control
 
 key_bindings:
   - {key: Return, mods: Control|Shift, action: SpawnNewInstance}
