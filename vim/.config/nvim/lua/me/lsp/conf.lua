@@ -36,10 +36,10 @@ do
       if client then
         local bufs = vim.lsp.get_buffers_by_client_id(client_id)
         client.stop()
-        client_id = lsp.start_client(client.config)
-        lsp_client_ids[id] = client_id
+        local new_client_id = lsp.start_client(client.config)
+        lsp_client_ids[id] = new_client_id
         for _, buf in pairs(bufs) do
-          lsp.buf_attach_client(buf, client_id)
+          lsp.buf_attach_client(buf, new_client_id)
         end
       end
     end
@@ -115,11 +115,10 @@ local function on_attach(client, bufnr)
   vim.cmd(string.format('au! * <buffer=%d>', bufnr))
   vim.cmd(string.format('au User LspDiagnosticsChanged <buffer=%d> redrawstatus!', bufnr))
   vim.cmd(string.format('au User LspMessageUpdate <buffer=%d> redrawstatus!', bufnr))
-
   if client.resolved_capabilities['document_highlight'] then
-    api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
-    api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
-    api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
+    vim.cmd(string.format('au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()', bufnr))
+    vim.cmd(string.format('au CursorHoldI <buffer=%d> lua vim.lsp.buf.document_highlight()', bufnr))
+    vim.cmd(string.format('au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()', bufnr))
   end
   vim.cmd('augroup end')
 end
@@ -139,6 +138,15 @@ local function jdtls_on_attach(client, bufnr)
   api.nvim_buf_set_keymap(bufnr, "n", "crc", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts)
 end
 
+
+local function on_exit(client, bufnr)
+  require('me.lsp.ext').detach(client.id, bufnr)
+  vim.cmd('augroup lsp_aucmds')
+  vim.cmd(string.format('au! * <buffer=%d>', bufnr))
+  vim.cmd('augroup end')
+end
+
+
 local function mk_config()
   local capabilities = lsp.protocol.make_client_capabilities()
   capabilities.workspace.configuration = true
@@ -152,6 +160,7 @@ local function mk_config()
     capabilities = capabilities;
     on_init = on_init;
     on_attach = on_attach;
+    on_exit = on_exit;
   }
 end
 

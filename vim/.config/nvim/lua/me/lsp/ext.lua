@@ -254,6 +254,13 @@ function M.setup()
 end
 
 
+function M.detach(client_id, bufnr)
+  vim.cmd(string.format('augroup lsp_ext_%d_%d', client_id, bufnr))
+  vim.cmd('au!')
+  vim.cmd('augroup end')
+  vim.cmd(string.format('augroup! lsp_ext_%d_%d', client_id, bufnr))
+end
+
 function M.attach(client, bufnr)
   vim.cmd(string.format('augroup lsp_ext_%d_%d', client.id, bufnr))
   vim.cmd('au!')
