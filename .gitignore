@@ -14,4 +14,6 @@ bin/bin/term2mp4
 bin/bin/term2mp4.hi
 bin/bin/gh-maybe-clone
 bin/bin/gh-maybe-clone.hi
+bin/bin/pin-qemu.hi
+bin/bin/pin-qemu
 .mypy_cache/
