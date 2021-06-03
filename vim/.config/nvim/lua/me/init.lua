@@ -138,25 +138,6 @@ function M.only()
 end
 
 
-function M.emoji()
-  local lines = {}
-  for line in io.lines(os.getenv('HOME') .. '/.config/dm/emoji.json') do
-    table.insert(lines, line)
-  end
-  local items = vim.fn.json_decode(table.concat(lines, '\n'))
-  require('fzy').pick_one(
-    items,
-    'Emoji> ',
-    function(item) return  item.emoji .. ' ' .. item.description end,
-    function(item)
-      if item then
-        api.nvim_feedkeys('a' .. item.emoji, 'n', true)
-      end
-    end
-  )
-end
-
-
 function M.reload(name, children)
   children = children or false
   package.loaded[name] = nil
@@ -210,6 +191,42 @@ function M.setup()
     fp:flush()
     fp:close()
   end
+end
+
+
+function M.format_uri(uri)
+  if vim.startswith(uri, 'jdt://') then
+    local package = uri:match('contents/[%a%d.-]+/([%a%d.-]+)') or ''
+    local class = uri:match('contents/[%a%d.-]+/[%a%d.-]+/([%a%d$]+).class') or ''
+    return string.format('%s::%s', package, class)
+  else
+    return vim.fn.fnamemodify(vim.uri_to_fname(uri), ':.')
+  end
+end
+
+
+-- quickfixtextfunc to be used with nvim-jdtls:
+-- Turns entries like `jdt://contents/java.xml/[...]/ListDatatypeValidator.class` into `package.name::ClassName: [Class] ListDatatypeValidator`
+function M.quickfixtext(opts)
+  if opts.quickfix == 0 then
+    return nil
+  end
+  local qflist = vim.fn.getqflist({ id = opts.id, items = 0, title = 0, context = 0 })
+  if qflist.title ~= 'Language Server' then
+    return nil
+  end
+  local result = {}
+  for i, item in pairs(qflist.items) do
+    if i >= opts.start_idx and i <= opts.end_idx then
+      table.insert(result, string.format('%s|%d %d|%s',
+        M.format_uri(vim.uri_from_bufnr(item.bufnr)),
+        item.lnum,
+        item.col,
+        item.text
+      ))
+    end
+  end
+  return result
 end
 
 

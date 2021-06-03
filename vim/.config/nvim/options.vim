@@ -93,6 +93,7 @@ endif
 if has('nvim-0.5')
     lua require('me').setup()
     set statusline=%!v:lua.U.statusline()
+    set quickfixtextfunc=v:lua.U.quickfixtext
     augroup lsp
       au!
       au FileType java lua require('me.lsp.conf').start_jdt()
