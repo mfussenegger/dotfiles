@@ -93,7 +93,7 @@ function M.init_hl()
     ts.highlighter.new(parser, query)
   end
   api.nvim_buf_attach(bufnr, false, {
-    on_detach = function(b)
+    on_detach = function(_, b)
       if ts.highlighter.active[b] then
         ts.highlighter.active[b]:destroy()
       end
@@ -109,7 +109,7 @@ function M.enable_lint()
   local bufnr = api.nvim_get_current_buf()
   lint_active[bufnr] = true
   api.nvim_buf_attach(bufnr, false, {
-    on_detach = function(b)
+    on_detach = function(_, b)
       lint_active[b] = nil
     end,
   })
