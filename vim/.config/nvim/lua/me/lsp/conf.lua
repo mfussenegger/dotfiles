@@ -126,7 +126,7 @@ end
 local function jdtls_on_attach(client, bufnr)
   on_attach(client, bufnr)
   local opts = { silent = true; }
-  jdtls.setup_dap()
+  jdtls.setup_dap({hotcodereplace = 'auto'})
   jdtls.setup.add_commands()
   api.nvim_buf_set_keymap(bufnr, "n", "<A-o>", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts)
   api.nvim_buf_set_keymap(bufnr, "n", "<leader>df", "<Cmd>lua require'jdtls'.test_class()<CR>", opts)
