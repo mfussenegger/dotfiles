@@ -2,29 +2,6 @@ local api = vim.api
 local M = {}
 
 
-local function diagnostics_to_items(diagnostics_by_buf, predicate)
-  if not diagnostics_by_buf then
-    return {}
-  end
-  local items = {}
-  for bufnr, diagnostics in pairs(diagnostics_by_buf) do
-    for _, d in pairs(diagnostics) do
-      if not predicate or predicate(d) then
-        table.insert(items, {
-          bufnr = bufnr,
-          lnum = d.range.start.line + 1,
-          col = d.range.start.character + 1,
-          text = d.message,
-          vcol = 1,
-        })
-      end
-    end
-  end
-  table.sort(items, function(a, b) return a.lnum < b.lnum end)
-  return items
-end
-
-
 do
   function M.publishDiagnostics(_, _, result, client_id)
     if not result then return end
@@ -53,7 +30,7 @@ do
       end
       vim.fn.setloclist(0, {}, 'r', {
         title = 'Language Server';
-        items = diagnostics_to_items({bufnr = diagnostics})
+        items = vim.lsp.util.diagnostics_to_items({bufnr = diagnostics})
       })
     end
   end
@@ -61,7 +38,7 @@ end
 
 
 function M.errors_to_quickfix()
-  local items = diagnostics_to_items(
+  local items = vim.lsp.util.diagnostics_to_items(
     vim.lsp.diagnostic.get_all(),
     function(d) return d.severity == vim.lsp.protocol.DiagnosticSeverity.Error end
   )
@@ -72,7 +49,7 @@ function M.errors_to_quickfix()
 end
 
 function M.warnings_to_quickfix()
-  local items = diagnostics_to_items(
+  local items = vim.lsp.util.diagnostics_to_items(
     vim.lsp.diagnostic.get_all(),
     function(d) return d.severity == vim.lsp.protocol.DiagnosticSeverity.Warning end
   )
