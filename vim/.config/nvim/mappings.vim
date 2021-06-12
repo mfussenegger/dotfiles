@@ -146,4 +146,6 @@ if has('nvim-0.5')
     vnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
     vnoremap <silent> <leader>/ :HopPattern<CR>
     omap     <silent> h :HopWord<CR>
+    omap     <silent> m :<C-U>lua U.reload('me.ts').nodes()<CR>
+    vnoremap <silent> m :lua U.reload('me.ts').nodes()<CR>
 endif
