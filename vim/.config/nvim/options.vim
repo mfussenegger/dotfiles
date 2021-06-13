@@ -116,8 +116,6 @@ if has('nvim-0.5')
     hi! def link LspReferenceRead IncSearch
     hi! def link LspReferenceWrite IncSearch
     hi! def link LspCodeLens Underlined
-    hi! def TSNodeUnmatched guifg=#666666 ctermfg=242
-    hi! def TSNodeKey guifg=#ff007c gui=bold ctermfg=198 cterm=bold
 
     set signcolumn=auto
     sign define LspDiagnosticsSignError text= texthl= linehl= numhl=ErrorMsg
