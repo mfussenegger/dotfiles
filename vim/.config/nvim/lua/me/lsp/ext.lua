@@ -222,7 +222,7 @@ function M._CompleteDone(resolveEdits)
     if expand_snippet then
       apply_snippet(item, suffix)
     end
-  elseif resolveEdits then
+  elseif resolveEdits and type(item) == "table" then
     local _, cancel_req = request('completionItem/resolve', item, function(err, _, result)
       completion_ctx.pending_requests = {}
       assert(not err, vim.inspect(err))
