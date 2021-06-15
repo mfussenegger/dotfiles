@@ -129,6 +129,7 @@ if has('nvim-0.5')
     nnoremap <silent> <leader>dS :lua require('dap.ui.widgets').centered_float(require('dap.ui.widgets').frames)<CR>
     nnoremap <silent> <leader>ds :lua require('dap.ui.widgets').centered_float(require('dap.ui.widgets').scopes)<CR>
     nnoremap <silent> <leader>dh :lua require('dap.ui.widgets').hover()<CR>
+    nnoremap <silent> <leader>dc :lua require('dap').run_to_cursor()<CR>
     vnoremap <silent> <leader>dh :lua require('dap.ui.widgets').hover(require("dap.utils").get_visual_selection_text)<CR>
 
     command -nargs=0 Into :lua require('dap').step_into()
