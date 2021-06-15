@@ -194,6 +194,16 @@ function M.setup()
 end
 
 
+function M.reload_dap()
+  require('dap.repl').close()
+  U.reload('dap', true)
+  U.reload('me.dap.conf')
+  require('me.dap.conf').setup()
+  U.reload('jdtls.dap').setup_dap({hotcodereplace = 'auto'})
+  require('dap.ui').pick_one = require('fzy').pick_one
+end
+
+
 function M.format_uri(uri)
   if vim.startswith(uri, 'jdt://') then
     local package = uri:match('contents/[%a%d.-]+/([%a%d.-]+)') or ''
