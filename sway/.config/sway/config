@@ -186,5 +186,5 @@ input type:touchpad {
 }
 
 
-exec systemctl --user import-environment
+include /etc/sway/config.d/*
 exec systemctl --user start swayidle.service
