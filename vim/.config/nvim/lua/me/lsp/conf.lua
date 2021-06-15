@@ -59,6 +59,7 @@ do
       end
       local stat = vim.loop.fs_stat(api.nvim_buf_get_name(bufnr))
       if not stat then
+        vim.fn.mkdir(vim.fn.expand('%:p:h'), 'p')
         vim.cmd('w')
       end
     end
