@@ -2,6 +2,7 @@
 font:
   normal:
     family: JuliaMono
+    style: Light
   size: 15
 
 window:
