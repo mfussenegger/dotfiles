@@ -296,9 +296,22 @@ function M.start_hie()
 end
 
 
-function M.start_go_ls()
-  local path = os.getenv("GOPATH") .. "/bin/go-langserver"
-  M.add_client({path, '-gocodecompletion'}, {name = 'gols'})
+function M.gopls()
+  local config = mk_config()
+  config.name = 'gopls'
+  config.cmd = {'gopls', 'serve'}
+  config.settings = {
+    gopls = {
+      experimentalPostfixCompletions = true,
+      codelenses = {
+        generate = true,
+        gc_details = true,
+        test = true,
+        tidy = true,
+      },
+    },
+  }
+  lspc.start(config, {'.git'})
 end
 
 
