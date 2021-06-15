@@ -26,6 +26,33 @@ function M.quickfix()
 end
 
 
+-- Like fzy.actions.buffers but with custom jdt:// URI handling
+function M.buffers()
+  local bufs = vim.tbl_filter(
+    function(b)
+      return api.nvim_buf_is_loaded(b) and api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix'
+    end,
+    api.nvim_list_bufs()
+  )
+  local format_bufname = function(b)
+    local fullname = api.nvim_buf_get_name(b)
+    local name
+    if #fullname == 0 then
+      name = '[No Name] (' .. api.nvim_buf_get_option(b, 'buftype') .. ')'
+    else
+      name= require('me').format_uri(vim.uri_from_bufnr(b))
+    end
+    local modified = api.nvim_buf_get_option(b, 'modified')
+    return modified and name .. ' [+]' or name
+  end
+  fzy.pick_one(bufs, 'Buffers> ', format_bufname, function(b)
+    if b then
+      api.nvim_set_current_buf(b)
+    end
+  end)
+end
+
+
 function M.emoji()
   local lines = {}
   for line in io.lines(os.getenv('HOME') .. '/.config/dm/emoji.json') do
