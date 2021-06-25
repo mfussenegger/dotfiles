@@ -69,3 +69,8 @@ clean_whiteboard() {
 update_mirrorlist() {
     reflector -n 24 -c AT -c DE -f 10 -l 10 | sudo tee /etc/pacman.d/mirrorlist
 }
+
+
+mp42gif() {
+  ffmpeg -i "$1" -vf "fps=10,scale=1024:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 "$2"
+}
