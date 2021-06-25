@@ -29,14 +29,10 @@ function M.statusline()
       '%#MyStatuslineLSPErrors#%{luaeval("vim.lsp.diagnostic.get_count(0, [[Error]])")}',
       '%#MyStatuslineLSP# □ ',
       '%#MyStaruslineLSPWarnings#%{luaeval("vim.lsp.diagnostic.get_count(0, [[Warning]])")}',
+      ' ',
     }
   end
   vim.list_extend(parts, diagnostics)
-  if vim.tbl_isempty(diagnostics) then
-    table.insert(parts, "%-14.(%l,%c%)")
-  else
-    table.insert(parts, "%-14.( | %l,%c%)")
-  end
   return table.concat(parts, '')
 end
 
