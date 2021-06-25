@@ -203,8 +203,8 @@ end
 
 function M.format_uri(uri)
   if vim.startswith(uri, 'jdt://') then
-    local package = uri:match('contents/[%a%d.-]+/([%a%d.-]+)') or ''
-    local class = uri:match('contents/[%a%d.-]+/[%a%d.-]+/([%a%d$]+).class') or ''
+    local package = uri:match('contents/[%a%d._-]+/([%a%d._-]+)') or ''
+    local class = uri:match('contents/[%a%d._-]+/[%a%d._-]+/([%a%d$]+).class') or ''
     return string.format('%s::%s', package, class)
   else
     return vim.fn.fnamemodify(vim.uri_to_fname(uri), ':.')
