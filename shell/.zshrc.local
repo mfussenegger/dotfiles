@@ -3,7 +3,7 @@ export KUBECONFIG=$HOME/.kube/config:$HOME/.kube/config_user
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
-export JAVA_HOME=/usr/lib/jvm/java-15-openjdk/
+export JAVA_HOME=/usr/lib/jvm/java-16-openjdk/
 export GOPATH="$HOME/workspace/code/go"
 export STARDICT_DATA_DIR="$HOME/.local/share/stardict/"
 # Refresh gpg-agent tty in case user switches into an X session

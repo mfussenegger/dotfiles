@@ -204,10 +204,6 @@ function M.start_jdt()
             path = "/usr/lib/jvm/java-11-openjdk/",
           },
           {
-            name = "JavaSE-15",
-            path = "/usr/lib/jvm/java-15-openjdk/",
-          },
-          {
             name = "JavaSE-16",
             path = home .. "/.local/jdks/jdk-16.0.1+9/",
           },
