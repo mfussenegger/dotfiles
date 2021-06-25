@@ -170,6 +170,7 @@ function M.setup()
   require('dap.ui').pick_one = require('fzy').pick_one
   require('me.lsp.conf').setup()
   require('me.dap.conf').setup()
+  require('hop').setup()
   require('lint').linters_by_ft = {
     markdown = {'vale'},
     rst = {'vale'},
