@@ -131,6 +131,8 @@ if has('nvim-0.5')
     nnoremap <silent> <leader>dh :lua require('dap.ui.widgets').hover()<CR>
     nnoremap <silent> <leader>dc :lua require('dap').run_to_cursor()<CR>
     vnoremap <silent> <leader>dh :lua require('dap.ui.widgets').hover(require("dap.utils").get_visual_selection_text)<CR>
+    nnoremap <silent> <leader>dj :lua require'dap'.down()<CR>
+    nnoremap <silent> <leader>dk :lua require'dap'.up()<CR>
 
     command -nargs=0 Into :lua require('dap').step_into()
     command -nargs=0 DapBreakpoints :lua require('dap').list_breakpoints()
