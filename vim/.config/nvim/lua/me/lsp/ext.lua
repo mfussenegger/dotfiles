@@ -66,8 +66,22 @@ local function text_document_completion_list_to_complete_items(result, prefix, f
       -- haskell-ide-engine has
       --      insertText = "testSuites ${1:Env}"
       --      label = "testSuites"
+      --
+      -- lua-language-server has
+      --      insertText = "query_definition",
+      --      label = "query_definition(pattern)",
       --]]
-      word = item.textEdit and (item.insertText or item.textEdit.newText) or item.label
+      if item.textEdit then
+        word = item.insertText or item.textEdit.newText
+      elseif item.insertText then
+        if #item.label < #item.insertText then
+          word = item.label
+        else
+          word = item.insertText
+        end
+      else
+        word = item.label
+      end
     else
       word = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
     end
