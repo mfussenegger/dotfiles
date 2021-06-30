@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+java -cp ~/apps/converter.jar jfr2flame "$1" "$2"
