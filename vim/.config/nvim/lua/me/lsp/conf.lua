@@ -298,17 +298,32 @@ end
 
 function M.start_lua_ls()
   local config = mk_config()
+  local library = {}
+  local path = vim.split(package.path, ";")
+  table.insert(path, "lua/?.lua")
+  table.insert(path, "lua/?/init.lua")
+
+  local function add(lib)
+    for _, p in pairs(vim.fn.expand(lib, false, true)) do
+      p = vim.loop.fs_realpath(p)
+      library[p] = true
+    end
+  end
+
+  add("$VIMRUNTIME")
+  add("~/.config/nvim")
+  add("~/.config/nvim/pack/plugins/start/*")
   config.settings = {
     Lua = {
       diagnostics = {
         globals = {'vim', 'it', 'describe'}
       },
-      runtime = {version = "LuaJIT"},
+      runtime = {
+        version = "LuaJIT",
+        path = path,
+      },
       workspace = {
-        library = {
-          [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-          [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-        }
+        library = library,
       },
       telemetry = {
         enable = false,
