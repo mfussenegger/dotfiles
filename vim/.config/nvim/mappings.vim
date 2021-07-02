@@ -70,14 +70,13 @@ augroup end
 
 
 if has('nvim-0.5')
-  lua fzy = require('fzy')
-  nnoremap <silent><leader>fq :lua require'me.fzy'.quickfix()<CR>
-  nnoremap <silent><leader>ff :lua fzy.execute('fd', fzy.sinks.edit_file)<CR>
-  nnoremap <silent><leader>fb :lua require'me.fzy'.buffers()<CR>
-  nnoremap <silent><leader>ft :lua fzy.try(fzy.actions.lsp_tags, fzy.actions.buf_tags)<CR>
-  nnoremap <silent><leader>fg :lua fzy.execute('git ls-files', fzy.sinks.edit_file)<CR>
-  nnoremap <silent><leader>f/ :lua fzy.actions.buf_lines()<CR>
-  inoremap <silent><c-e> <ESC>:lua require'me.fzy'.emoji()<CR>
+  nnoremap <silent><leader>fq :lua require('me.fzy').actions.quickfix()<CR>
+  nnoremap <silent><leader>ff :lua local fzy = require('me.fzy'); fzy.execute('fd', fzy.sinks.edit_file)<CR>
+  nnoremap <silent><leader>fb :lua require('me.fzy').actions.buffers()<CR>
+  nnoremap <silent><leader>ft :lua local fzy = require('me.fzy'); fzy.try(fzy.actions.lsp_tags, fzy.actions.buf_tags)<CR>
+  nnoremap <silent><leader>fg :lua local fzy = require('me.fzy'); fzy.execute('git ls-files', fzy.sinks.edit_file)<CR>
+  nnoremap <silent><leader>f/ :lua require('me.fzy').actions.buf_lines()<CR>
+  inoremap <silent><c-e> <ESC>:lua require('me.fzy').emoji()<CR>
 endif
 
 " gnupg
