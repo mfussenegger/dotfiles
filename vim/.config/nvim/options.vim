@@ -90,10 +90,16 @@ if executable("rg")
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
+
 if has('nvim-0.5')
+
+    function! MyQuickfixtext(opts)
+      return luaeval('U.quickfixtext(_A)', a:opts)
+    endfunction
+
     lua require('me').setup()
     set statusline=%!v:lua.U.statusline()
-    set quickfixtextfunc=v:lua.U.quickfixtext
+    set quickfixtextfunc=MyQuickfixtext
     augroup lsp
       au!
       au FileType java lua require('me.lsp.conf').start_jdt()
