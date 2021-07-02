@@ -104,19 +104,6 @@ local function text_document_completion_list_to_complete_items(result, prefix, f
 end
 
 
-local function find_start(line, cursor_pos)
-  local line_to_cursor = line:sub(1, cursor_pos)
-  local idx = 0
-  while true do
-    local i = string.find(line_to_cursor, '[^a-zA-Z0-9_]', idx + 1)
-    if i == nil then
-      break
-    else
-      idx = i
-    end
-  end
-  return idx + 1
-end
 
 
 local function reset_timer()
@@ -133,7 +120,7 @@ function M.trigger_completion()
   completion_ctx.cancel_pending()
   local cursor_pos = api.nvim_win_get_cursor(0)[2]
   local line = api.nvim_get_current_line()
-  local col = completion_ctx.col or find_start(line, cursor_pos)
+  local col = completion_ctx.col or require('me.compl').find_start(line, cursor_pos)
   local prefix = line:sub(col, cursor_pos)
   local params = lsp.util.make_position_params()
   local _, cancel_req = request('textDocument/completion', params, function(err, _, result, client_id)
