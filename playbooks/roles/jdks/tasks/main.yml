@@ -31,3 +31,19 @@
     dest: ~/.local/jdks/
     creates: ~/.local/jdks/jdk-17
     remote_src: true
+
+- name: Install panama early access
+  unarchive:
+    src: https://download.java.net/java/early_access/panama/3/openjdk-17-panama+3-167_linux-x64_bin.tar.gz
+    dest: ~/.local/jdks/
+    remote_src: true
+    extra_opts:
+      - --transform
+      - s/jdk-17/jdk-17ea-panama/
+
+- name: Install GraalVM Java16
+  unarchive:
+    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.1.0/graalvm-ce-java16-linux-amd64-21.1.0.tar.gz
+    dest: ~/.local/jdks/
+    creates: ~/.local/jdks/graalvm-ce-java16-21.1.0/
+    remote_src: true
