@@ -54,5 +54,6 @@
     - mfussenegger/nvim-fzy
     - mfussenegger/nvim-lint
     - mfussenegger/nvim-ts-hint-textobject
+    - mfussenegger/nvim-lsp-compl
 - name: Update Remote Plugins
   command: nvim +UpdateRemotePlugins +qa

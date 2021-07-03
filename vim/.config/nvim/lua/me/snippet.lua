@@ -51,7 +51,7 @@ function M.maybe()
       end
       local cursor_pos = api.nvim_win_get_cursor(0)[2]
       local line = api.nvim_get_current_line()
-      local col = require('me.compl').find_start(line, cursor_pos)
+      local col = require('lsp_compl').find_start(line, cursor_pos)
       vim.fn.complete(col, matches)
       if #matches == 1 then
         api.nvim_feedkeys(
