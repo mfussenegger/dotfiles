@@ -9,9 +9,40 @@ local function setup_widgets()
 end
 
 
+local function pick_process()
+  local output = vim.fn.system({'ps', 'a'})
+  local lines = vim.split(output, '\n')
+  local procs = {}
+  for _, line in pairs(lines) do
+    -- output format
+    --    " 107021 pts/4    Ss     0:00 /bin/zsh <args>"
+    local parts = vim.fn.split(vim.fn.trim(line), ' \\+')
+    local pid = parts[1]
+    local name = table.concat({unpack(parts, 5)}, ' ')
+    if pid and pid ~= 'PID' then
+      pid = tonumber(pid)
+      if pid ~= vim.fn.getpid() then
+        table.insert(procs, { pid = tonumber(pid), name = name })
+      end
+    end
+  end
+  local choices = {'Select process'}
+  for i, proc in ipairs(procs) do
+    table.insert(choices, string.format("%d: pid=%d name=%s", i, proc.pid, proc.name))
+  end
+  local choice = vim.fn.inputlist(choices)
+  if choice < 1 or choice > #procs then
+    return nil
+  end
+  return procs[choice].pid
+end
+
+
 function M.setup()
   setup_widgets()
 
+  dap.defaults.fallback.terminal_win_cmd = 'belowright 15new'
+  dap.defaults.fallback.force_external_terminal = false
   dap.defaults.fallback.external_terminal = {
     command = '/usr/bin/alacritty';
     args = {'-e'};
@@ -106,69 +137,61 @@ function M.setup()
     },
   }
 
-
-  dap.adapters.cpp = {
+  dap.adapters.netcoredbg = {
     type = 'executable',
-    command = 'lldb-vscode',
-    env = {
-      LLDB_LAUNCH_FLAG_LAUNCH_IN_TTY = "YES"
+    command = HOME .. '/.local/dotnet/netcoredbg/netcoredbg',
+    args = {'--interpreter=vscode'}
+  }
+  dap.configurations.cs = {
+    {
+      type = "netcoredbg",
+      name = "launch - netcoredbg",
+      request = "launch",
+      program = function()
+          return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+      end,
+      stopAtEntry = true,
     },
+  }
+
+
+  dap.adapters.lldb = {
+    type = 'executable',
+    command = '/usr/bin/lldb-vscode',
     name = "lldb"
   }
   dap.configurations.cpp = {
     {
-      name = "Launch",
-      type = "cpp",
+      name = "Launch (integrated terminal)",
+      type = "lldb",
       request = "launch",
       program = function()
         return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
       end,
       cwd = '${workspaceFolder}',
-      env = function()
-        local variables = {}
-        for k, v in pairs(vim.fn.environ()) do
-          table.insert(variables, string.format("%s=%s", k, v))
-        end
-        return variables
-      end,
       stopOnEntry = false,
-      args = {}
+      args = {},
+      runInTerminal = true,
+    },
+    {
+      name = "Launch",
+      type = "lldb",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      stopOnEntry = false,
+      args = {},
+      runInTerminal = false,
     },
     {
       -- If you get an "Operation not permitted" error using this, try disabling YAMA:
       --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
       name = "Attach to process",
-      type = 'cpp',
+      type = 'lldb',
       request = 'attach',
-      pid = function()
-        local output = vim.fn.system({'ps', 'a'})
-        local lines = vim.split(output, '\n')
-        local procs = {}
-        for _, line in pairs(lines) do
-          -- output format
-          --    " 107021 pts/4    Ss     0:00 /bin/zsh <args>"
-          local parts = vim.fn.split(vim.fn.trim(line), ' \\+')
-          local pid = parts[1]
-          local name = table.concat({unpack(parts, 5)}, ' ')
-          if pid and pid ~= 'PID' then
-            pid = tonumber(pid)
-            if pid ~= vim.fn.getpid() then
-              table.insert(procs, { pid = tonumber(pid), name = name })
-            end
-          end
-        end
-        local choices = {'Select process'}
-        for i, proc in ipairs(procs) do
-          table.insert(choices, string.format("%d: pid=%d name=%s", i, proc.pid, proc.name))
-        end
-        -- Would be cool to have a fancier selection, but needs to be sync :/
-        -- Should nvim-dap handle coroutine results?
-        local choice = vim.fn.inputlist(choices)
-        if choice < 1 or choice > #procs then
-          return nil
-        end
-        return procs[choice].pid
-      end,
+      pid = pick_process,
       args = {},
     },
   }
