@@ -167,9 +167,7 @@ end
 function M.setup()
   require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
   require('jdtls.ui').pick_one_async = require('fzy').pick_one
-  require('dap.ui').pick_one = require('fzy').pick_one
   require('me.lsp.conf').setup()
-  require('me.dap.conf').setup()
   require('hop').setup()
   require('lint').linters_by_ft = {
     markdown = {'vale'},
@@ -194,8 +192,7 @@ end
 function M.reload_dap()
   require('dap.repl').close()
   U.reload('dap', true)
-  U.reload('me.dap.conf')
-  require('me.dap.conf').setup()
+  U.reload('me.dap')
   U.reload('jdtls.dap').setup_dap({hotcodereplace = 'auto'})
   require('dap.ui').pick_one = require('fzy').pick_one
 end

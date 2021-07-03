@@ -1,6 +1,17 @@
 local dap = require('dap')
 local HOME = os.getenv('HOME')
-local M = {}
+
+
+local M = setmetatable({}, {
+  __index = function(tbl, key)
+    if key == 'widgets' then
+      local val = require('dap.ui.widgets')
+      rawset(tbl, key, val)
+      return val
+    end
+    return dap[key]
+  end,
+})
 
 
 local function setup_widgets()
@@ -39,6 +50,7 @@ end
 
 
 function M.setup()
+  require('dap.ui').pick_one = require('fzy').pick_one
   setup_widgets()
 
   dap.defaults.fallback.terminal_win_cmd = 'belowright 15new'
@@ -201,4 +213,5 @@ function M.setup()
   require('dap.ext.vscode').load_launchjs()
 end
 
+M.setup()
 return M
