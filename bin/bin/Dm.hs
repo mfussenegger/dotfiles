@@ -34,7 +34,7 @@ import qualified Network.HTTP.Client.TLS as HTTP
 import System.Directory
   ( canonicalizePath,
     doesFileExist,
-    getHomeDirectory,
+    getHomeDirectory, removeFile
   )
 import System.Environment (getArgs)
 import System.Posix.Files (rename)
@@ -44,6 +44,8 @@ import qualified Data.Text as T
 import qualified Data.Text.Read as T
 import Data.Either.Combinators (rightToMaybe)
 import Text.Printf (printf)
+import Control.Exception (catch, throwIO)
+import System.IO.Error (isDoesNotExistError)
 
 
 data SwayOutput = SwayOutput
@@ -331,6 +333,24 @@ pulseMove = do
     listSinks = readProcess "pactl" ["list", "sinks"] ""
 
 
+
+removeIfExists :: FilePath -> IO ()
+removeIfExists path = removeFile path `catch` handleExists
+  where
+    handleExists e
+      | isDoesNotExistError e = pure ()
+      | otherwise = throwIO e
+
+
+wfRecord :: String -> IO ()
+wfRecord slurpCmd = do
+  removeIfExists filePath
+  window <- readProcess slurpCmd [] ""
+  callProcess "alacritty" ["-e", "wf-recorder", "-g", window, "-f", filePath]
+  where
+    filePath = "/tmp/recording.mp4"
+
+
 main :: IO ()
 main = do
     let choices = [ "keyboard"
@@ -344,6 +364,8 @@ main = do
                   , "emoji"
                   , "mpc"
                   , "pulse move"
+                  , "record window"
+                  , "record region"
                   ]
     out <- selection choices
     case out of
@@ -358,4 +380,6 @@ main = do
         "emoji"         -> selectEmoji
         "mpc"           -> selectSong
         "pulse move"    -> pulseMove
+        "record window" -> wfRecord "slurp-win"
+        "record region" -> wfRecord "slurp"
         _               -> putStrLn $ "Invalid selection " ++ out
