@@ -38,7 +38,7 @@ import System.Directory
   )
 import System.Environment (getArgs)
 import System.Posix.Files (rename)
-import System.Process (callProcess, readProcess)
+import System.Process (callProcess, readProcess, callCommand)
 import Text.Regex.PCRE ((=~))
 import qualified Data.Text as T
 import qualified Data.Text.Read as T
@@ -347,6 +347,7 @@ wfRecord slurpCmd = do
   removeIfExists filePath
   window <- readProcess slurpCmd [] ""
   callProcess "alacritty" ["-e", "wf-recorder", "-g", window, "-f", filePath]
+  callCommand $ "wl-copy < " <> filePath
   where
     filePath = "/tmp/recording.mp4"
 
