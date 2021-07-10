@@ -91,41 +91,40 @@ if executable("rg")
 endif
 
 
-if has('nvim-0.5')
+function! MyQuickfixtext(opts)
+  return luaeval('U.quickfixtext(_A)', a:opts)
+endfunction
 
-    function! MyQuickfixtext(opts)
-      return luaeval('U.quickfixtext(_A)', a:opts)
-    endfunction
+lua require('me').setup()
+set statusline=%!v:lua.U.statusline()
+set quickfixtextfunc=MyQuickfixtext
+augroup lsp
+  au!
+  au FileType java lua require('me.lsp.conf').start_jdt()
+  au FileType haskell lua require('me.lsp.conf').start_hie()
+  au FileType python lua require('me.lsp.conf').add_client({'pyls'})
+  au FileType html lua require('me.lsp.conf').add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
+  au FileType go lua require('me.lsp.conf').gopls()
+  au FileType sh lua require('me.lsp.conf').add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
+  au FileType rust lua require('me.lsp.conf').add_client({'rls'}, {root={'Cargo.toml', '.git'}})
+  au FileType lua lua require('me.lsp.conf').start_lua_ls()
+  au FileType json lua require('me.lsp.conf').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
+  au FileType css lua require('me.lsp.conf').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
+  au FileType cs lua require('me.lsp.conf').start_omnisharp()
+  au FileType c lua require('me.lsp.conf').add_client({'clangd'})
+  au FileType tex lua require('me.lsp.conf').add_client({'texlab'})
+  au FileType * lua require('me').init_hl()
+  au FileType * lua require('me').enable_lint()
+augroup end
 
-    lua require('me').setup()
-    set statusline=%!v:lua.U.statusline()
-    set quickfixtextfunc=MyQuickfixtext
-    augroup lsp
-      au!
-      au FileType java lua require('me.lsp.conf').start_jdt()
-      au FileType haskell lua require('me.lsp.conf').start_hie()
-      au FileType python lua require('me.lsp.conf').add_client({'pyls'})
-      au FileType html lua require('me.lsp.conf').add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
-      au FileType go lua require('me.lsp.conf').gopls()
-      au FileType sh lua require('me.lsp.conf').add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
-      au FileType rust lua require('me.lsp.conf').add_client({'rls'}, {root={'Cargo.toml', '.git'}})
-      au FileType lua lua require('me.lsp.conf').start_lua_ls()
-      au FileType json lua require('me.lsp.conf').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
-      au FileType css lua require('me.lsp.conf').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
-      au FileType cs lua require('me.lsp.conf').start_omnisharp()
-      au FileType c lua require('me.lsp.conf').add_client({'clangd'})
-      au FileType * lua require('me').init_hl()
-      au FileType * lua require('me').enable_lint()
-    augroup end
+hi! def link LspReferenceText IncSearch
+hi! def link LspReferenceRead IncSearch
+hi! def link LspReferenceWrite IncSearch
+hi! def link LspCodeLens Underlined
+hi! def link LspSignatureActiveParameter WarningMsg
 
-    hi! def link LspReferenceText IncSearch
-    hi! def link LspReferenceRead IncSearch
-    hi! def link LspReferenceWrite IncSearch
-    hi! def link LspCodeLens Underlined
-
-    set signcolumn=auto
-    sign define LspDiagnosticsSignError text= texthl= linehl= numhl=ErrorMsg
-    sign define LspDiagnosticsSignWarning text= texthl= linehl= numhl=WarningMsg
-    sign define LspDiagnosticsSignInformation text= texthl= linehl= numhl=Underlined
-    sign define LspDiagnosticsSignHint text= texthl= linehl= numhl=Underlined
-endif
+set signcolumn=auto
+sign define LspDiagnosticsSignError text= texthl= linehl= numhl=ErrorMsg
+sign define LspDiagnosticsSignWarning text= texthl= linehl= numhl=WarningMsg
+sign define LspDiagnosticsSignInformation text= texthl= linehl= numhl=Underlined
+sign define LspDiagnosticsSignHint text= texthl= linehl= numhl=Underlined
