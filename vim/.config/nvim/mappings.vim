@@ -64,7 +64,7 @@ cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
 augroup outline
-  autocmd! FileType python,java nnoremap <buffer><silent>gO :Vista!!<CR>
+  autocmd! FileType python,java,lua,haskell nnoremap <buffer><silent>gO :Vista!!<CR>
 augroup end
 
 
