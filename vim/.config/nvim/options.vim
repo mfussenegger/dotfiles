@@ -60,6 +60,10 @@ set thesaurus=~/.local/share/nvim/mthesaur.txt
 set dictionary=/usr/share/dict/words
 set spelllang=en,de
 
+let &showbreak = '↪ '
+let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±,trail:⣿'
+set list
+
 set diffopt=filler,internal,hiddenoff,algorithm:histogram,indent-heuristic
 
 augroup nvim_opts
