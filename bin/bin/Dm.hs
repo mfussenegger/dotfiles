@@ -167,7 +167,7 @@ xset = callProcess "xset"
 presOff :: IO ()
 presOff = do
   callProcess "systemctl" ["--user", "start", "swayidle.service"]
-  changeVimColorScheme ("tempus_totus", "gruvbox8_hard") ("light", "dark")
+  changeVimColorScheme ("tempus_totus", "gruvbox-material") ("light", "dark")
   alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
   sed alacrittyConfig "colors: *light" "colors: *dark"
   sed alacrittyConfig "    family: JetBrains Mono" "    family: JetBrains Mono Light"
@@ -176,7 +176,7 @@ presOff = do
 presOn :: IO ()
 presOn = do
   callProcess "systemctl" ["--user", "stop", "swayidle.service"]
-  changeVimColorScheme ("gruvbox8_hard", "tempus_totus") ("dark", "light")
+  changeVimColorScheme ("gruvbox-material", "tempus_totus") ("dark", "light")
   alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
   sed alacrittyConfig "colors: *dark" "colors: *light"
   sed alacrittyConfig "    family: JetBrains Mono Light" "    family: JetBrains Mono"

@@ -2,9 +2,12 @@ set shortmess+=wI
 
 let mapleader = ","
 let maplocalleader = " "
+set termguicolors
 
+let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_better_performance = 1
 set background=dark
-colorscheme gruvbox8_hard
+colorscheme gruvbox-material
 
 set matchtime=3 " show matching parenthesis a bit faster.
 set cmdheight=2
@@ -15,7 +18,6 @@ set hidden
 set lazyredraw
 set ttyfast
 set scrolloff=3
-set termguicolors
 
 set updatetime=1000
 
@@ -124,7 +126,7 @@ augroup end
 hi! def link LspReferenceText IncSearch
 hi! def link LspReferenceRead IncSearch
 hi! def link LspReferenceWrite IncSearch
-hi! def link LspCodeLens Underlined
+hi! def link LspCodeLens Include
 hi! def link LspSignatureActiveParameter WarningMsg
 
 set signcolumn=auto

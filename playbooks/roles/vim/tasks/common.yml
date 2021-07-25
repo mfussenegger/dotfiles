@@ -16,7 +16,7 @@
     repo: https://github.com/{{ item }}
     dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
   loop:
-    - lifepillar/vim-gruvbox8
+    - sainnhe/gruvbox-material
     - junegunn/gv.vim
     - junegunn/vim-easy-align
     - tpope/vim-fugitive
