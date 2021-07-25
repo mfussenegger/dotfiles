@@ -53,8 +53,7 @@ function M.setup()
   require('dap.ui').pick_one = require('fzy').pick_one
   setup_widgets()
 
-  dap.defaults.fallback.terminal_win_cmd = 'belowright 15new'
-  dap.defaults.fallback.force_external_terminal = false
+  dap.defaults.fallback.terminal_win_cmd = 'tabnew'
   dap.defaults.fallback.external_terminal = {
     command = '/usr/bin/alacritty';
     args = {'-e'};
