@@ -1,0 +1,25 @@
+---
+- name: Ensure cpptools folder exists
+  file:
+    path: ~/apps/cpptools
+    state: directory
+- name: Download cpptools
+  unarchive:
+    src: https://github.com/microsoft/vscode-cpptools/releases/download/1.5.1/cpptools-linux.vsix
+    dest: ~/apps/cpptools/
+    remote_src: true
+
+- name: Set executable flag
+  file:
+    path: ~/apps/cpptools/extension/debugAdapters/{{ item }}
+    mode: 0755
+  loop:
+    - OpenDebugAD7
+    - mono.linux-x86_64
+
+- name: Create nvim-dap.ad7Engine.json
+  copy:
+    src: ~/apps/cpptools/extension/cppdbg.ad7Engine.json
+    dest: ~/apps/cpptools/extension/debugAdapters/bin/nvim-dap.ad7Engine.json
+    remote_src: true
+

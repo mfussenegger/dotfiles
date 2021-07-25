@@ -167,12 +167,28 @@ function M.setup()
   }
 
 
+  dap.adapters.cppdbg = {
+    type = 'executable',
+    command = HOME .. '/apps/cpptools/extension/debugAdapters/OpenDebugAD7',
+  }
   dap.adapters.lldb = {
     type = 'executable',
     command = '/usr/bin/lldb-vscode',
     name = "lldb"
   }
   dap.configurations.cpp = {
+    {
+      name = 'Attach to gdbserver :1234',
+      type = 'cppdbg',
+      request = 'launch',
+      MIMode = 'gdb',
+      miDebuggerServerAddress = 'localhost:1234',
+      miDebuggerPath = '/usr/bin/gdb',
+      cwd = '${workspaceFolder}',
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+    },
     {
       name = "Launch (integrated terminal)",
       type = "lldb",
