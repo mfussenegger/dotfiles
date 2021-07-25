@@ -279,6 +279,9 @@ function M.start_hie()
       formattingProvider = "ormolu";
     }
   }
+  config.on_attach = function(client, bufnr)
+    on_attach(client, bufnr, { server_side_fuzzy_completion = true })
+  end
   lspc.start(config, {'hie.yaml', 'stack.yml', '.git'})
 end
 
