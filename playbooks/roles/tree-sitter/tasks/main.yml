@@ -66,8 +66,6 @@
     dest: ~/.config/nvim/queries/{{ item.ft }}/{{ item.file }}
   loop:
     - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'tags.scm' }
-    - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'highlights.scm' }
-    - { ft: 'python', src_dir: 'tree-sitter/tree-sitter-python/queries', file: 'tags.scm' }
     - { ft: 'html', src_dir: 'tree-sitter/tree-sitter-html/queries', file: 'highlights.scm' }
     - { ft: 'haskell', src_dir: 'tree-sitter/tree-sitter-haskell/queries', file: 'highlights.scm' }
 
@@ -81,6 +79,7 @@
     - { ft: 'json', name: 'highlights' }
     - { ft: 'java', name: 'highlights' }
     - { ft: 'java', name: 'locals' }
+    - { ft: 'python', name: 'highlights' }
     - { ft: 'python', name: 'locals' }
     - { ft: 'markdown', name: 'highlights' }
     - { ft: 'markdown', name: 'injections' }
