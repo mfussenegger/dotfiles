@@ -87,14 +87,14 @@ function M.init_hl()
   ok, query = pcall(get_query, ft, 'highlights')
   if ok and query then
     ts.highlighter.new(parser, query)
+    api.nvim_buf_attach(bufnr, false, {
+      on_detach = function(_, b)
+        if ts.highlighter.active[b] then
+          ts.highlighter.active[b]:destroy()
+        end
+      end,
+    })
   end
-  api.nvim_buf_attach(bufnr, false, {
-    on_detach = function(_, b)
-      if ts.highlighter.active[b] then
-        ts.highlighter.active[b]:destroy()
-      end
-    end,
-  })
 end
 
 
