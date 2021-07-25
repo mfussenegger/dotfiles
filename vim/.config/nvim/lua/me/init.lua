@@ -186,6 +186,25 @@ function M.setup()
     fp:flush()
     fp:close()
   end
+  local debug_view = nil
+  PB = function(...)
+    if not debug_view then
+      debug_view = require('dap.ui').new_view(
+        function()
+          return api.nvim_create_buf(false, true)
+        end,
+        function(buf)
+          vim.cmd('split')
+          api.nvim_win_set_buf(0, buf)
+          return api.nvim_get_current_win()
+        end
+      )
+    end
+    debug_view.open()
+    local text = table.concat(vim.tbl_map(vim.inspect, {...}), ', ')
+    local lines = vim.split(vim.trim(text), '\n')
+    vim.fn.appendbufline(debug_view.buf, '$', lines)
+  end
 end
 
 
