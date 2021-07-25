@@ -51,8 +51,9 @@ function M.maybe()
       end
       local cursor_pos = api.nvim_win_get_cursor(0)[2]
       local line = api.nvim_get_current_line()
-      local col = require('lsp_compl').find_start(line, cursor_pos)
-      vim.fn.complete(col, matches)
+      local line_to_cursor = line:sub(1, cursor_pos)
+      local col = vim.fn.match(line_to_cursor, '\\k*$')
+      vim.fn.complete(col + 1, matches)
       if #matches == 1 then
         api.nvim_feedkeys(
           api.nvim_replace_termcodes("<C-n>", true, false, true), 'n', true)
