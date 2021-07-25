@@ -30,18 +30,25 @@
     - cespare/vim-toml
     - tpope/vim-eunuch
     - hrsh7th/vim-vsnip
-    - vim-scripts/dbext.vim
-    - diepm/vim-rest-console
     - liuchengxu/vista.vim
     - janko-m/vim-test
+    - phaazon/hop.nvim
+    - nvim-lua/plenary.nvim
+    - vim-scripts/dbext.vim
+    - jbyuki/venn.nvim
+- name: Checkout opt vim plugins
+  git:
+    repo: https://github.com/{{ item }}
+    dest: ~/.config/nvim/pack/plugins/opt/{{ item | basename }}
+  loop:
+    - nvim-treesitter/nvim-treesitter
+    - nvim-treesitter/playground
+    - jbyuki/one-small-step-for-vimkind
     - saltstack/salt-vim
     - vmchale/dhall-vim
     - hashivim/vim-terraform
     - sirtaj/vim-openscad
-    - phaazon/hop.nvim
-    - nvim-lua/plenary.nvim
-    - jbyuki/one-small-step-for-vimkind
-    - jbyuki/venn.nvim
+    - diepm/vim-rest-console
 - name: Checkout vim dev plugins
   git:
     repo: https://github.com/{{ item }}
