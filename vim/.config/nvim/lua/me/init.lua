@@ -172,6 +172,9 @@ function M.setup()
   require('lint').linters_by_ft = {
     markdown = {'vale'},
     rst = {'vale'},
+    java = {'codespell'},
+    lua = {'codespell', 'luacheck'},
+    sh = {'shellcheck'},
   }
 
   U = M
