@@ -11,3 +11,6 @@
 - name: Install stack
   aur:
     name: stack-static
+- name: Install yaml-language-server
+  aur:
+    name: yaml-language-server

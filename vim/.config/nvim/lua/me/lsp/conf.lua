@@ -7,7 +7,6 @@ local lspc = {}
 do
   -- id is filetype│root_dir
   local lsp_client_ids = {}
-  local URI_SCHEME_PATTERN = '^([a-zA-Z]+[a-zA-Z0-9+-.]*)://.*'
 
   function lspc.start(config, root_markers)
     local root_dir = require('jdtls.setup').find_root(root_markers)
@@ -354,6 +353,17 @@ function M.start_omnisharp()
     root = {'.csproj', '.git', '.sln'},
   }
   M.add_client({path, '--languageserver', '--hostPID', tostring(pid)}, opts)
+end
+
+
+
+
+function M.start_yaml_ls()
+  local name = api.nvim_buf_get_name(0)
+  if name:match('.*/playbooks/.*%.yml') or name:match('.*/roles/.*%.yml') then
+    return
+  end
+  M.add_client({'yaml-language-server', '--stdio'})
 end
 
 
