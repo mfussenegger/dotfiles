@@ -26,6 +26,7 @@
     repo: https://github.com/microsoft/vscode-java-test
     dest: ~/dev/microsoft/vscode-java-test
     force: true  # npm commands below modify the package.json
+    version: main
 
 - name: Build vscode-java-test
   command: ./mvnw clean verify -DskipTests
