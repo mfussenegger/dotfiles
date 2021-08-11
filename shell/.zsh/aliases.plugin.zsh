@@ -42,7 +42,7 @@ alias -g V='| vim -'
 
 ## misc
 alias s='ssh'
-alias c="date && echo -e && cal -3mw"
+alias c="date -R && echo -e && khal calendar --notstarted"
 alias :q="exit"
 alias eject='sudo eject'
 alias rcp='rsync --progress'
