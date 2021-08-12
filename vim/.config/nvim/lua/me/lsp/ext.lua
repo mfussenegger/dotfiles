@@ -44,7 +44,7 @@ do
       for _, symbol in pairs(symbols.result or {}) do
         local loc = symbol.location
         local item = mk_tag_item(symbol.name, loc.range, loc.uri)
-        item.kind = lsp.protocol.SymbolKind[symbol.kind] or 'Unknown'
+        item.kind = (lsp.protocol.SymbolKind[symbol.kind] or 'Unknown')[1]
         table.insert(results, item)
       end
     end
@@ -60,6 +60,29 @@ do
       return vim.NIL
     end
   end
+
+  function M.symbol_tagfunc(pattern, flags)
+    if not (flags == 'c' or flags == '' or flags == 'i') then
+      return vim.NIL
+    end
+    local clients = vim.lsp.get_active_clients()
+    local num_clients = vim.tbl_count(clients)
+    local results = {}
+    for _, client in pairs(clients) do
+      client.request('workspace/symbol', { query = pattern }, function(_, _, result)
+        for _, symbol in pairs(result or {}) do
+          local loc = symbol.location
+          local item = mk_tag_item(symbol.name, loc.range, loc.uri)
+          item.kind = (lsp.protocol.SymbolKind[symbol.kind] or 'Unknown')[1]
+          table.insert(results, item)
+        end
+        num_clients = num_clients - 1
+      end)
+    end
+    vim.wait(1500, function() return num_clients == 0 end)
+    return results
+  end
+end
 end
 
 

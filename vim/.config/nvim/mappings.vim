@@ -44,6 +44,10 @@ noremap <c-h> <c-w>h
 noremap <c-j> <c-w>j
 noremap <c-k> <c-w>k
 noremap <c-l> <c-w>l
+nnoremap <silent> <c-w>s :lua require('me.win').split()<CR>
+nnoremap <silent> <c-w>v :lua require('me.win').vsplit()<CR>
+nnoremap <silent> <c-w>] :lua require('me.win').goto_def()<CR>
+
 
 " :terminal stuff
 

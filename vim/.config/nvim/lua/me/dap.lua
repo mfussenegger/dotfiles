@@ -1,3 +1,4 @@
+local api = vim.api
 local dap = require('dap')
 local HOME = os.getenv('HOME')
 
@@ -14,9 +15,21 @@ local M = setmetatable({}, {
 })
 
 
+local function add_tagfunc(widget)
+  local orig_new_buf = widget.new_buf
+  widget.new_buf = function(...)
+    local bufnr = orig_new_buf(...)
+    api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.require'me.lsp.ext'.symbol_tagfunc")
+    return bufnr
+  end
+end
+
+
 local function setup_widgets()
   local widgets = require('dap.ui.widgets')
   M.sidebar = widgets.sidebar(widgets.scopes)
+  add_tagfunc(widgets.expression)
+  add_tagfunc(widgets.scopes)
 end
 
 
