@@ -8,6 +8,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TupleSections #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
@@ -21,12 +23,12 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.UTF8 as BL
 import Data.Char (isSpace)
 import Data.Foldable (for_)
-import Data.List (findIndex, isInfixOf)
+import Data.List (findIndex, isInfixOf, foldl')
 import qualified Data.Map.Strict as M
 import Data.Maybe
   ( catMaybes,
     fromJust,
-    fromMaybe,
+    fromMaybe, mapMaybe
   )
 import GHC.Generics (Generic)
 import qualified Network.HTTP.Client as HTTP
@@ -78,7 +80,7 @@ getOutputs = do
   case swayOutputs of
     Left err -> error $ "Couldn't decode output of swaymsg -t get_outputs:" <> err
     Right outputs' -> pure outputs'
-  
+
 
 selection :: [String] -> IO String
 selection input = do
@@ -86,8 +88,8 @@ selection input = do
   let
     runTool tool args = trim <$> readProcess tool args (unlines input)
     tool = case args of
-      [] -> "bemenu"
       [arg] -> arg
+      _ -> "bemenu"
   if tool == "bemenu"
     then do
       idx <- getDisplayIdx
@@ -277,50 +279,95 @@ selectSong = do
 
 data SinkInput = SinkInput
   { inputNumber :: Int,
+    inputSinkNumber :: Int,
     inputAppName :: T.Text
   }
   deriving (Eq, Show)
 
 
 data Sink = Sink
-  { sinkName :: T.Text,
+  { sinkNumber :: Int,
+    sinkName :: T.Text,
     sinkDescription :: T.Text
   }
   deriving (Eq, Show)
 
 
--- > parseSinkInputs "Sink Input #135\nGarbage\n      application.name = \"Music Player Daemon\""
--- [ SinkInput
---    { inputNumber = 135
---    , inputAppName = ""Music Player Daemon""
---    }
--- ]
+-- >>> parseSinkInputs "Sink Input #135\nGarbage\n      application.name = \"Music Player Daemon\""
+-- []
 parseSinkInputs :: String -> [SinkInput]
-parseSinkInputs text = snd $ foldr step (Nothing, []) (reverse $ lines text)
+parseSinkInputs text = mapMaybe mkSinkInput inputs
   where
-    step line r@(Nothing, inputs) = case T.splitOn "Sink Input #" (T.pack line) of
-      ["", number] -> (, inputs) . rightToMaybe $ fst <$> T.decimal number
-      _ -> r
-    step line r@(Just num, inputs) = case T.splitOn "application.name = " (T.stripStart $ T.pack line) of
-      [_, appName] -> (Nothing, SinkInput num appName : inputs)
-      _ -> r
+    inputs = splitBy (== "") (lines text)
+    mkSinkInput :: [String] -> Maybe SinkInput
+    mkSinkInput lines = do
+      inputNumber <- get "Sink Input #"
+      inputAppName <- T.replace "\"" "" <$> get "application.name = "
+      sinkNumber <- get "Sink: "
+      Just $
+        SinkInput
+          { inputNumber = read $ T.unpack inputNumber,
+            inputAppName = inputAppName,
+            inputSinkNumber = read $ T.unpack sinkNumber
+          }
+      where
+        lines' = fmap T.pack lines
+        get prefix = mhead $ mapMaybe (T.stripPrefix prefix . T.strip) lines'
 
 
+-- >>> parseSink "Sink #61\n    State: SUSPENDED\n    Name: alsa_output\n    Description: Foo"
+-- [Sink {sinkNumber = 61, sinkName = "alsa_output", sinkDescription = "Foo"}]
 parseSink :: String -> [Sink]
-parseSink text = snd $ foldr step (Nothing, []) (fmap T.pack $ reverse $ lines text)
+parseSink text = mapMaybe mkSink (splitBy (== "") (lines text))
   where
-    step line r@(Nothing, sinks) = case T.splitOn "Name: " (T.stripStart line) of
-      ["", sinkName] -> (Just sinkName, sinks)
-      _ -> r
-    step line r@(Just sinkName, sinks) = case T.splitOn "Description: " (T.stripStart line) of
-      ["", sinkDescription] -> (Nothing, Sink sinkName sinkDescription : sinks)
-      _ -> r
+    mkSink :: [String] -> Maybe Sink
+    mkSink lines = do
+      sinkNumber <- get "Sink #"
+      sinkName <- get "Name: "
+      sinkDescription <- get "Description: "
+      Just $
+        Sink
+          { sinkNumber = read $ T.unpack sinkNumber,
+            sinkName = sinkName,
+            sinkDescription = sinkDescription
+          }
+      where
+        lines' = fmap T.pack lines
+        get prefix = mhead $ mapMaybe (T.stripPrefix prefix . T.strip) lines'
+
+
+-- >>> splitBy (== "") ["foo", "bar", "", "baz"]
+-- [["foo","bar"],["baz"]]
+--
+-- >>> splitBy (== "") []
+-- []
+--
+-- >>> splitBy (== "") [""]
+-- []
+splitBy :: forall a. (a -> Bool) -> [a] -> [[a]]
+splitBy pred xs = reverse . fmap reverse $ foldl' split [] xs
+  where
+    split :: [[a]] -> a -> [[a]]
+    split [] x
+      | pred x = []
+      | otherwise = [[x]]
+    split xs x
+      | pred x = [] : xs
+      | otherwise =
+        let (h : t) = xs
+        in [x : h] <> t
+
+
+mhead :: [a] -> Maybe a
+mhead [] = Nothing
+mhead (x : _) = Just x
 
 
 pulseMove :: IO ()
 pulseMove = do
   inputs <- parseSinkInputs <$> listInputs
-  sinkInput <- pickOne inputs inputAppName
+  sinks <- parseSink <$> listSinks
+  sinkInput <- pickOne inputs (formatInput sinks)
   case sinkInput of
     Nothing -> pure ()
     Just sinkInput' -> do
@@ -331,7 +378,10 @@ pulseMove = do
   where
     listInputs = readProcess "pactl" ["list", "sink-inputs"] ""
     listSinks = readProcess "pactl" ["list", "sinks"] ""
-
+    formatInput sinks input = inputAppName input <> maybe "" desc (mhead $ filter sinkMatches sinks)
+      where
+        sinkMatches sink = sinkNumber sink == inputSinkNumber input
+        desc sink = " (" <> sinkDescription sink <> ")"
 
 
 removeIfExists :: FilePath -> IO ()
@@ -354,33 +404,23 @@ wfRecord slurpCmd = do
 
 main :: IO ()
 main = do
-    let choices = [ "keyboard"
-                  , "bar invisible"
-                  , "bar dock"
-                  , "xrandr off"
-                  , "xrandr on"
-                  , "pres on"
-                  , "pres off"
-                  , "call"
-                  , "emoji"
-                  , "mpc"
-                  , "pulse move"
-                  , "record window"
-                  , "record region"
-                  ]
-    out <- selection choices
-    case out of
-        "keyboard"      -> keyboard
-        "bar invisible" -> barMode "invisible"
-        "bar dock"      -> barMode "dock"
-        "xrandr off"    -> xrandrOff
-        "xrandr on"     -> xrandrOn
-        "pres on"       -> presOn
-        "pres off"      -> presOff
-        "call"          -> callContacts
-        "emoji"         -> selectEmoji
-        "mpc"           -> selectSong
-        "pulse move"    -> pulseMove
-        "record window" -> wfRecord "slurp-win"
-        "record region" -> wfRecord "slurp"
-        _               -> putStrLn $ "Invalid selection " ++ out
+  let choices :: [(String, IO ())]
+      choices =
+        [ ("keyboard", keyboard),
+          ("bar invisible", barMode "invisible"),
+          ("bar dock", barMode "dock"),
+          ("xrandr off", xrandrOff),
+          ("xrandr on", xrandrOn),
+          ("pres on", presOn),
+          ("pres off", presOff),
+          ("call", callContacts),
+          ("emoji", selectEmoji),
+          ("mpc", selectSong),
+          ("pulse move", pulseMove),
+          ("record window", wfRecord "slurp-win"),
+          ("record region", wfRecord "slurp")
+        ]
+  choice <- pickOne choices fst
+  case choice of
+    Nothing -> putStrLn "Invalid selection"
+    Just (_, action) -> action
