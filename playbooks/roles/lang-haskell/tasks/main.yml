@@ -1,6 +1,6 @@
 ---
-- name: Install haskell tooling lts17
-  command: stack install --resolver lts-17.9 ghcid hlint hoogle dhall dhall-json ormolu
+- name: Install haskell tooling lts18
+  command: stack install --resolver lts-18.7 ghcid hlint hoogle dhall dhall-json ormolu
   args:
     chdir: ~/
 - name: Clone/pull haskell-language-server and ghcid
@@ -11,9 +11,13 @@
     - haskell/haskell-language-server
     - ndmitchell/ghcid
 - name: Build haskell-language-server
-  command: stack install --stack-yaml=stack-8.10.4.yaml
+  command: stack ./install.hs {{ item }}
   args:
     chdir: ~/dev/haskell/haskell-language-server
+  loop:
+    - hls-8.10.4
+    - hls-8.10.6
+    - hls-9.0.1
 - name: Generate hoogle database for hie
   command: stack exec hoogle generate
   args:
