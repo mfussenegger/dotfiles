@@ -127,6 +127,7 @@ hi! def link LspReferenceRead IncSearch
 hi! def link LspReferenceWrite IncSearch
 hi! def link LspCodeLens Include
 hi! def link LspSignatureActiveParameter WarningMsg
+hi! def link NormalFloat Normal
 
 set signcolumn=auto
 sign define LspDiagnosticsSignError text= texthl= linehl= numhl=ErrorMsg
