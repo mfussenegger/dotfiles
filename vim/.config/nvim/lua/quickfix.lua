@@ -8,7 +8,10 @@ function M.toggle()
     if api.nvim_buf_get_option(buf, 'buftype') == 'quickfix' then
       api.nvim_command('cclose')
       if win_pre_copen then
-        api.nvim_command(api.nvim_win_get_number(win_pre_copen) .. 'wincmd w')
+        local w = api.nvim_win_get_number(win_pre_copen)
+        if api.nvim_win_is_valid(w) then
+          api.nvim_set_current_win(w)
+        end
         win_pre_copen = nil
       end
       return
@@ -17,7 +20,7 @@ function M.toggle()
 
   -- no quickfix buffer found so far, so show it
   win_pre_copen = api.nvim_get_current_win()
-  api.nvim_command('copen')
+  api.nvim_command('belowright copen')
 end
 
 return M
