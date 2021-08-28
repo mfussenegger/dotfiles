@@ -13,6 +13,7 @@
     - { repo: 'nvim-treesitter/tree-sitter-lua', version: 'master' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
+    - { repo: 'vigoux/tree-sitter-viml', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -29,6 +30,7 @@
     - queries/json
     - queries/haskell
     - queries/markdown
+    - queries/vim
 
 - name: Generate parsers
   command: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
@@ -59,6 +61,9 @@
     - repo: 'ikatyang/tree-sitter-markdown'
       ft: 'markdown'
       files: src/parser.c src/scanner.cc
+    - repo: 'vigoux/tree-sitter-viml'
+      ft: 'vim'
+      files: src/parser.c src/scanner.c
 
 - name: Copy queries
   copy:
@@ -85,3 +90,5 @@
     - { ft: 'markdown', name: 'injections' }
     - { ft: 'rst', name: 'highlights' }
     - { ft: 'rst', name: 'injections' }
+    - { ft: 'vim', name: 'highlights' }
+    - { ft: 'vim', name: 'injections' }
