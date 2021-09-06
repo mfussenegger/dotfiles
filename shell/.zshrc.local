@@ -21,10 +21,10 @@ else
   if [ -d "$HOME/dev/neovim/neovim/build/bin" ]; then
     export VIMRUNTIME="$HOME/dev/neovim/neovim/runtime"
     export VISUAL="$HOME/dev/neovim/neovim/build/bin/nvim"
-    export MANPAGER="$VISUAL -c 'set ft=man' -"
+    export MANPAGER="$VISUAL +Man! -"
   else
     export VISUAL="nvim"
-    export MANPAGER="nvim -c 'set ft=man' -"
+    export MANPAGER="nvim +Man! -"
   fi
 fi
 export EDITOR=$VISUAL
