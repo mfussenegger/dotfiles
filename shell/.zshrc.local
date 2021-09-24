@@ -31,6 +31,7 @@ export EDITOR=$VISUAL
 export SUDO_EDIT=$VISUAL
 alias v=$VISUAL
 alias vi=$VISUAL
+alias nvim="VIMRUNTIME=/usr/share/nvim/runtime nvim"
 
 
 myoutube() {
