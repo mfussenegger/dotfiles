@@ -120,6 +120,9 @@ augroup lsp
   au FileType yaml lua require('me.lsp.conf').start_yaml_ls()
   au FileType * lua require('me').init_hl()
   au FileType * lua require('me').enable_lint()
+
+  au User LspDiagnosticsChanged redrawstatus!
+  au User LspMessageUpdate redrawstatus!
 augroup end
 
 hi! def link LspReferenceText IncSearch
@@ -130,6 +133,12 @@ hi! def link LspSignatureActiveParameter WarningMsg
 hi! def link NormalFloat Normal
 
 set signcolumn=auto
+
+" support both, nvim-0.5 and latest master
+sign define DiagnosticSignError text= texthl= linehl= numhl=ErrorMsg
+sign define DiagnosticSignWarn text= texthl= linehl= numhl=WarningMsg
+sign define DiagnosticSignInfo text= texthl= linehl= numhl=Underlined
+sign define DiagnosticSignHint text= texthl= linehl= numhl=Underlined
 sign define LspDiagnosticsSignError text= texthl= linehl= numhl=ErrorMsg
 sign define LspDiagnosticsSignWarning text= texthl= linehl= numhl=WarningMsg
 sign define LspDiagnosticsSignInformation text= texthl= linehl= numhl=Underlined

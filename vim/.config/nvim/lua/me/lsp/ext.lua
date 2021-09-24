@@ -69,7 +69,8 @@ do
     local num_clients = vim.tbl_count(clients)
     local results = {}
     for _, client in pairs(clients) do
-      client.request('workspace/symbol', { query = pattern }, function(_, _, result)
+      client.request('workspace/symbol', { query = pattern }, function(_, method_or_result, result_or_ctx)
+        local result = type(method_or_result) == 'string' and result_or_ctx or method_or_result
         for _, symbol in pairs(result or {}) do
           local loc = symbol.location
           local item = mk_tag_item(symbol.name, loc.range, loc.uri)

@@ -93,8 +93,6 @@ local function on_attach(client, bufnr, attach_opts)
   api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp_compl').trigger_completion()<CR>", opts)
   vim.cmd('augroup lsp_aucmds')
   vim.cmd(string.format('au! * <buffer=%d>', bufnr))
-  vim.cmd(string.format('au User LspDiagnosticsChanged <buffer=%d> redrawstatus!', bufnr))
-  vim.cmd(string.format('au User LspMessageUpdate <buffer=%d> redrawstatus!', bufnr))
   if client.resolved_capabilities['document_highlight'] then
     vim.cmd(string.format('au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()', bufnr))
     vim.cmd(string.format('au CursorHoldI <buffer=%d> lua vim.lsp.buf.document_highlight()', bufnr))
