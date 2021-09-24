@@ -1,5 +1,5 @@
 #!/usr/bin/stack
--- stack script --optimize --resolver lts-18.7
+-- stack script --optimize --resolver lts-18.10
 --
 -- To allow users to run this, create a udev rule:
 --
