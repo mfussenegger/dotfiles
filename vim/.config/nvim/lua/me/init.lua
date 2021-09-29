@@ -166,7 +166,12 @@ end
 
 function M.setup()
   require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
-  require('jdtls.ui').pick_one_async = require('fzy').pick_one
+  if vim.ui then
+    require('fzy').setup()
+  else
+    require('jdtls.ui').pick_one_async = require('fzy').pick_one
+    require('dap.ui').pick_one = require('fzy').pick_one
+  end
   require('me.lsp.conf').setup()
   require('hop').setup()
   require('lint').linters_by_ft = {
@@ -217,7 +222,9 @@ function M.reload_dap()
   U.reload('dap', true)
   U.reload('me.dap')
   U.reload('jdtls.dap').setup_dap({hotcodereplace = 'auto'})
-  require('dap.ui').pick_one = require('fzy').pick_one
+  if not vim.ui then
+    require('dap.ui').pick_one = require('fzy').pick_one
+  end
 end
 
 

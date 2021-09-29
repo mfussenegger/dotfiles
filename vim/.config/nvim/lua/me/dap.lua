@@ -34,7 +34,6 @@ end
 
 
 function M.setup()
-  require('dap.ui').pick_one = require('fzy').pick_one
   setup_widgets()
 
   dap.defaults.fallback.terminal_win_cmd = 'tabnew'
