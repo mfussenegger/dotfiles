@@ -77,6 +77,10 @@ end
 
 
 function M.errors_to_quickfix()
+  if vim.diagnostic then
+    vim.diagnostic.setqflist { severity = vim.diagnostic.severity.ERROR }
+    return
+  end
   local items = vim.lsp.util.diagnostics_to_items(
     vim.lsp.diagnostic.get_all(),
     function(d) return d.severity == vim.lsp.protocol.DiagnosticSeverity.Error end
@@ -88,6 +92,10 @@ function M.errors_to_quickfix()
 end
 
 function M.warnings_to_quickfix()
+  if vim.diagnostic then
+    vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
+    return
+  end
   local items = vim.lsp.util.diagnostics_to_items(
     vim.lsp.diagnostic.get_all(),
     function(d) return d.severity == vim.lsp.protocol.DiagnosticSeverity.Warning end
