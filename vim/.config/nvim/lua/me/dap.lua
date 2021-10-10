@@ -42,6 +42,16 @@ function M.setup()
     args = {'-e'};
   }
   require('dap-python').setup('~/.virtualenvs/tools/bin/python')
+  table.insert(dap.configurations.python, {
+    type = 'python',
+    request = 'launch',
+    program = '${workspaceFolder}/${file}',
+    console = 'integratedTerminal',
+    name = 'Launch file with autoReload',
+    autoReload = {
+      enable = true,
+    }
+  })
 
   dap.configurations.java = {
     {
