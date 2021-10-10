@@ -3,7 +3,7 @@
   git:
     repo: https://github.com/sumneko/lua-language-server
     dest: ~/dev/sumneko/lua-language-server
-    version: f3b880ec7c0db1b7f86650e3d393a7f25da2a99b
+    version: 2.4.2
     recursive: true
     force: true
 
