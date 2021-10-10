@@ -1,0 +1,11 @@
+---
+- name: Ensure codelldb folder exists
+  file:
+    path: ~/apps/codelldb
+    state: directory
+
+- name: Download codelldb
+  unarchive:
+    src: https://github.com/vadimcn/vscode-lldb/releases/download/v1.6.7/codelldb-x86_64-linux.vsix
+    dest: ~/apps/codelldb
+    remote_src: true
