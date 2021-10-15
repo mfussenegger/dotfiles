@@ -3,18 +3,18 @@
   pip:
     name:
       - pip
-      - python-language-server
+      - python-lsp-server
       - pyflakes
       - yapf
       - mccabe
       - pycodestyle
       - pydocstyle
-      - pyls-mypy
+      - pylsp-mypy
     virtualenv: ~/.virtualenvs/pyls
     virtualenv_command: /usr/bin/python3 -m venv
     state: latest
 - name: Symlink pyls
   file:
-    src: ~/.virtualenvs/pyls/bin/pyls
-    dest: ~/bin/pyls
+    src: ~/.virtualenvs/pyls/bin/pylsp
+    dest: ~/bin/pylsp
     state: link
