@@ -22,8 +22,6 @@
     - tpope/vim-fugitive
     - tpope/vim-rhubarb
     - editorconfig/editorconfig-vim
-    - mattn/webapi-vim
-    - mattn/gist-vim
     - vim-scripts/linediff.vim
     - hynek/vim-python-pep8-indent
     - jamessan/vim-gnupg
