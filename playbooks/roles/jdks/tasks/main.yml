@@ -18,13 +18,6 @@
     creates: ~/.local/jdks/jdk-16.0.1+9
     remote_src: true
 
-- name: Install openjdk 17
-  unarchive:
-    src: https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17%2B35/OpenJDK17-jdk_x64_linux_hotspot_17_35.tar.gz
-    dest: ~/.local/jdks/
-    creates: ~/.local/jdks/jdk-17+35
-    remote_src: true
-
 - name: Install panama early access
   unarchive:
     src: https://download.java.net/java/early_access/panama/3/openjdk-17-panama+3-167_linux-x64_bin.tar.gz
