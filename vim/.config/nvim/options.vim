@@ -115,7 +115,7 @@ augroup lsp
   au FileType json lua require('me.lsp.conf').add_client({'json-languageserver', '--stdio'}, {name='json-ls'})
   au FileType css lua require('me.lsp.conf').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
   au FileType cs lua require('me.lsp.conf').start_omnisharp()
-  au FileType c lua require('me.lsp.conf').add_client({'clangd'})
+  au FileType c,cpp lua require('me.lsp.conf').add_client({'clangd'})
   au FileType tex lua require('me.lsp.conf').add_client({'texlab'})
   au FileType yaml lua require('me.lsp.conf').start_yaml_ls()
   au FileType * lua require('me').init_hl()
