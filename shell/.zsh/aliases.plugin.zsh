@@ -57,3 +57,5 @@ alias ip="ip --color"
 
 alias benice="renice -n 19 -p $$ && ionice -c3 -p $$ && ionice -p $$"
 alias berude="sudo renice -n -19 -p $$ && sudo ionice -c1 -p $$ && ionice -p $$"
+
+alias tablet="scrcpy --v4l2-sink=/dev/video7 --no-display"
