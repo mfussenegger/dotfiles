@@ -9,19 +9,21 @@ local function bo(option, value)
     api.nvim_buf_set_option(0, option, value)
 end
 
-local function launch_term(cmd)
-    vim.cmd("belowright new")
-    winid = vim.fn.win_getid()
-    api.nvim_win_set_var(0, 'REPL', 1)
-    bo('buftype', 'nofile')
-    bo('bufhidden', 'wipe')
-    bo('buflisted', false)
-    bo('swapfile', false)
-    jobid = vim.fn.termopen(cmd, {
-      on_exit = function()
-        jobid = nil
-      end
-    })
+local function launch_term(cmd, opts)
+  opts = opts or {}
+  vim.cmd("belowright new")
+  winid = vim.fn.win_getid()
+  api.nvim_win_set_var(0, 'REPL', 1)
+  bo('buftype', 'nofile')
+  bo('bufhidden', 'wipe')
+  bo('buflisted', false)
+  bo('swapfile', false)
+  opts = vim.tbl_extend('error', opts, {
+    on_exit = function()
+      jobid = nil
+    end
+  })
+  jobid = vim.fn.termopen(cmd, opts)
 end
 
 local function close_term()
@@ -46,6 +48,22 @@ function M.run()
     local filepath = api.nvim_buf_get_name(0)
     close_term()
     launch_term(filepath)
+end
+
+
+function M.run_ansible()
+  local path = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':p')
+  local match = path:match('/roles/([%w-]+)/')
+  if match then
+    local _, end_ = path:find('/playbooks/')
+    local cwd = nil
+    if end_ then
+      cwd = path:sub(1, end_)
+    end
+    local cmd = {'ansible', 'localhost', '-m', 'import_role', '-a', 'name=' .. match}
+    close_term()
+    launch_term(cmd, { cwd = cwd })
+  end
 end
 
 
