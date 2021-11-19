@@ -184,6 +184,12 @@ function M.setup()
     gitcommit = {'codespell'},
   }
 
+  if vim.diagnostic then
+    vim.diagnostic.config({
+      virtual_text = false
+    })
+  end
+
   U = M
   P = function(...)
     print(unpack(vim.tbl_map(vim.inspect, {...})))
