@@ -256,6 +256,7 @@ function M.start_jdt()
     '/dev/microsoft/vscode-java-test/java-extension/com.microsoft.java.test.plugin/target/*.jar',
     '/dev/microsoft/vscode-java-test/java-extension/com.microsoft.java.test.runner/target/*.jar',
     '/dev/microsoft/vscode-java-test/java-extension/com.microsoft.java.test.runner/lib/*.jar',
+    '/dev/testforstephen/vscode-pde/server/*.jar'
   }
   -- npm install broke for me: https://github.com/npm/cli/issues/2508
   -- So gather the required jars manually; this is based on the gulpfile.js in the vscode-java-test repo

@@ -90,3 +90,16 @@
   git:
     repo: https://github.com/dgileadi/vscode-java-decompiler
     dest: ~/dev/dgileadi/vscode-java-decompiler
+
+- name: Clone vscode-pde
+  git:
+    repo: https://github.com/testforstephen/vscode-pde
+    dest: ~/dev/testforstephen/vscode-pde
+    force: true  # npm commands below modify the package.json
+
+- name: Build vscode-pde
+  command: npm install
+  environment:
+    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
+  args:
+    chdir: ~/dev/testforstephen/vscode-pde/
