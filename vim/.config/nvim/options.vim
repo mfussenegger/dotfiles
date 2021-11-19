@@ -118,6 +118,7 @@ augroup lsp
   au FileType c,cpp lua require('me.lsp.conf').add_client({'clangd'})
   au FileType tex lua require('me.lsp.conf').add_client({'texlab'})
   au FileType yaml lua require('me.lsp.conf').start_yaml_ls()
+  au FileType yaml.ansible lua require('me.lsp.conf').start_ansible_ls()
   au FileType * lua require('me').init_hl()
   au FileType * lua require('me').enable_lint()
 

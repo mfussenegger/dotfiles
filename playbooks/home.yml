@@ -8,6 +8,7 @@
     - lang-java
     - lang-python
     - lang-lua
+    - lang-ansible
     - tree-sitter
     - tools
     - zsh-plugins

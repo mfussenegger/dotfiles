@@ -388,6 +388,25 @@ function M.start_omnisharp()
 end
 
 
+function M.start_ansible_ls()
+  local config = mk_config()
+  config.name = 'ansible-ls'
+  config.cmd = {'node', os.getenv('HOME') .. '/dev/ansible/ansible-language-server/out/server/src/server.js', '--stdio'}
+  config.settings = {
+    ansible = {
+      ansible = {
+        path = '/usr/bin/ansible',
+      },
+      python = {
+        interpreterPath = '/usr/bin/python',
+      },
+      ansibleLint = {
+        enabled = false,
+      }
+    }
+  }
+  lspc.start(config, {'.git'})
+end
 
 
 function M.start_yaml_ls()
