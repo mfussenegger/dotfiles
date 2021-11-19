@@ -116,7 +116,7 @@ endf
 command! -nargs=+ -bang -complete=command R call ReadExCommandOutput(<bang>0, <q-args>)
 
 
-nnoremap <silent> <F3> :lua local d = require'me.dap'; d.disconnect(); d.close()<CR>
+nnoremap <silent> <F3> :lua require'me.dap'.terminate()<CR>
 nnoremap <silent> <F5> :lua require'me.dap'.continue()<CR>
 nnoremap <silent> <F10> :lua require'me.dap'.step_over()<CR>
 nnoremap <silent> <F11> :lua require'me.dap'.step_into()<CR>
