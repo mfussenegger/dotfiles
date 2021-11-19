@@ -46,7 +46,7 @@ alias c="date -R && echo -e && khal calendar --notstarted"
 alias :q="exit"
 alias eject='sudo eject'
 alias rcp='rsync --progress'
-alias lsblk='lsblk -o +MODEL'
+alias lsblk='lsblk -o +MODEL -o +LABEL'
 alias drop_caches='echo 3 | sudo tee /proc/sys/vm/drop_caches'
 
 # useful defaults
