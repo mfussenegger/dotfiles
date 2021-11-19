@@ -181,6 +181,7 @@ function M.setup()
     lua = {'codespell', 'luacheck'},
     sh = {'shellcheck'},
     ['yaml.ansible'] = {'ansible_lint'},
+    gitcommit = {'codespell'},
   }
 
   U = M
