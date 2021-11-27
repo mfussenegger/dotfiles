@@ -63,6 +63,10 @@ function M.run_ansible()
     local cmd = {'ansible', 'localhost', '-m', 'import_role', '-a', 'name=' .. match}
     close_term()
     launch_term(cmd, { cwd = cwd })
+  elseif path:match('/playbooks/') then
+    local cmd = {'ansible-playbook', path}
+    close_term()
+    launch_term(cmd)
   end
 end
 
