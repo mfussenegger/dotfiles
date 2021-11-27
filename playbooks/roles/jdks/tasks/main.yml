@@ -27,9 +27,9 @@
       - --transform
       - s/jdk-17/jdk-17ea-panama/
 
-- name: Install GraalVM Java16
+- name: Install GraalVM Java17
   unarchive:
-    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.1.0/graalvm-ce-java16-linux-amd64-21.1.0.tar.gz
+    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.3.0/graalvm-ce-java17-linux-amd64-21.3.0.tar.gz
     dest: ~/.local/jdks/
-    creates: ~/.local/jdks/graalvm-ce-java16-21.1.0/
+    creates: ~/.local/jdks/graalvm-ce-java17-21.3.0/
     remote_src: true
