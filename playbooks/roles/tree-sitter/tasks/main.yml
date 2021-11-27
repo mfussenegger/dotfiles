@@ -69,6 +69,7 @@
   copy:
     src: ~/dev/{{ item.src_dir }}/{{ item.file }}
     dest: ~/.config/nvim/queries/{{ item.ft }}/{{ item.file }}
+    mode: 0644
   loop:
     - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'tags.scm' }
     - { ft: 'html', src_dir: 'tree-sitter/tree-sitter-html/queries', file: 'highlights.scm' }
@@ -92,3 +93,4 @@
     - { ft: 'rst', name: 'injections' }
     - { ft: 'vim', name: 'highlights' }
     - { ft: 'vim', name: 'injections' }
+    - { ft: 'vim', name: 'locals' }
