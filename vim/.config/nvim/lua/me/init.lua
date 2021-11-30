@@ -114,12 +114,6 @@ function M.enable_lint()
   vim.cmd(string.format("au BufWritePost <buffer=%d> lua require'lint'.try_lint()", bufnr))
   vim.cmd(string.format("au BufEnter <buffer=%d> lua require'lint'.try_lint()", bufnr))
   vim.cmd("augroup end")
-  local opts = {
-    silent = true;
-  }
-  api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
-  api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-  api.nvim_buf_set_keymap(bufnr, "n", "<space>", "<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
 end
 
 
@@ -166,12 +160,7 @@ end
 
 function M.setup()
   require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
-  if vim.ui then
-    require('fzy').setup()
-  else
-    require('jdtls.ui').pick_one_async = require('fzy').pick_one
-    require('dap.ui').pick_one = require('fzy').pick_one
-  end
+  require('fzy').setup()
   require('me.lsp.conf').setup()
   require('hop').setup()
   require('lint').linters_by_ft = {
@@ -184,11 +173,16 @@ function M.setup()
     gitcommit = {'codespell'},
   }
 
-  if vim.diagnostic then
-    vim.diagnostic.config({
-      virtual_text = false
-    })
-  end
+  vim.diagnostic.config({
+    virtual_text = false
+  })
+  vim.diagnostic.handlers.me = {
+    show = function(_, bufnr, diagnostics)
+      require('me.diagnostic').set_loclist(bufnr, diagnostics)
+    end,
+    hide = function()
+    end
+  }
 
   U = M
   P = function(...)

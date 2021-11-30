@@ -122,7 +122,7 @@ augroup lsp
   au FileType * lua require('me').init_hl()
   au FileType * lua require('me').enable_lint()
 
-  au User LspDiagnosticsChanged redrawstatus!
+  au DiagnosticChanged redrawstatus!
   au User LspMessageUpdate redrawstatus!
 augroup end
 
@@ -135,12 +135,7 @@ hi! def link NormalFloat Normal
 
 set signcolumn=auto
 
-" support both, nvim-0.5 and latest master
 sign define DiagnosticSignError text= texthl= linehl= numhl=ErrorMsg
 sign define DiagnosticSignWarn text= texthl= linehl= numhl=WarningMsg
 sign define DiagnosticSignInfo text= texthl= linehl= numhl=Underlined
 sign define DiagnosticSignHint text= texthl= linehl= numhl=Underlined
-sign define LspDiagnosticsSignError text= texthl= linehl= numhl=ErrorMsg
-sign define LspDiagnosticsSignWarning text= texthl= linehl= numhl=WarningMsg
-sign define LspDiagnosticsSignInformation text= texthl= linehl= numhl=Underlined
-sign define LspDiagnosticsSignHint text= texthl= linehl= numhl=Underlined

@@ -101,10 +101,7 @@ local function on_attach(client, bufnr, attach_opts)
       api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
     end
   end
-  api.nvim_buf_set_keymap(bufnr, "n", "<space>", "<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
   api.nvim_buf_set_keymap(bufnr, "n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", opts)
-  api.nvim_buf_set_keymap(bufnr, "n", "]w", "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
-  api.nvim_buf_set_keymap(bufnr, "n", "[w", "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
   api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp_compl').trigger_completion()<CR>", opts)
   vim.cmd('augroup lsp_aucmds')
   vim.cmd(string.format('au! * <buffer=%d>', bufnr))
@@ -419,7 +416,6 @@ end
 
 
 function M.setup()
-  vim.lsp.handlers['textDocument/publishDiagnostics'] = require('me.lsp.diagnostic').publishDiagnostics
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' })
   vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single' })
 end

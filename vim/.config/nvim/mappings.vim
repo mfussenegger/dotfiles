@@ -138,8 +138,8 @@ command -nargs=0 Into :lua require('me.dap').step_into()
 command -nargs=0 DapBreakpoints :lua require('me.dap').list_breakpoints()
 command -nargs=0 DapSidebar :lua require('me.dap').sidebar.toggle()
 
-command -nargs=0 LspErrors :lua require('me.lsp.diagnostic').errors_to_quickfix()
-command -nargs=0 LspWarnings :lua require('me.lsp.diagnostic').warnings_to_quickfix()
+command -nargs=0 LspErrors :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.ERROR }
+command -nargs=0 LspWarnings :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
 command -nargs=0 LspRestart :lua require('me.lsp.conf').restart()
 
 nnoremap <silent> <leader>q :lua require('quickfix').toggle()<CR>
@@ -150,3 +150,7 @@ vnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
 omap     <silent> h :HopWord<CR>
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
 vnoremap <silent> m :lua require('tsht').nodes()<CR>
+
+nnoremap <space> <cmd>lua vim.diagnostic.open_float(0, { border = 'single' })<CR>
+nnoremap ]w <cmd>lua vim.diagnostic.goto_next{ float = { border = 'single' }}<CR>
+nnoremap [w <cmd>lua vim.diagnostic.goto_prev{ float = { border = 'single' }}<CR>
