@@ -143,7 +143,7 @@ local function mk_config()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
   return {
     flags = {
-      debounce_text_changes = 150,
+      debounce_text_changes = 80,
       allow_incremental_sync = true,
     };
     handlers = {},
