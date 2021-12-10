@@ -74,7 +74,7 @@
     mode: 0700
 - name: Get and unpack jmc
   unarchive:
-    src: https://github.com/AdoptOpenJDK/openjdk-jmc-overrides/releases/download/8.0.0/org.openjdk.jmc-8.0.0-linux.gtk.x86_64.tar.gz
+    src: https://github.com/AdoptOpenJDK/openjdk-jmc-overrides/releases/download/8.1.0/org.openjdk.jmc-8.1.0-linux.gtk.x86_64.tar.gz
     dest: ~/apps/jmc/
     remote_src: true
     creates: ~/apps/jmc/bin/jmc
