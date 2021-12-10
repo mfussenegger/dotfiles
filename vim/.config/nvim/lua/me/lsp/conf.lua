@@ -386,11 +386,23 @@ function M.start_ansible_ls()
       python = {
         interpreterPath = '/usr/bin/python',
       },
+      executionEnvironment = {
+        enabled = false,
+      },
       ansibleLint = {
         enabled = false,
       }
     }
   }
+  local activate_path = vim.fn.getcwd() .. '/.venv/bin/activate'
+  if vim.loop.fs_stat(activate_path) then
+    config.settings.ansible.python.activationScript = activate_path
+  end
+  config.on_attach = function(client, bufnr)
+    -- Keep using ansible-doc via keywordprg its content is more detailed
+    client.resolved_capabilities.hover = nil
+    on_attach(client, bufnr)
+  end
   lspc.start(config, {'.git'})
 end
 
