@@ -26,14 +26,19 @@ function M.statusline()
   else
     diagnostics = {
       '%#MyStatuslineLSP# ■ ',
-      '%#MyStatuslineLSPErrors#%{luaeval("vim.lsp.diagnostic.get_count(0, [[Error]])")}',
+      '%#MyStatuslineLSPErrors#%{luaeval("U.diagnostic_count(vim.diagnostic.severity.ERROR)")}',
       '%#MyStatuslineLSP# □ ',
-      '%#MyStaruslineLSPWarnings#%{luaeval("vim.lsp.diagnostic.get_count(0, [[Warning]])")}',
+      '%#MyStaruslineLSPWarnings#%{luaeval("U.diagnostic_count(vim.diagnostic.severity.WARN)")}',
       ' ',
     }
   end
   vim.list_extend(parts, diagnostics)
   return table.concat(parts, '')
+end
+
+
+function M.diagnostic_count(severity)
+  return #vim.diagnostic.get(0, { severity = severity })
 end
 
 
