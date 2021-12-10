@@ -23,7 +23,6 @@ set updatetime=1000
 
 set complete=.,w,b,u,U,i,d,t
 set completeopt=menuone,noinsert,noselect
-set infercase
 
 set wildmode=longest:full,full
 set wildignore+=*.pyc,.git,.idea,*.o
@@ -36,8 +35,6 @@ set selection=old
 " lower the delay of escaping out of other modes
 set timeout timeoutlen=1000 ttimeoutlen=0
 
-" live preview for substitute
-set inccommand=split
 
 set expandtab
 set shiftwidth=2
