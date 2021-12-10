@@ -56,13 +56,19 @@ function M.run_ansible()
   local match = path:match('/roles/([%w-]+)/')
   if match then
     local _, end_ = path:find('/playbooks/')
-    local cwd = nil
+    local playbook_dir = nil
     if end_ then
-      cwd = path:sub(1, end_)
+      playbook_dir = path:sub(1, end_)
     end
-    local cmd = {'ansible', 'localhost', '-m', 'import_role', '-a', 'name=' .. match}
+    local cmd = {
+      'ansible',
+      'localhost',
+      '--playbook-dir', playbook_dir,
+      '-m', 'import_role',
+      '-a', 'name=' .. match
+    }
     close_term()
-    launch_term(cmd, { cwd = cwd })
+    launch_term(cmd)
   elseif path:match('/playbooks/') then
     local cmd = {'ansible-playbook', path}
     close_term()
