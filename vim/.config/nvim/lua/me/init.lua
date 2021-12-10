@@ -220,6 +220,10 @@ function M.setup()
     local lines = vim.split(vim.trim(text), '\n')
     vim.fn.appendbufline(debug_view.buf, '$', lines)
   end
+  PT = function()
+    PL(debug.traceback("Stack trace"))
+    PL(debug.getinfo(1))
+  end
 end
 
 
