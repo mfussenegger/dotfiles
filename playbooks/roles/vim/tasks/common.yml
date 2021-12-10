@@ -21,7 +21,7 @@
     - junegunn/vim-easy-align
     - tpope/vim-fugitive
     - tpope/vim-rhubarb
-    - editorconfig/editorconfig-vim
+    - gpanders/editorconfig.nvim
     - vim-scripts/linediff.vim
     - hynek/vim-python-pep8-indent
     - jamessan/vim-gnupg
