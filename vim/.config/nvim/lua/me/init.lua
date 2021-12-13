@@ -18,27 +18,25 @@ function M.statusline()
     "%*",
     "%{luaeval('U.dap_status()')}"
   }
-  local diagnostics
   local bufnr = api.nvim_get_current_buf()
   local has_clients = not vim.tbl_isempty(vim.lsp.buf_get_clients(0))
-  if not has_clients and not lint_active[bufnr] then
-    diagnostics = {}
-  else
-    diagnostics = {
-      '%#MyStatuslineLSP# ■ ',
-      '%#MyStatuslineLSPErrors#%{luaeval("U.diagnostic_count(vim.diagnostic.severity.ERROR)")}',
-      '%#MyStatuslineLSP# □ ',
-      '%#MyStaruslineLSPWarnings#%{luaeval("U.diagnostic_count(vim.diagnostic.severity.WARN)")}',
-      ' ',
-    }
+  if has_clients or lint_active[bufnr] then
+    table.insert(parts, '%{luaeval("U.diagnostic_status()")}')
   end
-  vim.list_extend(parts, diagnostics)
   return table.concat(parts, '')
 end
 
 
-function M.diagnostic_count(severity)
-  return #vim.diagnostic.get(0, { severity = severity })
+function M.diagnostic_status()
+  local num_errors = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+  if num_errors > 0 then
+    return ' 💀 ' .. num_errors .. ' '
+  end
+  local num_warnings = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN })
+  if num_warnings > 0 then
+    return ' 💩' .. num_warnings .. ' '
+  end
+  return ''
 end
 
 
