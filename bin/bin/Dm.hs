@@ -105,12 +105,14 @@ selection input = do
 pickOne :: ToString b => [a] -> (a -> b) -> IO (Maybe a)
 pickOne xs formatX = do
   selected <- selection formattedXs
-  case T.splitOn " ¦ " (T.pack selected) of
+  case T.splitOn "│ " (T.pack selected) of
     (idx : _) -> pure . fmap (xs !!) . rightToMaybe $ fst <$> T.decimal idx
     _         -> pure Nothing
   where
     formattedXs = fmap renderX (zip [(0 :: Int)..] xs)
-    renderX (idx, x) = printf "%03d ¦ %s" idx (str $ formatX x)
+    numDigits = ceiling . logBase 10 . fromIntegral $ length xs
+    formatStr = "%0" <> show numDigits <> "d│ %s"
+    renderX (idx, x) = printf formatStr idx (str $ formatX x)
 
 
 
