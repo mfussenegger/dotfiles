@@ -22,7 +22,7 @@
     - tpope/vim-fugitive
     - tpope/vim-rhubarb
     - gpanders/editorconfig.nvim
-    - vim-scripts/linediff.vim
+    - AndrewRadev/linediff.vim
     - hynek/vim-python-pep8-indent
     - jamessan/vim-gnupg
     - cespare/vim-toml
