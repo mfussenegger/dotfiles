@@ -409,8 +409,16 @@ end
 
 function M.start_yaml_ls()
   local name = api.nvim_buf_get_name(0)
-  if name:match('.*/playbooks/.*%.yml') or name:match('.*/roles/.*%.yml') then
-    return
+  local ansible_patterns = {
+    '.*/playbooks/.*%.yml',
+    '.*/roles/.*%.yml',
+    '.*/playbooks/.*%.yaml',
+    '.*/roles/.*%.yaml',
+  }
+  for _, pattern in pairs(ansible_patterns) do
+    if name:match(pattern) then
+      return
+    end
   end
   M.add_client({'yaml-language-server', '--stdio'})
 end
