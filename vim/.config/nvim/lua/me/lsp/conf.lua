@@ -195,6 +195,9 @@ function M.start_jdt()
         toString = {
           template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
         },
+        hashCodeEquals = {
+          useJava7Objects = true,
+        },
         useBlocks = true,
       };
       configuration = {
