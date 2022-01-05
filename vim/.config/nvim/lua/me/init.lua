@@ -230,9 +230,6 @@ function M.reload_dap()
   U.reload('dap', true)
   U.reload('me.dap')
   U.reload('jdtls.dap').setup_dap({hotcodereplace = 'auto'})
-  if not vim.ui then
-    require('dap.ui').pick_one = require('fzy').pick_one
-  end
 end
 
 
