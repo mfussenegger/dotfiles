@@ -358,7 +358,7 @@ function M.start_lua_ls()
   }
   local server_dir = vim.fn.expand('~/dev/sumneko/lua-language-server/')
   config['name'] = 'luals'
-  config['cmd'] = {server_dir .. 'bin/Linux/lua-language-server', server_dir .. 'main.lua'}
+  config['cmd'] = {server_dir .. 'bin/lua-language-server', server_dir .. 'main.lua'}
   lspc.start(config, {'.git'})
 end
 
