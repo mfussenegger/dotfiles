@@ -5,7 +5,7 @@
     state: directory
 - name: Download and extract omnisharp-roslyn
   unarchive:
-    src: https://github.com/OmniSharp/omnisharp-roslyn/releases/download/v1.37.3/omnisharp-linux-x64.tar.gz
+    src: https://github.com/OmniSharp/omnisharp-roslyn/releases/download/v1.38.0/omnisharp-linux-x64.tar.gz
     dest: ~/apps/omnisharp/
     creates: ~/apps/omnisharp/run
     remote_src: true
