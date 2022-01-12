@@ -77,11 +77,7 @@ local function on_attach(client, bufnr, attach_opts)
   api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
 
   if client.resolved_capabilities.goto_definition then
-    if vim.lsp.tagfunc then
-      api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.vim.lsp.tagfunc")
-    else
-      api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.require'me.lsp.ext'.tagfunc")
-    end
+    api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.vim.lsp.tagfunc")
   end
   local opts = { silent = true; }
   for _, mappings in pairs(key_mappings) do
