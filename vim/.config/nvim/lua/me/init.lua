@@ -253,7 +253,8 @@ function M.quickfixtext(opts)
     return nil
   end
   local qflist = vim.fn.getqflist({ id = opts.id, items = 0, title = 0, context = 0 })
-  if qflist.title ~= 'Language Server' then
+  local ctx = qflist.context or {}
+  if not ctx.client_id and qflist.title ~= 'Language Server' then
     return nil
   end
   local result = {}
