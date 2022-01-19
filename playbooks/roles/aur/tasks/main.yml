@@ -14,3 +14,8 @@
 - name: Install yaml-language-server
   aur:
     name: yaml-language-server
+
+- name: Install readability-cli
+  aur:
+    name: readability-cli
+
