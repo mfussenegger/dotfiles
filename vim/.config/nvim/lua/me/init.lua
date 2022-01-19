@@ -176,7 +176,10 @@ function M.setup()
   }
 
   vim.diagnostic.config({
-    virtual_text = false
+    virtual_text = false,
+    float = {
+      source = 'always',
+    },
   })
   vim.diagnostic.handlers.me = {
     show = function(_, bufnr, diagnostics)
