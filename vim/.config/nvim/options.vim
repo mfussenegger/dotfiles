@@ -118,9 +118,6 @@ augroup lsp
   au FileType yaml.ansible lua require('me.lsp.conf').start_ansible_ls()
   au FileType * lua require('me').init_hl()
   au FileType * lua require('me').enable_lint()
-
-  au DiagnosticChanged redrawstatus!
-  au User LspMessageUpdate redrawstatus!
 augroup end
 
 hi! def link LspReferenceText IncSearch
