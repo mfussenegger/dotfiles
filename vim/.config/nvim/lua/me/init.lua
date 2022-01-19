@@ -82,12 +82,11 @@ end
 function M.init_hl()
   local ts = vim.treesitter
   local bufnr = api.nvim_get_current_buf()
-  local ft = api.nvim_buf_get_option(bufnr, 'filetype')
-  local ok, parser = pcall(ts.get_parser, bufnr, ft)
+  local ok, parser = pcall(ts.get_parser, bufnr)
   if not ok then return end
   local get_query = require('vim.treesitter.query').get_query
   local query
-  ok, query = pcall(get_query, ft, 'highlights')
+  ok, query = pcall(get_query, parser._lang, 'highlights')
   if ok and query then
     ts.highlighter.new(parser, query)
     api.nvim_buf_attach(bufnr, false, {
