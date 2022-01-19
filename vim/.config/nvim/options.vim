@@ -104,7 +104,7 @@ augroup lsp
   au FileType java lua require('me.lsp.conf').start_jdt()
   au FileType haskell lua require('me.lsp.conf').start_hie()
   au FileType python lua require('me.lsp.conf').add_client({'pylsp'})
-  au FileType html lua require('me.lsp.conf').add_client({'html-languageserver', '--stdio'}, {name='html-ls'})
+  au FileType html lua require('me.lsp.conf').add_client({'vscode-html-languageserver', '--stdio'}, {name='html-ls'})
   au FileType go lua require('me.lsp.conf').gopls()
   au FileType sh lua require('me.lsp.conf').add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
   au FileType rust lua require('me.lsp.conf').add_client({'rls'}, {root={'Cargo.toml', '.git'}})
