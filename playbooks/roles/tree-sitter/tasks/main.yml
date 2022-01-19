@@ -15,6 +15,7 @@
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
     - { repo: 'vigoux/tree-sitter-viml', version: 'master' }
+    - { repo: 'maxxnino/tree-sitter-zig', version: 'main' }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -33,6 +34,7 @@
     - queries/markdown
     - queries/vim
     - queries/c_sharp
+    - queries/zig
 
 - name: Generate parsers
   command: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
@@ -69,6 +71,9 @@
     - repo: 'tree-sitter/tree-sitter-c-sharp'
       ft: 'c_sharp'
       files: src/parser.c src/scanner.c
+    - repo: 'maxxnino/tree-sitter-zig'
+      ft: 'zig'
+      files: src/parser.c
 
 - name: Copy queries
   copy:
@@ -79,6 +84,8 @@
     - { ft: 'java', src_dir: 'tree-sitter/tree-sitter-java/queries', file: 'tags.scm' }
     - { ft: 'html', src_dir: 'tree-sitter/tree-sitter-html/queries', file: 'highlights.scm' }
     - { ft: 'haskell', src_dir: 'tree-sitter/tree-sitter-haskell/queries', file: 'highlights.scm' }
+    - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'highlights.scm' }
+    - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'injections.scm' }
 
 - name: Fetch queries
   get_url:

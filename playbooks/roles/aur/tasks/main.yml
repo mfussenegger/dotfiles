@@ -19,3 +19,6 @@
   aur:
     name: readability-cli
 
+- name: Install zls
+  aur:
+    name: zls-bin
