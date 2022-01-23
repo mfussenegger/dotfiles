@@ -12,3 +12,5 @@ setup-info:
 
 ghc-options:
   "$everything": -haddock
+
+allow-newer: true
