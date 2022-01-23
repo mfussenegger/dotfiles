@@ -1,5 +1,5 @@
 ---
 packages: []
-resolver: lts-18.7
+resolver: lts-18.22
 
 allow-newer: true
