@@ -41,6 +41,7 @@ import System.Directory
 import System.Environment (getArgs)
 import System.Posix.Files (rename)
 import System.Process (callProcess, readProcess, callCommand)
+import Control.Monad (when, unless)
 import Text.Regex.PCRE ((=~))
 import qualified Data.Text as T
 import qualified Data.Text.Read as T
@@ -211,8 +212,9 @@ changeVimColorScheme colorscheme background = do
   sed vimrc ("set background=" ++ fst background) ("set background=" ++ snd background)
   instances <- lines <$> readProcess "nvr" ["--serverlist"] ""
   let changeColor = "<Esc>:set background=" ++ snd background ++ "<CR>:colorscheme " ++ snd colorscheme ++ "<CR>"
-  for_ instances (\x ->
-    callProcess "nvr" ["--servername", x, "--remote-send", changeColor])
+  for_ instances $ \x ->
+    when (take 3 x /= "127") $
+      callProcess "nvr" ["--nostart", "--servername", x, "--remote-send", changeColor]
 
 
 callContacts :: IO ()
