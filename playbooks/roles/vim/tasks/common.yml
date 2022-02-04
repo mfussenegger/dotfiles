@@ -34,6 +34,7 @@
     - nvim-lua/plenary.nvim
     - vim-scripts/dbext.vim
     - jbyuki/venn.nvim
+    - jbyuki/one-small-step-for-vimkind
 - name: Checkout opt vim plugins
   git:
     repo: https://github.com/{{ item }}
@@ -41,7 +42,6 @@
   loop:
     - nvim-treesitter/nvim-treesitter
     - nvim-treesitter/playground
-    - jbyuki/one-small-step-for-vimkind
     - saltstack/salt-vim
     - vmchale/dhall-vim
     - hashivim/vim-terraform
