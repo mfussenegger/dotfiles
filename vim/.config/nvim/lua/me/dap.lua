@@ -36,6 +36,17 @@ end
 function M.setup()
   setup_widgets()
 
+  dap.listeners.after.event_initialized['me-keys'] = function()
+    api.nvim_set_keymap("n", "<down>", "<cmd>lua require('dap').step_over()<CR>", {noremap = true, silent = true})
+    api.nvim_set_keymap("n", "<left>", "<cmd>lua require('dap').step_out()<CR>", {noremap = true, silent = true})
+    api.nvim_set_keymap("n", "<right>", "<cmd>lua require('dap').step_into()<CR>", {noremap = true, silent = true})
+  end
+  dap.listeners.after.event_terminated['me-keys'] = function()
+    api.nvim_del_keymap("n", "<down>")
+    api.nvim_del_keymap("n", "<left>")
+    api.nvim_del_keymap("n", "<right>")
+  end
+
   dap.defaults.fallback.terminal_win_cmd = 'tabnew'
   dap.defaults.fallback.external_terminal = {
     command = '/usr/bin/alacritty';
