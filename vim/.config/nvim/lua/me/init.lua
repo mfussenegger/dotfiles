@@ -113,8 +113,7 @@ function M.enable_lint()
   })
   vim.cmd("augroup lint")
   vim.cmd("au!")
-  vim.cmd(string.format("au BufWritePost <buffer=%d> lua require'lint'.try_lint()", bufnr))
-  vim.cmd(string.format("au BufEnter <buffer=%d> lua require'lint'.try_lint()", bufnr))
+  vim.cmd(string.format("au BufWritePost,BufEnter,BufLeave <buffer=%d> lua require'lint'.try_lint()", bufnr))
   vim.cmd("augroup end")
 end
 
