@@ -4,6 +4,7 @@
     repo: https://github.com/{{ item.repo }}
     dest: ~/dev/{{ item.repo }}
     version: '{{ item.version }}'
+    force: true
   loop:
     - { repo: 'tree-sitter/tree-sitter-java', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-python', version: 'master' }
@@ -37,7 +38,7 @@
     - queries/zig
 
 - name: Generate parsers
-  command: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
+  shell: tree-sitter generate --abi 14 && cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
   args:
     chdir: ~/dev/{{ item.repo }}
   loop:
