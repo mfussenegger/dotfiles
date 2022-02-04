@@ -177,9 +177,9 @@ function M.setup()
 
 
   dap.adapters.cppdbg = {
-    type = 'executable',
-    command = HOME .. '/apps/cpptools/extension/debugAdapters/OpenDebugAD7',
     id = 'cppdbg',
+    type = 'executable',
+    command = HOME .. '/apps/cpptools/extension/debugAdapters/bin/OpenDebugAD7',
   }
   dap.adapters.codelldb = function(on_adapter)
     local stdout = vim.loop.new_pipe(false)
