@@ -4,7 +4,7 @@ local lint_active = {}
 
 function M.statusline()
   local parts = {
-    "%<» %{luaeval('U.file_or_lsp_status()')} %h%m%r%=",
+    [[%<» %{luaeval("require'me'.file_or_lsp_status()")} %m%r%=]],
     "%#warningmsg#",
     "%{&paste?'[paste] ':''}",
     "%*",
@@ -16,12 +16,12 @@ function M.statusline()
     "%#warningmsg#",
     "%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.'] ':''}",
     "%*",
-    "%{luaeval('U.dap_status()')}"
+    [[%{luaeval("require'me'.dap_status()")}]]
   }
   local bufnr = api.nvim_get_current_buf()
-  local has_clients = not vim.tbl_isempty(vim.lsp.buf_get_clients(0))
+  local has_clients = not vim.tbl_isempty(vim.lsp.buf_get_clients(bufnr))
   if has_clients or lint_active[bufnr] then
-    table.insert(parts, '%{luaeval("U.diagnostic_status()")}')
+    table.insert(parts, [[%{luaeval("require'me'.diagnostic_status()")}]])
   end
   return table.concat(parts, '')
 end

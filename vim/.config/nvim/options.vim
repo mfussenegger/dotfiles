@@ -97,7 +97,7 @@ function! MyQuickfixtext(opts)
 endfunction
 
 lua require('me').setup()
-set statusline=%!v:lua.U.statusline()
+set statusline=%!v:lua.require'me'.statusline()
 set quickfixtextfunc=MyQuickfixtext
 augroup lsp
   au!
