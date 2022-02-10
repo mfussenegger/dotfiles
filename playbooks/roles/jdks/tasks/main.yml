@@ -20,12 +20,12 @@
 
 - name: Install panama early access
   unarchive:
-    src: https://download.java.net/java/early_access/panama/3/openjdk-17-panama+3-167_linux-x64_bin.tar.gz
+    src: https://download.java.net/java/early_access/panama/1/openjdk-19-panama+1-13_linux-x64_bin.tar.gz
     dest: ~/.local/jdks/
     remote_src: true
     extra_opts:
       - --transform
-      - s/jdk-17/jdk-17ea-panama/
+      - s/jdk-19/jdk-19ea-panama/
 
 - name: Install GraalVM Java17
   unarchive:
