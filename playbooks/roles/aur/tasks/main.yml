@@ -5,9 +5,6 @@
 - name: Install pg_format
   aur:
     name: pgformatter-git
-- name: Install vale-bin
-  aur:
-    name: vale-bin
 - name: Install stack
   aur:
     name: stack-static

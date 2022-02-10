@@ -37,7 +37,7 @@
 # vale from aur is outdated
 - name: Get vale
   unarchive:
-    src: https://github.com/errata-ai/vale/releases/download/v2.14.0/vale_2.14.0_Linux_64-bit.tar.gz
+    src: https://github.com/errata-ai/vale/releases/download/v2.15.0/vale_2.15.0_Linux_64-bit.tar.gz
     dest: ~/bin/
     remote_src: true
     creates: ~/bin/vale
