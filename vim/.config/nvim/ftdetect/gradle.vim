@@ -1,1 +1,1 @@
-au BufRead,BufNewFile *.gradle setlocal ft=groovy
+au BufRead,BufNewFile *.gradle setlocal ft=groovy.gradle

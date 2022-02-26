@@ -96,7 +96,6 @@ local function on_attach(client, bufnr, attach_opts)
     vim.cmd(string.format('au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()', bufnr))
   end
   if vim.lsp.codelens and client.resolved_capabilities['code_lens'] then
-    -- vim.cmd(string.format('au BufEnter,BufModifiedSet,InsertLeave <buffer=%d> lua vim.lsp.codelens.refresh()', bufnr))
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>ce", "<Cmd>lua vim.lsp.codelens.run()<CR>", opts)
   end
@@ -147,15 +146,20 @@ local function mk_config()
     on_init = on_init;
     on_attach = on_attach;
     on_exit = on_exit;
+    init_options = {},
+    settings = {},
   }
 end
 
 
-function M.add_client(cmd, opts)
-  local config = mk_config()
-  config['name'] = opts and opts.name or cmd[1]
-  config['cmd'] = cmd
-  lspc.start(config, opts and opts.root or {'.git'})
+function M.add_client(cmd, config)
+  local default_config = mk_config()
+  config = vim.tbl_deep_extend('force', default_config, config or {})
+  config.cmd = cmd
+  config.name = config.name or cmd[1]
+  local root_markers = config.root or {'.git'}
+  config.root = nil
+  lspc.start(config, root_markers)
 end
 
 
@@ -165,7 +169,6 @@ function M.start_jdt()
   local home = os.getenv('HOME')
   local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
   local config = mk_config()
-  config.flags.server_side_fuzzy_completion = true
   config.settings = {
     java = {
       signatureHelp = { enabled = true };
