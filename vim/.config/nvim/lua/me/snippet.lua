@@ -7,10 +7,36 @@ local function exit()
 end
 
 
+function M.setup()
+  local ls = require('luasnip')
+  local s = ls.s
+  local p = require("luasnip.extras").partial
+  local parse_snippet = ls.parser.parse_snippet
+  ls.snippets = {
+    all = {
+      s('date', p(os.date, '%Y-%m-%d')),
+    },
+    lua = {
+      parse_snippet('lf', 'local function ${1:name}(${2})\n  $0\nend'),
+      parse_snippet('mf', 'function ${1:M}.${2:name}(${3})\n  $0\nend'),
+    },
+    java = {
+      parse_snippet('lf', 'private ${1:static} ${2:void} ${3:name}(${4}) {\n    $0\n}'),
+      parse_snippet('test', '@Test\npublic void ${1:test}() {\n    $0\n}'),
+    },
+    ansible = {
+      parse_snippet('git', 'git:\n  repo: ${1}\n  dest: ${0}\n'),
+      parse_snippet('pip', 'pip:\n  name:${1}\n  virtualenv: ${2}\n  virtualenv_command: /usr/bin/python3 -m venv\n${0}'),
+    },
+  }
+end
+
+
 function M.maybe()
-  local expandable = vim.fn['vsnip#expandable']()
-  if expandable ~= 0 then
-    vim.fn['vsnip#expand']()
+  local ls = require('luasnip')
+  local expandable = ls.expandable()
+  if expandable then
+    ls.expand()
   else
     local clients = vim.lsp.get_active_clients()
     if not next(clients) then

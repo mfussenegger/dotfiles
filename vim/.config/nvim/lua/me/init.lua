@@ -160,6 +160,7 @@ end
 
 
 function M.setup()
+  require('me.snippet').setup()
   require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
   require('fzy').setup()
   require('me.lsp.conf').setup()

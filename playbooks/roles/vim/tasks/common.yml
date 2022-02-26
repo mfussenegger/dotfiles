@@ -27,7 +27,7 @@
     - jamessan/vim-gnupg
     - cespare/vim-toml
     - tpope/vim-eunuch
-    - hrsh7th/vim-vsnip
+    - L3MON4D3/LuaSnip
     - liuchengxu/vista.vim
     - janko-m/vim-test
     - phaazon/hop.nvim
