@@ -6,7 +6,7 @@
     name:
       - sway
       - swayidle
-      - swaylock
+      - waylock
       - slurp
       - bemenu
       - wl-clipboard
