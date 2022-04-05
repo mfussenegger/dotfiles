@@ -215,14 +215,14 @@ function M.start_jdt()
           },
           {
             name = "JavaSE-17",
-            path = "/usr/lib/jvm/java-17-openjdk/",
+            path = home .. "/.local/jdks/jdk-17.0.2+8/",
           },
         }
       };
     };
   }
   config.cmd = {
-    '/usr/lib/jvm/java-17-openjdk/bin/java',
+    home .. "/.local/jdks/jdk-17.0.2+8/bin/java",
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
