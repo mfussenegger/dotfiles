@@ -27,6 +27,7 @@ function M.setup()
     ansible = {
       parse_snippet('git', 'git:\n  repo: ${1}\n  dest: ${0}\n'),
       parse_snippet('pip', 'pip:\n  name:${1}\n  virtualenv: ${2}\n  virtualenv_command: /usr/bin/python3 -m venv\n${0}'),
+      parse_snippet('get_url', 'get_url:\n  url: ${1}\n  dest: ${0}\n'),
     },
   })
 end
