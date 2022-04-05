@@ -127,6 +127,7 @@ nnoremap <silent> <leader>lp :lua require'me.dap'.toggle_breakpoint(nil, nil, vi
 nnoremap <silent> <leader>dr :lua require'me.dap'.repl.toggle({height=15})<CR>
 nnoremap <silent> <leader>dl :lua require('me.dap').run_last()<CR>
 nnoremap <silent> <leader>dS :lua local w = require('me.dap').widgets; w.centered_float(w.frames)<CR>
+nnoremap <silent> <leader>dt :lua local w = require('me.dap').widgets; w.centered_float(w.threads)<CR>
 nnoremap <silent> <leader>ds :lua local w = require('me.dap').widgets; w.centered_float(w.scopes)<CR>
 nnoremap <silent> <leader>dh :lua require('me.dap').widgets.hover()<CR>
 nnoremap <silent> <leader>dc :lua require('me.dap').run_to_cursor()<CR>
