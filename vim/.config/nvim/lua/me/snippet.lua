@@ -12,7 +12,7 @@ function M.setup()
   local s = ls.s
   local p = require("luasnip.extras").partial
   local parse_snippet = ls.parser.parse_snippet
-  ls.snippets = {
+  ls.add_snippets(nil,  {
     all = {
       s('date', p(os.date, '%Y-%m-%d')),
     },
@@ -28,7 +28,7 @@ function M.setup()
       parse_snippet('git', 'git:\n  repo: ${1}\n  dest: ${0}\n'),
       parse_snippet('pip', 'pip:\n  name:${1}\n  virtualenv: ${2}\n  virtualenv_command: /usr/bin/python3 -m venv\n${0}'),
     },
-  }
+  })
 end
 
 
