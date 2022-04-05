@@ -233,6 +233,8 @@ function M.reload_dap()
   U.reload('dap', true)
   U.reload('me.dap')
   U.reload('jdtls.dap').setup_dap({hotcodereplace = 'auto'})
+  vim.cmd('set ft=' .. vim.bo.filetype)
+  require('dap').set_log_level('TRACE')
 end
 
 

@@ -138,6 +138,7 @@ nnoremap <silent> <leader>dk :lua require'me.dap'.up()<CR>
 command -nargs=0 Into :lua require('me.dap').step_into()
 command -nargs=0 DapBreakpoints :copen | lua require('me.dap').list_breakpoints()
 command -nargs=0 DapSidebar :lua require('me.dap').sidebar.toggle()
+command -nargs=0 DapReload :lua require('me').reload_dap()
 
 command -nargs=0 LspErrors :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.ERROR }
 command -nargs=0 LspWarnings :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
