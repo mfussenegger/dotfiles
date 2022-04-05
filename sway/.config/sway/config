@@ -135,11 +135,9 @@ bar {
 
 output 'Dell Inc. DELL P2416D 07C5367S0RKU' {
   position 0 0
-  subpixel rgb
 }
 output 'Dell Inc. DELL P2416D 07C5367S0R4U' {
   position 2560 0
-  subpixel rgb
 }
 
 workspace 1 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
