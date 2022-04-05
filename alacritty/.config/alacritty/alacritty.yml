@@ -2,8 +2,8 @@
 font:
   normal:
     family: JuliaMono
-    style: Light
-  size: 15
+    style: Normal
+  size: 14
 
 window:
   dynamic_title: true
