@@ -101,7 +101,8 @@ end
 
 
 function M.enable_lint()
-  if not require('lint').linters_by_ft[vim.bo.filetype] then
+  local lint = require('lint')
+  if not lint.linters_by_ft[vim.bo.filetype] then
     return
   end
   local bufnr = api.nvim_get_current_buf()
@@ -111,10 +112,15 @@ function M.enable_lint()
       lint_active[b] = nil
     end,
   })
-  vim.cmd("augroup lint")
-  vim.cmd("au!")
-  vim.cmd(string.format("au BufWritePost,BufEnter,BufLeave <buffer=%d> lua require'lint'.try_lint()", bufnr))
-  vim.cmd("augroup end")
+  local group = 'lint_' .. bufnr
+  api.nvim_create_augroup(group, {})
+  api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'BufLeave'}, {
+    group = group,
+    buffer = bufnr,
+    callback = function()
+      lint.try_lint()
+    end
+  })
 end
 
 
@@ -162,7 +168,6 @@ end
 function M.setup()
   require('me.snippet').setup()
   require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
-  require('fzy').setup()
   require('me.lsp.conf').setup()
   require('hop').setup()
   require('lint').linters_by_ft = {
@@ -228,14 +233,6 @@ function M.setup()
 end
 
 
-function M.reload_dap()
-  require('dap.repl').close()
-  U.reload('dap', true)
-  U.reload('me.dap')
-  U.reload('jdtls.dap').setup_dap({hotcodereplace = 'auto'})
-  vim.cmd('set ft=' .. vim.bo.filetype)
-  require('dap').set_log_level('TRACE')
-end
 
 
 function M.format_uri(uri)
