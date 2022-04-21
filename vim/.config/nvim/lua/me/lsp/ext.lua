@@ -1,5 +1,6 @@
 local M = {}
 local lsp = vim.lsp
+local api = vim.api
 
 local function mk_tag_item(name, range, uri)
   local start = range.start
@@ -33,6 +34,18 @@ function M.symbol_tagfunc(pattern, flags)
   end
   vim.wait(1500, function() return num_clients == 0 end)
   return results
+end
+
+
+
+function M.remove_unused_imports()
+  vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
+  vim.cmd('packadd cfilter')
+  vim.cmd('Cfilter /main/')
+  vim.cmd('Cfilter /The import/')
+  vim.cmd('cdo normal dd')
+  vim.cmd('cclose')
+  vim.cmd('wa')
 end
 
 

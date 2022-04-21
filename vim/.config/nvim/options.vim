@@ -101,7 +101,6 @@ set statusline=%!v:lua.require'me'.statusline()
 set quickfixtextfunc=MyQuickfixtext
 augroup lsp
   au!
-  au FileType java lua require('me.lsp.conf').start_jdt()
   au FileType haskell lua require('me.lsp.conf').start_hie()
   au FileType python lua require('me.lsp.conf').add_client({'pylsp'})
   au FileType html lua require('me.lsp.conf').add_client({'vscode-html-languageserver', '--stdio'}, {name='html-ls'})
