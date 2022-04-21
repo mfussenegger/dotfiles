@@ -133,7 +133,7 @@ function M.setup()
   set('n', '<leader>dt', function() widgets.centered_float(widgets.threads) end)
   set('n', '<leader>ds', function() widgets.centered_float(widgets.scopes) end)
   set('n', '<leader>dh', widgets.hover)
-  set('v', '<leader>dh', function() widgets.hover(require("dap.utils").get_visual_selection_text) end)
+  set('v', '<leader>dh', [[<ESC><CMD>lua require'dap.ui.widgets'.hover(require("dap.utils").get_visual_selection_text)<CR>]])
 
   dap.listeners.after.event_initialized['me.dap.keys'] = function()
     set("n", "<down>", dap.step_over)
