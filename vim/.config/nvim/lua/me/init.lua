@@ -254,7 +254,7 @@ function M.quickfixtext(opts)
   end
   local qflist = vim.fn.getqflist({ id = opts.id, items = 0, title = 0, context = 0 })
   local ctx = qflist.context or {}
-  if not ctx.client_id and qflist.title ~= 'Language Server' then
+  if not ctx.client_id and qflist.title ~= 'Language Server' and qflist.title ~= 'LSP locations' then
     return nil
   end
   local result = {}
@@ -270,6 +270,5 @@ function M.quickfixtext(opts)
   end
   return result
 end
-
 
 return M
