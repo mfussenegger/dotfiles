@@ -46,19 +46,19 @@ do
 end
 
 
--- array of mappings to setup; {<capability_name>, <mode>, <lhs>, <rhs>}
+-- array of mappings to setup; {<capability>, <mode>, <lhs>, <rhs>}
 local key_mappings = {
-  {"document_formatting", "n", "gq", "<Cmd>lua vim.lsp.buf.formatting()<CR>"},
-  {"document_range_formatting", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>"},
-  {"find_references", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>"},
-  {"hover", "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>"},
-  {"implementation", "n", "gD",  "<Cmd>lua vim.lsp.buf.implementation()<CR>"},
-  {"signature_help", "i", "<c-space>",  "<Cmd>lua vim.lsp.buf.signature_help()<CR>"},
-  {"workspace_symbol", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>"},
-  {"code_action", "n", "<a-CR>", "<Cmd>lua vim.lsp.buf.code_action()<CR>"},
-  {"code_action", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { only = 'refactor' }<CR>"},
-  {"code_action", "v", "<a-CR>", "<Esc><Cmd>lua vim.lsp.buf.range_code_action()<CR>"},
-  {"code_action", "v", "<leader>r", "<Esc><Cmd>lua vim.lsp.buf.range_code_action { only = 'refactor'}<CR>"},
+  {"documentFormattingProvider", "n", "gq", "<Cmd>lua vim.lsp.buf.format{async = true}<CR>"},
+  {"documentRangeFormattingProvider", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>"},
+  {"referencesProvider", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>"},
+  {"hoverProvider", "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>"},
+  {"implementationProvider", "n", "gD",  "<Cmd>lua vim.lsp.buf.implementation()<CR>"},
+  {"signatureHelpProvider", "i", "<c-space>",  "<Cmd>lua vim.lsp.buf.signature_help()<CR>"},
+  {"workspaceSymbolProvider", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>"},
+  {"codeActionProvider", "n", "<a-CR>", "<Cmd>lua vim.lsp.buf.code_action()<CR>"},
+  {"codeActionProvider", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { only = 'refactor' }<CR>"},
+  {"codeActionProvider", "v", "<a-CR>", "<Esc><Cmd>lua vim.lsp.buf.range_code_action()<CR>"},
+  {"codeActionProvider", "v", "<leader>r", "<Esc><Cmd>lua vim.lsp.buf.range_code_action { only = 'refactor'}<CR>"},
 }
 
 
@@ -75,13 +75,13 @@ local function on_attach(client, bufnr, attach_opts)
   api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
 
-  if client.resolved_capabilities.goto_definition then
+  if client.server_capabilities.definitionProvider then
     api.nvim_buf_set_option(bufnr, 'tagfunc', "v:lua.vim.lsp.tagfunc")
   end
   local opts = { silent = true; }
   for _, mappings in pairs(key_mappings) do
     local capability, mode, lhs, rhs = unpack(mappings)
-    if client.resolved_capabilities[capability] then
+    if client.server_capabilities[capability] then
       api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
     end
   end
@@ -89,12 +89,12 @@ local function on_attach(client, bufnr, attach_opts)
   api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp_compl').trigger_completion()<CR>", opts)
   vim.cmd('augroup lsp_aucmds')
   vim.cmd(string.format('au! * <buffer=%d>', bufnr))
-  if client.resolved_capabilities['document_highlight'] then
+  if client.server_capabilities.documentHighlightProvider then
     vim.cmd(string.format('au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()', bufnr))
     vim.cmd(string.format('au CursorHoldI <buffer=%d> lua vim.lsp.buf.document_highlight()', bufnr))
     vim.cmd(string.format('au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()', bufnr))
   end
-  if vim.lsp.codelens and client.resolved_capabilities['code_lens'] then
+  if vim.lsp.codelens and client.server_capabilities.codeLensProvider then
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>ce", "<Cmd>lua vim.lsp.codelens.run()<CR>", opts)
   end
@@ -256,7 +256,7 @@ function M.start_ansible_ls()
   end
   config.on_attach = function(client, bufnr)
     -- Keep using ansible-doc via keywordprg its content is more detailed
-    client.resolved_capabilities.hover = nil
+    client.server_capabilities.hoverProvider = false
     on_attach(client, bufnr)
   end
   lspc.start(config, {'.git'})
