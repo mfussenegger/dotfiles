@@ -63,7 +63,7 @@
 
 - name: Get jfr converter
   get_url:
-    url: https://github.com/jvm-profiling-tools/async-profiler/releases/download/v2.6/converter.jar
+    url: https://github.com/jvm-profiling-tools/async-profiler/releases/download/v2.7/converter.jar
     dest: ~/apps/converter.jar
 
 
@@ -74,7 +74,7 @@
     mode: 0700
 - name: Get and unpack jmc
   unarchive:
-    src: https://github.com/AdoptOpenJDK/openjdk-jmc-overrides/releases/download/8.1.0/org.openjdk.jmc-8.1.0-linux.gtk.x86_64.tar.gz
+    src: https://github.com/adoptium/jmc-build/releases/download/8.3.0-SNAPSHOT/org.openjdk.jmc-8.3.0-SNAPSHOT-linux.gtk.x86_64.tar.gz
     dest: ~/apps/jmc/
     remote_src: true
     creates: ~/apps/jmc/bin/jmc
