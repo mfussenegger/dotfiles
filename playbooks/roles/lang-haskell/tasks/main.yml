@@ -12,14 +12,13 @@
     - ndmitchell/ghcid
 - name: Build haskell-language-server
   shell: |
-    stack install --stack-yaml stack-{{ item.yaml }}.yaml \
+    stack install --stack-yaml {{ item.yaml }}.yaml \
       && mv ~/.local/bin/haskell-language-server ~/.local/bin/haskell-language-server-{{ item.v }}
   args:
     chdir: ~/dev/haskell/haskell-language-server
   loop:
-    - { yaml: 8.10.7, v: 8.10.7 }
-    - { yaml: 9.0.2, v: 9.0.2 }
-    - { yaml: 9.2, v: 9.2.2 }
+    - {yaml: stack-lts19, v: 9.0.2}
+    - {yaml: stack, v: 9.2.2}
 - name: Generate hoogle database for hie
   command: stack exec hoogle generate
   args:
