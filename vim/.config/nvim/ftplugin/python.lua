@@ -3,8 +3,11 @@ local a = vim.api
 vim.cmd('compiler pyunit')
 vim.bo.makeprg = 'python %'
 
+local dap = require('dap')
 local dappy = require('dap-python')
-dappy.setup('~/.virtualenvs/tools/bin/python')
+if not dap.adapters.python then
+  dappy.setup('~/.virtualenvs/tools/bin/python')
+end
 
 
 local function mkopts()
