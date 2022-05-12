@@ -56,9 +56,9 @@ local key_mappings = {
   {"signatureHelpProvider", "i", "<c-space>",  "<Cmd>lua vim.lsp.buf.signature_help()<CR>"},
   {"workspaceSymbolProvider", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>"},
   {"codeActionProvider", "n", "<a-CR>", "<Cmd>lua vim.lsp.buf.code_action()<CR>"},
-  {"codeActionProvider", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { only = 'refactor' }<CR>"},
+  {"codeActionProvider", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'} }}<CR>"},
   {"codeActionProvider", "v", "<a-CR>", "<Esc><Cmd>lua vim.lsp.buf.range_code_action()<CR>"},
-  {"codeActionProvider", "v", "<leader>r", "<Esc><Cmd>lua vim.lsp.buf.range_code_action { only = 'refactor'}<CR>"},
+  {"codeActionProvider", "v", "<leader>r", "<Esc><Cmd>lua vim.lsp.buf.range_code_action { context = { only = {'refactor'}}}<CR>"},
 }
 
 
