@@ -106,7 +106,6 @@ augroup lsp
   au FileType go lua require('me.lsp.conf').gopls()
   au FileType sh lua require('me.lsp.conf').add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
   au FileType rust lua require('me.lsp.conf').add_client({'rls'}, {root={'Cargo.toml', '.git'}})
-  au FileType lua lua require('me.lsp.conf').start_lua_ls()
   au FileType json lua require('me.lsp.conf').add_client({'vscode-json-languageserver', '--stdio'}, {name='json-ls'})
   au FileType css lua require('me.lsp.conf').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
   au FileType cs lua require('me.lsp.conf').start_omnisharp()

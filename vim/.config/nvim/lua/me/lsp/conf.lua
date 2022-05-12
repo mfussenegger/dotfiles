@@ -177,47 +177,6 @@ function M.gopls()
 end
 
 
-function M.start_lua_ls()
-  local config = mk_config()
-  local library = {}
-  local path = vim.split(package.path, ";")
-  table.insert(path, "lua/?.lua")
-  table.insert(path, "lua/?/init.lua")
-
-  local function add(lib)
-    for _, p in pairs(vim.fn.expand(lib, false, true)) do
-      p = vim.loop.fs_realpath(p)
-      library[p] = true
-    end
-  end
-
-  add("$VIMRUNTIME")
-  add("~/.config/nvim")
-  add("~/.config/nvim/pack/plugins/start/*")
-  config.settings = {
-    Lua = {
-      diagnostics = {
-        globals = {'vim', 'it', 'describe'}
-      },
-      runtime = {
-        version = "LuaJIT",
-        path = path,
-      },
-      workspace = {
-        library = library,
-      },
-      telemetry = {
-        enable = false,
-      },
-    }
-  }
-  local server_dir = vim.fn.expand('~/dev/sumneko/lua-language-server/')
-  config['name'] = 'luals'
-  config['cmd'] = {server_dir .. 'bin/lua-language-server', server_dir .. 'main.lua'}
-  lspc.start(config, {'.git'})
-end
-
-
 function M.start_omnisharp()
   local pid = vim.fn.getpid()
   local path = vim.fn.expand('~/apps/omnisharp/run')
