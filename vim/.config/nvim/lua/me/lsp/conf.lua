@@ -4,41 +4,37 @@ local M = {}
 local lspc = {}
 
 do
-  -- id is filetype│root_dir
-  local lsp_client_ids = {}
-
-  function lspc.start(config, root_markers)
-    local root_dir = require('jdtls.setup').find_root(root_markers)
-    if not root_dir then return end
-
-    local cmd = config.cmd[1]
-    if tonumber(vim.fn.executable(cmd)) == 0 then
-      api.nvim_command(string.format(
-        ':echohl WarningMsg | redraw | echo "No LSP executable: %s" | echohl None', cmd))
-      return
-    end
-    config['root_dir'] = root_dir
-    local lsp_id = tostring(vim.bo.filetype) .. "│" .. root_dir
-    local client_id = lsp_client_ids[lsp_id]
-    if not client_id then
-      client_id = lsp.start_client(config)
-      lsp_client_ids[lsp_id] = client_id
+  local function start_or_attach(config, reuse_client)
+    reuse_client = reuse_client or function(client)
+      return client.config.root_dir == config.root_dir and client.name == config.name
     end
     local bufnr = api.nvim_get_current_buf()
+    for _, client in pairs(vim.lsp.get_active_clients()) do
+      if reuse_client(client) then
+        lsp.buf_attach_client(bufnr, client.id)
+        return
+      end
+    end
+    local client_id = lsp.start_client(config)
     lsp.buf_attach_client(bufnr, client_id)
   end
 
+  function lspc.start(config, root_markers)
+    local root_dir = require('jdtls.setup').find_root(root_markers)
+    if not root_dir
+      then return
+    end
+    config['root_dir'] = root_dir
+    start_or_attach(config)
+  end
+
   function lspc.restart()
-    for id, client_id in pairs(lsp_client_ids) do
-      local client = vim.lsp.get_client_by_id(client_id)
-      if client then
-        local bufs = vim.lsp.get_buffers_by_client_id(client_id)
-        client.stop()
-        local new_client_id = lsp.start_client(client.config)
-        lsp_client_ids[id] = new_client_id
-        for _, buf in pairs(bufs) do
-          lsp.buf_attach_client(buf, new_client_id)
-        end
+    for _, client in pairs(vim.lsp.get_active_clients()) do
+      local bufs = vim.lsp.get_buffers_by_client_id(client.id)
+      client.stop()
+      local new_client_id = lsp.start_client(client.config)
+      for _, buf in pairs(bufs) do
+        lsp.buf_attach_client(buf, new_client_id)
       end
     end
   end
