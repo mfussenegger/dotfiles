@@ -63,7 +63,6 @@ local key_mappings = {
 
 
 local function on_init(client)
-  lsp.util.text_document_completion_list_to_complete_items = require('lsp_compl').text_document_completion_list_to_complete_items
   if client.config.settings then
     client.notify('workspace/didChangeConfiguration', { settings = client.config.settings })
   end
