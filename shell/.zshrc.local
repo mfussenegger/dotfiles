@@ -16,23 +16,15 @@ else
   export BROWSER=/usr/bin/qutebrowser
 fi
 
-if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
+if [ -n "$NVIM" ]; then
   export VISUAL="nvr -cc split --remote-wait"
 else
-  if [ -d "$HOME/dev/neovim/neovim/build/bin" ]; then
-    export VIMRUNTIME="$HOME/dev/neovim/neovim/runtime"
-    export VISUAL="$HOME/dev/neovim/neovim/build/bin/nvim"
-    export MANPAGER="$VISUAL +Man! -"
-  else
-    export VISUAL="nvim"
-    export MANPAGER="nvim +Man! -"
-  fi
+  export VISUAL="v"
 fi
+export MANPAGER="$VISUAL +Man! -"
 export EDITOR=$VISUAL
 export SUDO_EDIT=$VISUAL
-alias v=$VISUAL
 alias vi=$VISUAL
-alias nvim="VIMRUNTIME=/usr/share/nvim/runtime nvim"
 
 
 myoutube() {

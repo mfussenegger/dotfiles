@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ -d "$HOME/dev/neovim/neovim/build/bin" ]; then
+  VIMRUNTIME=$HOME/dev/neovim/neovim/runtime $HOME/dev/neovim/neovim/build/bin/nvim "$@"
+else
+  nvim "$@"
+fi
