@@ -89,6 +89,23 @@ config.on_attach = function(client, bufnr)
   vim.keymap.set('n', "<A-o>", jdtls.organize_imports, opts)
   vim.keymap.set('n', "<leader>df", jdtls.test_class, opts)
   vim.keymap.set('n', "<leader>dn", jdtls.test_nearest_method, opts)
+
+  vim.keymap.set('n', "<leader>dN",
+    function()
+      local async_profiler_so = home .. "/apps/async-profiler/build/libasyncProfiler.so"
+      local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,event=cpu,file=/tmp/profile.html"
+      jdtls.test_nearest_method({
+        config_overrides = {
+          vmArgs = vmArgs,
+          noDebug = true,
+        },
+        after_test = function()
+          vim.fn.system("firefox /tmp/profile.html")
+        end
+      })
+    end,
+  opts)
+
   vim.keymap.set('n', "crv", jdtls.extract_variable, opts)
   vim.keymap.set('v', 'crm', [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
   vim.keymap.set('n', "crc", jdtls.extract_constant, opts)
