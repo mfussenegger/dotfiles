@@ -1,6 +1,5 @@
 local M = {}
 local api = vim.api
-local lint_active = {}
 
 function M.statusline()
   local parts = {
@@ -16,13 +15,9 @@ function M.statusline()
     "%#warningmsg#",
     "%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.'] ':''}",
     "%*",
-    [[%{luaeval("require'me'.dap_status()")}]]
+    [[%{luaeval("require'me'.dap_status()")}]],
+    [[%{luaeval("require'me'.diagnostic_status()")}]],
   }
-  local bufnr = api.nvim_get_current_buf()
-  local has_clients = not vim.tbl_isempty(vim.lsp.buf_get_clients(bufnr))
-  if has_clients or lint_active[bufnr] then
-    table.insert(parts, [[%{luaeval("require'me'.diagnostic_status()")}]])
-  end
   return table.concat(parts, '')
 end
 
@@ -100,30 +95,6 @@ function M.init_hl()
 end
 
 
-function M.enable_lint()
-  local lint = require('lint')
-  if not lint.linters_by_ft[vim.bo.filetype] then
-    return
-  end
-  local bufnr = api.nvim_get_current_buf()
-  lint_active[bufnr] = true
-  api.nvim_buf_attach(bufnr, false, {
-    on_detach = function(_, b)
-      lint_active[b] = nil
-    end,
-  })
-  local group = 'lint_' .. bufnr
-  api.nvim_create_augroup(group, {})
-  api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'BufLeave'}, {
-    group = group,
-    buffer = bufnr,
-    callback = function()
-      lint.try_lint()
-    end
-  })
-end
-
-
 --- Like :only but delete other buffers
 function M.only()
   local cur_buf = api.nvim_get_current_buf()
@@ -170,16 +141,6 @@ function M.setup()
   require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
   require('me.lsp.conf').setup()
   require('hop').setup()
-  require('lint').linters_by_ft = {
-    markdown = {'vale'},
-    rst = {'vale'},
-    java = {'codespell'},
-    lua = {'codespell', 'luacheck'},
-    sh = {'shellcheck'},
-    ['yaml.ansible'] = {'ansible_lint'},
-    yaml = {'yamllint'},
-    gitcommit = {'codespell'},
-  }
 
   vim.diagnostic.config({
     virtual_text = false,
@@ -231,8 +192,6 @@ function M.setup()
     PL(debug.getinfo(1))
   end
 end
-
-
 
 
 function M.format_uri(uri)

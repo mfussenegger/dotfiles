@@ -1,3 +1,4 @@
+local api = vim.api
 vim.cmd [[
   source ~/.config/nvim/options.vim
   source ~/.config/nvim/mappings.vim
@@ -21,8 +22,26 @@ keymap.set('n', '[l', ':lprevious<CR>')
 keymap.set('n', ']L', ':lfirst<CR>')
 keymap.set('n', '[L', ':llast<CR>')
 
+require('me').setup()
 require('me.fzy').setup()
 require('me.dap').setup()
+do
+  local lint = require('lint')
+  lint.linters_by_ft = {
+    markdown = {'vale'},
+    rst = {'vale'},
+    java = {'codespell'},
+    lua = {'codespell', 'luacheck'},
+    sh = {'shellcheck'},
+    ['yaml.ansible'] = {'ansible_lint'},
+    yaml = {'yamllint'},
+    gitcommit = {'codespell'},
+  }
+  api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'BufLeave'}, {
+    group = api.nvim_create_augroup('lint', { clear = true }),
+    callback = function() lint.try_lint() end,
+  })
+end
 
 
 vim.o.scrollback=100000

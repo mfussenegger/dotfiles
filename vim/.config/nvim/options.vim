@@ -96,7 +96,6 @@ function! MyQuickfixtext(opts)
   return luaeval('U.quickfixtext(_A)', a:opts)
 endfunction
 
-lua require('me').setup()
 set statusline=%!v:lua.require'me'.statusline()
 set quickfixtextfunc=MyQuickfixtext
 augroup lsp
@@ -114,7 +113,6 @@ augroup lsp
   au FileType yaml lua require('me.lsp.conf').start_yaml_ls()
   au FileType yaml.ansible lua require('me.lsp.conf').start_ansible_ls()
   au FileType * lua require('me').init_hl()
-  au FileType * lua require('me').enable_lint()
 augroup end
 
 hi! def link LspReferenceText IncSearch
