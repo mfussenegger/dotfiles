@@ -1,4 +1,4 @@
-local a = vim.api
+local api = vim.api
 
 vim.cmd('compiler pyunit')
 vim.bo.makeprg = 'python %'
@@ -17,13 +17,19 @@ if not dap.adapters.python then
   })
 end
 
+local function test_runner()
+  if vim.loop.fs_stat('manage.py') then
+    return 'django'
+  else
+    return 'unittest'
+  end
+end
+
 
 local function mkopts()
-  if vim.loop.fs_stat('manage.py') then
-    return { test_runner = 'django' }
-  else
-    return { test_runner = 'unittest' }
-  end
+  return {
+    test_runner = test_runner(),
+  }
 end
 
 local function test_method()
@@ -37,6 +43,15 @@ end
 
 local silent = { silent = true }
 vim.keymap.set('n', '<leader>dn', test_method, silent)
+vim.keymap.set('n', '<leader>dN', function()
+  local opts = {
+    test_runner = test_runner(),
+    config = {
+      justMyCode = false
+    }
+  }
+  dappy.test_method(opts)
+end, silent)
 vim.keymap.set('n', '<leader>df', test_class, silent)
 vim.keymap.set(
   'v', '<leader>ds', '<ESC>:lua require("dap-python").debug_selection()<CR>', silent)
@@ -64,8 +79,8 @@ config.on_attach = function(client, bufnr)
     table.insert(on_write_cmds, 'silent !black -q %')
   end
   if next(on_write_cmds) then
-    local group = a.nvim_create_augroup('black-' .. bufnr, {})
-    a.nvim_create_autocmd('BufWritePost', { callback = run_cmds(on_write_cmds), buffer = bufnr, group = group })
+    local group = api.nvim_create_augroup('black-' .. bufnr, {})
+    api.nvim_create_autocmd('BufWritePost', { callback = run_cmds(on_write_cmds), buffer = bufnr, group = group })
   end
 end
 lsp.add_client({'pylsp'}, config)
