@@ -7,6 +7,14 @@ local dap = require('dap')
 local dappy = require('dap-python')
 if not dap.adapters.python then
   dappy.setup('~/.virtualenvs/tools/bin/python')
+  table.insert(dap.configurations.python, {
+    type = 'python',
+    request = 'launch',
+    name = 'doctest',
+    module = 'doctest',
+    console = 'integratedTerminal',
+    args = { "${file}" },
+  })
 end
 
 
