@@ -69,6 +69,8 @@ end
 
 local lsp = require('me.lsp.conf')
 local config = lsp.mk_config()
+config.cmd = {'pylsp'}
+config.root_dir = require('jdtls.setup').find_root({'.git', 'setup.py', 'setup.cfg'})
 config.on_attach = function(client, bufnr)
   lsp.on_attach(client, bufnr)
   local on_write_cmds = {}
@@ -83,4 +85,13 @@ config.on_attach = function(client, bufnr)
     api.nvim_create_autocmd('BufWritePost', { callback = run_cmds(on_write_cmds), buffer = bufnr, group = group })
   end
 end
-lsp.add_client({'pylsp'}, config)
+lsp.start(config, {
+  reuse_client = function(client, conf)
+    return (client.name == conf.name
+      and (
+        client.config.root_dir == conf.root_dir
+        or conf.root_dir == nil and vim.startswith(api.nvim_buf_get_name(0), "/usr/lib/python")
+      )
+    )
+  end
+})
