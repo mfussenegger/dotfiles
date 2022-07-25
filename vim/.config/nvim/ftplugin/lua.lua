@@ -1,20 +1,6 @@
 local lsp = require('me.lsp.conf')
 local config = lsp.mk_config()
-local library = {}
-local path = vim.split(package.path, ";")
-table.insert(path, "lua/?.lua")
-table.insert(path, "lua/?/init.lua")
 
-local function add(lib)
-  for _, p in pairs(vim.fn.expand(lib, false, true)) do
-    p = vim.loop.fs_realpath(p)
-    library[p] = true
-  end
-end
-
-add("$VIMRUNTIME")
-add("~/.config/nvim")
-add("~/.config/nvim/pack/plugins/start/*")
 config.settings = {
   Lua = {
     diagnostics = {
@@ -22,18 +8,18 @@ config.settings = {
     },
     runtime = {
       version = "LuaJIT",
-      path = path,
     },
     workspace = {
-      library = library,
+      library = vim.api.nvim_get_runtime_file("", true),
     },
     telemetry = {
       enable = false,
     },
   }
 }
-local server_dir = vim.fn.expand('~/dev/sumneko/lua-language-server/')
 config.name = 'luals'
+config.cmd = {'lua-language-server'}
+config.root_dir = require('jdtls.setup').find_root({'.git'})
 config.on_attach = function(client, bufnr)
   lsp.on_attach(client, bufnr)
   if vim.loop.fs_stat(".stylua.toml") then
@@ -51,5 +37,4 @@ config.on_attach = function(client, bufnr)
     })
   end
 end
-local cmd = {server_dir .. 'bin/lua-language-server', server_dir .. 'main.lua'}
-lsp.add_client(cmd, config)
+lsp.start(config)

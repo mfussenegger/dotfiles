@@ -8,8 +8,10 @@
       - jq
       - ripgrep
       - bash-language-server
+      - lua-language-server
       - hub
       - luarocks
+      - stylua
       - ninja
       - fzf
       - fzy
