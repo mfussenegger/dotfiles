@@ -26,18 +26,12 @@ local function test_runner()
 end
 
 
-local function mkopts()
-  return {
-    test_runner = test_runner(),
-  }
-end
-
 local function test_method()
-  return dappy.test_method(mkopts())
+  return dappy.test_method({ test_runner = test_runner() })
 end
 
 local function test_class()
-  return dappy.test_class(mkopts())
+  return dappy.test_class({ test_runner = test_runner() })
 end
 
 
@@ -67,30 +61,34 @@ local function run_cmds(cmds)
 end
 
 
+local on_write_cmds = {}
+if vim.fn.executable('isort') == 1 then
+  table.insert(on_write_cmds, 'silent !isort --profile black %')
+end
+if vim.fn.executable('black') == 1 then
+  table.insert(on_write_cmds, 'silent !black -q %')
+end
+if next(on_write_cmds) then
+  local bufnr = api.nvim_get_current_buf()
+  api.nvim_create_autocmd('BufWritePost', {
+    callback = run_cmds(on_write_cmds),
+    buffer = bufnr,
+    group = api.nvim_create_augroup('black-' .. bufnr, {})
+  })
+end
+
+
 local lsp = require('me.lsp.conf')
 local config = lsp.mk_config()
 config.cmd = {'pylsp'}
 config.root_dir = require('jdtls.setup').find_root({'.git', 'setup.py', 'setup.cfg'})
-config.on_attach = function(client, bufnr)
-  lsp.on_attach(client, bufnr)
-  local on_write_cmds = {}
-  if vim.fn.executable('isort') then
-    table.insert(on_write_cmds, 'silent !isort --profile black %')
-  end
-  if vim.fn.executable('black') then
-    table.insert(on_write_cmds, 'silent !black -q %')
-  end
-  if next(on_write_cmds) then
-    local group = api.nvim_create_augroup('black-' .. bufnr, {})
-    api.nvim_create_autocmd('BufWritePost', { callback = run_cmds(on_write_cmds), buffer = bufnr, group = group })
-  end
-end
+config.on_attach = lsp.on_attach
 lsp.start(config, {
   reuse_client = function(client, conf)
     return (client.name == conf.name
       and (
         client.config.root_dir == conf.root_dir
-        or conf.root_dir == nil and vim.startswith(api.nvim_buf_get_name(0), "/usr/lib/python")
+        or (conf.root_dir == nil and vim.startswith(api.nvim_buf_get_name(0), "/usr/lib/python"))
       )
     )
   end
