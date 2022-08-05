@@ -5,8 +5,6 @@
     dest: ~/dev/eclipse/eclipse.jdt.ls
 - name: Build eclipse.jdt.ls
   command: ./mvnw clean install -DskipTests
-  environment:
-    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
   args:
     chdir: ~/dev/eclipse/eclipse.jdt.ls
 
@@ -16,8 +14,6 @@
     dest: ~/dev/microsoft/java-debug
 - name: Build java-debug
   command: ./mvnw clean install
-  environment:
-    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
   args:
     chdir: ~/dev/microsoft/java-debug
 
@@ -30,8 +26,6 @@
 
 - name: Build vscode-java-test
   command: ./mvnw clean verify -DskipTests
-  environment:
-    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
   args:
     chdir: ~/dev/microsoft/vscode-java-test/java-extension
 
