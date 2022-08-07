@@ -49,6 +49,34 @@ function M.gdb()
 end
 
 
+function M.codelldb()
+  local dap = require('dap')
+  dap.adapters.codelldb = {
+    type = 'server',
+    port = "${port}",
+    executable = {
+      command = HOME .. '/apps/codelldb/extension/adapter/codelldb',
+      args = {"--port", "${port}"},
+    }
+  }
+  local configs = {
+    {
+      name = "codelldb: Launch",
+      type = "codelldb",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      args = {},
+    },
+  }
+  dap.configurations.c = configs
+  dap.configurations.rust = configs
+  dap.configurations.cpp = configs
+end
+
+
 function M.lldb()
   local dap = require('dap')
   dap.adapters.lldb = {
