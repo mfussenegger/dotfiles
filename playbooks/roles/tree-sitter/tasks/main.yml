@@ -5,6 +5,9 @@
     dest: ~/dev/{{ item.repo }}
     version: '{{ item.version }}'
     force: true
+  async: 30
+  poll: 0
+  register: git_clone
   loop:
     - { repo: 'tree-sitter/tree-sitter-java', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-python', version: 'master' }
@@ -17,6 +20,7 @@
     - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
     - { repo: 'vigoux/tree-sitter-viml', version: 'master' }
     - { repo: 'maxxnino/tree-sitter-zig', version: 'main' }
+    - { repo: 'ikatyang/tree-sitter-yaml', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -36,9 +40,20 @@
     - queries/vim
     - queries/c_sharp
     - queries/zig
+    - queries/yaml
+
+- name: Wait for git clone
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: git_clone_jobs
+  until: git_clone_jobs.finished
+  loop: "{{ git_clone.results }}"
 
 - name: Generate parsers
   shell: tree-sitter generate --abi 14 && cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
+  async: 30
+  poll: 0
+  register: compile_parsers
   args:
     chdir: ~/dev/{{ item.repo }}
   loop:
@@ -75,6 +90,16 @@
     - repo: 'maxxnino/tree-sitter-zig'
       ft: 'zig'
       files: src/parser.c
+    - repo: 'ikatyang/tree-sitter-yaml'
+      ft: 'yaml'
+      files: src/parser.c src/scanner.cc
+
+- name: Wait for compile parsers
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: compile_jobs
+  until: compile_jobs.finished
+  loop: "{{ compile_parsers.results }}"
 
 - name: Copy queries
   copy:
@@ -108,6 +133,9 @@
     - { ft: 'vim', name: 'highlights' }
     - { ft: 'vim', name: 'injections' }
     - { ft: 'vim', name: 'locals' }
+    - { ft: 'yaml', name: 'highlights' }
+    - { ft: 'yaml', name: 'locals' }
+    - { ft: 'yaml', name: 'injections' }
 
 - name: Fetch csharp queries
   get_url:
