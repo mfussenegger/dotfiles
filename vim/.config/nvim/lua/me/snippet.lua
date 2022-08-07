@@ -27,9 +27,13 @@ function M.setup()
       parse_snippet('test', '@Test\npublic void ${1:test}() {\n    $0\n}'),
     },
     ansible = {
-      parse_snippet('git', 'git:\n  repo: ${1}\n  dest: ${0}\n'),
-      parse_snippet('pip', 'ansible.builtin.pip:\n  name:${1}\n  virtualenv: ${2}\n  virtualenv_command: /usr/bin/python3 -m venv\n${0}'),
-      parse_snippet('get_url', 'get_url:\n  url: ${1}\n  dest: ${0}\n'),
+      parse_snippet('git', 'ansible.builtin.git:\n  repo: ${1}\n  dest: ${0}'),
+      parse_snippet('pip', 'ansible.builtin.pip:\n  name: ${1}\n  virtualenv: ${2}\n  virtualenv_command: /usr/bin/python3 -m venv\n${0}'),
+      parse_snippet('get_url', 'ansible.builtin.get_url:\n  url: ${1}\n  dest: ${0}'),
+      parse_snippet('service', 'ansible.builtin.service:\n  name: ${1}\n  state: ${2:started}\n  enabled: ${0:true}'),
+      parse_snippet('file', 'ansible.builtin.file:\n  path: ${1}\n  state: ${0:absent}'),
+      parse_snippet('copy', 'ansible.builtin.copy:\n  src: ${1}\n  dest: ${0}'),
+      parse_snippet('package', 'ansible.builtin.package:\n  state: ${1:present}\n  name: ${0}')
     },
     haskell = {
       parse_snippet('f', '${1:name} :: ${2}\n${1:name} = ${0:undefined}'),
