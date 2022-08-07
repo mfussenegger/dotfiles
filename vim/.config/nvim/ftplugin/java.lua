@@ -10,6 +10,10 @@ config.settings = {
     contentProvider = { preferred = 'fernflower' };
     completion = {
       favoriteStaticMembers = {
+        "org.assertj.core.api.Assertions.assertThat",
+        "org.assertj.core.api.Assertions.assertThatThrownBy",
+        "org.assertj.core.api.Assertions.assertThatExceptionOfType",
+        "org.assertj.core.api.Assertions.catchThrowable",
         "org.hamcrest.MatcherAssert.assertThat",
         "org.hamcrest.Matchers.*",
         "org.hamcrest.CoreMatchers.*",
