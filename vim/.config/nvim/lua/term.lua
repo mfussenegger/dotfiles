@@ -51,10 +51,41 @@ function M.run()
 end
 
 
+local function get_selected_lines()
+  -- [bufnr, lnum, col, off]; 1-indexed
+  local start = vim.fn.getpos('v')
+  local end_ = vim.fn.getpos('.')
+  local start_row = start[2]
+  local start_col = start[3]
+  local end_row = end_[2]
+  local end_col = end_[3]
+  if start_row == end_row and end_col < start_col then
+    end_col, start_col = start_col, end_col
+  elseif end_row < start_row then
+    start_row, end_row = end_row, start_row
+    start_col, end_col = end_col, start_col
+  end
+  return api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col - 1, {})
+end
+
+
 function M.run_ansible()
   local path = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':p')
-  local match = path:match('/roles/([%w-]+)/')
-  if match then
+  local role_match = path:match('/roles/([%w-]+)/')
+  if role_match then
+    local mode = api.nvim_get_mode().mode
+    if mode == 'v' or mode == 'V' then
+      local lines = get_selected_lines()
+      local tmptask = string.gsub(path, role_match, 'tmptask')
+      tmptask = vim.fn.fnamemodify(tmptask, ':h') .. '/main.yml'
+      vim.fn.mkdir(vim.fn.fnamemodify(tmptask, ':h'), 'p')
+      local f = io.open(tmptask, "w")
+      assert(f, "Must be able to open tmpfile in write mode")
+      f:write(table.concat(lines, '\n'))
+      f:flush()
+      f:close()
+      role_match = 'tmptask'
+    end
     local _, end_ = path:find('/playbooks/')
     local playbook_dir = nil
     if end_ then
@@ -65,7 +96,7 @@ function M.run_ansible()
       'localhost',
       '--playbook-dir', playbook_dir,
       '-m', 'import_role',
-      '-a', 'name=' .. match
+      '-a', 'name=' .. role_match
     }
     close_term()
     launch_term(cmd)
