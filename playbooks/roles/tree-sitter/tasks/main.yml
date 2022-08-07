@@ -12,7 +12,7 @@
     - { repo: 'tree-sitter/tree-sitter-json', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-c-sharp', version: 'master' }
-    - { repo: 'nvim-treesitter/tree-sitter-lua', version: 'master' }
+    - { repo: 'MunifTanjim/tree-sitter-lua', version: 'main' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
     - { repo: 'vigoux/tree-sitter-viml', version: 'master' }
@@ -54,9 +54,9 @@
     - repo: 'tree-sitter/tree-sitter-html'
       ft: 'html'
       files: src/parser.c src/scanner.cc
-    - repo: 'nvim-treesitter/tree-sitter-lua'
+    - repo: 'MunifTanjim/tree-sitter-lua'
       ft: 'lua'
-      files: src/parser.c src/scanner.cc
+      files: src/parser.c src/scanner.c
     - repo: 'stsewd/tree-sitter-rst'
       ft: 'rst'
       files: src/parser.c src/scanner.c
@@ -95,6 +95,7 @@
   loop:
     - { ft: 'lua', name: 'highlights' }
     - { ft: 'lua', name: 'locals' }
+    - { ft: 'lua', name: 'injections' }
     - { ft: 'json', name: 'highlights' }
     - { ft: 'java', name: 'highlights' }
     - { ft: 'java', name: 'locals' }
