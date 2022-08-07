@@ -2,20 +2,14 @@
 - name: Install yay
   aur:
     name: yay
-- name: Install pg_format
+
+- name: Install tools
   aur:
     name: pgformatter-git
-- name: Install stack
-  aur:
-    name: stack-static
-- name: Install yaml-language-server
-  aur:
-    name: yaml-language-server
-
-- name: Install readability-cli
-  aur:
-    name: readability-cli
-
-- name: Install zls
-  aur:
-    name: zls-bin
+  loop:
+    - pgformatter-git
+    - stack-static
+    - yaml-language-server
+    - readability-cli
+    - zls-bin
+    - vale-bin
