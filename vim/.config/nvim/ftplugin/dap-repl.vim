@@ -8,6 +8,8 @@ inoremap <buffer> <F10> <ESC>:lua require'dap'.step_over(); vim.cmd('startinsert
 inoremap <buffer> <F11> <ESC>:lua require'dap'.step_into(); vim.cmd('startinsert!')<CR>
 inoremap <buffer> <F12> <ESC>:lua require'dap'.step_out(); vim.cmd('startinsert!')<CR>
 
+nnoremap <buffer> gF <c-w>sgF
+
 setlocal nonumber norelativenumber cc=-1 nocuc
 setlocal tagfunc=v:lua.require'me.lsp.ext'.symbol_tagfunc
 
