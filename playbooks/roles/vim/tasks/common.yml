@@ -59,5 +59,3 @@
     - mfussenegger/nvim-lint
     - mfussenegger/nvim-treehopper
     - mfussenegger/nvim-lsp-compl
-- name: Update Remote Plugins
-  command: nvim +UpdateRemotePlugins +qa
