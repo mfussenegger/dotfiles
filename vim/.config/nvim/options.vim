@@ -10,13 +10,8 @@ set background=dark
 colorscheme gruvbox-material
 
 set matchtime=3 " show matching parenthesis a bit faster.
-set cmdheight=2
 set nu rnu numberwidth=4
-set mouse=a
 set cursorline
-set hidden
-set lazyredraw
-set ttyfast
 set scrolloff=3
 
 set updatetime=1000
@@ -32,9 +27,6 @@ set path-=/usr/include
 
 " do not select the end of line
 set selection=old
-" lower the delay of escaping out of other modes
-set timeout timeoutlen=1000 ttimeoutlen=0
-
 
 set expandtab
 set shiftwidth=2
@@ -44,12 +36,9 @@ set shiftround
 " improve search
 set ignorecase
 set smartcase
-set hlsearch
 
 set matchpairs+=<:> " pairs for % command
 
-" no backup files
-set nobackup
 set noswapfile
 
 " smart autoindenting when starting a new line
@@ -74,13 +63,11 @@ augroup nvim_opts
     au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
 augroup end
 
-if exists("&colorcolumn")
-    augroup colorcol
-        autocmd!
-        autocmd InsertEnter * set colorcolumn=80,120
-        autocmd InsertLeave * set colorcolumn=""
-    augroup end
-endif
+augroup colorcol
+  autocmd!
+  autocmd InsertEnter * set colorcolumn=80,120
+  autocmd InsertLeave * set colorcolumn=""
+augroup end
 
 " template support
 set cpoptions-=a
