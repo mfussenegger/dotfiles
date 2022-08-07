@@ -6,6 +6,6 @@
 
 - name: Download codelldb
   unarchive:
-    src: https://github.com/vadimcn/vscode-lldb/releases/download/v1.6.10/codelldb-x86_64-linux.vsix
+    src: https://github.com/vadimcn/vscode-lldb/releases/download/v1.7.3/codelldb-x86_64-linux.vsix
     dest: ~/apps/codelldb
     remote_src: true
