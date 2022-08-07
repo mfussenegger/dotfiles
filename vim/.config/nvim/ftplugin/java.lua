@@ -56,19 +56,19 @@ config.settings = {
           path = "/usr/lib/jvm/java-11-openjdk/",
         },
         {
-          name = "JavaSE-16",
-          path = home .. "/.local/jdks/jdk-16.0.1+9/",
+          name = "JavaSE-17",
+          path = home .. "/.local/jdks/jdk-17.0.4+8/",
         },
         {
-          name = "JavaSE-17",
-          path = home .. "/.local/jdks/jdk-17.0.2+8/",
+          name = "JavaSE-18",
+          path = home .. "/.local/jdks/jdk-18.0.2+9/",
         },
       }
     };
   };
 }
 config.cmd = {
-  home .. "/.local/jdks/jdk-17.0.2+8/bin/java",
+  home .. "/.local/jdks/jdk-18.0.2+9/bin/java",
   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
   '-Dosgi.bundles.defaultStartLevel=4',
   '-Declipse.product=org.eclipse.jdt.ls.core.product',
