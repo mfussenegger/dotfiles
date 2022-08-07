@@ -4,7 +4,7 @@ export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
 export JAVA_HOME="$HOME/.local/jdks/jdk-18.0.2+9/"
-export GRAALVM_HOME="$HOME/.local/jdks/graalvm-ce-java17-22.1.0/"
+export GRAALVM_HOME="$HOME/.local/jdks/graalvm-ce-java17-22.2.0/"
 export GOPATH="$HOME/workspace/code/go"
 export STARDICT_DATA_DIR="$HOME/.local/share/stardict/"
 # Refresh gpg-agent tty in case user switches into an X session

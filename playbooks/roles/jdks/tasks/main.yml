@@ -25,7 +25,7 @@
 
 - name: Install GraalVM Java17
   unarchive:
-    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java17-linux-amd64-22.1.0.tar.gz
+    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-linux-amd64-22.2.0.tar.gz
     dest: ~/.local/jdks/
-    creates: ~/.local/jdks/graalvm-ce-java17-22.1.0/
+    creates: ~/.local/jdks/graalvm-ce-java17-22.2.0/
     remote_src: true
