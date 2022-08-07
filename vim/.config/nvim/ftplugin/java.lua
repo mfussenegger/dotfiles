@@ -111,6 +111,7 @@ config.on_attach = function(client, bufnr)
   opts)
 
   vim.keymap.set('n', "crv", jdtls.extract_variable, opts)
+  vim.keymap.set('v', "crv", [[<ESC><CMD>lua require('jdtls').extract_variable(true)<CR>]], opts)
   vim.keymap.set('v', 'crm', [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
   vim.keymap.set('n', "crc", jdtls.extract_constant, opts)
   local create_command = vim.api.nvim_buf_create_user_command
