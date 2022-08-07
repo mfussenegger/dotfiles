@@ -22,6 +22,9 @@ keymap.set('n', '[l', ':lprevious<CR>')
 keymap.set('n', ']L', ':lfirst<CR>')
 keymap.set('n', '[L', ':llast<CR>')
 
+keymap.set('n', ']v', function() require('me.lsp.ext').next_highlight() end)
+keymap.set('n', '[v', function() require('me.lsp.ext').prev_highlight() end)
+
 require('me').setup()
 require('me.fzy').setup()
 require('me.dap').setup()

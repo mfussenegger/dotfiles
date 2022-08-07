@@ -41,12 +41,53 @@ end
 function M.remove_unused_imports()
   vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
   vim.cmd('packadd cfilter')
-  vim.cmd('Cfilter /main/')
   vim.cmd('Cfilter /The import/')
   vim.cmd('cdo normal dd')
   vim.cmd('cclose')
   vim.cmd('wa')
 end
 
+
+local function is_before(x, y)
+  if x.start.line < y.start.line then
+    return true
+  elseif x.start.line == y.start.line then
+    return x.start.character < y.start.character
+  else
+    return false
+  end
+end
+
+local function move_to_highlight(is_closer)
+  local params = lsp.util.make_position_params()
+  local win = api.nvim_get_current_win()
+  local lnum, col = unpack(api.nvim_win_get_cursor(win))
+  lnum = lnum - 1
+  local cursor = {
+    start = { line = lnum, character = col }
+  }
+  lsp.buf_request(0, 'textDocument/documentHighlight', params, function(err, result)
+    assert(not err, err and err.message)
+    local closest = nil
+    for _, highlight in pairs(result or {}) do
+      local range = highlight.range
+      if is_closer(cursor, range) and (closest == nil or is_closer(range, closest)) then
+        closest = range
+      end
+    end
+    if closest then
+      api.nvim_win_set_cursor(win, { closest.start.line + 1, closest.start.character })
+    end
+  end)
+end
+
+function M.next_highlight()
+  return move_to_highlight(is_before)
+end
+
+
+function M.prev_highlight()
+  return move_to_highlight(function(x, y) return is_before(y, x) end)
+end
 
 return M
