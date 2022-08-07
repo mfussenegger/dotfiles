@@ -25,7 +25,6 @@
     - AndrewRadev/linediff.vim
     - hynek/vim-python-pep8-indent
     - jamessan/vim-gnupg
-    - cespare/vim-toml
     - L3MON4D3/LuaSnip
     - liuchengxu/vista.vim
     - janko-m/vim-test
