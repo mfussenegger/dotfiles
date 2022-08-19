@@ -24,109 +24,6 @@ local function reload()
 end
 
 
-function M.gdb()
-  local dap = require('dap')
-  dap.adapters.cppdbg = {
-    id = 'cppdbg',
-    type = 'executable',
-    command = HOME .. '/apps/cpptools/extension/debugAdapters/bin/OpenDebugAD7',
-  }
-  local configs = {
-    {
-      name = "cppdbg: Launch",
-      type = "cppdbg",
-      request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
-      cwd = '${workspaceFolder}',
-      args = {},
-    },
-  }
-  dap.configurations.c = configs
-  dap.configurations.rust = configs
-  dap.configurations.cpp = configs
-end
-
-
-function M.codelldb()
-  local dap = require('dap')
-  dap.adapters.codelldb = {
-    type = 'server',
-    port = "${port}",
-    executable = {
-      command = HOME .. '/apps/codelldb/extension/adapter/codelldb',
-      args = {"--port", "${port}"},
-    }
-  }
-  local configs = {
-    {
-      name = "codelldb: Launch",
-      type = "codelldb",
-      request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
-      cwd = '${workspaceFolder}',
-      args = {},
-    },
-  }
-  dap.configurations.c = configs
-  dap.configurations.rust = configs
-  dap.configurations.cpp = configs
-end
-
-
-function M.lldb()
-  local dap = require('dap')
-  dap.adapters.lldb = {
-    type = 'executable',
-    command = '/usr/bin/lldb-vscode',
-    name = "lldb"
-  }
-  local configs = {
-    {
-      name = "lldb: Launch (integratedTerminal)",
-      type = "lldb",
-      request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
-      cwd = '${workspaceFolder}',
-      stopOnEntry = false,
-      args = {},
-      runInTerminal = true,
-    },
-    {
-      name = "lldb: Launch (console)",
-      type = "lldb",
-      request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
-      cwd = '${workspaceFolder}',
-      stopOnEntry = false,
-      args = {},
-      runInTerminal = false,
-    },
-    {
-      -- If you get an "Operation not permitted" error using this, try disabling YAMA:
-      --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-      name = "lldb: Attach to process",
-      type = 'lldb',
-      request = 'attach',
-      pid = require('dap.utils').pick_process,
-      args = {},
-    },
-  }
-  dap.configurations.c = configs
-  dap.configurations.rust = configs
-  dap.configurations.cpp = configs
-end
-
-
-
-
 function M.setup()
   local dap = require('dap')
 
@@ -188,6 +85,91 @@ function M.setup()
     args = {'--hold', '-e'};
   }
   require('dap.ext.vscode').load_launchjs()
+
+
+  dap.adapters.cppdbg = {
+    id = 'cppdbg',
+    type = 'executable',
+    command = HOME .. '/apps/cpptools/extension/debugAdapters/bin/OpenDebugAD7',
+  }
+  dap.adapters.codelldb = {
+    type = 'server',
+    port = "${port}",
+    executable = {
+      command = HOME .. '/apps/codelldb/extension/adapter/codelldb',
+      args = {"--port", "${port}"},
+    }
+  }
+  dap.adapters.lldb = {
+    type = 'executable',
+    command = '/usr/bin/lldb-vscode',
+    name = "lldb"
+  }
+  -- Dont forget, attach needs permission:
+  --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+  local configs = {
+    {
+      name = "cppdbg: Launch",
+      type = "cppdbg",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      args = {},
+    },
+    {
+      name = "codelldb: Launch",
+      type = "codelldb",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      args = {},
+    },
+    {
+      name = "codelldb: Attach to process",
+      type = 'codelldb',
+      request = 'attach',
+      pid = require('dap.utils').pick_process,
+      args = {},
+    },
+    {
+      name = "lldb: Launch (integratedTerminal)",
+      type = "lldb",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      stopOnEntry = false,
+      args = {},
+      runInTerminal = true,
+    },
+    {
+      name = "lldb: Launch (console)",
+      type = "lldb",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      stopOnEntry = false,
+      args = {},
+      runInTerminal = false,
+    },
+    {
+      name = "lldb: Attach to process",
+      type = 'lldb',
+      request = 'attach',
+      pid = require('dap.utils').pick_process,
+      args = {},
+    },
+  }
+  dap.configurations.c = configs
+  dap.configurations.rust = configs
+  dap.configurations.cpp = configs
 end
 
 
