@@ -13,6 +13,9 @@ local accept_compl_or_cr = function()
 end
 keymap.set('i', '<CR>', accept_compl_or_cr, { expr = true })
 
+keymap.set('n', 'gs', [[:let @/='\<'.expand('<cword>').'\>'<CR>cgn]])
+keymap.set('x', 'gs', [["sy:let @/=@s<CR>cgn]])
+
 keymap.set('n', ']q', ':cnext<CR>')
 keymap.set('n', '[q', ':cprevious<CR>')
 keymap.set('n', ']Q', ':cfirst<CR>')
