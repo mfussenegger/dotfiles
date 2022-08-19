@@ -73,12 +73,33 @@ function M.file_or_lsp_status()
   end
 end
 
+local function get_parser(bufnr)
+  local ok, parser = pcall(vim.treesitter.get_parser, bufnr)
+  local err
+  if ok then
+    return parser
+  else
+    err = parser
+  end
+  if string.find(vim.bo.filetype, '%.') then
+    for ft in string.gmatch(vim.bo.filetype, '([^.]+)') do
+      ok, parser = pcall(vim.treesitter.get_parser, bufnr, ft)
+      if ok then
+        return parser
+      end
+    end
+  end
+  error(err)
+end
+
 
 function M.init_hl()
   local ts = vim.treesitter
   local bufnr = api.nvim_get_current_buf()
-  local ok, parser = pcall(ts.get_parser, bufnr)
-  if not ok then return end
+  local ok, parser = pcall(get_parser, bufnr)
+  if not ok then
+    return
+  end
   local get_query = require('vim.treesitter.query').get_query
   local query
   ok, query = pcall(get_query, parser._lang, 'highlights')
@@ -229,5 +250,6 @@ function M.quickfixtext(opts)
   end
   return result
 end
+
 
 return M
