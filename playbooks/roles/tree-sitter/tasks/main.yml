@@ -51,7 +51,7 @@
 
 - name: Generate parsers
   shell: tree-sitter generate --abi 14 && cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
-  async: 30
+  async: 120
   poll: 0
   register: compile_parsers
   args:
