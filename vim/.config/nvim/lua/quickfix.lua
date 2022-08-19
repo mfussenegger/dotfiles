@@ -8,8 +8,8 @@ function M.toggle()
     if api.nvim_buf_get_option(buf, 'buftype') == 'quickfix' then
       api.nvim_command('cclose')
       if win_pre_copen then
-        local w = api.nvim_win_get_number(win_pre_copen)
-        if api.nvim_win_is_valid(w) then
+        local ok, w = pcall(api.nvim_win_get_number, win_pre_copen)
+        if ok and api.nvim_win_is_valid(w) then
           api.nvim_set_current_win(w)
         end
         win_pre_copen = nil
