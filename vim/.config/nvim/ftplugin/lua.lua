@@ -14,7 +14,7 @@ dap.adapters.nlua = function(callback, conf)
     local opts = {
       args = {
         '-e',
-        'v',
+        vim.v.progpath,
         '-c',
         string.format("lua require('osv').launch({ port = %s })", conf.port),
         start_opts.fname or api.nvim_buf_get_name(0),
@@ -81,9 +81,13 @@ dap.configurations.lua = {
   }
 }
 
+if vim.loop.fs_stat(".stylua.toml") then
+  vim.bo.formatprg = "stylua -"
+end
+
+
 local lsp = require('me.lsp.conf')
 local config = lsp.mk_config()
-
 config.settings = {
   Lua = {
     diagnostics = {
@@ -103,21 +107,28 @@ config.settings = {
 config.name = 'luals'
 config.cmd = {'lua-language-server'}
 config.root_dir = require('jdtls.setup').find_root({'.git'})
-config.on_attach = function(client, bufnr)
-  lsp.on_attach(client, bufnr)
-  if vim.loop.fs_stat(".stylua.toml") then
-    vim.bo.formatprg = "stylua -"
-    vim.keymap.del('n', 'gq', { buffer = bufnr })
-    vim.keymap.del('v', 'gq', { buffer = bufnr })
-    local group = vim.api.nvim_create_augroup('format-' .. bufnr, {})
-    vim.api.nvim_create_autocmd('BufWritePost', {
-      callback = function()
-        vim.cmd('silent !stylua %')
-        vim.cmd('silent e!')
-      end,
-      buffer = bufnr,
-      group = group
-    })
-  end
-end
+config.on_attach = lsp.on_attach
 lsp.start(config)
+
+local bufnr = api.nvim_get_current_buf()
+
+if vim.endswith(config.root_dir, "neovim/neovim") then
+  local group = vim.api.nvim_create_augroup('formatlua-' .. bufnr, { clear = true })
+  api.nvim_create_autocmd('BufWritePost', {
+    callback = function()
+      vim.cmd('silent !make formatlua')
+      vim.cmd('silent e!')
+    end,
+    buffer = bufnr,
+    group = group
+  })
+end
+
+if vim.loop.fs_stat("lemmy.sh") then
+  local group = vim.api.nvim_create_augroup('lemmy-' .. bufnr, { clear = true })
+  api.nvim_create_autocmd('BufWritePost', {
+    command = 'silent !./lemmy.sh',
+    buffer = bufnr,
+    group = group
+  })
+end
