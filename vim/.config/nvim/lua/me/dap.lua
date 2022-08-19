@@ -80,6 +80,7 @@ function M.setup()
   api.nvim_create_user_command('DapBreakpoints', function() dap.list_breakpoints(true) end, { nargs = 0 })
 
   dap.defaults.fallback.terminal_win_cmd = 'tabnew'
+  dap.defaults.python.terminal_win_cmd = 'belowright new'
   dap.defaults.fallback.external_terminal = {
     command = '/usr/bin/alacritty';
     args = {'--hold', '-e'};
