@@ -48,3 +48,6 @@ end
 
 
 vim.o.scrollback=100000
+
+api.nvim_create_user_command('Grep', 'silent grep! <args> | copen | wincmd p', { nargs = '+' })
+
