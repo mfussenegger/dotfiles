@@ -31,7 +31,7 @@ require('me.dap').setup()
 do
   local lint = require('lint')
   lint.linters_by_ft = {
-    markdown = {'vale'},
+    markdown = {'vale', 'markdownlint'},
     rst = {'vale'},
     java = {'codespell'},
     lua = {'codespell', 'luacheck'},
