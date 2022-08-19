@@ -97,13 +97,14 @@ config.on_attach = function(client, bufnr)
   vim.keymap.set('n', "<leader>dN",
     function()
       local async_profiler_so = home .. "/apps/async-profiler/build/libasyncProfiler.so"
-      local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,event=cpu,file=/tmp/profile.html"
+      local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,event=cpu,alloc=2m,lock=10ms,file=/tmp/profile.jfr"
       jdtls.test_nearest_method({
         config_overrides = {
           vmArgs = vmArgs,
           noDebug = true,
         },
         after_test = function()
+          vim.fn.system("jfr2flame /tmp/profile.jfr /tmp/profile.html")
           vim.fn.system("firefox /tmp/profile.html")
         end
       })
