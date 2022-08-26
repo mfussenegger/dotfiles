@@ -405,6 +405,15 @@ wfRecord slurpCmd = do
   where
     filePath = "/tmp/recording.mp4"
 
+grim :: String -> IO ()
+grim slurpCmd = do
+  removeIfExists filePath
+  window <- readProcess slurpCmd [] ""
+  callProcess "grim" ["-g", window, filePath]
+  callCommand $ "wl-copy < " <> filePath
+  where
+    filePath = "/tmp/screenshot.png"
+
 
 main :: IO ()
 main = do
@@ -422,7 +431,8 @@ main = do
           ("mpc", selectSong),
           ("pulse move", pulseMove),
           ("record window", wfRecord "slurp-win"),
-          ("record region", wfRecord "slurp")
+          ("record region", wfRecord "slurp"),
+          ("screenshot window", grim "slurp-win")
         ]
   choice <- pickOne choices fst
   case choice of
