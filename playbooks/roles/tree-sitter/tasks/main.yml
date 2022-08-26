@@ -21,6 +21,7 @@
     - { repo: 'vigoux/tree-sitter-viml', version: 'master' }
     - { repo: 'maxxnino/tree-sitter-zig', version: 'main' }
     - { repo: 'ikatyang/tree-sitter-yaml', version: 'master' }
+    - { repo: 'PrestonKnopp/tree-sitter-gdscript', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -41,6 +42,7 @@
     - queries/c_sharp
     - queries/zig
     - queries/yaml
+    - queries/gdscript
 
 - name: Wait for git clone
   async_status:
@@ -93,6 +95,9 @@
     - repo: 'ikatyang/tree-sitter-yaml'
       ft: 'yaml'
       files: src/parser.c src/scanner.cc
+    - repo: 'PrestonKnopp/tree-sitter-gdscript'
+      ft: 'gdscript'
+      files: src/parser.c src/scanner.cc
 
 - name: Wait for compile parsers
   async_status:
@@ -136,6 +141,9 @@
     - { ft: 'yaml', name: 'highlights' }
     - { ft: 'yaml', name: 'locals' }
     - { ft: 'yaml', name: 'injections' }
+    - { ft: 'gdscript', name: 'highlights' }
+    - { ft: 'gdscript', name: 'locals' }
+    - { ft: 'gdscript', name: 'injections' }
 
 - name: Fetch csharp queries
   get_url:
