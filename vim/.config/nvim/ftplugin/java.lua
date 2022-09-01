@@ -135,20 +135,14 @@ local plugin_path = '/dev/microsoft/vscode-java-test/java-extension/com.microsof
 local bundle_list = vim.tbl_map(
   function(x) return require('jdtls.path').join(plugin_path, x) end,
   {
+    'junit-jupiter-*.jar',
+    'junit-platform-*.jar',
+    'junit-vintage-engine_*.jar',
+    'org.opentest4j*.jar',
+    'org.apiguardian.api_*.jar',
     'org.eclipse.jdt.junit4.runtime_*.jar',
     'org.eclipse.jdt.junit5.runtime_*.jar',
-    'org.junit.jupiter.api*.jar',
-    'org.junit.jupiter.engine*.jar',
-    'org.junit.jupiter.migrationsupport*.jar',
-    'org.junit.jupiter.params*.jar',
-    'org.junit.vintage.engine*.jar',
-    'org.opentest4j*.jar',
-    'org.junit.platform.commons*.jar',
-    'org.junit.platform.engine*.jar',
-    'org.junit.platform.launcher*.jar',
-    'org.junit.platform.runner*.jar',
-    'org.junit.platform.suite.api*.jar',
-    'org.apiguardian*.jar'
+    'org.opentest4j_*.jar'
   }
 )
 vim.list_extend(jar_patterns, bundle_list)
