@@ -21,6 +21,7 @@
     - { repo: 'vigoux/tree-sitter-viml', version: 'master' }
     - { repo: 'maxxnino/tree-sitter-zig', version: 'main' }
     - { repo: 'ikatyang/tree-sitter-yaml', version: 'master' }
+    - { repo: 'ikatyang/tree-sitter-toml', version: 'master' }
     - { repo: 'PrestonKnopp/tree-sitter-gdscript', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
@@ -43,6 +44,7 @@
     - queries/zig
     - queries/yaml
     - queries/gdscript
+    - queries/toml
 
 - name: Wait for git clone
   async_status:
@@ -52,7 +54,7 @@
   loop: "{{ git_clone.results }}"
 
 - name: Generate parsers
-  shell: tree-sitter generate --abi 14 && cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
+  shell: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
   async: 120
   poll: 0
   register: compile_parsers
@@ -95,6 +97,9 @@
     - repo: 'ikatyang/tree-sitter-yaml'
       ft: 'yaml'
       files: src/parser.c src/scanner.cc
+    - repo: 'ikatyang/tree-sitter-toml'
+      ft: 'toml'
+      files: src/parser.c src/scanner.c
     - repo: 'PrestonKnopp/tree-sitter-gdscript'
       ft: 'gdscript'
       files: src/parser.c src/scanner.cc
@@ -117,6 +122,7 @@
     - { ft: 'haskell', src_dir: 'tree-sitter/tree-sitter-haskell/queries', file: 'highlights.scm' }
     - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'highlights.scm' }
     - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'injections.scm' }
+    - { ft: 'toml', src_dir: 'ikatyang/tree-sitter-toml/queries', file: 'highlights.scm' }
 
 - name: Fetch queries
   get_url:
