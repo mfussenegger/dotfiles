@@ -15,6 +15,7 @@
     - { repo: 'tree-sitter/tree-sitter-json', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-c-sharp', version: 'master' }
+    - { repo: 'nvim-treesitter/tree-sitter-query', version: 'master' }
     - { repo: 'MunifTanjim/tree-sitter-lua', version: 'main' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
@@ -45,6 +46,7 @@
     - queries/yaml
     - queries/gdscript
     - queries/toml
+    - queries/query
 
 - name: Wait for git clone
   async_status:
@@ -73,6 +75,9 @@
     - repo: 'tree-sitter/tree-sitter-html'
       ft: 'html'
       files: src/parser.c src/scanner.cc
+    - repo: 'nvim-treesitter/tree-sitter-query'
+      ft: 'query'
+      files: src/parser.c
     - repo: 'MunifTanjim/tree-sitter-lua'
       ft: 'lua'
       files: src/parser.c src/scanner.c
@@ -150,6 +155,9 @@
     - { ft: 'gdscript', name: 'highlights' }
     - { ft: 'gdscript', name: 'locals' }
     - { ft: 'gdscript', name: 'injections' }
+    - { ft: 'query', name: 'highlights' }
+    - { ft: 'query', name: 'locals' }
+    - { ft: 'query', name: 'injections' }
 
 - name: Fetch csharp queries
   get_url:
