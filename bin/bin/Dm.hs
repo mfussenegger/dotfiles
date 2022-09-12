@@ -40,7 +40,7 @@ import System.Directory
   )
 import System.Environment (getArgs)
 import System.Posix.Files (rename)
-import System.Process (callProcess, readProcess, callCommand)
+import System.Process (callProcess, readProcess, callCommand, shell, readCreateProcess)
 import Control.Monad (when, unless)
 import Text.Regex.PCRE ((=~))
 import qualified Data.Text as T
@@ -414,6 +414,16 @@ grim slurpCmd = do
   where
     filePath = "/tmp/screenshot.png"
 
+pickColor :: IO ()
+pickColor = do
+  out <- readCreateProcess (shell grimCmd) ""
+  let [_, lastLine] = lines out
+      colorCode = T.unpack $ T.splitOn " " (T.pack lastLine) !! 3
+  callProcess "wl-copy" [colorCode]
+  putStrLn colorCode
+  where
+    grimCmd = "grim -g \"$(slurp -p)\" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:-"
+
 
 main :: IO ()
 main = do
@@ -432,7 +442,8 @@ main = do
           ("pulse move", pulseMove),
           ("record window", wfRecord "slurp-win"),
           ("record region", wfRecord "slurp"),
-          ("screenshot window", grim "slurp-win")
+          ("screenshot window", grim "slurp-win"),
+          ("pick color", pickColor)
         ]
   choice <- pickOne choices fst
   case choice of
