@@ -6,12 +6,18 @@ vim.cmd [[
 ]]
 
 vim.g.python3_host_prog = vim.fn.expand('$HOME/.virtualenvs/nvim/bin/python')
+vim.o.laststatus = 3
+vim.o.scrollback=100000
 
 local keymap = vim.keymap
 local accept_compl_or_cr = function()
   return require('lsp_compl').accept_pum() and '<c-y>' or '<CR>'
 end
 keymap.set('i', '<CR>', accept_compl_or_cr, { expr = true })
+keymap.set({'i', 's'}, '<ESC>', function()
+  require('luasnip').unlink_current()
+  return '<ESC>'
+end, { expr = true })
 
 keymap.set('n', 'gs', [[:let @/='\<'.expand('<cword>').'\>'<CR>cgn]])
 keymap.set('x', 'gs', [["sy:let @/=@s<CR>cgn]])
@@ -25,12 +31,14 @@ keymap.set('n', '[l', ':lprevious<CR>')
 keymap.set('n', ']L', ':lfirst<CR>')
 keymap.set('n', '[L', ':llast<CR>')
 
-keymap.set('n', ']v', function() require('me.lsp.ext').next_highlight() end)
-keymap.set('n', '[v', function() require('me.lsp.ext').prev_highlight() end)
+keymap.set('n', ']v', function() require('me.lsp').next_highlight() end)
+keymap.set('n', '[v', function() require('me.lsp').prev_highlight() end)
 
 require('me').setup()
 require('me.fzy').setup()
 require('me.dap').setup()
+require('me.lsp').setup()
+
 do
   local lint = require('lint')
   lint.linters_by_ft = {
@@ -49,8 +57,4 @@ do
   })
 end
 
-
-vim.o.scrollback=100000
-
 api.nvim_create_user_command('Grep', 'silent grep! <args> | copen | wincmd p', { nargs = '+' })
-

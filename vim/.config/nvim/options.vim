@@ -85,20 +85,8 @@ endfunction
 
 set statusline=%!v:lua.require'me'.statusline()
 set quickfixtextfunc=MyQuickfixtext
-augroup lsp
+augroup tshl
   au!
-  au FileType haskell lua require('me.lsp.conf').start_hie()
-  au FileType html lua require('me.lsp.conf').add_client({'vscode-html-languageserver', '--stdio'}, {name='html-ls'})
-  au FileType go lua require('me.lsp.conf').gopls()
-  au FileType sh lua require('me.lsp.conf').add_client({'bash-language-server', 'start'}, {name = 'bash-ls'})
-  au FileType rust lua require('me.lsp.conf').add_client({'rls'}, {root={'Cargo.toml', '.git'}})
-  au FileType json lua require('me.lsp.conf').add_client({'vscode-json-languageserver', '--stdio'}, {name='json-ls'})
-  au FileType css lua require('me.lsp.conf').add_client({'css-languageserver', '--stdio'}, {name='css-ls'})
-  au FileType cs lua require('me.lsp.conf').start_omnisharp()
-  au FileType c,cpp lua require('me.lsp.conf').add_client({'clangd'})
-  au FileType tex lua require('me.lsp.conf').add_client({'texlab'})
-  au FileType yaml lua require('me.lsp.conf').start_yaml_ls()
-  au FileType yaml.ansible lua require('me.lsp.conf').start_ansible_ls()
   au FileType * lua require('me').init_hl()
 augroup end
 

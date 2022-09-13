@@ -3,7 +3,7 @@ local root_markers = {'gradlew', '.git'}
 local root_dir = require('jdtls.setup').find_root(root_markers)
 local home = os.getenv('HOME')
 local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
-local config = require('me.lsp.conf').mk_config()
+local config = require('me.lsp').mk_config()
 config.settings = {
   java = {
     signatureHelp = { enabled = true };
@@ -83,7 +83,7 @@ config.cmd = {
   '-data', workspace_folder,
 }
 config.on_attach = function(client, bufnr)
-  require('me.lsp.conf').on_attach(client, bufnr, {
+  require('lsp_compl').attach(client, bufnr, {
     server_side_fuzzy_completion = true,
   })
 
@@ -96,18 +96,35 @@ config.on_attach = function(client, bufnr)
 
   vim.keymap.set('n', "<leader>dN",
     function()
-      local async_profiler_so = home .. "/apps/async-profiler/build/libasyncProfiler.so"
-      local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,event=cpu,alloc=2m,lock=10ms,file=/tmp/profile.jfr"
-      jdtls.test_nearest_method({
-        config_overrides = {
-          vmArgs = vmArgs,
-          noDebug = true,
-        },
-        after_test = function()
-          vim.fn.system("jfr2flame /tmp/profile.jfr /tmp/profile.html")
-          vim.fn.system("firefox /tmp/profile.html")
+      local choices = {
+        'cpu,alloc=2m,lock=10ms',
+        'cpu',
+        'alloc',
+        'wall',
+        'context-switches',
+        'cycles',
+        'instructions',
+        'cache-misses',
+      }
+      vim.ui.select(choices, {}, function(choice)
+        if not choice then
+          return
         end
-      })
+        local async_profiler_so = home .. "/apps/async-profiler/build/libasyncProfiler.so"
+        local event = 'event=' .. choice
+        local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,"
+        vmArgs = vmArgs .. event .. ",file=/tmp/profile.jfr"
+        jdtls.test_nearest_method({
+          config_overrides = {
+            vmArgs = vmArgs,
+            noDebug = true,
+          },
+          after_test = function()
+            vim.fn.system("jfr2flame /tmp/profile.jfr /tmp/profile.html")
+            vim.fn.system("firefox /tmp/profile.html")
+          end
+        })
+      end)
     end,
   opts)
 
@@ -116,7 +133,7 @@ config.on_attach = function(client, bufnr)
   vim.keymap.set('v', 'crm', [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
   vim.keymap.set('n', "crc", jdtls.extract_constant, opts)
   local create_command = vim.api.nvim_buf_create_user_command
-  create_command(bufnr, 'W', require('me.lsp.ext').remove_unused_imports, {
+  create_command(bufnr, 'W', require('me.lsp').remove_unused_imports, {
     nargs = 0,
   })
 end

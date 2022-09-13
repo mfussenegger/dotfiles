@@ -86,7 +86,7 @@ if vim.loop.fs_stat(".stylua.toml") then
 end
 
 
-local lsp = require('me.lsp.conf')
+local lsp = require('me.lsp')
 local config = lsp.mk_config()
 config.settings = {
   Lua = {
@@ -106,23 +106,10 @@ config.settings = {
 }
 config.name = 'luals'
 config.cmd = {'lua-language-server'}
-config.root_dir = require('jdtls.setup').find_root({'.git'})
-config.on_attach = lsp.on_attach
-lsp.start(config)
+config.root_dir = vim.fs.dirname(vim.fs.find({'.git'}, { upward = true })[1])
+vim.lsp.start(config)
 
 local bufnr = api.nvim_get_current_buf()
-
-if vim.endswith(config.root_dir, "neovim/neovim") then
-  local group = vim.api.nvim_create_augroup('formatlua-' .. bufnr, { clear = true })
-  api.nvim_create_autocmd('BufWritePost', {
-    callback = function()
-      vim.cmd('silent !make formatlua')
-      vim.cmd('silent e!')
-    end,
-    buffer = bufnr,
-    group = group
-  })
-end
 
 if vim.loop.fs_stat("lemmy.sh") then
   local group = vim.api.nvim_create_augroup('lemmy-' .. bufnr, { clear = true })

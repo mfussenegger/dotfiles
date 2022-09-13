@@ -94,25 +94,12 @@ end
 
 
 function M.init_hl()
-  local ts = vim.treesitter
   local bufnr = api.nvim_get_current_buf()
   local ok, parser = pcall(get_parser, bufnr)
   if not ok then
     return
   end
-  local get_query = require('vim.treesitter.query').get_query
-  local query
-  ok, query = pcall(get_query, parser._lang, 'highlights')
-  if ok and query then
-    ts.highlighter.new(parser, query)
-    api.nvim_buf_attach(bufnr, false, {
-      on_detach = function(_, b)
-        if ts.highlighter.active[b] then
-          ts.highlighter.active[b]:destroy()
-        end
-      end,
-    })
-  end
+  vim.treesitter.start(bufnr, parser._lang)
 end
 
 
@@ -160,7 +147,6 @@ end
 function M.setup()
   require('me.snippet').setup()
   require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
-  require('me.lsp.conf').setup()
   require('hop').setup()
 
   vim.diagnostic.config({
@@ -250,6 +236,9 @@ function M.quickfixtext(opts)
   end
   return result
 end
+
+
+
 
 
 return M

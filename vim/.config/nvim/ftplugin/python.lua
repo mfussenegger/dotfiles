@@ -70,12 +70,10 @@ if next(on_write_cmds) then
 end
 
 
-local lsp = require('me.lsp.conf')
-local config = lsp.mk_config()
+local config = require('me.lsp').mk_config()
 config.cmd = {'pylsp'}
-config.root_dir = require('jdtls.setup').find_root({'.git', 'setup.py', 'setup.cfg'})
-config.on_attach = lsp.on_attach
-lsp.start(config, {
+config.root_dir = vim.fs.dirname(vim.fs.find({'.git', 'setup.py', 'setup.cfg'})[1])
+vim.lsp.start(config, {
   reuse_client = function(client, conf)
     return (client.name == conf.name
       and (

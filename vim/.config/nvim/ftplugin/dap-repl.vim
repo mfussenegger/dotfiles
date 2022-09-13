@@ -11,6 +11,6 @@ inoremap <buffer> <F12> <ESC>:lua require'dap'.step_out(); vim.cmd('startinsert!
 nnoremap <buffer> gF <c-w>sgF
 
 setlocal nonumber norelativenumber cc=-1 nocuc
-setlocal tagfunc=v:lua.require'me.lsp.ext'.symbol_tagfunc
+setlocal tagfunc=v:lua.require'me.lsp'.symbol_tagfunc
 
 lua require('dap.ext.autocompl').attach()
