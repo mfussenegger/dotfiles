@@ -238,7 +238,119 @@ function M.quickfixtext(opts)
 end
 
 
+function M.dump_hl(name, path)
+  local header = string.format([[
+vim.o.background = '%s'
+vim.cmd.highlight 'clear'
+if vim.g.syntax_on then
+  vim.cmd.syntax 'reset'
+end
+vim.g.colors_name = '%s'
 
+]], vim.o.background, name)
+
+  local f = io.open(path, "w")
+  assert(f, "Could not open " .. path)
+  f:write(header)
+  local colors = {
+    [vim.g.terminal_color_0] = "black",
+    [vim.g.terminal_color_1] = "red",
+    [vim.g.terminal_color_2] = "green",
+    [vim.g.terminal_color_3] = "yellow",
+    [vim.g.terminal_color_4] = "blue",
+    [vim.g.terminal_color_5] = "magenta",
+    [vim.g.terminal_color_6] = "cyan",
+    [vim.g.terminal_color_7] = "white",
+    [vim.g.terminal_color_8] = "bright_black",
+    [vim.g.terminal_color_9] = "bright_red",
+    [vim.g.terminal_color_10] = "bright_green",
+    [vim.g.terminal_color_11] = "bright_yellow",
+    [vim.g.terminal_color_12] = "bright_blue",
+    [vim.g.terminal_color_13] = "bright_magenta",
+    [vim.g.terminal_color_14] = "bright_cyan",
+    [vim.g.terminal_color_15] = "bright_white",
+  }
+  f:write("local black = '" .. vim.g.terminal_color_0 .. "'\n")
+  f:write("local red = '" .. vim.g.terminal_color_1 .. "'\n")
+  f:write("local green = '" .. vim.g.terminal_color_2 .. "'\n")
+  f:write("local yellow = '" .. vim.g.terminal_color_3 .. "'\n")
+  f:write("local blue = '" .. vim.g.terminal_color_4 .. "'\n")
+  f:write("local magenta = '" .. vim.g.terminal_color_5 .. "'\n")
+  f:write("local cyan = '" .. vim.g.terminal_color_6 .. "'\n")
+  f:write("local white = '" .. vim.g.terminal_color_7 .. "'\n")
+  f:write("local bright_black = '" .. vim.g.terminal_color_8 .. "'\n")
+  f:write("local bright_red = '" .. vim.g.terminal_color_9 .. "'\n")
+  f:write("local bright_green = '" .. vim.g.terminal_color_10 .. "'\n")
+  f:write("local bright_yellow = '" .. vim.g.terminal_color_11 .. "'\n")
+  f:write("local bright_blue = '" .. vim.g.terminal_color_12 .. "'\n")
+  f:write("local bright_magenta = '" .. vim.g.terminal_color_13 .. "'\n")
+  f:write("local bright_cyan = '" .. vim.g.terminal_color_14 .. "'\n")
+  f:write("local bright_white = '" .. vim.g.terminal_color_15 .. "'\n")
+  f:write('vim.g.terminal_color_0 = black\n')
+  f:write('vim.g.terminal_color_1 = red\n')
+  f:write('vim.g.terminal_color_2 = green\n')
+  f:write('vim.g.terminal_color_3 = yellow\n')
+  f:write('vim.g.terminal_color_4 = blue\n')
+  f:write('vim.g.terminal_color_5 = magenta\n')
+  f:write('vim.g.terminal_color_6 = cyan\n')
+  f:write('vim.g.terminal_color_7 = white\n')
+  f:write('vim.g.terminal_color_8 = bright_black\n')
+  f:write('vim.g.terminal_color_9 = bright_red\n')
+  f:write('vim.g.terminal_color_10 = bright_green\n')
+  f:write('vim.g.terminal_color_11 = bright_yellow\n')
+  f:write('vim.g.terminal_color_12 = bright_blue\n')
+  f:write('vim.g.terminal_color_13 = bright_magenta\n')
+  f:write('vim.g.terminal_color_14 = bright_cyan\n')
+  f:write('vim.g.terminal_color_15 = bright_white\n')
+  f:write('local theme = {\n')
+  for hl_name, hl in pairs(vim.api.nvim__get_hl_defs(0)) do
+    if not vim.startswith(hl_name, '@') then
+      f:write('  ')
+      f:write(hl_name)
+      f:write(' = { ')
+      for k, v in pairs(hl) do
+        if type(k) ~= "boolean" then
+          if k == "foreground" then
+            f:write("fg")
+          elseif k == "background" then
+            f:write("bg")
+          else
+            f:write(k)
+          end
+          f:write(' = ')
+          if type(v) == "string" then
+            f:write("'")
+            f:write(v)
+            f:write("'")
+          elseif k ~= "blend" and type(v) == "number" then
+            local color_code = string.format("#%06x", v)
+            local color_name = colors[color_code]
+            if color_name then
+              f:write(color_name)
+            else
+              f:write("'")
+              f:write(color_code)
+              f:write("'")
+            end
+          else
+            f:write(tostring(v))
+          end
+          if next(hl, k) then
+            f:write(', ')
+          end
+        end
+      end
+      f:write(' },\n')
+    end
+  end
+  f:write('}\n')
+  f:write([[
+for k, v in pairs(theme) do
+  vim.api.nvim_set_hl(0, k, v)
+end
+]])
+  f:close()
+end
 
 
 return M
