@@ -65,7 +65,88 @@ local function get_selected_lines()
     start_row, end_row = end_row, start_row
     start_col, end_col = end_col, start_col
   end
-  return api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col - 1, {})
+  return api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col, {})
+end
+
+
+function M.cr8_run_next()
+  local tsquery = vim.treesitter.query
+  local bufnr = api.nvim_get_current_buf()
+  local parser = vim.treesitter.get_parser(bufnr)
+  local tree = parser:parse()[1]
+  local root = tree:root()
+  local lnum, col = unpack(api.nvim_win_get_cursor(0))
+  lnum = lnum - 1
+  local cursor_node = root:descendant_for_range(lnum, col, lnum, col)
+  local parent = cursor_node:parent()
+  while parent ~= nil do
+    local type = parent:type()
+    if type == "table" and parent:child_count() > 0 then
+      local child = parent:child(1)
+      if child:type() == "bare_key" then
+        local name = tsquery.get_node_text(child, bufnr)
+        if name == "setup" or name == "teardown" then
+          local cmd = {
+            'cr8',
+            'run-spec',
+            api.nvim_buf_get_name(bufnr),
+            'localhost:4200',
+            '--action', name,
+          }
+          close_term()
+          launch_term(cmd)
+          return
+        end
+      end
+    end
+    parent = parent:parent()
+  end
+  local query = vim.treesitter.query.parse_query(vim.bo.filetype, [[
+    ((table_array_element
+      (bare_key) @element_name
+      (#eq? @element_name "queries")
+      (pair
+        (bare_key) @property
+        (string) @value
+        (#eq? @property "name")
+      )
+     )
+    )
+  ]])
+  local last = nil
+  for id, node in query:iter_captures(root, bufnr, 0, lnum) do
+    local capture = query.captures[id]
+    if capture == "value" then
+      last = node
+    end
+  end
+  if last then
+    local name = vim.treesitter.query.get_node_text(last, bufnr)
+    local cmd = {
+      'cr8',
+      'run-spec',
+      api.nvim_buf_get_name(bufnr),
+      'localhost:4200',
+      '--action', 'queries',
+      '--re-name', string.sub(name, 2, #name - 1)
+    }
+    close_term()
+    launch_term(cmd)
+  else
+    vim.notify('No query found near cursor with `name` property')
+  end
+end
+
+
+function M.cr8_run_file()
+  local cmd = {
+    'cr8',
+    'run-spec',
+    api.nvim_buf_get_name(0),
+    'localhost:4200',
+  }
+  close_term()
+  launch_term(cmd)
 end
 
 
