@@ -16,10 +16,8 @@
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-c-sharp', version: 'master' }
     - { repo: 'nvim-treesitter/tree-sitter-query', version: 'master' }
-    - { repo: 'MunifTanjim/tree-sitter-lua', version: 'main' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
-    - { repo: 'vigoux/tree-sitter-viml', version: 'master' }
     - { repo: 'maxxnino/tree-sitter-zig', version: 'main' }
     - { repo: 'ikatyang/tree-sitter-yaml', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-toml', version: 'master' }
@@ -34,13 +32,11 @@
     - queries/
     - queries/java
     - queries/python
-    - queries/lua
     - queries/rst
     - queries/html
     - queries/json
     - queries/haskell
     - queries/markdown
-    - queries/vim
     - queries/c_sharp
     - queries/zig
     - queries/yaml
@@ -78,9 +74,6 @@
     - repo: 'nvim-treesitter/tree-sitter-query'
       ft: 'query'
       files: src/parser.c
-    - repo: 'MunifTanjim/tree-sitter-lua'
-      ft: 'lua'
-      files: src/parser.c src/scanner.c
     - repo: 'stsewd/tree-sitter-rst'
       ft: 'rst'
       files: src/parser.c src/scanner.c
@@ -90,9 +83,6 @@
     - repo: 'ikatyang/tree-sitter-markdown'
       ft: 'markdown'
       files: src/parser.c src/scanner.cc
-    - repo: 'vigoux/tree-sitter-viml'
-      ft: 'vim'
-      files: src/parser.c src/scanner.c
     - repo: 'tree-sitter/tree-sitter-c-sharp'
       ft: 'c_sharp'
       files: src/parser.c src/scanner.c
@@ -134,9 +124,6 @@
     url: https://raw.githubusercontent.com/nvim-treesitter/nvim-treesitter/master/queries/{{ item.ft }}/{{ item.name }}.scm
     dest: ~/.config/nvim/queries/{{ item.ft }}/{{ item.name }}.scm
   loop:
-    - { ft: 'lua', name: 'highlights' }
-    - { ft: 'lua', name: 'locals' }
-    - { ft: 'lua', name: 'injections' }
     - { ft: 'json', name: 'highlights' }
     - { ft: 'java', name: 'highlights' }
     - { ft: 'java', name: 'locals' }
@@ -146,9 +133,6 @@
     - { ft: 'markdown', name: 'injections' }
     - { ft: 'rst', name: 'highlights' }
     - { ft: 'rst', name: 'injections' }
-    - { ft: 'vim', name: 'highlights' }
-    - { ft: 'vim', name: 'injections' }
-    - { ft: 'vim', name: 'locals' }
     - { ft: 'yaml', name: 'highlights' }
     - { ft: 'yaml', name: 'locals' }
     - { ft: 'yaml', name: 'injections' }
