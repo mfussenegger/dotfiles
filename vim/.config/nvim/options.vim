@@ -4,8 +4,6 @@ let mapleader = ","
 let maplocalleader = " "
 set termguicolors
 
-let g:gruvbox_material_background = 'hard'
-let g:gruvbox_material_better_performance = 1
 set background=dark
 colorscheme gruvbox-material
 

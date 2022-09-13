@@ -20,7 +20,6 @@
   poll: 0
   register: git_clone
   loop:
-    - { folder: start, repo: sainnhe/gruvbox-material }
     - { folder: start, repo: junegunn/gv.vim }
     - { folder: start, repo: junegunn/vim-easy-align }
     - { folder: start, repo: tpope/vim-fugitive }
