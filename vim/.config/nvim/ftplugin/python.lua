@@ -9,36 +9,17 @@ if not dap.adapters.python then
   dappy.setup('~/.virtualenvs/tools/bin/python')
 end
 
-local function test_runner()
-  if vim.loop.fs_stat('manage.py') then
-    return 'django'
-  else
-    return 'unittest'
-  end
-end
-
-
-local function test_method()
-  return dappy.test_method({ test_runner = test_runner() })
-end
-
-local function test_class()
-  return dappy.test_class({ test_runner = test_runner() })
-end
-
-
 local silent = { silent = true }
-vim.keymap.set('n', '<leader>dn', test_method, silent)
+vim.keymap.set('n', '<leader>dn', dappy.test_method, silent)
 vim.keymap.set('n', '<leader>dN', function()
   local opts = {
-    test_runner = test_runner(),
     config = {
       justMyCode = false
     }
   }
   dappy.test_method(opts)
 end, silent)
-vim.keymap.set('n', '<leader>df', test_class, silent)
+vim.keymap.set('n', '<leader>df', dappy.test_class, silent)
 vim.keymap.set(
   'v', '<leader>ds', '<ESC>:lua require("dap-python").debug_selection()<CR>', silent)
 
