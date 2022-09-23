@@ -400,7 +400,13 @@ wfRecord :: String -> IO ()
 wfRecord slurpCmd = do
   removeIfExists filePath
   window <- readProcess slurpCmd [] ""
-  callProcess "alacritty" ["-e", "wf-recorder", "-g", window, "-f", filePath]
+  callProcess "systemd-run" ["--user", "-u", "record", "wf-recorder", "-c", "hevc_vaapi", "-d", "/dev/dri/renderD128", "-g", window, "-f", filePath]
+  where
+    filePath = "/tmp/recording.mp4"
+
+stopRecording :: IO ()
+stopRecording = do
+  callProcess "systemctl" ["--user", "kill", "-s", "SIGINT", "record.service"]
   callCommand $ "wl-copy < " <> filePath
   where
     filePath = "/tmp/recording.mp4"
@@ -442,6 +448,7 @@ main = do
           ("pulse move", pulseMove),
           ("record window", wfRecord "slurp-win"),
           ("record region", wfRecord "slurp"),
+          ("stop recording", stopRecording),
           ("screenshot window", grim "slurp-win"),
           ("pick color", pickColor)
         ]
