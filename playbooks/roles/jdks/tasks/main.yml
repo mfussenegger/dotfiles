@@ -8,20 +8,12 @@
   ansible.builtin.unarchive:
     src: "https://github.com/adoptium/temurin{{ item.major }}-binaries/releases/download/jdk-{{ item.version }}/OpenJDK{{ item.major }}U-jdk_x64_linux_hotspot_{{ item.version|replace('+', '_') }}.tar.gz"
     dest: ~/.local/jdks/
-    creates: ~/.local/jdks/jdk-{{ item }}
+    creates: ~/.local/jdks/jdk-{{ item.version }}
     remote_src: true
   loop:
     - { major: 17, version: "17.0.4+8" }
     - { major: 18, version: "18.0.2+9" }
-
-- name: Install panama early access
-  unarchive:
-    src: https://download.java.net/java/early_access/panama/1/openjdk-19-panama+1-13_linux-x64_bin.tar.gz
-    dest: ~/.local/jdks/
-    remote_src: true
-    extra_opts:
-      - --transform
-      - s/jdk-19/jdk-19ea-panama/
+    - { major: 19, version: "19+36" }
 
 - name: Install GraalVM Java17
   unarchive:

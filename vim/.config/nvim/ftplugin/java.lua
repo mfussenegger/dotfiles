@@ -63,6 +63,10 @@ config.settings = {
           name = "JavaSE-18",
           path = home .. "/.local/jdks/jdk-18.0.2+9/",
         },
+        {
+          name = "JavaSE-19",
+          path = home .. "/.local/jdks/jdk-19+36/",
+        },
       }
     };
   };
