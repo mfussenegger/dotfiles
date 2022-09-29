@@ -31,7 +31,7 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+Shift+Q kill
 
 # start program launcher
-bindsym $mod+p exec 'wl-menu-run | xargs -r swaymsg -t command exec' 
+bindsym $mod+p exec 'wl-menu-run | xargs -r swaymsg -t command exec'
 
 for_window [title="^floatterm$"] floating enable, border none, resize set width 1280 px height 720 px, move position 200 px 200 px
 
@@ -171,6 +171,14 @@ bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ true && killall -U
 
 bindsym XF86MonBrightnessUp exec xbacklight.hs --inc 5%
 bindsym XF86MonBrightnessDown exec xbacklight.hs --dec 5%
+
+input 7504:24868:Ultimate_Gadget_Laboratories_UHK_60_v2 {
+    xkb_layout "de"
+    xkb_variant "nodeadkeys"
+
+    repeat_delay 200
+    repeat_rate 40
+}
 
 input * {
     xkb_layout "de"
