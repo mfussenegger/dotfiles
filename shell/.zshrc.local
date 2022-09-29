@@ -28,7 +28,7 @@ alias vi=$VISUAL
 
 
 myoutube() {
-    mplayer -vo vaapi -cache 8192 -fs $(youtube-dl -g $1)
+    mpv $(youtube-dl -g $1)
 }
 
 greph() {
@@ -67,4 +67,8 @@ update_mirrorlist() {
 
 mp42gif() {
   ffmpeg -i "$1" -vf "fps=10,scale=1024:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 "$2"
+}
+
+pick-color() {
+  grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:-
 }
