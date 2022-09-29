@@ -95,8 +95,6 @@ command -nargs=0 LspErrors :lua vim.diagnostic.setqflist { severity = vim.diagno
 command -nargs=0 LspWarnings :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
 command -nargs=0 LspRestart :lua require('me.lsp.conf').restart()
 
-nnoremap <silent> <leader>q :lua require('quickfix').toggle()<CR>
-
 nnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
 nnoremap <silent> <leader>/ :HopPattern<CR>
 vnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>

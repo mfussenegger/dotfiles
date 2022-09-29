@@ -34,6 +34,10 @@ keymap.set('n', '[L', ':llast<CR>')
 keymap.set('n', ']v', function() require('me.lsp').next_highlight() end)
 keymap.set('n', '[v', function() require('me.lsp').prev_highlight() end)
 
+keymap.set('n', '<leader>q', function() require('quickfix').toggle() end, { silent = true })
+keymap.set('n', '<leader>lq', function() require('quickfix').load() end, { silent = true })
+
+
 require('me').setup()
 require('me.fzy').setup()
 require('me.dap').setup()

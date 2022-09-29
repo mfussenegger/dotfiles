@@ -23,4 +23,19 @@ function M.toggle()
   api.nvim_command('belowright copen')
 end
 
+
+local efms = {
+  python = [[%C %.%#,%A  File "%f"\, line %l%.%#,%Z%[%^ ]%\@=%m]],
+}
+
+function M.load()
+  local buf = api.nvim_get_current_buf()
+  local ft = vim.b[buf]['dap-type'] or vim.bo.filetype
+  local efm = efms[ft] or vim.bo.errorformat or vim.g.errorformat
+  local lines = api.nvim_buf_get_lines(buf, 0, -1, true)
+  vim.fn.setqflist({}, 'r', { efm = efm, lines = lines })
+  vim.cmd('belowright copen')
+end
+
+
 return M
