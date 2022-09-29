@@ -50,6 +50,7 @@ do
     ['yaml.ansible'] = {'ansible_lint'},
     yaml = {'yamllint'},
     gitcommit = {'codespell'},
+    dockerfile = {'hadolint'},
   }
   api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'BufLeave'}, {
     group = api.nvim_create_augroup('lint', { clear = true }),
