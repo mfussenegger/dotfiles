@@ -3,7 +3,7 @@
     email = f.mathias@zign"ar.n"et
 
 [core]
-    editor = vim
+    editor = v
     autocrlf = input
     excludesfile = ~/.config/git/gitignore
     attributesfile = ~/.config/git/gitattributes
