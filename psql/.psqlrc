@@ -11,4 +11,4 @@
 \set HISTCONTROL ignoredups
 \set COMP_KEYWORD_CASE upper
 \set ON_ERROR_ROLLBACK interactive
-\setenv PAGER 'vim -c "set ft=man"'
+\setenv PAGER 'v -c "setlocal ft=man buftype=nofile"'
