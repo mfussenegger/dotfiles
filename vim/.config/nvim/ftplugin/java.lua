@@ -95,9 +95,18 @@ config.on_attach = function(client, bufnr)
   jdtls.setup.add_commands()
   local opts = { silent = true, buffer = bufnr }
   vim.keymap.set('n', "<A-o>", jdtls.organize_imports, opts)
-  vim.keymap.set('n', "<leader>df", jdtls.test_class, opts)
-  vim.keymap.set('n', "<leader>dn", jdtls.test_nearest_method, opts)
-
+  vim.keymap.set('n', "<leader>df", function()
+    if vim.bo.modified then
+      vim.cmd('w')
+    end
+    jdtls.test_class()
+  end, opts)
+  vim.keymap.set('n', "<leader>dn", function()
+    if vim.bo.modified then
+      vim.cmd('w')
+    end
+    jdtls.test_nearest_method()
+  end, opts)
   vim.keymap.set('n', "<leader>dN",
     function()
       local choices = {
