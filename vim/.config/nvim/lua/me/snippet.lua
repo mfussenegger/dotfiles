@@ -54,7 +54,7 @@ function M.maybe()
       return exit()
     end
     local params = vim.lsp.util.make_position_params()
-    local results, err = vim.lsp.buf_request_sync(0, 'textDocument/completion', params, 1000)
+    local results, err = vim.lsp.buf_request_sync(0, 'textDocument/completion', params, 3000)
     assert(not err, vim.inspect(err))
     for _, resp in pairs(results) do
       local result = resp.result
