@@ -128,7 +128,7 @@ function M.cr8_run_next()
       api.nvim_buf_get_name(bufnr),
       'localhost:4200',
       '--action', 'queries',
-      '--re-name', string.sub(name, 2, #name - 1)
+      '--re-name', '^' .. string.sub(name, 2, #name - 1) .. '$'
     }
     close_term()
     launch_term(cmd)
