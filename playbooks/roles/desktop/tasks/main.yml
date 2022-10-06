@@ -1,7 +1,7 @@
 ---
 - name: Install sway
   become: true
-  package:
+  ansible.builtin.package:
     state: present
     name:
       - sway
@@ -13,17 +13,18 @@
 
 - name: Install desktop essentials
   become: true
-  package:
+  ansible.builtin.package:
     state: present
     name:
       - openssh
       - alacritty
       - qutebrowser
       - libnitrokey
+      - pass
 
 - name: Install audio packages
   become: true
-  package:
+  ansible.builtin.package:
     name:
       - alsa-utils
       - pipewire-pulse
@@ -31,7 +32,7 @@
 
 - name: Install fonts
   become: true
-  package:
+  ansible.builtin.package:
     name:
       - noto-fonts
       - noto-fonts-emoji
