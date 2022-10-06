@@ -32,6 +32,7 @@ function M.setup()
       parse_snippet('get_url', 'ansible.builtin.get_url:\n  url: ${1}\n  dest: ${0}'),
       parse_snippet('service', 'ansible.builtin.service:\n  name: ${1}\n  state: ${2:started}\n  enabled: ${0:true}'),
       parse_snippet('file', 'ansible.builtin.file:\n  path: ${1}\n  state: ${0:absent}'),
+      parse_snippet('dir', 'ansible.builtin.file:\n  state: directory\n  recurse: true\n  path: ${0}'),
       parse_snippet('copy', 'ansible.builtin.copy:\n  src: ${1}\n  dest: ${0}'),
       parse_snippet('package', 'ansible.builtin.package:\n  state: ${1:present}\n  name: ${0}')
     },
