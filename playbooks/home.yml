@@ -3,6 +3,8 @@
   gather_facts: true
   roles:
     - vim
+    - tools
+    - zsh-plugins
     - lang-haskell
     - jdks
     - lang-java
@@ -10,5 +12,3 @@
     - lang-lua
     - lang-ansible
     - tree-sitter
-    - tools
-    - zsh-plugins
