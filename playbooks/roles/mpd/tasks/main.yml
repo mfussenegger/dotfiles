@@ -1,0 +1,16 @@
+---
+- name: Create folders
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+  loop:
+    - ~/.config/mpd/playlists
+    - ~/.config/mpd/cache
+    - ~/music
+
+- name: Create symlinks
+  ansible.builtin.command: stow mpd
+  args:
+    chdir: ~/dotfiles
+    creates: ~/.config/mpd/mpd.conf
