@@ -1,7 +1,15 @@
 ---
-- hosts: localhost
+- name: Add aur module
+  hosts: localhost
   tasks:
+  - name: Create modules folder
+    ansible.builtin.file:
+      state: directory
+      recurse: true
+      path: ~/.ansible/plugins/modules
+
   - name: Install ansible aur helper
-    git:
-      repo: https://github.com/kewlfft/ansible-aur.git
-      dest: ~/.ansible/plugins/modules/aur
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/kewlfft/ansible-aur/master/plugins/modules/aur.py
+      dest: ~/.ansible/plugins/modules/aur.py
+      mode: 0644
