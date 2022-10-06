@@ -1,12 +1,13 @@
 ---
 - name: Install dev packages
   become: true
-  package:
+  ansible.builtin.package:
     state: present
     name:
       - base-devel
       - jq
       - ripgrep
+      - fd
       - bash-language-server
       - lua-language-server
       - hub
@@ -17,3 +18,11 @@
       - fzy
       - htop
       - delve
+
+- name: Install linters
+  become: true
+  ansible.builtin.package:
+    state: present
+    name:
+      - codespell
+      - shellcheck
