@@ -5,7 +5,7 @@
     dest: ~/dev/{{ item.repo }}
     version: '{{ item.version }}'
     force: true
-  async: 30
+  async: 300
   poll: 0
   register: git_clone
   loop:
@@ -53,7 +53,7 @@
 
 - name: Generate parsers
   shell: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
-  async: 120
+  async: 300
   poll: 0
   register: compile_parsers
   args:
