@@ -10,6 +10,7 @@
       - fd
       - bash-language-server
       - lua-language-server
+      - yaml-language-server
       - hub
       - luarocks
       - stylua

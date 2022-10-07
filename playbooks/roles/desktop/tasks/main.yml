@@ -10,6 +10,7 @@
       - slurp
       - bemenu
       - wl-clipboard
+      - xdg-desktop-portal-wlr
 
 - name: Install desktop essentials
   become: true

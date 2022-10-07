@@ -5,11 +5,10 @@
 
 - name: Install tools
   aur:
-    name: pgformatter-git
-  loop:
-    - pgformatter-git
-    - stack-static
-    - yaml-language-server
-    - readability-cli
-    - zls-bin
-    - vale-bin
+    name:
+      - pgformatter-git
+      - stack-static
+      - readability-cli
+      - zls-bin
+      - vale-bin
+      - hadolint-bin
