@@ -1,0 +1,23 @@
+---
+- name: Gathering facts
+  gather_facts:
+
+- name: Install podman
+  become: true
+  ansible.builtin.package:
+    state: present
+    name:
+      - podman
+      - podman-compose
+      - fuse-overlayfs
+      - slirp4netns
+
+- name: Create sub[u/g]id files
+  become: true
+  ansible.builtin.copy:
+    content: "{{ ansible_user_id }}:100000:65536"
+    dest: "{{ item }}"
+    mode: 0644
+  loop:
+    - /etc/subuid
+    - /etc/subgid
