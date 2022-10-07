@@ -150,14 +150,28 @@ function M.cr8_run_file()
 end
 
 
+local function has_become(lines)
+  for _, line in pairs(lines) do
+    if line:find('become: true') then
+      return true
+    end
+  end
+  return false
+end
+
+
 function M.run_ansible()
-  local path = vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':p')
+  local bufnr = api.nvim_get_current_buf()
+  local fname = api.nvim_buf_get_name(bufnr)
+  local path = vim.fn.fnamemodify(fname, ':p')
   local role_match = path:match('/roles/([%w-]+)/')
   if role_match then
     local mode = api.nvim_get_mode().mode
+    local become
     if mode == 'v' or mode == 'V' then
       local lines = get_selected_lines()
       local tmptask = string.gsub(path, role_match, 'tmptask')
+      become = has_become(lines)
       tmptask = vim.fn.fnamemodify(tmptask, ':h') .. '/main.yml'
       vim.fn.mkdir(vim.fn.fnamemodify(tmptask, ':h'), 'p')
       local f = io.open(tmptask, "w")
@@ -166,6 +180,9 @@ function M.run_ansible()
       f:flush()
       f:close()
       role_match = 'tmptask'
+    else
+      local lines = api.nvim_buf_get_lines(bufnr, 0, -1, true)
+      become = has_become(lines)
     end
     local _, end_ = path:find('/playbooks/')
     local playbook_dir = nil
@@ -179,10 +196,17 @@ function M.run_ansible()
       '-m', 'import_role',
       '-a', 'name=' .. role_match
     }
+    if become then
+      table.insert(cmd, '-K')
+    end
     close_term()
     launch_term(cmd)
   elseif path:match('/playbooks/') then
+    local lines = api.nvim_buf_get_lines(bufnr, 0, -1, true)
     local cmd = {'ansible-playbook', path}
+    if has_become(lines) then
+      table.insert(cmd, '-K')
+    end
     close_term()
     launch_term(cmd)
   end
