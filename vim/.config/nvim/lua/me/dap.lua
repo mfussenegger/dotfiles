@@ -85,9 +85,6 @@ function M.setup()
     command = '/usr/bin/alacritty';
     args = {'--hold', '-e'};
   }
-  require('dap.ext.vscode').load_launchjs()
-
-
   dap.adapters.cppdbg = {
     id = 'cppdbg',
     type = 'executable',
@@ -171,6 +168,10 @@ function M.setup()
   dap.configurations.c = configs
   dap.configurations.rust = configs
   dap.configurations.cpp = configs
+  require('dap.ext.vscode').type_to_filetypes = {
+    lldb = {'rust', 'c', 'cpp'},
+  }
+  require('dap.ext.vscode').load_launchjs()
 end
 
 
