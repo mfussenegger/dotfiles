@@ -11,6 +11,7 @@
       - bash-language-server
       - lua-language-server
       - yaml-language-server
+      - rust-analyzer
       - hub
       - luarocks
       - stylua
@@ -19,6 +20,7 @@
       - fzy
       - htop
       - delve
+      - lldb
 
 - name: Install linters
   become: true

@@ -31,7 +31,7 @@ function M.setup()
     {'css', {'vscode-css-language-server', '--stdio'}},
     {'c', 'clangd', {'.git'}},
     {'sh', {'bash-language-server', 'start'}},
-    {'rust', 'rls', {'Cargo.toml', '.git'}},
+    {'rust', 'rust-analyzer', {'Cargo.toml', '.git'}},
     {'tex', 'texlab', {'.git'}},
     {'zig', 'zls', {'.git'}},
   }
