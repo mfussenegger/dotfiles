@@ -15,6 +15,7 @@
     - { repo: 'tree-sitter/tree-sitter-json', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-c-sharp', version: 'master' }
+    - { repo: 'tree-sitter/tree-sitter-rust', version: 'master' }
     - { repo: 'nvim-treesitter/tree-sitter-query', version: 'master' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
@@ -43,6 +44,7 @@
     - queries/gdscript
     - queries/toml
     - queries/query
+    - queries/rust
 
 - name: Wait for git clone
   async_status:
@@ -98,6 +100,9 @@
     - repo: 'PrestonKnopp/tree-sitter-gdscript'
       ft: 'gdscript'
       files: src/parser.c src/scanner.cc
+    - repo: 'tree-sitter/tree-sitter-rust'
+      ft: 'rust'
+      files: src/parser.c src/scanner.c
 
 - name: Wait for compile parsers
   async_status:
@@ -142,6 +147,9 @@
     - { ft: 'query', name: 'highlights' }
     - { ft: 'query', name: 'locals' }
     - { ft: 'query', name: 'injections' }
+    - { ft: 'rust', name: 'highlights' }
+    - { ft: 'rust', name: 'locals' }
+    - { ft: 'rust', name: 'injections' }
 
 - name: Fetch csharp queries
   get_url:
