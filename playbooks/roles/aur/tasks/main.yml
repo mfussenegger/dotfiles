@@ -12,3 +12,4 @@
       - zls-bin
       - vale-bin
       - hadolint-bin
+      - comby-bin
