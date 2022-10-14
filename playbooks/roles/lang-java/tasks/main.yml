@@ -93,7 +93,10 @@
 
 - name: Build vscode-pde
   command: npm install
-  environment:
-    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
+  args:
+    chdir: ~/dev/testforstephen/vscode-pde/
+
+- name: Build vscode-pde part2
+  command: gulp full_build
   args:
     chdir: ~/dev/testforstephen/vscode-pde/
