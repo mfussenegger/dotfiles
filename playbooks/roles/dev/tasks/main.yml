@@ -11,6 +11,7 @@
       - bash-language-server
       - lua-language-server
       - yaml-language-server
+      - vscode-json-languageserver
       - rust-analyzer
       - hub
       - luarocks
@@ -21,6 +22,7 @@
       - htop
       - delve
       - lldb
+      - python-docutils  # rst2html is used by vale
 
 - name: Install linters
   become: true
