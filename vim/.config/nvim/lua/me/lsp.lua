@@ -108,6 +108,7 @@ function M.setup()
     callback = function(args)
       local group_name = 'lsp-' .. args.buf
       pcall(api.nvim_del_augroup_by_name, group_name)
+      pcall(require('lsp_compl').detach, args.data.client_id, args.buf)
     end,
   })
 
