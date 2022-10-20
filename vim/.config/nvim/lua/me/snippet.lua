@@ -24,7 +24,7 @@ function M.setup()
       parse_snippet('f', '${1:private} ${2:static} ${3:void} ${4:name}(${5}) {\n    $0\n}'),
       parse_snippet('m', '${1:private} ${2:void} ${3:name}(${4}) {\n    $0\n}'),
       parse_snippet('logger', 'private static final Logger LOGGER = LogManager.getLogger(${1}.class);'),
-      parse_snippet('test', '@Test\npublic void ${1:test}() {\n    $0\n}'),
+      parse_snippet('test', '@Test\npublic void ${1:test}() throws Exception {\n    $0\n}'),
     },
     ansible = {
       parse_snippet('git', 'ansible.builtin.git:\n  repo: ${1}\n  dest: ${0}'),
@@ -64,7 +64,7 @@ function M.maybe()
       if mode ~= 'i' and mode ~= 'ic' then
         return
       end
-      local items = result.items
+      local items = result.items or {}
       if #items == 0 then
         return exit()
       end
