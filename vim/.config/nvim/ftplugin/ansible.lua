@@ -31,8 +31,10 @@ vim.lsp.start(vim.tbl_extend('force', require('me.lsp').mk_config(), {
       executionEnvironment = {
         enabled = false,
       },
-      ansibleLint = {
-        enabled = false,
+      validation = {
+        lint = {
+          enabled = false,
+        }
       },
       completion = {
         provideRedirectModules = true,
