@@ -32,3 +32,18 @@
     name:
       - codespell
       - shellcheck
+
+- name: Install yay
+  aur:
+    name: yay
+
+- name: Install tools
+  aur:
+    name:
+      - pgformatter-git
+      - stack-static
+      - readability-cli
+      - zls-bin
+      - vale-bin
+      - hadolint-bin
+      - comby-bin
