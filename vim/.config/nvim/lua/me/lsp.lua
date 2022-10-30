@@ -89,14 +89,14 @@ function M.setup()
           group = group,
           buffer = args.buf,
           callback = function()
-            vim.lsp.buf.document_highlight()
+            pcall(vim.lsp.buf.document_highlight)
           end,
         })
         api.nvim_create_autocmd('CursorMoved', {
           group = group,
           buffer = args.buf,
           callback = function()
-            vim.lsp.buf.clear_references()
+            pcall(vim.lsp.buf.clear_references)
           end,
         })
       end
