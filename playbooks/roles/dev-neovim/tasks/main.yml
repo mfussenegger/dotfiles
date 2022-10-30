@@ -12,6 +12,10 @@
       - cmake
       - ninja
 
+      # for gen_vimdoc.py:
+      - python-msgpack
+      - doxygen
+
 - name: Build neovim
   command: make
   environment:
