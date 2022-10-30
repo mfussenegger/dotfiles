@@ -31,36 +31,39 @@ end
 
 
 function M.setup()
-  local fzy = require('fzy')
-  fzy.format_bufname = format_bufname
-  fzy.setup()
+  local q = require('qwahl')
+  q.format_bufname = format_bufname
   local set = vim.keymap.set
   local silent = { silent = true }
-  local actions = fzy.actions
-  set('n', '<leader>fq', actions.quickfix, silent)
-  set('n', '<leader>fb', actions.buffers, silent)
-  set('n', '<leader>fj', actions.jumplist, silent)
-  set('n', '<leader>f/', actions.buf_lines, silent)
-  set('n', '<leader>ff', function() fzy.execute('fd', fzy.sinks.edit_file) end, silent)
-  set('n', '<leader>ft', function() fzy.try(actions.lsp_tags, actions.buf_tags) end, silent)
-  set('n', '<leader>fg', function() fzy.execute('git ls-files', fzy.sinks.edit_file) end, silent)
+  set('n', '<leader>fq', q.quickfix, silent)
+  set('n', '<leader>fb', q.buffers, silent)
+  set('n', '<leader>fj', q.tagstack, silent)
+  set('n', '<leader>f/', q.buf_lines, silent)
+  set('n', '<leader>ff', function()
+    local fzy = require('fzy')
+    fzy.execute('fd', fzy.sinks.edit_file)
+  end, silent)
+  set('n', '<leader>ft', function() q.try(q.lsp_tags, q.buf_tags) end, silent)
+  set('n', '<leader>fg', function()
+    local fzy = require('fzy')
+    fzy.execute('git ls-files', fzy.sinks.edit_file)
+  end, silent)
   set('i', '<c-e>', emoji, silent)
 
   local function next_methods()
-    actions.lsp_tags({
+    q.lsp_tags({
       kind = {'Constructor', 'Method', 'Function'},
       mode = 'next'
     })
   end
   local function prev_methods()
-    actions.lsp_tags({
+    q.lsp_tags({
       kind = {'Constructor', 'Method', 'Function'},
       mode = 'prev'
     })
   end
   set('n', ']M', next_methods, silent)
   set('n', '[M', prev_methods, silent)
-  return fzy
 end
 
 

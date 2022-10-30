@@ -61,6 +61,7 @@
     - mfussenegger/nvim-dap
     - mfussenegger/nvim-dap-python
     - mfussenegger/nvim-fzy
+    - mfussenegger/nvim-qwahl
     - mfussenegger/nvim-lint
     - mfussenegger/nvim-treehopper
     - mfussenegger/nvim-lsp-compl
