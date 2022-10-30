@@ -3,20 +3,19 @@ local api = vim.api
 local M = {}
 
 function M.mk_config()
-  local capabilities = lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
-  capabilities.textDocument.completion.completionItem.labelDetailsSupport = true
-  capabilities.textDocument.completion.contextSupport = true
-  capabilities.textDocument.completion.resolveSupport = {
-    properties = {'edit', 'documentation', 'detail'},
-  }
+  local lsp_compl = require('lsp_compl')
+  local capabilities = vim.tbl_deep_extend(
+    "force",
+    lsp.protocol.make_client_capabilities(),
+    lsp_compl.capabilities()
+  )
   return {
     flags = {
       debounce_text_changes = 80,
     };
     handlers = {},
     capabilities = capabilities;
-    on_attach = require('lsp_compl').attach;
+    on_attach = lsp_compl.attach;
     init_options = {},
     settings = {},
   }
