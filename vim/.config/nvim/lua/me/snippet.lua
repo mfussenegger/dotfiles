@@ -57,18 +57,14 @@ function M.maybe()
     local params = vim.lsp.util.make_position_params()
     local results, err = vim.lsp.buf_request_sync(0, 'textDocument/completion', params, 3000)
     assert(not err, vim.inspect(err))
+    local mode = api.nvim_get_mode()['mode']
+    if mode ~= 'i' and mode ~= 'ic' then
+      return
+    end
+    local matches = {}
     for _, resp in pairs(results) do
-      local result = resp.result
-      if not result then return end
-      local mode = api.nvim_get_mode()['mode']
-      if mode ~= 'i' and mode ~= 'ic' then
-        return
-      end
+      local result = resp.result or {}
       local items = result.items or {}
-      if #items == 0 then
-        return exit()
-      end
-      local matches = {}
       for _, item in pairs(items) do
         local kind = vim.lsp.protocol.CompletionItemKind[item.kind] or ''
         if kind == 'Snippet' then
@@ -84,20 +80,20 @@ function M.maybe()
           })
         end
       end
-      if #matches == 0 then
-        return exit()
-      end
-      local cursor_pos = api.nvim_win_get_cursor(0)[2]
-      local line = api.nvim_get_current_line()
-      local line_to_cursor = line:sub(1, cursor_pos)
-      local col = vim.fn.match(line_to_cursor, '\\k*$')
-      vim.fn.complete(col + 1, matches)
-      if #matches == 1 then
-        api.nvim_feedkeys(
-          api.nvim_replace_termcodes("<C-n>", true, false, true), 'n', true)
-        api.nvim_feedkeys(
-          api.nvim_replace_termcodes("<CR>", true, false, true), 'm', true)
-      end
+    end
+    if #matches == 0 then
+      return exit()
+    end
+    local cursor_pos = api.nvim_win_get_cursor(0)[2]
+    local line = api.nvim_get_current_line()
+    local line_to_cursor = line:sub(1, cursor_pos)
+    local col = vim.fn.match(line_to_cursor, '\\k*$')
+    vim.fn.complete(col + 1, matches)
+    if #matches == 1 then
+      api.nvim_feedkeys(
+        api.nvim_replace_termcodes("<C-n>", true, false, true), 'n', true)
+      api.nvim_feedkeys(
+        api.nvim_replace_termcodes("<CR>", true, false, true), 'm', true)
     end
   end
 end
