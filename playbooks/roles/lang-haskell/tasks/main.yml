@@ -18,7 +18,7 @@
     chdir: ~/dev/haskell/haskell-language-server
   loop:
     - {yaml: stack-lts19, v: 9.0.2}
-    - {yaml: stack, v: 9.2.3}
+    - {yaml: stack, v: 9.2.4}
 - name: Generate hoogle database for hie
   command: stack exec hoogle generate
   args:
