@@ -55,19 +55,21 @@ end
 
 dap.configurations.lua = {
   {
-    type = 'nlua',
-    request = 'attach',
-    name = 'Attach',
-    port = function()
-      return assert(tonumber(vim.fn.input('Port: ')), 'Port is required')
-    end
-  },
-  {
     type = "nlua",
     request = "attach",
     name = "New instance (current file)",
     port = free_port,
     start_neovim = {}
+  },
+  {
+    type = "nlua",
+    request = "attach",
+    name = "New instance (dotfiles)",
+    port = free_port,
+    start_neovim = {
+      cwd = os.getenv('HOME') .. '/dotfiles',
+      fname = 'vim/.config/nvim/init.lua',
+    }
   },
   {
     type = "nlua",
@@ -78,7 +80,25 @@ dap.configurations.lua = {
       cwd = os.getenv('HOME') .. '/dev/crate/crate',
       fname = 'server/src/test/java/io/crate/planner/PlannerTest.java',
     }
-  }
+  },
+  {
+    type = "nlua",
+    request = "attach",
+    name = "New instance (neovim/neovim)",
+    port = free_port,
+    start_neovim = {
+      cwd = os.getenv('HOME') .. '/dev/neovim/neovim',
+      fname = 'src/nvim/main.c',
+    }
+  },
+  {
+    type = 'nlua',
+    request = 'attach',
+    name = 'Attach',
+    port = function()
+      return assert(tonumber(vim.fn.input('Port: ')), 'Port is required')
+    end
+  },
 }
 
 if vim.loop.fs_stat(".stylua.toml") then
