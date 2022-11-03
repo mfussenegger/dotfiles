@@ -16,7 +16,7 @@ vim.lsp.start(vim.tbl_extend('force', require('me.lsp').mk_config(), {
   cmd = {'node', os.getenv('HOME') .. '/dev/ansible/ansible-language-server/out/server/src/server.js', '--stdio'},
   on_attach = function(client, bufnr)
     -- Keep using ansible-doc via keywordprg its content is more detailed
-    client.server_capabilities.hoverProvider = false
+    vim.keymap.del('n', 'K', { buffer = bufnr })
     require('lsp_compl').attach(client, bufnr)
   end,
   settings = {
