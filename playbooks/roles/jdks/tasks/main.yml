@@ -11,13 +11,13 @@
     creates: ~/.local/jdks/jdk-{{ item.version }}
     remote_src: true
   loop:
-    - { major: 17, version: "17.0.4+8" }
+    - { major: 17, version: "17.0.5+8" }
     - { major: 18, version: "18.0.2+9" }
-    - { major: 19, version: "19+36" }
+    - { major: 19, version: "19.0.1+10" }
 
 - name: Install GraalVM Java17
   unarchive:
-    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-linux-amd64-22.2.0.tar.gz
+    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz
     dest: ~/.local/jdks/
-    creates: ~/.local/jdks/graalvm-ce-java17-22.2.0/
+    creates: ~/.local/jdks/graalvm-ce-java17-22.3.0/
     remote_src: true
