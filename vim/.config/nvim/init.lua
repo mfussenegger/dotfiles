@@ -37,11 +37,23 @@ keymap.set('n', '[v', function() require('me.lsp').prev_highlight() end)
 keymap.set('n', '<leader>q', function() require('quickfix').toggle() end, { silent = true })
 keymap.set('n', '<leader>lq', function() require('quickfix').load() end, { silent = true })
 
-
-require('me').setup()
+local me = require('me')
+me.setup()
 require('me.fzy').setup()
 require('me.dap').setup()
 require('me.lsp').setup()
+
+vim.g.clipboard = {
+  name = 'wl-link-paste',
+  copy = {
+    ['+'] = {'wl-copy', '--type', 'text/plain'},
+    ['*'] = {'wl-copy', '--primary', '--type', 'text/plain'},
+  },
+  paste = {
+    ['+'] = me.paste(),
+    ['*'] = me.paste("--primary"),
+  }
+}
 
 do
   local lint = require('lint')

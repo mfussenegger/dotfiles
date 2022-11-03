@@ -134,6 +134,29 @@ M.modules = setmetatable({}, {
 })
 
 
+function M.paste(args)
+  local cmd = "wl-paste --no-newline"
+  local path = "/tmp/tmp.paste"
+  if args then
+    cmd = cmd .. " " .. args
+  end
+  return function()
+    local types = vim.fn.system("wl-paste -l")
+    if types:find('text/plain') or types:find('TEXT') or types:find('STRING') then
+      return { vim.split(vim.fn.system(cmd), "\n"), "" }
+    else
+      vim.fn.system(cmd .. " > " .. path)
+      local filetype = vim.trim(vim.fn.system("xdg-mime query filetype " .. path))
+      local hash = vim.split(vim.trim(vim.fn.system("sha256sum " .. path)), " ")[1]
+      local ext = vim.split(filetype, "/")[2]
+      local filename = hash .. "." .. ext
+      vim.fn.system("scp /tmp/tmp.paste blog@zignar.net:/home/blog/output/assets/files/" .. filename)
+      return { "https://zignar.net/assets/files/" .. filename, "" }
+    end
+  end
+end
+
+
 function M.activate_reload(name, children)
   name = name or vim.fn.fnamemodify(api.nvim_buf_get_name(0), ':t:r')
   children = children or false
