@@ -24,6 +24,7 @@ fi
 export MANPAGER="$VISUAL +Man! -"
 export EDITOR=$VISUAL
 export SUDO_EDIT=$VISUAL
+export DIFFPROG="$VISUAL -d"
 alias vi=$VISUAL
 
 
