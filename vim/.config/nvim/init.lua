@@ -31,6 +31,30 @@ keymap.set('n', '[l', ':lprevious<CR>')
 keymap.set('n', ']L', ':lfirst<CR>')
 keymap.set('n', '[L', ':llast<CR>')
 
+
+local function diagnostic_severity()
+  local num_warnings = 0
+  for _, d in ipairs(vim.diagnostic.get(0)) do
+    if d.severity == vim.diagnostic.severity.ERROR then
+      return vim.diagnostic.severity.ERROR
+    elseif d.severity == vim.diagnostic.severity.WARN then
+      num_warnings = num_warnings + 1
+    end
+  end
+  if num_warnings > 0 then
+    return vim.diagnostic.severity.WARN
+  else
+    return nil
+  end
+end
+keymap.set('n', ']w', function()
+  vim.diagnostic.goto_next({ severity = diagnostic_severity() })
+end)
+keymap.set('n', '[w', function()
+  vim.diagnostic.goto_prev({ severity = diagnostic_severity() })
+end)
+
+
 keymap.set('n', ']v', function() require('me.lsp').next_highlight() end)
 keymap.set('n', '[v', function() require('me.lsp').prev_highlight() end)
 

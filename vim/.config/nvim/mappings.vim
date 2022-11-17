@@ -103,5 +103,3 @@ omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
 vnoremap <silent> m :lua require('tsht').nodes()<CR>
 
 nnoremap <space> <cmd>lua vim.diagnostic.open_float(0, { border = 'single' })<CR>
-nnoremap ]w <cmd>lua vim.diagnostic.goto_next{ float = { border = 'single' }}<CR>
-nnoremap [w <cmd>lua vim.diagnostic.goto_prev{ float = { border = 'single' }}<CR>
