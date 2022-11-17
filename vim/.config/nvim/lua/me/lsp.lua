@@ -75,7 +75,6 @@ function M.setup()
       }
 
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-      local group = api.nvim_create_augroup('lsp-' .. args.buf, {})
       keymap.set("n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", { buffer = args.buf })
       keymap.set("i", "<c-n>", "<Cmd>lua require('lsp_compl').trigger_completion()<CR>", { buffer = args.buf })
       for _, mappings in pairs(key_mappings) do
@@ -85,11 +84,13 @@ function M.setup()
         end
       end
       if client.server_capabilities.documentHighlightProvider then
+        local group = api.nvim_create_augroup(string.format('lsp-%s-%s', args.buf, args.data.client_id), {})
         api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
           group = group,
           buffer = args.buf,
           callback = function()
-            pcall(vim.lsp.buf.document_highlight)
+            local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+            client.request('textDocument/documentHighlight', params, nil, args.buf)
           end,
         })
         api.nvim_create_autocmd('CursorMoved', {
@@ -105,8 +106,8 @@ function M.setup()
   api.nvim_create_autocmd('LspDetach', {
     group = lsp_group,
     callback = function(args)
-      local group_name = 'lsp-' .. args.buf
-      pcall(api.nvim_del_augroup_by_name, group_name)
+      local group = api.nvim_create_augroup(string.format('lsp-%s-%s', args.buf, args.data.client_id), {})
+      pcall(api.nvim_del_augroup_by_name, group)
       pcall(require('lsp_compl').detach, args.data.client_id, args.buf)
     end,
   })
@@ -128,6 +129,7 @@ function M.setup()
       end
     }
   )
+
 end
 
 local function mk_tag_item(name, range, uri)
