@@ -73,14 +73,6 @@ nnoremap <leader>gc :Git commit -v<cr>
 " }}}
 
 
-" vim-test 
-nmap <silent> t<C-n> :w <BAR> TestNearest<CR>
-nmap <silent> t<C-f> :w <BAR> TestFile<CR>
-nmap <silent> t<C-s> :w <BAR> TestSuite --verbose<CR>
-nmap <silent> t<C-l> :w <BAR> TestLast<CR>
-nmap <silent> t<C-g> :w <BAR> TestVisit<CR>
-
-
 " for :R digraphs
 func! ReadExCommandOutput(newbuf, cmd) abort
   redir => l:message

@@ -99,3 +99,20 @@ do
 end
 
 api.nvim_create_user_command('Grep', 'silent grep! <args> | copen | wincmd p', { nargs = '+' })
+
+
+local function neotest()
+  vim.cmd.packadd('neotest')
+  vim.cmd.packadd('neotest-plenary')
+  vim.cmd.packadd('nvim-treesitter')
+  local n = require('neotest')
+  n.setup({
+    adapters = {
+      require('neotest-plenary'),
+    },
+  })
+  return n
+end
+keymap.set('n', 't<C-n>', function() neotest().run.run() end)
+keymap.set('n', 't<C-l>', function() neotest().run.run_last() end)
+keymap.set('n', 't<C-f>', function() neotest().run.run(vim.fn.expand('%')) end)

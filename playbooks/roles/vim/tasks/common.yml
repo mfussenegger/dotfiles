@@ -30,7 +30,6 @@
     - { folder: start, repo: jamessan/vim-gnupg }
     - { folder: start, repo: L3MON4D3/LuaSnip }
     - { folder: start, repo: liuchengxu/vista.vim }
-    - { folder: start, repo: janko-m/vim-test }
     - { folder: start, repo: phaazon/hop.nvim }
     - { folder: start, repo: nvim-lua/plenary.nvim }
     - { folder: start, repo: vim-scripts/dbext.vim }
@@ -43,6 +42,8 @@
     - { folder: opt, repo: hashivim/vim-terraform }
     - { folder: opt, repo: sirtaj/vim-openscad }
     - { folder: opt, repo: diepm/vim-rest-console }
+    - { folder: opt, repo: nvim-neotest/neotest }
+    - { folder: opt, repo: nvim-neotest/neotest-plenary }
 
 - name: Wait for git clone
   async_status:
