@@ -34,6 +34,9 @@ bindsym $mod+Shift+Q kill
 bindsym $mod+p exec 'wl-menu-run | xargs -r swaymsg -t command exec'
 
 for_window [title="^floatterm$"] floating enable, border none, resize set width 1280 px height 720 px, move position 200 px 200 px
+for_window [app_id="firefox" title="Firefox — Sharing Indicator"] {
+  kill
+}
 
 
 # change focus
