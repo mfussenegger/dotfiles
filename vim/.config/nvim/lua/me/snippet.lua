@@ -34,7 +34,8 @@ function M.setup()
       parse_snippet('file', 'ansible.builtin.file:\n  path: ${1}\n  state: ${0:absent}'),
       parse_snippet('dir', 'ansible.builtin.file:\n  state: directory\n  recurse: true\n  path: ${0}'),
       parse_snippet('copy', 'ansible.builtin.copy:\n  src: ${1}\n  dest: ${0}'),
-      parse_snippet('package', 'ansible.builtin.package:\n  state: ${1:present}\n  name: ${0}')
+      parse_snippet('package', 'ansible.builtin.package:\n  state: ${1:present}\n  name: ${0}'),
+      parse_snippet('ln', 'ansible.builtin.file:\n  state:link\n  src: ${1}\n  dest: ${0}'),
     },
     haskell = {
       parse_snippet('f', '${1:name} :: ${2}\n${1:name} = ${0:undefined}'),
