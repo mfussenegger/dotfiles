@@ -1,15 +1,8 @@
-local api = vim.api
 local opts = { buffer = true, silent = true }
 local set = vim.keymap.set
-set('v', '<leader>te', function() require('term').run_ansible() end, opts)
-set('n', '<leader>te', ":w<CR> :lua require('term').run_ansible()<CR>", opts)
+set('v', '<leader>te', function() require('ansible').run() end, opts)
+set('n', '<leader>te', ":w<CR> :lua require('ansible').run()<CR>", opts)
 
-vim.bo.keywordprg = ':sp term://ansible-doc'
-
-local fname = api.nvim_buf_get_name(0)
-if fname:find('tasks/') then
-  vim.bo.path = vim.bo.path .. ',' .. vim.fs.dirname(fname:gsub("tasks/", "files/"))
-end
 
 vim.lsp.start(vim.tbl_extend('force', require('me.lsp').mk_config(), {
   name = 'ansible-ls',

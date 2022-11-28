@@ -66,3 +66,4 @@
     - mfussenegger/nvim-lint
     - mfussenegger/nvim-treehopper
     - mfussenegger/nvim-lsp-compl
+    - mfussenegger/nvim-ansible
