@@ -64,6 +64,7 @@ nnoremap <leader>pv :GPGViewRecipients<cr>
 
 " fugitive {{{
 
+nnoremap <Leader>ge :sp<CR>:Gedit :%:p<Left><Left><Left><Left>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gd :Gdiffsplit<cr>
 nnoremap <leader>gs :Git<cr>
