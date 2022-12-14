@@ -8,6 +8,9 @@ config.settings = {
   java = {
     signatureHelp = { enabled = true };
     contentProvider = { preferred = 'fernflower' };
+    saveActions = {
+      organizeImports = true,
+    },
     completion = {
       favoriteStaticMembers = {
         "org.assertj.core.api.Assertions.assertThat",
