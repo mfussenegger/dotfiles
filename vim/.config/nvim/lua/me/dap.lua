@@ -62,18 +62,20 @@ function M.setup()
   set({'n', 'v'}, '<leader>dh', widgets.hover)
   set({'n', 'v'}, '<leader>dp', widgets.preview)
 
-  dap.listeners.after.event_initialized['me.dap.keys'] = function()
+  dap.listeners.after.event_initialized['me.dap'] = function()
     set("n", "<down>", dap.step_over)
     set("n", "<left>", dap.step_out)
     set("n", "<right>", dap.step_into)
+    vim.o.signcolumn = 'yes:1'
   end
-  local reset_keys = function()
+  local after_session = function()
     pcall(keymap.del, "n", "<down>")
     pcall(keymap.del, "n", "<left>")
     pcall(keymap.del, "n", "<right>")
+    vim.o.signcolumn = 'auto'
   end
-  dap.listeners.after.event_terminated['me.dap.keys'] = reset_keys
-  dap.listeners.after.disconnected['me.dap.keys'] = reset_keys
+  dap.listeners.after.event_terminated['me.dap'] = after_session
+  dap.listeners.after.disconnected['me.dap'] = after_session
 
   local sidebar = widgets.sidebar(widgets.scopes)
   api.nvim_create_user_command('DapSidebar', sidebar.toggle, { nargs = 0 })
