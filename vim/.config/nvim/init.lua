@@ -99,6 +99,9 @@ do
 end
 
 api.nvim_create_user_command('Grep', 'silent grep! <args> | copen | wincmd p', { nargs = '+' })
+if not pcall(require, 'editorconfig') then
+  vim.cmd.packadd('editorconfig.nvim')
+end
 
 
 do

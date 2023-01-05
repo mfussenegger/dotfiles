@@ -24,7 +24,6 @@
     - { folder: start, repo: junegunn/vim-easy-align }
     - { folder: start, repo: tpope/vim-fugitive }
     - { folder: start, repo: tpope/vim-rhubarb }
-    - { folder: start, repo: gpanders/editorconfig.nvim }
     - { folder: start, repo: AndrewRadev/linediff.vim }
     - { folder: start, repo: hynek/vim-python-pep8-indent }
     - { folder: start, repo: jamessan/vim-gnupg }
@@ -35,6 +34,7 @@
     - { folder: start, repo: vim-scripts/dbext.vim }
     - { folder: start, repo: jbyuki/venn.nvim }
     - { folder: start, repo: jbyuki/one-small-step-for-vimkind }
+    - { folder: opt, repo: gpanders/editorconfig.nvim }
     - { folder: opt, repo: nvim-treesitter/nvim-treesitter }
     - { folder: opt, repo: sirtaj/vim-openscad }
     - { folder: opt, repo: nvim-neotest/neotest }
