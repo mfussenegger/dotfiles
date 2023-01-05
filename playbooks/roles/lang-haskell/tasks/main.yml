@@ -1,27 +1,19 @@
 ---
-- name: Install haskell tooling lts19
-  command: stack install --resolver lts-19.6 ghcid hlint hoogle dhall dhall-json ormolu
+- name: Install haskell tooling lts20
+  command: stack install --resolver lts-20.5 ghcid hlint hoogle dhall dhall-json ormolu
   args:
     chdir: ~/
-- name: Clone/pull haskell-language-server and ghcid
+- name: Clone/pull ghcid
   git:
     repo: https://github.com/{{ item }}
     dest: ~/dev/{{ item }}
   loop:
-    - haskell/haskell-language-server
     - ndmitchell/ghcid
-- name: Build haskell-language-server
-  shell: |
-    stack install --stack-yaml {{ item.yaml }}.yaml \
-      && mv ~/.local/bin/haskell-language-server ~/.local/bin/haskell-language-server-{{ item.v }}
-  args:
-    chdir: ~/dev/haskell/haskell-language-server
-  loop:
-    - {yaml: stack-lts19, v: 9.0.2}
-    - {yaml: stack, v: 9.2.4}
-- name: Generate hoogle database for hie
-  command: stack exec hoogle generate
-  args:
-    chdir: ~/dev/haskell/haskell-language-server
+
+- name: Install haskell-language-server
+  aur:
+    name: haskell-language-server-static
+    state: present
+
 - name: Install ghcid vim plugin
   command: cp -a ~/dev/ndmitchell/ghcid/plugins/nvim ~/.config/nvim/pack/plugins/start/ghcid

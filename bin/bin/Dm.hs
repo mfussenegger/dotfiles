@@ -1,12 +1,11 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-19.6
+{- stack script --optimize --resolver lts-20.5
  --package "aeson process bytestring regex-pcre text either utf8-string containers"
  --package "http-client http-client-tls directory unix"
 -}
 
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TupleSections #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -375,7 +374,7 @@ pulseMove = do
   case sinkInput of
     Nothing -> pure ()
     Just sinkInput' -> do
-      sink <- (parseSink <$> listSinks) >>= flip pickOne sinkDescription
+      sink <- listSinks >>= flip pickOne sinkDescription . parseSink
       case sink of
         Nothing    -> pure()
         Just sink' -> callProcess "pactl" ["move-sink-input", show (inputNumber sinkInput'), T.unpack (sinkName sink')]
