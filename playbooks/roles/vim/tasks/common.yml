@@ -36,12 +36,7 @@
     - { folder: start, repo: jbyuki/venn.nvim }
     - { folder: start, repo: jbyuki/one-small-step-for-vimkind }
     - { folder: opt, repo: nvim-treesitter/nvim-treesitter }
-    - { folder: opt, repo: nvim-treesitter/playground }
-    - { folder: opt, repo: saltstack/salt-vim }
-    - { folder: opt, repo: vmchale/dhall-vim }
-    - { folder: opt, repo: hashivim/vim-terraform }
     - { folder: opt, repo: sirtaj/vim-openscad }
-    - { folder: opt, repo: diepm/vim-rest-console }
     - { folder: opt, repo: nvim-neotest/neotest }
     - { folder: opt, repo: nvim-neotest/neotest-plenary }
 
