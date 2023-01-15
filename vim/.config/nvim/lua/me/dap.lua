@@ -51,7 +51,12 @@ function M.setup()
   end)
   set('n', '<leader>dr', function() dap.repl.toggle({height=15}) end)
   set('n', '<leader>dR', dap.restart_frame)
-  set('n', '<leader>dl', dap.run_last)
+  set('n', '<leader>dl', function()
+    if vim.bo.modified and vim.bo.buftype == '' then
+      vim.cmd.w()
+    end
+    dap.run_last()
+  end)
   set('n', '<leader>dj', dap.down)
   set('n', '<leader>dk', dap.up)
   set('n', '<leader>dc', dap.run_to_cursor)
@@ -82,6 +87,7 @@ function M.setup()
   api.nvim_create_user_command('DapReload', reload, { nargs = 0 })
   api.nvim_create_user_command('DapBreakpoints', function() dap.list_breakpoints(true) end, { nargs = 0 })
 
+  dap.defaults.fallback.switchbuf = 'usetab,uselast'
   dap.defaults.fallback.terminal_win_cmd = 'tabnew'
   dap.defaults.python.terminal_win_cmd = 'belowright new'
   dap.defaults.fallback.external_terminal = {
