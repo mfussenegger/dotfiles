@@ -6,6 +6,7 @@ alias lu='lt -u'
 
 alias fpacman="pacman -Slq | fzf -m --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
 alias p='sudo pacman'
+alias sc='systemctl'
 
 # whitespace at the end causes the next command word after sudo to
 # also be checked for alias expansion
@@ -37,7 +38,7 @@ alias -g H='| head'
 alias -g T='| tail'
 alias -g F='| fzf'
 alias -g X='| xargs'
-alias -g V='| vim -'
+alias -g V='| v -'
 
 
 ## misc
