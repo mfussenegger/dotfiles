@@ -73,6 +73,29 @@ function M.setup()
         {"codeActionProvider", "v", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'}}}<CR>"},
         {"codeLensProvider", "n", "<leader>cr", vim.lsp.codelens.refresh},
         {"codeLensProvider", "n", "<leader>ce", vim.lsp.codelens.run},
+        {"codeLensProvider", "n", "<leader>ca",
+          function()
+            vim.lsp.codelens.refresh()
+            local bufnr = api.nvim_get_current_buf()
+            api.nvim_create_autocmd({'InsertLeave', 'CursorHold'}, {
+              group = api.nvim_create_augroup(string.format('lsp-codelens-%s', bufnr), {}),
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.codelens.refresh()
+              end,
+            })
+          end
+        },
+        {"codeLensProvider", "n", "<leader>cc",
+          function()
+            local bufnr = api.nvim_get_current_buf()
+            if vim.lsp.codelens.clear then
+              vim.lsp.codelens.clear(nil, bufnr)
+            end
+            local group = string.format('lsp-codelens-%s', bufnr)
+            pcall(api.nvim_del_augroup_by_name, group)
+          end
+        },
       }
 
       local client = vim.lsp.get_client_by_id(args.data.client_id)
