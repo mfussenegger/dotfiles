@@ -26,6 +26,7 @@ function M.setup()
   vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single' })
   local servers = {
     {'html', {'vscode-html-language-server', '--stdio'}},
+    {'htmldjango', {'vscode-html-language-server', '--stdio'}},
     {'json', {'vscode-json-language-server', '--stdio'}},
     {'css', {'vscode-css-language-server', '--stdio'}},
     {'c', 'clangd', {'.git'}},
