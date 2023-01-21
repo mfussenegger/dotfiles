@@ -4,10 +4,8 @@
     name:
       - pip
       - python-lsp-server
-      - pyflakes
       - yapf
       - mccabe
-      - pycodestyle
       - pydocstyle
       - pylsp-mypy
     virtualenv: ~/.virtualenvs/pyls

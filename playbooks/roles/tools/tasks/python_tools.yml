@@ -19,6 +19,8 @@
       - termgraph
       - debugpy
       - exodus-bundler
+      - ruff
+      - curlylint
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -38,6 +40,8 @@
     - ansible-lint
     - mprof
     - termgraph
+    - ruff
+    - curlylint
 - name: Symlink py -> ptipython
   file:
     src: ~/.virtualenvs/tools/bin/ptipython

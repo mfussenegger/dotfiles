@@ -82,9 +82,11 @@ vim.g.clipboard = {
 do
   local lint = require('lint')
   lint.linters_by_ft = {
-    markdown = {'vale', 'markdownlint'},
+    markdown = {'vale'},
+    htmldjango = {'curlylint'},
     rst = {'vale'},
     java = {'codespell'},
+    python = {'ruff'},
     lua = {'codespell', 'luacheck'},
     sh = {'shellcheck'},
     ['yaml.ansible'] = {'ansible_lint'},
@@ -92,7 +94,7 @@ do
     gitcommit = {'codespell'},
     dockerfile = {'hadolint'},
   }
-  api.nvim_create_autocmd({'BufWritePost', 'BufEnter', 'BufLeave'}, {
+  api.nvim_create_autocmd({'BufWritePost', 'BufEnter'}, {
     group = api.nvim_create_augroup('lint', { clear = true }),
     callback = function() lint.try_lint() end,
   })
