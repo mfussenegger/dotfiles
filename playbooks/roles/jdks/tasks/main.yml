@@ -11,9 +11,8 @@
     creates: ~/.local/jdks/jdk-{{ item.version }}
     remote_src: true
   loop:
-    - { major: 17, version: "17.0.5+8" }
-    - { major: 18, version: "18.0.2+9" }
-    - { major: 19, version: "19.0.1+10" }
+    - { major: 17, version: "17.0.6+10" }
+    - { major: 19, version: "19.0.2+7" }
 
 - name: Install GraalVM Java17
   unarchive:

@@ -56,22 +56,18 @@ config.settings = {
         },
         {
           name = "JavaSE-17",
-          path = home .. "/.local/jdks/jdk-17.0.5+8/",
-        },
-        {
-          name = "JavaSE-18",
-          path = home .. "/.local/jdks/jdk-18.0.2+9/",
+          path = home .. "/.local/jdks/jdk-17.0.6+10/",
         },
         {
           name = "JavaSE-19",
-          path = home .. "/.local/jdks/jdk-19.0.1+10/",
+          path = home .. "/.local/jdks/jdk-19.0.2+7/",
         },
       }
     };
   };
 }
 config.cmd = {
-  home .. "/.local/jdks/jdk-18.0.2+9/bin/java",
+  home .. "/.local/jdks/jdk-17.0.6+10/bin/java",
   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
   '-Dosgi.bundles.defaultStartLevel=4',
   '-Declipse.product=org.eclipse.jdt.ls.core.product',
