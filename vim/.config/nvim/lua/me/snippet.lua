@@ -36,9 +36,10 @@ function M.setup()
       parse_snippet('copy', 'ansible.builtin.copy:\n  src: ${1}\n  dest: ${0}'),
       parse_snippet('package', 'ansible.builtin.package:\n  state: ${1:present}\n  name: ${0}'),
       parse_snippet('ln', 'ansible.builtin.file:\n  state:link\n  src: ${1}\n  dest: ${0}'),
+      parse_snippet('command', 'ansible.builtin.command: ${1}\nargs:\n  chdir: ${2}\n  creates: ${0}'),
     },
     haskell = {
-      parse_snippet('f', '${1:name} :: ${2}\n${1:name} = ${0:undefined}'),
+      parse_snippet('f', '${1:name} :: ${2}\n${1:name} ${3}= ${0:undefined}'),
       parse_snippet('lang', '{-# LANGUAGE ${1} #-}$0'),
     },
   })
@@ -49,7 +50,7 @@ function M.maybe()
   local ls = require('luasnip')
   local expandable = ls.expandable()
   if expandable then
-    ls.expand()
+    ls.expand({})
   else
     local clients = vim.lsp.get_active_clients()
     if not next(clients) then
