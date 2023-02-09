@@ -19,6 +19,9 @@ set completeopt=menuone,noinsert,noselect
 
 set wildmode=longest:full,full
 set wildignore+=*.pyc,.git,.idea,*.o
+if has('nvim-0.9')
+  set wildoptions=pum,tagfile,fuzzy
+endif
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
 set path-=/usr/include
