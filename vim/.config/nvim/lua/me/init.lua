@@ -230,7 +230,10 @@ function M.format_uri(uri)
     local class = uri:match('contents/[%a%d._-]+/[%a%d._-]+/([%a%d$]+).class') or ''
     return string.format('%s::%s', package, class)
   else
-    return vim.fn.fnamemodify(vim.uri_to_fname(uri), ':.')
+    local fname = vim.fn.fnamemodify(vim.uri_to_fname(uri), ':.')
+    fname = fname:gsub('src/main/java/', 's/m/j/')
+    fname = fname:gsub('src/test/java/', 's/t/j/')
+    return fname
   end
 end
 
