@@ -34,6 +34,8 @@ function M.setup()
     {'rust', 'rust-analyzer', {'Cargo.toml', '.git'}},
     {'tex', 'texlab', {'.git'}},
     {'zig', 'zls', {'.git'}},
+    {'javascript', {'typescript-language-server', '--stdio'}},
+    {'typescript', {'typescript-language-server', '--stdio'}},
   }
   local lsp_group = api.nvim_create_augroup('lsp', {})
   for _, server in pairs(servers) do
