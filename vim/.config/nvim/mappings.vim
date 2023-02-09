@@ -19,7 +19,7 @@ nnoremap H Hzz
 " snippets
 imap <C-j> <cmd>lua U.reload('me.snippet').maybe()<CR>
 
-imap <expr> <Tab>   luasnip#jumpable(1)  ? '<Plug>luasnip-expand-or-jump' : '<Tab>'
+imap <expr> <Tab>   luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : '<Tab>'
 smap <expr> <Tab>   luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : '<Tab>'
 imap <expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'
 smap <expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'
@@ -93,6 +93,6 @@ nnoremap <silent> <leader>/ :HopPattern<CR>
 vnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
 omap     <silent> h :HopWord<CR>
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
-vnoremap <silent> m :lua require('tsht').nodes()<CR>
+xnoremap <silent> m :lua require('tsht').nodes()<CR>
 
-nnoremap <space> <cmd>lua vim.diagnostic.open_float(0, { border = 'single' })<CR>
+nnoremap <space> <cmd>lua vim.diagnostic.open_float({ border = 'single' })<CR>
