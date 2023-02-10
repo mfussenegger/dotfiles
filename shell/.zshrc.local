@@ -4,6 +4,7 @@ export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
 export JAVA_HOME="$HOME/.local/jdks/jdk-17.0.6+10/"
+export JDK17="$JAVA_HOME"
 export GRAALVM_HOME="$HOME/.local/jdks/graalvm-ce-java17-22.3.0/"
 export GOPATH="$HOME/workspace/code/go"
 export STARDICT_DATA_DIR="$HOME/.local/share/stardict/"

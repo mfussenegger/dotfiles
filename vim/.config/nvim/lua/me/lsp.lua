@@ -21,6 +21,13 @@ function M.mk_config()
   }
 end
 
+function M.find_root(markers, path)
+  path = path or api.nvim_buf_get_name(0)
+  local match = vim.fs.find(markers, { path = path, upward = true })[1]
+  return match and vim.fn.fnamemodify(match, ':p:h') or nil
+end
+
+
 function M.setup()
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' })
   vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single' })
@@ -42,7 +49,7 @@ function M.setup()
     api.nvim_create_autocmd('FileType', {
       pattern = server[1],
       group = lsp_group,
-      callback = function()
+      callback = function(args)
         local cmd = server[2]
         local config = vim.tbl_extend('force', M.mk_config(), {
           name = type(cmd) == "table" and cmd[1] or cmd,
@@ -50,7 +57,7 @@ function M.setup()
         })
         local markers = server[3]
         if markers then
-          config.root_dir = vim.fs.dirname(vim.fs.find(markers, { upward = true })[1])
+          config.root_dir = M.find_root(markers, args.file)
         end
         vim.lsp.start(config)
       end,

@@ -1,0 +1,49 @@
+---
+- name: Clone lemminx
+  ansible.builtin.git:
+    repo: https://github.com/eclipse/lemminx
+    dest: ~/dev/eclipse/lemminx
+    version: 0.23.2
+- name: Build lemminx
+  ansible.builtin.command: ./mvnw clean install -DskipTests
+  environment:
+    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'JDK17') }}"
+  args:
+    chdir: ~/dev/eclipse/lemminx
+
+- name: Clone lemminx-maven
+  ansible.builtin.git:
+    repo: https://github.com/eclipse/lemminx-maven/
+    dest: ~/dev/eclipse/lemminx-maven
+    version: 0.7.1
+
+- name: Build lemminx-maven
+  ansible.builtin.command: ./mvnw clean -B verify --file lemminx-maven/pom.xml -DskipTests -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true
+  environment:
+    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'JDK17') }}"
+  args:
+    chdir: ~/dev/eclipse/lemminx-maven
+
+- name: Create dist folder
+  ansible.builtin.file:
+    state: directory
+    recurse: true
+    path: ~/dev/eclipse/lemminx-maven/dist
+    mode: 0755
+
+- name: Unpack zip with dependencies
+  ansible.builtin.unarchive:
+    src: ~/dev/eclipse/lemminx-maven/lemminx-maven/target/lemminx-maven-0.7.1-zip-with-dependencies.zip
+    dest: ~/dev/eclipse/lemminx-maven/dist/
+    remote_src: true
+
+# Workaround for https://github.com/eclipse/lemminx-maven/issues/360
+- name: Remove rogue dependencies
+  ansible.builtin.file:
+    path: ~/dev/eclipse/lemminx-maven/dist/{{ item }}
+    state: absent
+  loop:
+    - aether-api-1.1.0.jar
+    - aether-connector-basic-1.1.0.jar
+    - aether-spi-1.1.0.jar
+    - aether-util-1.1.0.jar
