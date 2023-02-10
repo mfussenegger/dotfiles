@@ -68,19 +68,23 @@ function M.setup()
   set({'n', 'v'}, '<leader>dp', widgets.preview)
 
   dap.listeners.after.event_initialized['me.dap'] = function()
+    set("n", "<up>", dap.restart_frame)
     set("n", "<down>", dap.step_over)
     set("n", "<left>", dap.step_out)
     set("n", "<right>", dap.step_into)
     vim.o.signcolumn = 'yes:1'
   end
   local after_session = function()
-    pcall(keymap.del, "n", "<down>")
-    pcall(keymap.del, "n", "<left>")
-    pcall(keymap.del, "n", "<right>")
-    vim.o.signcolumn = 'auto'
+    if not next(dap.sessions()) then
+      pcall(keymap.del, "n", "<up>")
+      pcall(keymap.del, "n", "<down>")
+      pcall(keymap.del, "n", "<left>")
+      pcall(keymap.del, "n", "<right>")
+      vim.o.signcolumn = 'auto'
+    end
   end
   dap.listeners.after.event_terminated['me.dap'] = after_session
-  dap.listeners.after.disconnected['me.dap'] = after_session
+  dap.listeners.after.disconnect['me.dap'] = after_session
 
   local sidebar = widgets.sidebar(widgets.scopes)
   api.nvim_create_user_command('DapSidebar', sidebar.toggle, { nargs = 0 })
@@ -123,6 +127,20 @@ function M.setup()
         return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
       end,
       cwd = '${workspaceFolder}',
+      externalConsole = true,
+      args = {},
+    },
+    {
+      name = "cppdbg: Attach",
+      type = "cppdbg",
+      request = "Attach",
+      processId = function()
+        return tonumber(vim.fn.input("Pid: "))
+      end,
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
       args = {},
     },
     {
@@ -136,10 +154,30 @@ function M.setup()
       args = {},
     },
     {
-      name = "codelldb: Attach to process",
+      name = "codelldb: Launch external",
+      type = "codelldb",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      args = {},
+      terminal = 'external',
+    },
+    {
+      name = "codelldb: Attach (select process)",
       type = 'codelldb',
       request = 'attach',
       pid = require('dap.utils').pick_process,
+      args = {},
+    },
+    {
+      name = "codelldb: Attach (input pid)",
+      type = 'codelldb',
+      request = 'attach',
+      pid = function()
+        return tonumber(vim.fn. input('pid: '))
+      end,
       args = {},
     },
     {
@@ -173,6 +211,53 @@ function M.setup()
       pid = require('dap.utils').pick_process,
       args = {},
     },
+    setmetatable(
+      {
+        name = "Neovim",
+        type = "cppdbg",
+        request = "launch",
+        program = os.getenv("HOME") .. "/dev/neovim/neovim/build/bin/nvim",
+        cwd = os.getenv("HOME") .. "/dev/neovim/neovim/",
+        externalConsole = true,
+        args = {
+           "--clean",
+           "--cmd",
+           "call getchar()",
+        }
+      },
+      {
+        __call = function(config)
+          local key = "me.neovim"
+          dap.listeners.after.initialize[key] = function(session)
+            session.on_close[key] = function()
+              for _, handler in pairs(dap.listeners.after) do
+                handler['me.neovim'] = nil
+              end
+            end
+          end
+          dap.listeners.after.event_process[key] = function(_, body)
+            dap.listeners.after.initialize[key] = nil
+            local ppid = body.systemProcessId
+            vim.wait(1000, function()
+              return tonumber(vim.fn.system("ps -o pid= --ppid " .. tostring(ppid))) ~= nil
+            end)
+            local pid = tonumber(vim.fn.system("ps -o pid= --ppid " .. tostring(ppid)))
+            if pid then
+              dap.run({
+                name = "Neovim embedded",
+                type = "cppdbg",
+                request = "attach",
+                program = os.getenv("HOME") .. "/dev/neovim/neovim/build/bin/nvim",
+                processId = pid,
+                cwd = os.getenv("HOME") .. "/dev/neovim/neovim/",
+                externalConsole = false,
+              })
+            end
+          end
+          return config
+        end
+      }
+    ),
   }
   dap.configurations.c = configs
   dap.configurations.rust = configs
@@ -180,7 +265,7 @@ function M.setup()
   require('dap.ext.vscode').type_to_filetypes = {
     lldb = {'rust', 'c', 'cpp'},
   }
-  require('dap.ext.vscode').load_launchjs()
+  pcall(require('dap.ext.vscode').load_launchjs)
 end
 
 
