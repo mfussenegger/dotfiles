@@ -14,10 +14,10 @@ alt_send_esc: true
 schemes:
   light: &light
     primary:
-      background: '#ffffff'
+      background: '#f2f2f2'
       foreground: '#4d4d4c'
     normal:
-      black: '#ffffff'
+      black: '#f2f2f2'
       red: '#c82829'
       green: '#718c00'
       yellow: '#eab700'
@@ -28,10 +28,10 @@ schemes:
 
   dark: &dark
     primary:
-      background: '#000000'
+      background: '#0d0d0d'
       foreground: '#ffffff'
     normal:
-      black: '#000000'
+      black: '#0d0d0d'
       red: '#d54e53'
       green: '#b9ca4a'
       yellow: '#e6c547'
