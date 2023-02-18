@@ -12,12 +12,12 @@ function M.mk_config()
   return {
     flags = {
       debounce_text_changes = 80,
-    };
+    },
     handlers = {},
-    capabilities = capabilities;
-    on_attach = lsp_compl.attach;
-    init_options = {},
-    settings = {},
+    capabilities = capabilities,
+    on_attach = lsp_compl.attach,
+    init_options = vim.empty_dict(),
+    settings = vim.empty_dict(),
   }
 end
 
