@@ -68,7 +68,7 @@ bindsym $mod+f fullscreen
 # change container layout (stacked, tabbed, default)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+d layout default
+bindsym $mod+d layout splitv
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -164,9 +164,9 @@ bindsym $mod+u exec --no-startup-id $HOME/bin/Dm.hs
 
 
 # additional keybindings
-bindcode 172 exec mpc toggle
-bindcode 167 exec mpc next
-bindcode 166 exec mpc prev
+bindsym XF86AudioPlay exec mpc toggle
+bindsym XF86AudioNext exec mpc next
+bindsym XF86AudioPrev exec mpc prev
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ +5% && killall -USR1 i3status
 bindsym XF86AudioLowerVolume exec pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ -5% && killall -USR1 i3status
