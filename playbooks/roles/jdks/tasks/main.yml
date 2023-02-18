@@ -12,6 +12,7 @@
     remote_src: true
   loop:
     - { major: 17, version: "17.0.6+10" }
+    - { major: 18, version: "18.0.2.1+1" }
     - { major: 19, version: "19.0.2+7" }
 
 - name: Install GraalVM Java17

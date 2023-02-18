@@ -200,17 +200,6 @@ function M.symbol_tagfunc(pattern, flags)
 end
 
 
-
-function M.remove_unused_imports()
-  vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
-  vim.cmd('packadd cfilter')
-  vim.cmd('Cfilter /The import/')
-  vim.cmd('cdo normal dd')
-  vim.cmd('cclose')
-  vim.cmd('wa')
-end
-
-
 local function is_before(x, y)
   if x.start.line < y.start.line then
     return true

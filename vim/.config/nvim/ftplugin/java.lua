@@ -13,6 +13,7 @@ config.settings = {
     },
     completion = {
       favoriteStaticMembers = {
+        "io.crate.testing.Asserts.assertThat",
         "org.assertj.core.api.Assertions.assertThat",
         "org.assertj.core.api.Assertions.assertThatThrownBy",
         "org.assertj.core.api.Assertions.assertThatExceptionOfType",
@@ -23,7 +24,7 @@ config.settings = {
         "org.junit.jupiter.api.Assertions.*",
         "java.util.Objects.requireNonNull",
         "java.util.Objects.requireNonNullElse",
-        "org.mockito.Mockito.*"
+        "org.mockito.Mockito.*",
       },
       filteredTypes = {
         "com.sun.*",
@@ -50,6 +51,10 @@ config.settings = {
     };
     configuration = {
       runtimes = {
+         {
+          name = "JavaSE-1.8",
+          path = "/usr/lib/jvm/java-8-openjdk/",
+        },
         {
           name = "JavaSE-11",
           path = "/usr/lib/jvm/java-11-openjdk/",
@@ -57,6 +62,10 @@ config.settings = {
         {
           name = "JavaSE-17",
           path = home .. "/.local/jdks/jdk-17.0.6+10/",
+        },
+        {
+          name = "JavaSE-18",
+          path = home .. "/.local/jdks/jdk-18.0.2.1+1/",
         },
         {
           name = "JavaSE-19",
@@ -68,6 +77,9 @@ config.settings = {
 }
 config.cmd = {
   home .. "/.local/jdks/jdk-17.0.6+10/bin/java",
+  -- home .. "/.local/jdks/jdk-18.0.2.1+1/bin/java",
+  -- home .. "/.local/jdks/jdk-19.0.2+7/bin/java",
+  -- '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
   '-Dosgi.bundles.defaultStartLevel=4',
   '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -81,6 +93,48 @@ config.cmd = {
   '-configuration', home .. '/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux',
   '-data', workspace_folder,
 }
+
+
+local function test_with_profile(test_fn)
+  return function()
+    if vim.bo.modified then
+      vim.cmd.w()
+    end
+    local choices = {
+      'cpu,alloc=2m,lock=10ms',
+      'cpu',
+      'alloc',
+      'wall',
+      'context-switches',
+      'cycles',
+      'instructions',
+      'cache-misses',
+    }
+    local select_opts = {
+      format_item = tostring
+    }
+    vim.ui.select(choices, select_opts, function(choice)
+      if not choice then
+        return
+      end
+      local async_profiler_so = home .. "/apps/async-profiler/build/libasyncProfiler.so"
+      local event = 'event=' .. choice
+      local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,"
+      vmArgs = vmArgs .. event .. ",file=/tmp/profile.jfr"
+      test_fn({
+        config_overrides = {
+          vmArgs = vmArgs,
+          noDebug = true,
+        },
+        after_test = function()
+          vim.fn.system("jfr2flame /tmp/profile.jfr /tmp/profile.html")
+          vim.fn.system("firefox /tmp/profile.html")
+        end
+      })
+    end)
+  end
+end
+
 config.on_attach = function(client, bufnr)
   require('lsp_compl').attach(client, bufnr, {
     server_side_fuzzy_completion = true,
@@ -89,61 +143,34 @@ config.on_attach = function(client, bufnr)
   jdtls.setup_dap({hotcodereplace = 'auto'})
   jdtls.setup.add_commands()
   local opts = { silent = true, buffer = bufnr }
-  vim.keymap.set('n', "<A-o>", jdtls.organize_imports, opts)
-  vim.keymap.set('n', "<leader>df", function()
+  local set = vim.keymap.set
+  set('n', "<A-o>", jdtls.organize_imports, opts)
+  set('n', "<leader>df", function()
     if vim.bo.modified then
       vim.cmd('w')
     end
     jdtls.test_class()
   end, opts)
-  vim.keymap.set('n', "<leader>dn", function()
+  set('n', "<leader>dF", test_with_profile(jdtls.test_class), opts)
+  set('n', "<leader>dn", function()
     if vim.bo.modified then
       vim.cmd('w')
     end
-    jdtls.test_nearest_method()
-  end, opts)
-  vim.keymap.set('n', "<leader>dN",
-    function()
-      local choices = {
-        'cpu,alloc=2m,lock=10ms',
-        'cpu',
-        'alloc',
-        'wall',
-        'context-switches',
-        'cycles',
-        'instructions',
-        'cache-misses',
+    jdtls.test_nearest_method({
+      config_overrides = {
+        stepFilters = {
+          skipClasses = {"$JDK", "junit.*"},
+          skipSynthetics = true
+        }
       }
-      vim.ui.select(choices, {}, function(choice)
-        if not choice then
-          return
-        end
-        local async_profiler_so = home .. "/apps/async-profiler/build/libasyncProfiler.so"
-        local event = 'event=' .. choice
-        local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,"
-        vmArgs = vmArgs .. event .. ",file=/tmp/profile.jfr"
-        jdtls.test_nearest_method({
-          config_overrides = {
-            vmArgs = vmArgs,
-            noDebug = true,
-          },
-          after_test = function()
-            vim.fn.system("jfr2flame /tmp/profile.jfr /tmp/profile.html")
-            vim.fn.system("firefox /tmp/profile.html")
-          end
-        })
-      end)
-    end,
-  opts)
+    })
+  end, opts)
+  set('n', "<leader>dN", test_with_profile(jdtls.test_nearest_method), opts)
 
   vim.keymap.set('n', "crv", jdtls.extract_variable_all, opts)
   vim.keymap.set('v', "crv", [[<ESC><CMD>lua require('jdtls').extract_variable_all(true)<CR>]], opts)
   vim.keymap.set('v', 'crm', [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
   vim.keymap.set('n', "crc", jdtls.extract_constant, opts)
-  local create_command = vim.api.nvim_buf_create_user_command
-  create_command(bufnr, 'W', require('me.lsp').remove_unused_imports, {
-    nargs = 0,
-  })
 end
 
 local jar_patterns = {
@@ -182,6 +209,7 @@ for _, jar_pattern in ipairs(jar_patterns) do
 end
 local extendedClientCapabilities = jdtls.extendedClientCapabilities;
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
+extendedClientCapabilities.onCompletionItemSelectedCommand = "editor.action.triggerParameterHints"
 config.init_options = {
   bundles = bundles;
   extendedClientCapabilities = extendedClientCapabilities;
