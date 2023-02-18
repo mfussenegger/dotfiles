@@ -91,6 +91,10 @@ function M.setup()
   api.nvim_create_user_command('DapReload', reload, { nargs = 0 })
   api.nvim_create_user_command('DapBreakpoints', function() dap.list_breakpoints(true) end, { nargs = 0 })
 
+  local sessions_bar = widgets.sidebar(widgets.sessions, {}, '5 sp')
+  api.nvim_create_user_command("DapSessions", sessions_bar.toggle, { nargs = 0 })
+
+
   dap.defaults.fallback.switchbuf = 'usetab,uselast'
   dap.defaults.fallback.terminal_win_cmd = 'tabnew'
   dap.defaults.python.terminal_win_cmd = 'belowright new'
