@@ -2,14 +2,14 @@ local lsp = require 'vim.lsp'
 local api = vim.api
 local M = {}
 
-function M.mk_config()
+function M.mk_config(config)
   local lsp_compl = require('lsp_compl')
   local capabilities = vim.tbl_deep_extend(
     "force",
     lsp.protocol.make_client_capabilities(),
     lsp_compl.capabilities()
   )
-  return {
+  local defaults = {
     flags = {
       debounce_text_changes = 80,
     },
@@ -19,6 +19,11 @@ function M.mk_config()
     init_options = vim.empty_dict(),
     settings = vim.empty_dict(),
   }
+  if config then
+    return vim.tbl_deep_extend("force", defaults, config)
+  else
+    return defaults
+  end
 end
 
 function M.find_root(markers, path)

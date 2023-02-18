@@ -107,26 +107,36 @@ end
 
 
 local lsp = require('me.lsp')
-local config = lsp.mk_config()
-config.settings = {
-  Lua = {
-    diagnostics = {
-      globals = {'vim', 'it', 'describe'}
-    },
-    runtime = {
-      version = "LuaJIT",
-    },
-    workspace = {
-      library = vim.api.nvim_get_runtime_file("", true),
-    },
-    telemetry = {
-      enable = false,
-    },
+local config = lsp.mk_config {
+  name = "luals",
+  cmd = {'lua-language-server'},
+  root_dir = lsp.find_root({'.git'}),
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = {'vim', 'it', 'describe'}
+      },
+      runtime = {
+        version = "LuaJIT",
+      },
+      workspace = {
+        library = {
+          os.getenv("HOME") .. "/dev/neovim/neovim/runtime/lua/",
+          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-dap",
+          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-fzy",
+          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-qwahl",
+          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-lsp-compl",
+          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-lint",
+          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-jdtls",
+        },
+        checkThirdParty = false,
+      },
+      telemetry = {
+        enable = false,
+      },
+    }
   }
 }
-config.name = 'luals'
-config.cmd = {'lua-language-server'}
-config.root_dir = vim.fs.dirname(vim.fs.find({'.git'}, { upward = true })[1])
 vim.lsp.start(config)
 
 local bufnr = api.nvim_get_current_buf()
