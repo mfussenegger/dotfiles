@@ -39,6 +39,7 @@
     - { folder: opt, repo: sirtaj/vim-openscad }
     - { folder: opt, repo: nvim-neotest/neotest }
     - { folder: opt, repo: nvim-neotest/neotest-plenary }
+    - { folder: opt, repo: folke/neodev.nvim }
 
 - name: Wait for git clone
   async_status:
