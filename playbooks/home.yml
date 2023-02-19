@@ -10,5 +10,4 @@
     - lang-java
     - lang-python
     - lang-lua
-    - lang-ansible
     - tree-sitter

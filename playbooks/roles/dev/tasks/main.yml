@@ -13,6 +13,7 @@
       - yaml-language-server
       - vscode-json-languageserver
       - vscode-html-languageserver
+      - ansible-language-server
       - rust-analyzer
       - hub
       - luarocks
