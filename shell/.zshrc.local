@@ -1,13 +1,18 @@
-export PATH=$PATH:$HOME/.local/share/npm/bin:$HOME/.luarocks/bin
+export PATH=$PATH:$HOME/.local/share/npm/bin:$HOME/.luarocks/bin:.
+
 export KUBECONFIG=$HOME/.kube/config:$HOME/.kube/config_user
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
-export JAVA_HOME="$HOME/.local/jdks/jdk-17.0.6+10/"
-export JDK17="$JAVA_HOME"
+
+export JDK17="$HOME/.local/jdks/jdk-17.0.6+10/"
+export JDK19="$HOME/.local/jdks/jdk-19.0.2+7/"
+export JAVA_HOME="$JDK17"
 export GRAALVM_HOME="$HOME/.local/jdks/graalvm-ce-java17-22.3.0/"
+
 export GOPATH="$HOME/workspace/code/go"
 export STARDICT_DATA_DIR="$HOME/.local/share/stardict/"
+
 # Refresh gpg-agent tty in case user switches into an X session
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
