@@ -29,7 +29,14 @@ end
 function M.find_root(markers, path)
   path = path or api.nvim_buf_get_name(0)
   local match = vim.fs.find(markers, { path = path, upward = true })[1]
-  return match and vim.fn.fnamemodify(match, ':p:h') or nil
+  if match then
+    local stat = vim.loop.fs_stat(match)
+    if stat and stat.type == "directory" then
+      return vim.fn.fnamemodify(match, ':p:h:h')
+    end
+    return vim.fn.fnamemodify(match, ':p:h')
+  end
+  return nil
 end
 
 
