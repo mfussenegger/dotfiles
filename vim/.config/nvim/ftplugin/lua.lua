@@ -122,6 +122,7 @@ local config = lsp.mk_config {
       },
       workspace = {
         library = {
+          "${3rd}/luv/library",
           os.getenv("HOME") .. "/dev/neovim/neovim/runtime/lua/",
           os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-dap/lua",
           os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-fzy/lua",
