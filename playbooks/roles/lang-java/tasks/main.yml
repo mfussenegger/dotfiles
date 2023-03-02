@@ -1,4 +1,24 @@
 ---
+- name: Create apps/mvnd
+  ansible.builtin.file:
+    state: directory
+    recurse: true
+    path: ~/apps/mvnd
+
+- name: Download mvnd
+  ansible.builtin.unarchive:
+    src: https://github.com/apache/maven-mvnd/releases/download/0.9.0/maven-mvnd-0.9.0-linux-amd64.tar.gz
+    dest: ~/apps/mvnd/
+    remote_src: true
+    extra_opts:
+      - --strip-components=1
+
+- name: Symlink mvnd
+  ansible.builtin.file:
+    state: link
+    src: ~/apps/mvnd/bin/mvnd
+    dest: ~/bin/mvnd
+
 - name: Clone eclipse.jdt.ls
   git:
     repo: https://github.com/eclipse/eclipse.jdt.ls
