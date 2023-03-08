@@ -15,6 +15,7 @@
       - vscode-html-languageserver
       - ansible-language-server
       - rust-analyzer
+      - zls
       - hub
       - luarocks
       - stylua

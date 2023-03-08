@@ -52,7 +52,7 @@ function M.setup()
     {'sh', {'bash-language-server', 'start'}},
     {'rust', 'rust-analyzer', {'Cargo.toml', '.git'}},
     {'tex', 'texlab', {'.git'}},
-    {'zig', 'zls', {'.git'}},
+    {'zig', 'zls', {'build.zig', '.git'}},
     {'javascript', {'typescript-language-server', '--stdio'}},
     {'typescript', {'typescript-language-server', '--stdio'}},
   }
