@@ -28,6 +28,7 @@ function M.setup()
   local dap = require('dap')
 
   local orig_set_log_level = dap.set_log_level
+  ---@diagnostic disable-next-line: duplicate-set-field
   function dap.set_log_level(level)
     orig_set_log_level(level)
     log_level = level
@@ -44,10 +45,10 @@ function M.setup()
   set({'n', 't'}, '<F5>',  dap.continue)
   set('n', '<leader>b', dap.toggle_breakpoint)
   set('n', '<leader>B', function()
-    dap.toggle_breakpoint(vim.fn.input('Breakpoint Condition: '), nil, nil, true)
+    dap.toggle_breakpoint(vim.fn.input({ prompt = 'Breakpoint Condition: '}), nil, nil, true)
   end)
   set('n', '<leader>lp', function()
-    dap.toggle_breakpoint(nil, nil, vim.fn.input('Log point message: '), true)
+    dap.toggle_breakpoint(nil, nil, vim.fn.input({ prompt = 'Log point message: '}), true)
   end)
   set('n', '<leader>dr', function() dap.repl.toggle({height=15}) end)
   set('n', '<leader>dR', dap.restart_frame)
@@ -120,6 +121,15 @@ function M.setup()
     command = '/usr/bin/lldb-vscode',
     name = "lldb"
   }
+
+  local function program()
+    return vim.fn.input({
+      prompt = 'Path to executable: ',
+      default = vim.fn.getcwd() .. '/',
+      completion = 'file'
+    })
+  end
+
   -- Dont forget, attach needs permission:
   --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
   local configs = {
@@ -127,9 +137,7 @@ function M.setup()
       name = "cppdbg: Launch",
       type = "cppdbg",
       request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
+      program = program,
       cwd = '${workspaceFolder}',
       externalConsole = true,
       args = {},
@@ -139,11 +147,9 @@ function M.setup()
       type = "cppdbg",
       request = "Attach",
       processId = function()
-        return tonumber(vim.fn.input("Pid: "))
+        return tonumber(vim.fn.input({ prompt = "Pid: "}))
       end,
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
+      program = program,
       cwd = '${workspaceFolder}',
       args = {},
     },
@@ -151,9 +157,7 @@ function M.setup()
       name = "codelldb: Launch",
       type = "codelldb",
       request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
+      program = program,
       cwd = '${workspaceFolder}',
       args = {},
     },
@@ -161,9 +165,7 @@ function M.setup()
       name = "codelldb: Launch external",
       type = "codelldb",
       request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
+      program = program,
       cwd = '${workspaceFolder}',
       args = {},
       terminal = 'external',
@@ -180,7 +182,7 @@ function M.setup()
       type = 'codelldb',
       request = 'attach',
       pid = function()
-        return tonumber(vim.fn. input('pid: '))
+        return tonumber(vim.fn. input({ prompt = 'pid: '}))
       end,
       args = {},
     },
@@ -188,9 +190,7 @@ function M.setup()
       name = "lldb: Launch (integratedTerminal)",
       type = "lldb",
       request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
+      program = program,
       cwd = '${workspaceFolder}',
       stopOnEntry = false,
       args = {},
@@ -200,9 +200,7 @@ function M.setup()
       name = "lldb: Launch (console)",
       type = "lldb",
       request = "launch",
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
+      program = program,
       cwd = '${workspaceFolder}',
       stopOnEntry = false,
       args = {},
@@ -266,6 +264,40 @@ function M.setup()
   dap.configurations.c = configs
   dap.configurations.rust = configs
   dap.configurations.cpp = configs
+  dap.configurations.zig = {
+    {
+      name = "Zig run",
+      type = "cppdbg",
+      request = "launch",
+      program = "/usr/bin/zig",
+      args = {"run", "${file}"},
+      cwd = "${workspaceFolder}",
+    },
+    {
+      name = "Program",
+      type = "cppdbg",
+      request = "launch",
+      program = program,
+      args = {},
+      cwd = "${workspaceFolder}",
+    },
+    {
+      name = "Test (No breakpoints 😢)",
+      type = "cppdbg",
+      request = "launch",
+      program = "/usr/bin/zig",
+      args = {"test", "-fno-strip", "${file}"},
+      cwd = "${workspaceFolder}",
+      setupCommands = {
+        {
+          text = "set follow-fork-mode child",
+        },
+        {
+          text = "set detach-on-fork off",
+        },
+      }
+    },
+  }
   require('dap.ext.vscode').type_to_filetypes = {
     lldb = {'rust', 'c', 'cpp'},
   }
