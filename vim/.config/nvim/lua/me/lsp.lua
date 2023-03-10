@@ -230,8 +230,12 @@ local function move_to_highlight(is_closer)
   local cursor = {
     start = { line = lnum, character = col }
   }
-  lsp.buf_request(0, 'textDocument/documentHighlight', params, function(err, result)
-    assert(not err, err and err.message)
+  local results = lsp.buf_request_sync(0, 'textDocument/documentHighlight', params)
+  if not results then
+    return
+  end
+  for _, response in pairs(results) do
+    local result = response.result
     local closest = nil
     for _, highlight in pairs(result or {}) do
       local range = highlight.range
@@ -242,7 +246,7 @@ local function move_to_highlight(is_closer)
     if closest then
       api.nvim_win_set_cursor(win, { closest.start.line + 1, closest.start.character })
     end
-  end)
+  end
 end
 
 function M.next_highlight()
