@@ -38,6 +38,9 @@ function M.setup()
   set('n', '<leader>fq', q.quickfix, silent)
   set('n', '<leader>fb', q.buffers, silent)
   set('n', '<leader>fj', q.tagstack, silent)
+  set('n', '<leader>fd', function()
+    q.diagnostic(0, { severity = require('me').diagnostic_severity() })
+  end, silent)
   set('n', '<leader>f/', q.buf_lines, silent)
   set('n', '<leader>ff', function()
     local fzy = require('fzy')
@@ -53,21 +56,6 @@ function M.setup()
     fzy.execute('git ls-files --modified', fzy.sinks.edit_file)
   end, silent)
   set('i', '<c-e>', emoji, silent)
-
-  local function next_methods()
-    q.lsp_tags({
-      kind = {'Constructor', 'Method', 'Function'},
-      mode = 'next'
-    })
-  end
-  local function prev_methods()
-    q.lsp_tags({
-      kind = {'Constructor', 'Method', 'Function'},
-      mode = 'prev'
-    })
-  end
-  set('n', ']M', next_methods, silent)
-  set('n', '[M', prev_methods, silent)
 end
 
 

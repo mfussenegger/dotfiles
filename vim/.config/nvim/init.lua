@@ -1,4 +1,6 @@
 local api = vim.api
+local create_autocmd = api.nvim_create_autocmd
+local keymap = vim.keymap
 vim.cmd [[
   source ~/.config/nvim/options.vim
   source ~/.config/nvim/mappings.vim
@@ -9,7 +11,6 @@ vim.g.python3_host_prog = vim.fn.expand('$HOME/.virtualenvs/nvim/bin/python')
 vim.o.laststatus = 3
 vim.o.scrollback=100000
 
-local keymap = vim.keymap
 local accept_compl_or_cr = function()
   return require('lsp_compl').accept_pum() and '<c-y>' or '<CR>'
 end
@@ -22,41 +23,92 @@ end, { expr = true })
 keymap.set('n', 'gs', [[:let @/='\<'.expand('<cword>').'\>'<CR>cgn]])
 keymap.set('x', 'gs', [["sy:let @/=@s<CR>cgn]])
 
-keymap.set('n', ']q', ':cnext<CR>')
-keymap.set('n', '[q', ':cprevious<CR>')
-keymap.set('n', ']Q', ':cfirst<CR>')
-keymap.set('n', '[Q', ':clast<CR>')
-keymap.set('n', ']l', ':lnext<CR>')
-keymap.set('n', '[l', ':lprevious<CR>')
-keymap.set('n', ']L', ':lfirst<CR>')
-keymap.set('n', '[L', ':llast<CR>')
 
+local function next_diagnostic()
+  vim.diagnostic.goto_next({
+    severity = require('me').diagnostic_severity(),
+    float = { border = 'single' }
+  })
+end
+local function prev_diagnostic()
+  vim.diagnostic.goto_prev({
+    severity = require('me').diagnostic_severity(),
+    float = { border = 'single' }
+  })
+end
+local function next_methods()
+  require('qwahl').lsp_tags({
+    kind = {'Constructor', 'Method', 'Function'},
+    mode = 'next'
+  })
+end
+local function prev_methods()
+  require('qwahl').lsp_tags({
+    kind = {'Constructor', 'Method', 'Function'},
+    mode = 'prev'
+  })
+end
 
-local function diagnostic_severity()
-  local num_warnings = 0
-  for _, d in ipairs(vim.diagnostic.get(0)) do
-    if d.severity == vim.diagnostic.severity.ERROR then
-      return vim.diagnostic.severity.ERROR
-    elseif d.severity == vim.diagnostic.severity.WARN then
-      num_warnings = num_warnings + 1
+local move_maps = {
+  {']q', ':cnext<CR>'},
+  {'[q', ':cprevious<CR>'},
+  {']Q', ':cfirst<CR>'},
+  {'[Q', ':clast<CR>'},
+  {']l', ':lnext<CR>'},
+  {'[l', ':lprevious<CR>'},
+  {']L', ':lfirst<CR>'},
+  {'[L', ':llast<CR>'},
+  {']w', next_diagnostic},
+  {'[w', prev_diagnostic},
+  {']v', function() require('me.lsp').next_highlight() end},
+  {'[v', function() require('me.lsp').prev_highlight() end},
+  {']M', next_methods},
+  {'[M', prev_methods},
+}
+for _, move_map in pairs(move_maps) do
+  keymap.set('n', move_map[1], move_map[2])
+end
+
+---@param opts {next: function, prev:function}
+local function move(opts)
+  return function()
+    print("Move mode: Use ] or [ to move, any other char to abort: ")
+    while true do
+      vim.cmd.redraw()
+      local ok, keynum = pcall(vim.fn.getchar)
+      if not ok then
+        break
+      end
+      local key = string.char(keynum)
+      if key == "]" then
+        opts.next()
+      elseif key == "[" then
+        opts.prev()
+      else
+        break
+      end
     end
-  end
-  if num_warnings > 0 then
-    return vim.diagnostic.severity.WARN
-  else
-    return nil
+    print("Move mode exited")
   end
 end
-keymap.set('n', ']w', function()
-  vim.diagnostic.goto_next({ severity = diagnostic_severity() })
-end)
-keymap.set('n', '[w', function()
-  vim.diagnostic.goto_prev({ severity = diagnostic_severity() })
-end)
+keymap.set('n', '<leader>]v', move({
+  next = require("me.lsp").next_highlight,
+  prev = require("me.lsp").prev_highlight
+}))
+keymap.set("n", "<leader>]q", move({
+  next = function() vim.cmd("cnext") end,
+  prev = function() vim.cmd("cprev") end,
+}))
+keymap.set("n", "<leader>]l", move({
+    next = function() vim.cmd("lnext") end,
+    prev = function() vim.cmd("lprev") end,
+}))
+keymap.set("n", "<leader>]d", move({
+  next = next_diagnostic,
+  prev = prev_diagnostic
+}))
 
 
-keymap.set('n', ']v', function() require('me.lsp').next_highlight() end)
-keymap.set('n', '[v', function() require('me.lsp').prev_highlight() end)
 
 keymap.set('n', '<leader>q', function() require('quickfix').toggle() end, { silent = true })
 keymap.set('n', '<leader>lq', function() require('quickfix').load() end, { silent = true })
@@ -94,17 +146,15 @@ do
     gitcommit = {'codespell'},
     dockerfile = {'hadolint'},
   }
-  api.nvim_create_autocmd({'BufWritePost', 'BufEnter'}, {
+  create_autocmd({'BufWritePost', 'BufEnter'}, {
     group = api.nvim_create_augroup('lint', { clear = true }),
     callback = function() lint.try_lint() end,
   })
 end
 
-api.nvim_create_user_command('Grep', 'silent grep! <args> | copen | wincmd p', { nargs = '+' })
 if not pcall(require, 'editorconfig') then
   vim.cmd.packadd('editorconfig.nvim')
 end
-
 
 do
   local did_setup = false
