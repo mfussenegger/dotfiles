@@ -3,6 +3,109 @@ local HOME = os.getenv('HOME')
 local M = {}
 local log_level = 'INFO'
 
+
+function M.visualize(opts)
+  opts = opts or {}
+  local varname = opts.varname or vim.fn.expand("<cexpr>")
+  local child_names = (
+    opts.child_names
+    or vim.split(vim.fn.input({ prompt = "Child Properties: " }), " ")
+  )
+  local property_names = (
+    opts.property_names
+    or vim.split(vim.fn.input({ prompt = "Properties: " }), " ")
+  )
+  local session = require("dap").session() or {}
+  local scopes = (session.current_frame or {}).scopes
+  local variable = nil
+  for _, scope in pairs(scopes or {}) do
+    variable = scope.variables[varname]
+    if variable then
+      break
+    end
+  end
+  if not variable then
+    return
+  end
+  variable = variable --[[@as dap.Variable]]
+  local f = assert(io.open("/tmp/dap.gv", "w"), "Must be able to open file")
+  coroutine.wrap(function()
+    f:write("digraph G {\n")
+    f:write("  graph [\n")
+    f:write("     layout=dot\n")
+    f:write("     labelloc=t\n")
+    f:write("  ]\n")
+
+    ---@param v dap.Variable
+    ---@return dap.Variable[]
+    local function get_children(v)
+      if v.variablesReference == 0 then
+        return {}
+      end
+      local params = {
+        variablesReference = v.variablesReference
+      }
+      local err, result = session:request("variables", params)
+      assert(not err, err and require("dap.utils").fmt_error(err))
+      return result.variables
+    end
+
+    ---@param v dap.Variable
+    ---@return dap.Variable
+    local function resolve_lazy(v)
+      if (v.presentationHint or {}).lazy then
+        local resolved = get_children(v)[1]
+        resolved.name = v.name
+        return resolved
+      end
+      return v
+    end
+
+    ---@param parent dap.Variable
+    local function add_children(parent, parent_name)
+      local children = get_children(parent)
+      parent_name = parent_name or parent.name
+      local property_values = {}
+      for _, var in pairs(children) do
+        if vim.tbl_contains(property_names, var.name) then
+          if var.variablesReference > 0 then
+            for _, child_var in pairs(get_children(var)) do
+              table.insert(property_values, var.name .. ": " .. resolve_lazy(child_var).value)
+            end
+          else
+            table.insert(property_values, var.value)
+          end
+        end
+      end
+      for _, var in pairs(children) do
+        local name = parent_name .. "." .. var.name
+        var = resolve_lazy(var)
+        if vim.tbl_contains(child_names, var.name) or tonumber(var.name) then
+          if var.value ~= "" then
+            f:write(string.format(
+              '  "%s" [label=<<b>%s</b><br/>%s>]\n',
+              name,
+              name,
+              table.concat(property_values, "<br/>")))
+          else
+            f:write(string.format('  "%s"\n', name))
+          end
+          f:write(string.format('  "%s" -> "%s"\n', parent_name, name))
+          add_children(var, name)
+        end
+      end
+    end
+
+    variable = resolve_lazy(variable)
+    f:write(string.format('  "%s"\n', variable.name))
+    add_children(variable)
+    f:write("}")
+    f:close()
+    vim.fn.system("dot -Txlib /tmp/dap.gv")
+  end)()
+end
+
+
 local function add_tagfunc(widget)
   local orig_new_buf = widget.new_buf
   widget.new_buf = function(...)
@@ -88,12 +191,14 @@ function M.setup()
   dap.listeners.after.disconnect['me.dap'] = after_session
 
   local sidebar = widgets.sidebar(widgets.scopes)
-  api.nvim_create_user_command('DapSidebar', sidebar.toggle, { nargs = 0 })
-  api.nvim_create_user_command('DapReload', reload, { nargs = 0 })
-  api.nvim_create_user_command('DapBreakpoints', function() dap.list_breakpoints(true) end, { nargs = 0 })
+  local create_command = api.nvim_create_user_command
+  create_command('DapSidebar', sidebar.toggle, { nargs = 0 })
+  create_command('DapReload', reload, { nargs = 0 })
+  create_command('DapBreakpoints', function() dap.list_breakpoints(true) end, { nargs = 0 })
+  create_command('DapVisualize', function() M.visualize() end, { nargs = 0 })
 
   local sessions_bar = widgets.sidebar(widgets.sessions, {}, '5 sp')
-  api.nvim_create_user_command("DapSessions", sessions_bar.toggle, { nargs = 0 })
+  create_command("DapSessions", sessions_bar.toggle, { nargs = 0 })
 
 
   dap.defaults.fallback.switchbuf = 'usetab,uselast'
