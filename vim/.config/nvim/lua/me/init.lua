@@ -35,6 +35,22 @@ function M.diagnostic_status()
 end
 
 
+function M.diagnostic_severity()
+  local num_warnings = 0
+  for _, d in ipairs(vim.diagnostic.get(0)) do
+    if d.severity == vim.diagnostic.severity.ERROR then
+      return vim.diagnostic.severity.ERROR
+    elseif d.severity == vim.diagnostic.severity.WARN then
+      num_warnings = num_warnings + 1
+    end
+  end
+  if num_warnings > 0 then
+    return vim.diagnostic.severity.WARN
+  else
+    return nil
+  end
+end
+
 function M.dap_status()
   local ok, dap = pcall(require, 'dap')
   if not ok then
