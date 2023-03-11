@@ -1,6 +1,7 @@
 local api = vim.api
 local create_autocmd = api.nvim_create_autocmd
 local keymap = vim.keymap
+
 vim.cmd [[
   source ~/.config/nvim/options.vim
   source ~/.config/nvim/mappings.vim
@@ -126,6 +127,8 @@ keymap.set("n", "<leader>]m", move({
   prev = select_methods_sync { mode = "prev", pick_first = true },
 }))
 
+create_autocmd('WinEnter', { callback = function() vim.wo.cursorline = true end })
+create_autocmd('WinLeave', { callback = function() vim.wo.cursorline = false end })
 
 
 keymap.set('n', '<leader>q', function() require('quickfix').toggle() end, { silent = true })
