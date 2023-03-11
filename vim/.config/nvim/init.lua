@@ -36,18 +36,32 @@ local function prev_diagnostic()
     float = { border = 'single' }
   })
 end
-local function next_methods()
-  require('qwahl').lsp_tags({
-    kind = {'Constructor', 'Method', 'Function'},
-    mode = 'next'
-  })
+
+
+---@param opts lsp_tags.opts
+local function select_methods(opts)
+  return function()
+    require('qwahl').lsp_tags(vim.tbl_extend("force", {
+      kind = {'Constructor', 'Method', 'Function'},
+    }, opts or {}))
+  end
 end
-local function prev_methods()
-  require('qwahl').lsp_tags({
-    kind = {'Constructor', 'Method', 'Function'},
-    mode = 'prev'
-  })
+
+---@param opts lsp_tags.opts
+local function select_methods_sync(opts)
+  return function()
+    local done = false
+    opts.on_done = function()
+      done = true
+    end
+    require('qwahl').lsp_tags(vim.tbl_extend("force", {
+      kind = {'Constructor', 'Method', 'Function'},
+    }, opts or {}))
+    ---@diagnostic disable-next-line: redundant-return-value
+    vim.wait(1000, function() return done == true end)
+  end
 end
+
 
 local move_maps = {
   {']q', ':cnext<CR>'},
@@ -62,8 +76,8 @@ local move_maps = {
   {'[w', prev_diagnostic},
   {']v', function() require('me.lsp').next_highlight() end},
   {'[v', function() require('me.lsp').prev_highlight() end},
-  {']M', next_methods},
-  {'[M', prev_methods},
+  {']M', select_methods { mode = "next" }},
+  {'[M', select_methods { mode = "prev" }},
 }
 for _, move_map in pairs(move_maps) do
   keymap.set('n', move_map[1], move_map[2])
@@ -103,9 +117,13 @@ keymap.set("n", "<leader>]l", move({
     next = function() vim.cmd("lnext") end,
     prev = function() vim.cmd("lprev") end,
 }))
-keymap.set("n", "<leader>]d", move({
+keymap.set("n", "<leader>]w", move({
   next = next_diagnostic,
   prev = prev_diagnostic
+}))
+keymap.set("n", "<leader>]m", move({
+  next = select_methods_sync { mode = "next", pick_first = true },
+  prev = select_methods_sync { mode = "prev", pick_first = true },
 }))
 
 
