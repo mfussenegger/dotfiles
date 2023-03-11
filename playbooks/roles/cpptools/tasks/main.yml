@@ -3,15 +3,15 @@
   ansible.builtin.file:
     path: ~/apps/cpptools
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Download cpptools
   ansible.builtin.unarchive:
-    src: https://github.com/microsoft/vscode-cpptools/releases/download/1.13.9/cpptools-linux.vsix
+    src: https://github.com/microsoft/vscode-cpptools/releases/download/v1.14.4/cpptools-linux.vsix
     dest: ~/apps/cpptools/
     remote_src: true
 
 - name: Set executable flag
   ansible.builtin.file:
     path: ~/apps/cpptools/extension/debugAdapters/bin/OpenDebugAD7
-    mode: 0755
+    mode: "0755"
