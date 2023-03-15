@@ -98,7 +98,6 @@ hi! def link LspCodeLens Include
 hi! def link LspSignatureActiveParameter WarningMsg
 hi! def link NormalFloat Normal
 
-set signcolumn=auto
 
 sign define DiagnosticSignError text= texthl= linehl= numhl=ErrorMsg
 sign define DiagnosticSignWarn text= texthl= linehl= numhl=WarningMsg

@@ -11,6 +11,7 @@ vim.cmd [[
 vim.g.python3_host_prog = vim.fn.expand('$HOME/.virtualenvs/nvim/bin/python')
 vim.o.laststatus = 3
 vim.o.scrollback=100000
+vim.o.signcolumn = require("dap").session() == nil and "auto" or "yes:1"
 
 local accept_compl_or_cr = function()
   return require('lsp_compl').accept_pum() and '<c-y>' or '<CR>'
