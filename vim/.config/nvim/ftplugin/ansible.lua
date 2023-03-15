@@ -16,6 +16,7 @@ end
 vim.lsp.start(require('me.lsp').mk_config {
   name = 'ansible-ls',
   cmd = {'ansible-language-server', '--stdio'},
+  root_dir = require("me.lsp").find_root({".git"}),
   on_attach = function(client, bufnr)
     -- Keep using ansible-doc via keywordprg its content is more detailed
     vim.keymap.del('n', 'K', { buffer = bufnr })
