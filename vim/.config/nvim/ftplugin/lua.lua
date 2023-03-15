@@ -153,9 +153,7 @@ if vim.loop.fs_stat("lemmy.sh") then
   })
 end
 
-
-if vim.endswith(config.root_dir, "neovim/neovim") then
-  local function run_test()
+local function find_test()
     local bufnr = api.nvim_get_current_buf()
     local lang = "lua"
     local end_row = api.nvim_win_get_cursor(0)[1]
@@ -200,8 +198,15 @@ if vim.endswith(config.root_dir, "neovim/neovim") then
       path[#path - (i - 1)] = tmp
     end
 
+    return path
+end
+
+
+if vim.endswith(config.root_dir, "neovim/neovim") then
+  local function run_test()
+    local path = find_test()
     vim.cmd.split()
-    local fname = api.nvim_buf_get_name(bufnr)
+    local fname = api.nvim_buf_get_name(0)
     local filter = table.concat(path, " ")
     vim.cmd.term(string.format(
       [[TEST_FILE="%s" make functionaltest TEST_FILTER="%s"]],
@@ -217,5 +222,20 @@ if vim.endswith(config.root_dir, "neovim/neovim") then
       [[TEST_FILE="%s" make functionaltest]],
       api.nvim_buf_get_name(0)
     ))
+  end)
+else
+  vim.keymap.set("n", "<leader>dn", function()
+    local path = find_test()
+    vim.cmd.split()
+    vim.cmd.term(string.format(
+      [[~/.luarocks/bin/busted "%s" --filter="%s"]],
+      api.nvim_buf_get_name(0),
+      table.concat(path, " ")
+    ))
+  end)
+  vim.keymap.set("n", "<leader>df", function()
+    vim.cmd.split()
+    local fname = api.nvim_buf_get_name(0)
+    vim.cmd.term('~/.luarocks/bin/busted "' .. fname .. '"')
   end)
 end
