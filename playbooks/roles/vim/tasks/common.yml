@@ -16,21 +16,19 @@
   git:
     repo: https://github.com/{{ item.repo }}
     dest: ~/.config/nvim/pack/plugins/{{ item.folder }}/{{ item.repo | basename }}
+    single_branch: true
+    depth: 1
   async: 120
   poll: 0
   register: git_clone
   loop:
-    - { folder: start, repo: junegunn/gv.vim }
     - { folder: start, repo: junegunn/vim-easy-align }
     - { folder: start, repo: tpope/vim-fugitive }
     - { folder: start, repo: tpope/vim-rhubarb }
     - { folder: start, repo: AndrewRadev/linediff.vim }
     - { folder: start, repo: hynek/vim-python-pep8-indent }
-    - { folder: start, repo: jamessan/vim-gnupg }
     - { folder: start, repo: L3MON4D3/LuaSnip }
-    - { folder: start, repo: liuchengxu/vista.vim }
     - { folder: start, repo: phaazon/hop.nvim }
-    - { folder: start, repo: nvim-lua/plenary.nvim }
     - { folder: start, repo: vim-scripts/dbext.vim }
     - { folder: start, repo: jbyuki/venn.nvim }
     - { folder: start, repo: jbyuki/one-small-step-for-vimkind }
@@ -40,6 +38,7 @@
     - { folder: opt, repo: nvim-neotest/neotest }
     - { folder: opt, repo: nvim-neotest/neotest-plenary }
     - { folder: opt, repo: folke/neodev.nvim }
+    - { folder: opt, repo: nvim-lua/plenary.nvim }
 
 - name: Wait for git clone
   async_status:

@@ -174,6 +174,20 @@ do
   })
 end
 
+
+api.nvim_create_user_command(
+  "GV",
+  function(args)
+    local fname = api.nvim_buf_get_name(0)
+    local cmd = {
+      'G log --date=short --format="%cd %h%d %s (%an)"',
+      string.format("-L%d,%d:%s", args.line1, args.line2, fname),
+    }
+    vim.cmd(table.concat(cmd, " "))
+  end,
+  { range = "%" }
+)
+
 if not pcall(require, 'editorconfig') then
   vim.cmd.packadd('editorconfig.nvim')
 end
