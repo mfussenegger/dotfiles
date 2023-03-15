@@ -6,6 +6,7 @@ local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(
 local config = require('me.lsp').mk_config()
 config.settings = {
   java = {
+    autobuild = { enabled = false },
     signatureHelp = { enabled = true };
     contentProvider = { preferred = 'fernflower' };
     saveActions = {
@@ -140,7 +141,7 @@ config.on_attach = function(client, bufnr)
     server_side_fuzzy_completion = true,
   })
 
-  jdtls.setup_dap({hotcodereplace = 'auto'})
+  jdtls.setup_dap({})
   jdtls.setup.add_commands()
   local opts = { silent = true, buffer = bufnr }
   local set = vim.keymap.set
@@ -148,6 +149,7 @@ config.on_attach = function(client, bufnr)
   set('n', "<leader>df", function()
     if vim.bo.modified then
       vim.cmd('w')
+      client.request_sync("java/buildWorkspace", false, 5000, bufnr)
     end
     jdtls.test_class()
   end, opts)
@@ -155,6 +157,7 @@ config.on_attach = function(client, bufnr)
   set('n', "<leader>dn", function()
     if vim.bo.modified then
       vim.cmd('w')
+      client.request_sync("java/buildWorkspace", false, 5000, bufnr)
     end
     jdtls.test_nearest_method({
       config_overrides = {
