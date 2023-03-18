@@ -17,6 +17,19 @@ local accept_compl_or_cr = function()
   return require('lsp_compl').accept_pum() and '<c-y>' or '<CR>'
 end
 keymap.set('i', '<CR>', accept_compl_or_cr, { expr = true })
+keymap.set("i", "<c-l>", function()
+  if vim.fn.pumvisible() == 1 then
+    api.nvim_feedkeys(
+      api.nvim_replace_termcodes("<C-n>", true, false, true), 'n', true)
+    api.nvim_feedkeys(
+      api.nvim_replace_termcodes("<CR>", true, false, true), 'm', true)
+  else
+    api.nvim_feedkeys(
+      api.nvim_replace_termcodes("<C-l>", true, false, true), 'n', true)
+  end
+end)
+
+
 keymap.set({'i', 's'}, '<ESC>', function()
   require('luasnip').unlink_current()
   return '<ESC>'
