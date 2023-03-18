@@ -7,7 +7,7 @@ local function exit()
 end
 
 
-function M.setup()
+local function setup()
   local ls = require('luasnip')
   local s = ls.s
   local p = require("luasnip.extras").partial
@@ -35,7 +35,7 @@ function M.setup()
       parse_snippet('dir', 'ansible.builtin.file:\n  state: directory\n  recurse: true\n  path: ${0}'),
       parse_snippet('copy', 'ansible.builtin.copy:\n  src: ${1}\n  dest: ${0}'),
       parse_snippet('package', 'ansible.builtin.package:\n  state: ${1:present}\n  name: ${0}'),
-      parse_snippet('ln', 'ansible.builtin.file:\n  state:link\n  src: ${1}\n  dest: ${0}'),
+      parse_snippet('ln', 'ansible.builtin.file:\n  state: link\n  src: ${1}\n  dest: ${0}'),
       parse_snippet('command', 'ansible.builtin.command: ${1}\nargs:\n  chdir: ${2}\n  creates: ${0}'),
     },
     haskell = {
@@ -45,8 +45,14 @@ function M.setup()
   })
 end
 
+local loaded = false
+
 
 function M.maybe()
+  if not loaded then
+    loaded = true
+    setup()
+  end
   local ls = require('luasnip')
   local expandable = ls.expandable()
   if expandable then
@@ -64,7 +70,7 @@ function M.maybe()
       return
     end
     local matches = {}
-    for _, resp in pairs(results) do
+    for _, resp in pairs(results or {}) do
       local result = resp.result or {}
       local items = result.items or {}
       for _, item in pairs(items) do

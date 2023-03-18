@@ -17,7 +17,7 @@ nnoremap L Lzz
 nnoremap H Hzz
 
 " snippets
-imap <C-j> <cmd>lua U.reload('me.snippet').maybe()<CR>
+imap <C-j> <cmd>lua require('me.snippet').maybe()<CR>
 
 imap <expr> <Tab>   luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : '<Tab>'
 smap <expr> <Tab>   luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : '<Tab>'
