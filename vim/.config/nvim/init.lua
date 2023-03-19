@@ -5,10 +5,11 @@ local keymap = vim.keymap
 vim.cmd [[
   source ~/.config/nvim/options.vim
   source ~/.config/nvim/mappings.vim
-  source ~/.config/nvim/plugin_options.vim
 ]]
 
 vim.g.python3_host_prog = vim.fn.expand('$HOME/.virtualenvs/nvim/bin/python')
+vim.g.netrw_liststyle = 3
+
 vim.o.laststatus = 3
 vim.o.scrollback=100000
 vim.o.signcolumn = require("dap").session() == nil and "auto" or "yes:1"
