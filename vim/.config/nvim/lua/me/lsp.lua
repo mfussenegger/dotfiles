@@ -239,7 +239,15 @@ local function move_to_highlight(is_closer)
     local closest = nil
     for _, highlight in pairs(result or {}) do
       local range = highlight.range
-      if is_closer(cursor, range) and (closest == nil or is_closer(range, closest)) then
+      local cursor_inside_range = (
+        range.start.line <= lnum
+        and range.start.character < col
+        and range["end"].line >= lnum
+        and range["end"].character > col
+      )
+      if not cursor_inside_range
+        and is_closer(cursor, range)
+        and (closest == nil or is_closer(range, closest)) then
         closest = range
       end
     end
