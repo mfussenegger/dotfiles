@@ -193,6 +193,7 @@ do
     yaml = {'yamllint'},
     gitcommit = {'codespell'},
     dockerfile = {'hadolint'},
+    ghaction = {"actionlint"},
   }
   create_autocmd({'BufWritePost', 'BufEnter'}, {
     group = api.nvim_create_augroup('lint', { clear = true }),
@@ -239,3 +240,9 @@ do
   keymap.set('n', 't<C-l>', function() neotest().run.run_last() end)
   keymap.set('n', 't<C-f>', function() neotest().run.run(vim.fn.expand('%')) end)
 end
+vim.filetype.add({
+  pattern = {
+    ['.*/.github/workflows/.*%.yml'] = 'yaml.ghaction',
+    ['.*/.github/workflows/.*%.yaml'] = 'yaml.ghaction',
+  },
+})
