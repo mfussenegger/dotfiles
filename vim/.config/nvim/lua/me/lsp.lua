@@ -121,7 +121,13 @@ function M.setup()
 
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       keymap.set("n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", { buffer = args.buf })
-      keymap.set("i", "<c-n>", "<Cmd>lua require('lsp_compl').trigger_completion()<CR>", { buffer = args.buf })
+      keymap.set("i", "<c-n>", function()
+        require("lsp_compl").trigger_completion()
+      end, { buffer = args.buffer })
+      keymap.set('i', '<CR>', function()
+        return require('lsp_compl').accept_pum() and '<c-y>' or '<CR>'
+      end, { expr = true, buffer = args.buffer })
+
       for _, mappings in pairs(key_mappings) do
         local capability, mode, lhs, rhs = unpack(mappings)
         if client.server_capabilities[capability] then

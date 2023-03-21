@@ -11,25 +11,37 @@ vim.g.python3_host_prog = vim.fn.expand('$HOME/.virtualenvs/nvim/bin/python')
 vim.g.netrw_liststyle = 3
 
 vim.o.laststatus = 3
-vim.o.scrollback=100000
+vim.o.scrollback = 100000
 vim.o.signcolumn = require("dap").session() == nil and "auto" or "yes:1"
 
-local accept_compl_or_cr = function()
-  return require('lsp_compl').accept_pum() and '<c-y>' or '<CR>'
-end
-keymap.set('i', '<CR>', accept_compl_or_cr, { expr = true })
-keymap.set("i", "<c-l>", function()
-  if vim.fn.pumvisible() == 1 then
-    api.nvim_feedkeys(
-      api.nvim_replace_termcodes("<C-n>", true, false, true), 'n', true)
-    api.nvim_feedkeys(
-      api.nvim_replace_termcodes("<CR>", true, false, true), 'm', true)
-  else
-    api.nvim_feedkeys(
-      api.nvim_replace_termcodes("<C-l>", true, false, true), 'n', true)
-  end
-end)
 
+do
+  local function feedkeys(keys, mode)
+    mode = mode or "n"
+    api.nvim_feedkeys(
+      api.nvim_replace_termcodes(keys, true, false, true), mode, true)
+  end
+
+  keymap.set("i", "<c-l>", function()
+    local info = vim.fn.complete_info({"pum_visible", "selected"})
+    if info.pum_visible == 1 then
+      if info.selected == -1 then
+        feedkeys("<C-n>", "n")
+      end
+      feedkeys("<CR>", "m")
+    else
+      if next(vim.lsp.get_active_clients({ bufnr = 0 })) then
+        require("lsp_compl").trigger_completion()
+      else
+        if vim.bo.omnifunc == "" then
+          feedkeys("<C-x><C-n>", "n")
+        else
+          feedkeys("<C-x><C-o>", "n")
+        end
+      end
+    end
+  end)
+end
 
 keymap.set({'i', 's'}, '<ESC>', function()
   require('luasnip').unlink_current()
