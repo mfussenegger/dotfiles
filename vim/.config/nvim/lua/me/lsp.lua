@@ -7,7 +7,14 @@ function M.mk_config(config)
   local capabilities = vim.tbl_deep_extend(
     "force",
     lsp.protocol.make_client_capabilities(),
-    lsp_compl.capabilities()
+    lsp_compl.capabilities(),
+    {
+      workspace = {
+        didChangeWatchedFiles = {
+          dynamicRegistration = true
+        }
+      }
+    }
   )
   local defaults = {
     flags = {
