@@ -116,6 +116,7 @@ local function move(opts)
   return function()
     print("Move mode: Use ] or [ to move, any other char to abort: ")
     while true do
+      vim.cmd.normal("zz")
       vim.cmd.redraw()
       local ok, keynum = pcall(vim.fn.getchar)
       if not ok then
