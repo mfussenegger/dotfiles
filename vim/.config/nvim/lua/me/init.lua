@@ -193,13 +193,6 @@ function M.setup()
       source = 'always',
     },
   })
-  vim.diagnostic.handlers.me = {
-    show = function(_, bufnr, diagnostics)
-      require('me.diagnostic').set_loclist(bufnr, diagnostics)
-    end,
-    hide = function()
-    end
-  }
 
   U = M
   P = function(...)
