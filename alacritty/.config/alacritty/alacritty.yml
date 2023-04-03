@@ -8,7 +8,9 @@ font:
 window:
   dynamic_title: true
 live_config_reload: true
-alt_send_esc: true
+
+scrolling:
+  history: 100000
 
 
 schemes:
