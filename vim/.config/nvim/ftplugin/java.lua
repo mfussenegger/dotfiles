@@ -1,3 +1,4 @@
+local api = vim.api
 local jdtls = require('jdtls')
 local root_markers = {'gradlew', '.git'}
 local root_dir = require('jdtls.setup').find_root(root_markers)
@@ -133,6 +134,14 @@ local function test_with_profile(test_fn)
 end
 
 config.on_attach = function(client, bufnr)
+
+  api.nvim_create_autocmd("BufWritePost", {
+    buffer = bufnr,
+    callback = function()
+      client.request_sync("java/buildWorkspace", false, 5000, bufnr)
+    end,
+  })
+
   require('lsp_compl').attach(client, bufnr, {
     server_side_fuzzy_completion = true,
   })
@@ -145,15 +154,19 @@ config.on_attach = function(client, bufnr)
   set('n', "<leader>df", function()
     if vim.bo.modified then
       vim.cmd('w')
-      client.request_sync("java/buildWorkspace", false, 5000, bufnr)
     end
     jdtls.test_class()
   end, opts)
+  set('n', "<leader>dl", function()
+    if vim.bo.modified then
+      vim.cmd('w')
+    end
+    require("dap").run_last()
+  end)
   set('n', "<leader>dF", test_with_profile(jdtls.test_class), opts)
   set('n', "<leader>dn", function()
     if vim.bo.modified then
       vim.cmd('w')
-      client.request_sync("java/buildWorkspace", false, 5000, bufnr)
     end
     jdtls.test_nearest_method({
       config_overrides = {
