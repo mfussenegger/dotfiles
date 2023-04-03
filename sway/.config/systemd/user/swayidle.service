@@ -6,10 +6,8 @@ PartOf=graphical-session.target
 [Service]
 Type=simple
 ExecStart=/usr/bin/swayidle -w \
-            timeout 300 'setsid -f waylock' \
-            timeout 600 'swaymsg "output * dpms off"' \
-                resume 'swaymsg "output * dpms on"' \
-            before-sleep 'setsid -f waylock'
+            timeout 600 'swaymsg "output * power off"' \
+                resume 'swaymsg "output * power on"'
 
 [Install]
 WantedBy=default.target
