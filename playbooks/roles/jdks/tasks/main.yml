@@ -1,6 +1,6 @@
 ---
 - name: Ensure jdks folder exists
-  file:
+  ansible.builtin.file:
     path: ~/.local/jdks/
     state: directory
 
@@ -14,9 +14,10 @@
     - { major: 17, version: "17.0.6+10" }
     - { major: 18, version: "18.0.2.1+1" }
     - { major: 19, version: "19.0.2+7" }
+    - { major: 20, version: "20+36" }
 
 - name: Install GraalVM Java17
-  unarchive:
+  ansible.builtin.unarchive:
     src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz
     dest: ~/.local/jdks/
     creates: ~/.local/jdks/graalvm-ce-java17-22.3.0/

@@ -52,17 +52,9 @@ config.settings = {
     };
     configuration = {
       runtimes = {
-         {
-          name = "JavaSE-1.8",
-          path = "/usr/lib/jvm/java-8-openjdk/",
-        },
-        {
-          name = "JavaSE-11",
-          path = "/usr/lib/jvm/java-11-openjdk/",
-        },
         {
           name = "JavaSE-17",
-          path = home .. "/.local/jdks/jdk-17.0.6+10/",
+          path = os.getenv("JDK17"),
         },
         {
           name = "JavaSE-18",
@@ -70,7 +62,11 @@ config.settings = {
         },
         {
           name = "JavaSE-19",
-          path = home .. "/.local/jdks/jdk-19.0.2+7/",
+          path = os.getenv("JDK19"),
+        },
+        {
+          name = "JavaSE-20",
+          path = os.getenv("JDK20"),
         },
       }
     };

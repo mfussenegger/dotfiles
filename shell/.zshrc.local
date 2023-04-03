@@ -7,6 +7,7 @@ export GPG_TTY=$(tty)
 
 export JDK17="$HOME/.local/jdks/jdk-17.0.6+10/"
 export JDK19="$HOME/.local/jdks/jdk-19.0.2+7/"
+export JDK20="$HOME/.local/jdks/jdk-20+36/"
 export JAVA_HOME="$JDK17"
 export GRAALVM_HOME="$HOME/.local/jdks/graalvm-ce-java17-22.3.0/"
 
