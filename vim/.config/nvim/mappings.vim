@@ -84,9 +84,8 @@ func! ReadExCommandOutput(newbuf, cmd) abort
 endf
 command! -nargs=+ -bang -complete=command R call ReadExCommandOutput(<bang>0, <q-args>)
 
-command -nargs=0 LspErrors :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.ERROR }
-command -nargs=0 LspWarnings :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
-command -nargs=0 LspRestart :lua require('me.lsp.conf').restart()
+command -nargs=0 -bar Errors :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.ERROR }
+command -nargs=0 -bar Warnings :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
 
 nnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
 nnoremap <silent> <leader>/ :HopPattern<CR>
