@@ -58,10 +58,6 @@ augroup outline
 augroup end
 
 
-" gnupg
-nnoremap <leader>pe :GPGEditRecipients<cr>
-nnoremap <leader>pv :GPGViewRecipients<cr>
-
 " fugitive {{{
 
 nnoremap <Leader>ge :sp<CR>:Gedit :%:p<Left><Left><Left><Left>
