@@ -66,6 +66,7 @@ nnoremap <leader>gd :Gdiffsplit<cr>
 nnoremap <leader>gs :Git<cr>
 nnoremap <leader>gb :Git blame<cr>
 nnoremap <leader>gc :Git commit -v<cr>
+nnoremap <leader>gj :cexpr system("git jump --stdout diff")<CR>
 
 " }}}
 

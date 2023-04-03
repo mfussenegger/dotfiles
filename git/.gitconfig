@@ -60,6 +60,7 @@
     textconv = identify
 
 [alias]
+    jump = !/usr/share/git/git-jump/git-jump
     co = checkout
     lg = log --color --graph \
         --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' \
