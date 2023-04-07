@@ -204,17 +204,21 @@ do
 end
 
 
-api.nvim_create_user_command(
-  "GV",
-  function(args)
+api.nvim_create_user_command("Del", function(args)
+  local bufnr = api.nvim_get_current_buf()
+  local fname = api.nvim_buf_get_name(bufnr)
+  local ok, err = os.remove(fname)
+  assert(ok, err)
+  api.nvim_buf_delete(bufnr, { force = args.bang })
+end, { bang = true })
+api.nvim_create_user_command("GV", function(args)
     local fname = api.nvim_buf_get_name(0)
     local cmd = {
       'G log --date=short --format="%cd %h%d %s (%an)"',
       string.format("-L%d,%d:%s", args.line1, args.line2, fname),
     }
     vim.cmd(table.concat(cmd, " "))
-  end,
-  { range = "%" }
+  end, { range = "%" }
 )
 
 if not pcall(require, 'editorconfig') then
