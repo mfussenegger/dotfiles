@@ -48,6 +48,49 @@ end
 local loaded = false
 
 
+
+-- Expose those in nvim-lsp-compl or add { filter = ..., on_results = ...} options?
+
+---@param item lsp.CompletionItem
+---@param defaults lsp.ItemDefaults|nil
+local function apply_defaults(item, defaults)
+  if not defaults then
+    return
+  end
+  item.insertTextFormat = item.insertTextFormat or defaults.insertTextFormat
+  item.insertTextMode = item.insertTextMode or defaults.insertTextMode
+  item.data = item.data or defaults.data
+  if defaults.editRange then
+    local textEdit = item.textEdit or {}
+    item.textEdit = textEdit
+    textEdit.newText = textEdit.newText or item.textEditText or item.insertText
+    if defaults.editRange.start then
+      textEdit.range = textEdit.range or defaults.editRange
+    elseif defaults.editRange.insert then
+      textEdit.insert = defaults.editRange.insert
+      textEdit.replace = defaults.editRange.replace
+    end
+  end
+end
+
+
+--- Extract the completion items from a `textDocument/completion` response
+--- and apply defaults
+---
+---@param result lsp.CompletionItem[]|lsp.CompletionList
+---@returns lsp.CompletionItem[]
+local function get_completion_items(result)
+  if result.items then
+    for _, item in pairs(result.items) do
+      apply_defaults(item, result.itemDefaults)
+    end
+    return result.items
+  else
+    return result
+  end
+end
+
+
 function M.maybe()
   if not loaded then
     loaded = true
@@ -70,9 +113,9 @@ function M.maybe()
       return
     end
     local matches = {}
-    for _, resp in pairs(results or {}) do
+    for client_id, resp in pairs(results or {}) do
       local result = resp.result or {}
-      local items = result.items or {}
+      local items = get_completion_items(result)
       for _, item in pairs(items) do
         local kind = vim.lsp.protocol.CompletionItemKind[item.kind] or ''
         if kind == 'Snippet' then
@@ -84,7 +127,10 @@ function M.maybe()
             icase = 1,
             dup = 1,
             empty = 1,
-            user_data = item
+            user_data = {
+              item = item,
+              client_id = client_id
+            }
           })
         end
       end
