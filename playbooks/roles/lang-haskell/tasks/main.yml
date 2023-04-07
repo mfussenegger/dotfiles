@@ -1,6 +1,6 @@
 ---
 - name: Install haskell tooling lts20
-  command: stack install --resolver lts-20.5 ghcid hlint hoogle dhall dhall-json ormolu
+  command: stack install --resolver lts-20.17 ghcid hlint hoogle dhall dhall-json ormolu
   args:
     chdir: ~/
 - name: Clone/pull ghcid

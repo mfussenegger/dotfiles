@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-20.5
+{- stack script --optimize --resolver lts-20.17
     --package process
     --package parsec
 -}
