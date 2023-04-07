@@ -18,7 +18,7 @@
     dest: ~/.config/nvim/pack/plugins/{{ item.folder }}/{{ item.repo | basename }}
     single_branch: true
     depth: 1
-  async: 120
+  async: 600
   poll: 0
   register: git_clone
   loop:
@@ -32,7 +32,6 @@
     - { folder: start, repo: vim-scripts/dbext.vim }
     - { folder: start, repo: jbyuki/venn.nvim }
     - { folder: start, repo: jbyuki/one-small-step-for-vimkind }
-    - { folder: opt, repo: gpanders/editorconfig.nvim }
     - { folder: opt, repo: nvim-treesitter/nvim-treesitter }
     - { folder: opt, repo: sirtaj/vim-openscad }
     - { folder: opt, repo: nvim-neotest/neotest }

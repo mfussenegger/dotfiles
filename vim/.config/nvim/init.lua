@@ -221,10 +221,6 @@ api.nvim_create_user_command("GV", function(args)
   end, { range = "%" }
 )
 
-if not pcall(require, 'editorconfig') then
-  vim.cmd.packadd('editorconfig.nvim')
-end
-
 do
   local did_setup = false
   local function neotest()
