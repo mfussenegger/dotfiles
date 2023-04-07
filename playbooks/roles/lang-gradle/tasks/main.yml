@@ -7,7 +7,7 @@
 - name: Build vscode-gradle
   command: ./gradlew :gradle-language-server:distTar
   environment:
-    JAVA_HOME: /usr/lib/jvm/java-11-openjdk/
+    JAVA_HOME: /usr/lib/jvm/java-17-openjdk/
   args:
     chdir: ~/dev/microsoft/vscode-gradle
 
