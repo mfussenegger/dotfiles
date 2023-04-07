@@ -66,7 +66,7 @@ function M.cr8_run_next()
     if type == "table" and parent:child_count() > 0 then
       local child = parent:child(1)
       if child:type() == "bare_key" then
-        local name = tsquery.get_node_text(child, bufnr)
+        local name = vim.treesitter.get_node_text(child, bufnr)
         if name == "setup" or name == "teardown" then
           local cmd = {
             'cr8',
@@ -83,7 +83,7 @@ function M.cr8_run_next()
     end
     parent = parent:parent()
   end
-  local query = vim.treesitter.query.parse_query(vim.bo.filetype, [[
+  local query = vim.treesitter.query.parse(vim.bo.filetype, [[
     ((table_array_element
       (bare_key) @element_name
       (#eq? @element_name "queries")
@@ -103,7 +103,7 @@ function M.cr8_run_next()
     end
   end
   if last then
-    local name = vim.treesitter.query.get_node_text(last, bufnr)
+    local name = vim.treesitter.get_node_text(last, bufnr)
     local cmd = {
       'cr8',
       'run-spec',
