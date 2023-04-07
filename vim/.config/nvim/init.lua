@@ -13,6 +13,7 @@ vim.g.netrw_liststyle = 3
 vim.o.laststatus = 3
 vim.o.scrollback = 100000
 vim.o.signcolumn = require("dap").session() == nil and "auto" or "yes:1"
+vim.o.pumheight = 20
 
 
 do
