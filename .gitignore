@@ -7,13 +7,10 @@ shell/.zsh/plugins/
 systemd/.config/systemd/user/default.target.wants/
 *.retry
 bin/bin/Dm
-bin/bin/Dm.hi
 bin/bin/xbacklight
-bin/bin/xbacklight.hi
 bin/bin/term2mp4
-bin/bin/term2mp4.hi
 bin/bin/gh-maybe-clone
-bin/bin/gh-maybe-clone.hi
-bin/bin/pin-qemu.hi
 bin/bin/pin-qemu
+bin/bin/nlua
+bin/bin/*.hi
 .mypy_cache/
