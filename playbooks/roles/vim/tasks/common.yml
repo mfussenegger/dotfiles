@@ -32,12 +32,8 @@
     - { folder: start, repo: vim-scripts/dbext.vim }
     - { folder: start, repo: jbyuki/venn.nvim }
     - { folder: start, repo: jbyuki/one-small-step-for-vimkind }
-    - { folder: opt, repo: nvim-treesitter/nvim-treesitter }
     - { folder: opt, repo: sirtaj/vim-openscad }
-    - { folder: opt, repo: nvim-neotest/neotest }
-    - { folder: opt, repo: nvim-neotest/neotest-plenary }
     - { folder: opt, repo: folke/neodev.nvim }
-    - { folder: opt, repo: nvim-lua/plenary.nvim }
 
 - name: Wait for git clone
   async_status:
