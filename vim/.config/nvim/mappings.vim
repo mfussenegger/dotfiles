@@ -53,10 +53,6 @@ vnoremap <silent><leader>ts <ESC>:lua require('term').sendSelection()<CR>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
-augroup outline
-  autocmd! FileType python,java,lua,haskell,yaml nnoremap <buffer><silent>gO :Vista!!<CR>
-augroup end
-
 
 " fugitive {{{
 
