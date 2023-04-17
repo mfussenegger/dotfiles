@@ -220,7 +220,6 @@ for _, jar_pattern in ipairs(jar_patterns) do
   end
 end
 local extendedClientCapabilities = jdtls.extendedClientCapabilities;
-extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
 extendedClientCapabilities.onCompletionItemSelectedCommand = "editor.action.triggerParameterHints"
 config.init_options = {
   bundles = bundles;
