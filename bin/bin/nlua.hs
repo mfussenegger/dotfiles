@@ -2,28 +2,30 @@
 {- stack script --optimize --resolver lts-20.17 -}
 
 import System.Environment (getArgs)
-import System.Process (createProcess_, proc, spawnProcess, waitForProcess, CreateProcess (..), StdStream (..))
+import System.Process (spawnProcess, waitForProcess, CreateProcess (..))
 import System.Exit (exitWith)
 
 
 main :: IO ()
 main = do
   args <- remap <$> getArgs
-  --(stdin, stdout, stderr, handle) <- createProcess_ "nlua" (proc "v" ("-Es" : args)) { std_in = Inherit }
-  handle <- spawnProcess "v" ("-Es" : args)
-  waitForProcess handle >>= exitWith
+  spawnProcess "v" ("-Es" : args) >>= waitForProcess >>= exitWith
 
 
+--- >>> remap ["foo.lua"]
+-- ["-l","foo.lua"]
+---
 --- >>> remap ["-e", "stat"]
 -- ["-c","lua stat"]
---
+---
 --- >>> remap ["-e", "stat", "luascript_path"]
 -- ["-c","lua stat","-l","luascript_path"]
---
+---
 --- >>> remap ["-e", "stat", "-l", "luascript_path"]
 -- ["-c","lua stat","-l","luascript_path"]
 remap :: [String] -> [String]
 remap [] = []
+remap [x] = ["-l", x]
 remap ("-e" : x : xs)
   | null xs = newHead
   | head xs == "-l" = newHead <> xs
