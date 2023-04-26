@@ -1,4 +1,7 @@
 ---
+- import_role:
+    name: jdks
+
 - name: Create apps/mvnd
   ansible.builtin.file:
     state: directory
@@ -23,8 +26,12 @@
   git:
     repo: https://github.com/eclipse/eclipse.jdt.ls
     dest: ~/dev/eclipse/eclipse.jdt.ls
+    depth: 1
+    single_branch: true
 - name: Build eclipse.jdt.ls
   command: ./mvnw clean install -DskipTests
+  environment:
+    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.local/jdks/jdk-{{ jdk17 }}"
   args:
     chdir: ~/dev/eclipse/eclipse.jdt.ls
 
@@ -32,8 +39,12 @@
   git:
     repo: https://github.com/microsoft/java-debug
     dest: ~/dev/microsoft/java-debug
+    depth: 1
+    single_branch: true
 - name: Build java-debug
   command: ./mvnw clean install
+  environment:
+    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.local/jdks/jdk-{{ jdk17 }}"
   args:
     chdir: ~/dev/microsoft/java-debug
 
@@ -43,9 +54,13 @@
     dest: ~/dev/microsoft/vscode-java-test
     force: true  # npm commands below modify the package.json
     version: main
+    single_branch: true
+    depth: 1
 
 - name: Build vscode-java-test
   command: ./mvnw clean verify -DskipTests
+  environment:
+    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.local/jdks/jdk-{{ jdk17 }}"
   args:
     chdir: ~/dev/microsoft/vscode-java-test/java-extension
 
@@ -105,22 +120,9 @@
   git:
     repo: https://github.com/dgileadi/vscode-java-decompiler
     dest: ~/dev/dgileadi/vscode-java-decompiler
+    single_branch: true
+    depth: 1
 
-- name: Clone vscode-pde
-  git:
-    repo: https://github.com/testforstephen/vscode-pde
-    dest: ~/dev/testforstephen/vscode-pde
-    force: true  # npm commands below modify the package.json
-
-- name: Build vscode-pde
-  command: npm install
-  args:
-    chdir: ~/dev/testforstephen/vscode-pde/
-
-- name: Build vscode-pde part2
-  command: gulp full_build
-  args:
-    chdir: ~/dev/testforstephen/vscode-pde/
 
 - name: Create mcs folder
   ansible.builtin.file:

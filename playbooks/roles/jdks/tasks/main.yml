@@ -11,10 +11,10 @@
     creates: ~/.local/jdks/jdk-{{ item.version }}
     remote_src: true
   loop:
-    - { major: 17, version: "17.0.7+7" }
-    - { major: 18, version: "18.0.2.1+1" }
-    - { major: 19, version: "19.0.2+7" }
-    - { major: 20, version: "20.0.1+9" }
+    - { major: 17, version: "{{ jdk17 }}" }
+    - { major: 18, version: "{{ jdk18 }}" }
+    - { major: 19, version: "{{ jdk19 }}" }
+    - { major: 20, version: "{{ jdk20 }}" }
 
 - name: Install GraalVM Java17
   ansible.builtin.unarchive:
