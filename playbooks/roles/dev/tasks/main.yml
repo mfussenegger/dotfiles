@@ -16,7 +16,7 @@
       - ansible-language-server
       - rust-analyzer
       - zls
-      - hub
+      - github-cli
       - luarocks
       - stylua
       - ninja
@@ -25,6 +25,7 @@
       - htop
       - delve
       - lldb
+      - gulp
       - python-docutils  # rst2html is used by vale
 
 - name: Install linters
@@ -45,7 +46,6 @@
       - pgformatter-git
       - stack-static
       - readability-cli
-      - zls-bin
       - vale-bin
       - hadolint-bin
       - comby-bin
