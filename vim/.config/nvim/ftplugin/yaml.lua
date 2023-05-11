@@ -11,7 +11,12 @@ for _, pattern in pairs(ansible_patterns) do
   end
 end
 
-vim.lsp.start(vim.tbl_extend('force', require('me.lsp').mk_config(), {
+vim.lsp.start(require('me.lsp').mk_config {
   cmd = {'yaml-language-server', '--stdio'},
-  name = 'yaml-ls'
-}))
+  name = 'yaml-ls',
+  settings = {
+    yaml = {
+      keyOrdering = false
+    }
+  },
+})
