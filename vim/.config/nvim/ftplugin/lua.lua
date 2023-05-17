@@ -202,7 +202,7 @@ local function find_test()
 end
 
 
-if vim.endswith(config.root_dir, "neovim/neovim") then
+if config.root_dir and vim.endswith(config.root_dir, "neovim/neovim") then
   local function run_test()
     local path = find_test()
     vim.cmd.split()
