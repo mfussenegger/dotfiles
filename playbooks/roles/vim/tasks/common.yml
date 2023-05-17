@@ -1,6 +1,13 @@
 ---
+- name: Create .virtualenvs folder
+  ansible.builtin.file:
+    state: directory
+    recurse: true
+    path: ~/.virtualenvs
+
 - name: Setup neovim virtualenv
   pip:
+    state: latest
     name:
       - pynvim
       - neovim-remote
@@ -18,9 +25,8 @@
     dest: ~/.config/nvim/pack/plugins/{{ item.folder }}/{{ item.repo | basename }}
     single_branch: true
     depth: 1
-  async: 600
+  async: 1000
   poll: 0
-  register: git_clone
   loop:
     - { folder: start, repo: junegunn/vim-easy-align }
     - { folder: start, repo: tpope/vim-fugitive }
@@ -35,18 +41,13 @@
     - { folder: opt, repo: sirtaj/vim-openscad }
     - { folder: opt, repo: folke/neodev.nvim }
 
-- name: Wait for git clone
-  async_status:
-    jid: "{{ item.ansible_job_id }}"
-  register: git_clone_jobs
-  until: git_clone_jobs.finished
-  loop: "{{ git_clone.results }}"
-
 - name: Checkout vim dev plugins
   git:
     repo: https://github.com/{{ item }}
     dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
     update: false
+  async: 1000
+  poll: 0
   loop:
     - mfussenegger/nvim-jdtls
     - mfussenegger/nvim-dap

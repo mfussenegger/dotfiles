@@ -2,6 +2,13 @@
 - name: Check stardict contents
   shell: ls ~/.local/share/stardict || echo ""
   register: stardict_contents
+
+- name: Create ~/.local/share/nvim
+  ansible.builtin.file:
+    state: directory
+    recurse: true
+    path: ~/.local/share/nvim
+
 - name: Fetch mthesaur words
   get_url:
     url: https://raw.githubusercontent.com/words/moby/master/words.txt
