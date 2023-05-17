@@ -4,7 +4,7 @@ set $down j
 set $left h
 set $right l
 
-font pango: JuliaMono 15
+font pango: JuliaMono 14
 
 # colors
 #
@@ -25,7 +25,7 @@ titlebar_padding 1
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec alacritty msg create-window || alacritty
 
 # kill focused window
 bindsym $mod+Shift+Q kill
@@ -132,7 +132,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     status_command i3status-rs ~/.config/i3/status.toml
-    font pango: JuliaMono 16
+    font pango: JuliaMono 15
 }
 
 
