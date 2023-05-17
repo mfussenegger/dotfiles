@@ -188,7 +188,6 @@ do
     htmldjango = {'curlylint'},
     rst = {'vale'},
     java = {'codespell'},
-    python = {'ruff'},
     lua = {'codespell', 'luacheck'},
     sh = {'shellcheck'},
     ['yaml.ansible'] = {'ansible_lint'},
