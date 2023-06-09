@@ -92,13 +92,9 @@ function M.setup()
       -- array of mappings to setup; {<capability>, <mode>, <lhs>, <rhs>}
       local key_mappings = {
         {"referencesProvider", "n", "gr", vim.lsp.buf.references},
-        {"hoverProvider", "n", "K", vim.lsp.buf.hover},
         {"implementationProvider", "n", "gD",  vim.lsp.buf.implementation},
         {"signatureHelpProvider", "i", "<c-space>", vim.lsp.buf.signature_help},
         {"workspaceSymbolProvider", "n", "gW", vim.lsp.buf.workspace_symbol},
-        {"codeActionProvider", {"n", "v"}, "<a-CR>", vim.lsp.buf.code_action},
-        {"codeActionProvider", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'} }}<CR>"},
-        {"codeActionProvider", "v", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'}}}<CR>"},
         {"codeLensProvider", "n", "<leader>cr", vim.lsp.codelens.refresh},
         {"codeLensProvider", "n", "<leader>ce", vim.lsp.codelens.run},
         {"codeLensProvider", "n", "<leader>ca",
@@ -125,6 +121,11 @@ function M.setup()
           end
         },
       }
+
+      keymap.set("n", "K", vim.lsp.buf.hover, { buffer = args.buf })
+      keymap.set({"n", "v"}, "<a-CR>", vim.lsp.buf.code_action, { buffer = args.buf })
+      keymap.set("n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'} }}<CR>", { buffer = args.buf })
+      keymap.set("v", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'}}}<CR>", { buffer = args.buf })
 
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       keymap.set("n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", { buffer = args.buf })
