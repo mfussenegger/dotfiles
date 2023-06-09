@@ -44,7 +44,16 @@ end
 
 dap.adapters["local-lua"] = {
   type = 'executable',
-  command = 'local-lua-dbg'
+  command = 'local-lua-dbg',
+  enrich_config = function(config, on_config)
+    if not config["extensionPath"] then
+      local c = vim.deepcopy(config)
+      c.extensionPath = "/usr/lib/node_modules/local-lua-debugger-vscode/"
+      on_config(c)
+    else
+      on_config(config)
+    end
+  end
 }
 
 local function free_port()

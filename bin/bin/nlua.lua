@@ -1,7 +1,5 @@
 #!/usr/bin/env -S v -l
 
-package.path = package.path .. ";/usr/lib/node_modules/local-lua-debugger-vscode/debugger/?.lua"
-
 local ffi = require("ffi")
 ffi.cdef[[
   int isatty(int fd);
