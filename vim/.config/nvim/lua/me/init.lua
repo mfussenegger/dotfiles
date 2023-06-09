@@ -64,12 +64,7 @@ function M.dap_status()
 end
 
 
-function M.file_or_lsp_status()
-  local messages = vim.lsp.util.get_progress_messages()
-  local mode = api.nvim_get_mode().mode
-  if mode ~= 'n' or vim.tbl_isempty(messages) then
-    return M.format_uri(vim.uri_from_bufnr(api.nvim_get_current_buf()))
-  end
+local function format_lsp_progress(messages)
   local percentage
   local result = {}
   for _, msg in pairs(messages) do
@@ -88,6 +83,25 @@ function M.file_or_lsp_status()
     return table.concat(result, ', ')
   end
 end
+
+
+function M.file_or_lsp_status()
+  local mode = api.nvim_get_mode().mode
+  if vim.lsp.status then
+    local lsp_status = vim.lsp.status()
+    if mode ~= "n" or lsp_status == "" then
+      return M.format_uri(vim.uri_from_bufnr(api.nvim_get_current_buf()))
+    end
+    return lsp_status
+  end
+
+  local messages = vim.lsp.util.get_progress_messages()
+  if mode ~= 'n' or vim.tbl_isempty(messages) then
+    return M.format_uri(vim.uri_from_bufnr(api.nvim_get_current_buf()))
+  end
+  return format_lsp_progress(messages)
+end
+
 
 local function get_parser(bufnr)
   local ok, parser = pcall(vim.treesitter.get_parser, bufnr)

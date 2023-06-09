@@ -86,6 +86,12 @@ function M.setup()
     return
   end
   local keymap = vim.keymap
+  if vim.fn.exists("##LspProgress") == 1 then
+    api.nvim_create_autocmd("LspProgress", {
+      group = lsp_group,
+      command = "redrawstatus"
+    })
+  end
   api.nvim_create_autocmd('LspAttach', {
     group = lsp_group,
     callback = function(args)
