@@ -42,6 +42,10 @@ dap.adapters.nlua = function(callback, conf)
   end
 end
 
+dap.adapters["local-lua"] = {
+  type = 'executable',
+  command = 'local-lua-dbg'
+}
 
 local function free_port()
   local tcp = vim.loop.new_tcp()
@@ -98,6 +102,42 @@ dap.configurations.lua = {
     port = function()
       return assert(tonumber(vim.fn.input('Port: ')), 'Port is required')
     end
+  },
+  {
+    name = 'Current file (local-lua-dbg, nlua)',
+    type = 'local-lua',
+    request = 'launch',
+    cwd = '${workspaceFolder}',
+    program = {
+      lua = 'nlua.lua',
+      file = '${file}',
+    },
+    verbose = true,
+    args = {},
+  },
+  {
+    name = 'Busted current file (local-lua-dbg, nlua)',
+    type = 'local-lua',
+    request = 'launch',
+    cwd = '${workspaceFolder}',
+    program = {
+      command = "busted",
+    },
+    verbose = true,
+    args = {
+      "${file}"
+    },
+  },
+  {
+    name = 'Current file (local-lua-dbg, lua)',
+    type = 'local-lua',
+    request = 'launch',
+    cwd = '${workspaceFolder}',
+    program = {
+      lua = 'lua5.1',
+      file = '${file}',
+    },
+    args = {},
   },
 }
 

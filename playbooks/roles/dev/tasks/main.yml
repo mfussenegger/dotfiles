@@ -50,3 +50,4 @@
       - vale-bin
       - hadolint-bin
       - comby-bin
+      - local-lua-debugger-vscode
