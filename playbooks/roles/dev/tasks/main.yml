@@ -26,6 +26,7 @@
       - delve
       - lldb
       - gulp
+      - ruff
       - python-docutils  # rst2html is used by vale
 
 - name: Install linters
