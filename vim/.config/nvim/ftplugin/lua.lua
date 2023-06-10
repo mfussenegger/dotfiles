@@ -275,12 +275,20 @@ if config.root_dir and vim.endswith(config.root_dir, "neovim/neovim") then
 else
   vim.keymap.set("n", "<leader>dn", function()
     local path = find_test()
-    vim.cmd.split()
-    vim.cmd.term(string.format(
-      [[~/.luarocks/bin/busted "%s" --filter="%s"]],
-      api.nvim_buf_get_name(0),
-      table.concat(path, " ")
-    ))
+    local name = table.concat(path, " ")
+    dap.run({
+      name = name,
+      type = "local-lua",
+      request = "launch",
+      cwd = "${workspaceFolder}",
+      program = {
+        command = "busted",
+      },
+      args = {
+        api.nvim_buf_get_name(0),
+        '--filter="' .. name .. '"',
+      }
+    })
   end)
   vim.keymap.set("n", "<leader>df", function()
     vim.cmd.split()
