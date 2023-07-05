@@ -10,7 +10,6 @@
   register: git_clone
   loop:
     - { repo: 'tree-sitter/tree-sitter-java', version: 'master' }
-    - { repo: 'tree-sitter/tree-sitter-python', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-html', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-json', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
@@ -18,7 +17,6 @@
     - { repo: 'tree-sitter/tree-sitter-rust', version: 'master' }
     - { repo: 'nvim-treesitter/tree-sitter-query', version: 'master' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
-    - { repo: 'ikatyang/tree-sitter-markdown', version: 'master' }
     - { repo: 'maxxnino/tree-sitter-zig', version: 'main' }
     - { repo: 'ikatyang/tree-sitter-yaml', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-toml', version: 'master' }
@@ -32,12 +30,10 @@
     - parser/
     - queries/
     - queries/java
-    - queries/python
     - queries/rst
     - queries/html
     - queries/json
     - queries/haskell
-    - queries/markdown
     - queries/c_sharp
     - queries/zig
     - queries/yaml
@@ -64,9 +60,6 @@
     - repo: 'tree-sitter/tree-sitter-java'
       ft: 'java'
       files: src/parser.c
-    - repo: 'tree-sitter/tree-sitter-python'
-      ft: 'python'
-      files: src/parser.c src/scanner.cc
     - repo: 'tree-sitter/tree-sitter-haskell'
       ft: 'haskell'
       files: src/parser.c src/scanner.c
@@ -82,9 +75,6 @@
     - repo: 'tree-sitter/tree-sitter-json'
       ft: 'json'
       files: src/parser.c
-    - repo: 'ikatyang/tree-sitter-markdown'
-      ft: 'markdown'
-      files: src/parser.c src/scanner.cc
     - repo: 'tree-sitter/tree-sitter-c-sharp'
       ft: 'c_sharp'
       files: src/parser.c src/scanner.c
@@ -132,10 +122,6 @@
     - { ft: 'json', name: 'highlights' }
     - { ft: 'java', name: 'highlights' }
     - { ft: 'java', name: 'locals' }
-    - { ft: 'python', name: 'highlights' }
-    - { ft: 'python', name: 'locals' }
-    - { ft: 'markdown', name: 'highlights' }
-    - { ft: 'markdown', name: 'injections' }
     - { ft: 'rst', name: 'highlights' }
     - { ft: 'rst', name: 'injections' }
     - { ft: 'yaml', name: 'highlights' }
