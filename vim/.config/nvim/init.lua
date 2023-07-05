@@ -41,7 +41,8 @@ do
       if info.selected == -1 then
         feedkeys("<C-n>", "n")
       end
-      feedkeys("<CR>", "m")
+      require("lsp_compl").accept_pum()
+      feedkeys("<c-y>", "n")
     else
       if next(vim.lsp.get_active_clients({ bufnr = 0 })) then
         require("lsp_compl").trigger_completion()
