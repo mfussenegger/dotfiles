@@ -136,12 +136,17 @@ local function move(opts)
         break
       end
       local key = string.char(keynum)
+      local fn
       if key == "]" then
-        opts.next()
+        fn = opts.next
       elseif key == "[" then
-        opts.prev()
+        fn = opts.prev
       else
         break
+      end
+      local jump_ok, err = pcall(fn)
+      if not jump_ok then
+        vim.notify(err, vim.log.levels.WARN)
       end
     end
     print("Move mode exited")
