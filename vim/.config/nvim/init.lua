@@ -12,8 +12,20 @@ vim.g.netrw_liststyle = 3
 
 vim.o.laststatus = 3
 vim.o.scrollback = 100000
-vim.o.signcolumn = require("dap").session() == nil and "auto" or "yes:1"
+vim.o.signcolumn = "auto"
 vim.o.pumheight = 20
+
+api.nvim_create_autocmd("WinEnter", {
+  callback = function()
+    local win = api.nvim_get_current_win()
+    local value = (
+      (vim.bo.buftype == "" and package.loaded.dap and require("dap").session())
+      and "yes:1"
+      or "auto"
+    )
+    vim.wo[win].signcolumn = value
+  end,
+})
 
 
 do
