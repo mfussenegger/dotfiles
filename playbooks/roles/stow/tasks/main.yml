@@ -20,6 +20,9 @@
     - ~/.stack/global-project
     - ~/.config/systemd/
     - ~/.luarocks
+    - ~/.luarocks/bin
+    - ~/.luarocks/lib
+    - ~/.luarocks/share
 - name: Ensure ~/.gnupg exists
   file:
     path: ~/.gnupg
