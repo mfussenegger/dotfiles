@@ -59,7 +59,7 @@ config.settings = {
         },
         {
           name = "JavaSE-18",
-          path = home .. "/.local/jdks/jdk-18.0.2.1+1/",
+          path = home .. "/.m2/jdks/jdk-18.0.2.1+1/",
         },
         {
           name = "JavaSE-19",
@@ -74,10 +74,8 @@ config.settings = {
   };
 }
 config.cmd = {
-  home .. "/.local/jdks/jdk-17.0.6+10/bin/java",
-  -- home .. "/.local/jdks/jdk-18.0.2.1+1/bin/java",
-  -- home .. "/.local/jdks/jdk-19.0.2+7/bin/java",
-  -- '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
+  home .. "/.m2/jdks/jdk-18.0.2.1+1/bin/java",
+  --'-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
   '-Dosgi.bundles.defaultStartLevel=4',
   '-Declipse.product=org.eclipse.jdt.ls.core.product',

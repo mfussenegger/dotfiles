@@ -1,14 +1,15 @@
 ---
 - name: Ensure jdks folder exists
   ansible.builtin.file:
-    path: ~/.local/jdks/
+    path: ~/.m2/jdks/
     state: directory
+    recurse: true
 
 - name: Install jdks
   ansible.builtin.unarchive:
     src: "https://github.com/adoptium/temurin{{ item.major }}-binaries/releases/download/jdk-{{ item.version }}/OpenJDK{{ item.major }}U-jdk_x64_linux_hotspot_{{ item.version|replace('+', '_') }}.tar.gz"
-    dest: ~/.local/jdks/
-    creates: ~/.local/jdks/jdk-{{ item.version }}
+    dest: ~/.m2/jdks/
+    creates: ~/.m2/jdks/jdk-{{ item.version }}
     remote_src: true
   loop:
     - { major: 17, version: "{{ jdk17 }}" }
@@ -19,6 +20,6 @@
 - name: Install GraalVM Java17
   ansible.builtin.unarchive:
     src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz
-    dest: ~/.local/jdks/
-    creates: ~/.local/jdks/graalvm-ce-java17-22.3.0/
+    dest: ~/.m2/jdks/
+    creates: ~/.m2/jdks/graalvm-ce-java17-22.3.0/
     remote_src: true

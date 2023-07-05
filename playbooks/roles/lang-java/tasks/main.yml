@@ -31,7 +31,7 @@
 - name: Build eclipse.jdt.ls
   command: ./mvnw clean install -DskipTests
   environment:
-    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.local/jdks/jdk-{{ jdk17 }}"
+    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.m2/jdks/jdk-{{ jdk17 }}"
   args:
     chdir: ~/dev/eclipse/eclipse.jdt.ls
 
@@ -41,10 +41,11 @@
     dest: ~/dev/microsoft/java-debug
     depth: 1
     single_branch: true
+    version: main
 - name: Build java-debug
   command: ./mvnw clean install
   environment:
-    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.local/jdks/jdk-{{ jdk17 }}"
+    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.m2/jdks/jdk-{{ jdk17 }}"
   args:
     chdir: ~/dev/microsoft/java-debug
 
@@ -60,7 +61,7 @@
 - name: Build vscode-java-test
   command: ./mvnw clean verify -DskipTests
   environment:
-    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.local/jdks/jdk-{{ jdk17 }}"
+    JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.m2/jdks/jdk-{{ jdk17 }}"
   args:
     chdir: ~/dev/microsoft/vscode-java-test/java-extension
 
