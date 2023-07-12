@@ -132,7 +132,6 @@ local function test_with_profile(test_fn)
 end
 
 config.on_attach = function(client, bufnr)
-
   api.nvim_create_autocmd("BufWritePost", {
     buffer = bufnr,
     callback = function()
@@ -140,12 +139,14 @@ config.on_attach = function(client, bufnr)
     end,
   })
 
+  api.nvim_buf_create_user_command(bufnr, "A", function()
+    require("jdtls.tests").goto_subjects()
+  end, {})
+
   require('lsp_compl').attach(client, bufnr, {
     server_side_fuzzy_completion = true,
   })
 
-  jdtls.setup_dap({})
-  jdtls.setup.add_commands()
   local opts = { silent = true, buffer = bufnr }
   local set = vim.keymap.set
   set('n', "<A-o>", jdtls.organize_imports, opts)
