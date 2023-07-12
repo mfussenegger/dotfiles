@@ -65,7 +65,7 @@
       files: src/parser.c src/scanner.c
     - repo: 'tree-sitter/tree-sitter-html'
       ft: 'html'
-      files: src/parser.c src/scanner.cc
+      files: src/parser.c src/scanner.c
     - repo: 'nvim-treesitter/tree-sitter-query'
       ft: 'query'
       files: src/parser.c
@@ -89,7 +89,7 @@
       files: src/parser.c src/scanner.c
     - repo: 'PrestonKnopp/tree-sitter-gdscript'
       ft: 'gdscript'
-      files: src/parser.c src/scanner.cc
+      files: src/parser.c src/scanner.c
     - repo: 'tree-sitter/tree-sitter-rust'
       ft: 'rust'
       files: src/parser.c src/scanner.c
