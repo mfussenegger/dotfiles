@@ -182,6 +182,15 @@ config.on_attach = function(client, bufnr)
   vim.keymap.set('v', "crv", [[<ESC><CMD>lua require('jdtls').extract_variable_all(true)<CR>]], opts)
   vim.keymap.set('v', 'crm', [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
   vim.keymap.set('n', "crc", jdtls.extract_constant, opts)
+  vim.keymap.set("n", "<leader>ds", function()
+    local dap = require("dap")
+    if dap.session() then
+      local widgets = require("dap.ui.widgets")
+      widgets.centered_float(widgets.scopes)
+    else
+      require("jdtls.dap").pick_test()
+    end
+  end, opts)
 end
 
 local jar_patterns = {
