@@ -1,10 +1,11 @@
 local dap = require('dap')
 local api = vim.api
 dap.adapters.nlua = function(callback, conf)
+  local port = conf["port"]
   local adapter = {
     type = 'server',
     host = '127.0.0.1',
-    port = conf.port
+    port = port
   }
   if conf.start_neovim then
     local start_opts = conf.start_neovim
@@ -16,20 +17,23 @@ dap.adapters.nlua = function(callback, conf)
         '-e',
         vim.v.progpath,
         '-c',
-        string.format("lua require('osv').launch({ port = %s })", conf.port),
+        string.format("lua require('osv').launch({ port = %s })", port),
         start_opts.fname or api.nvim_buf_get_name(0),
       },
       cwd = start_opts.cwd or vim.fn.getcwd(),
       detached = true,
     }
     handle, pid_or_err = vim.loop.spawn('/usr/bin/alacritty', opts, function(code)
-      handle:close()
+      if handle then
+        handle:close()
+      end
       assert(code == 0, "Exit code must be 0, not " .. tostring(code))
     end)
     if not handle then
       error(pid_or_err)
     end
     local timer = vim.loop.new_timer()
+    assert(timer)
     timer:start(1000, 0, function()
       timer:stop()
       timer:close()
@@ -58,6 +62,7 @@ dap.adapters["local-lua"] = {
 
 local function free_port()
   local tcp = vim.loop.new_tcp()
+  assert(tcp)
   tcp:bind('127.0.0.1', 0)
   local port = tcp:getsockname().port
   tcp:shutdown()
@@ -173,6 +178,8 @@ local config = lsp.mk_config {
       workspace = {
         library = {
           "${3rd}/luv/library",
+          "${3rd}/busted/library",
+          "${3rd}/luassert/library",
           os.getenv("HOME") .. "/dev/neovim/neovim/runtime/lua/",
           os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-dap/lua",
           os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-fzy/lua",
@@ -280,6 +287,9 @@ if config.root_dir and vim.endswith(config.root_dir, "neovim/neovim") then
   end)
 else
   vim.keymap.set("n", "<leader>dn", function()
+    if vim.bo.modified then
+      vim.cmd.w()
+    end
     local path = find_test()
     local name = table.concat(path, " ")
     dap.run({
