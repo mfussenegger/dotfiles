@@ -15,6 +15,9 @@ local function setup()
   ls.add_snippets(nil,  {
     all = {
       s('date', p(os.date, '%Y-%m-%d')),
+      s("uuid", p(function()
+        return vim.trim(vim.fn.system("uuidgen"))
+      end)),
     },
     lua = {
       parse_snippet('f', 'local function ${1:name}(${2})\n  $0\nend'),
