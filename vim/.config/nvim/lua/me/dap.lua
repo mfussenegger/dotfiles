@@ -130,6 +130,12 @@ end
 function M.setup()
   local dap = require('dap')
 
+  api.nvim_create_autocmd("User", {
+    group = api.nvim_create_augroup("dap", { clear = true }),
+    pattern = "DapProgressUpdate",
+    command = "redrawstatus"
+  })
+
   local orig_set_log_level = dap.set_log_level
   ---@diagnostic disable-next-line: duplicate-set-field
   function dap.set_log_level(level)
@@ -177,6 +183,9 @@ function M.setup()
     set("n", "<left>", dap.step_out)
     set("n", "<right>", dap.step_into)
     vim.o.signcolumn = 'yes:1'
+    for _, win in ipairs(api.nvim_list_wins()) do
+      vim.wo[win].signcolumn = "yes:1"
+    end
   end
   local after_session = function()
     if not next(dap.sessions()) then
@@ -185,6 +194,9 @@ function M.setup()
       pcall(keymap.del, "n", "<left>")
       pcall(keymap.del, "n", "<right>")
       vim.o.signcolumn = 'auto'
+      for _, win in ipairs(api.nvim_list_wins()) do
+        vim.wo[win].signcolumn = "auto"
+      end
     end
   end
   dap.listeners.after.event_terminated['me.dap'] = after_session
@@ -196,6 +208,7 @@ function M.setup()
   create_command('DapReload', reload, { nargs = 0 })
   create_command('DapBreakpoints', function() dap.list_breakpoints(true) end, { nargs = 0 })
   create_command('DapVisualize', function() M.visualize() end, { nargs = 0 })
+  create_command("DapNew", function() dap.continue({ new = true }) end, { nargs = 0 })
 
   local sessions_bar = widgets.sidebar(widgets.sessions, {}, '5 sp')
   create_command("DapSessions", sessions_bar.toggle, { nargs = 0 })
