@@ -156,10 +156,11 @@ end
 
 
 local lsp = require('me.lsp')
+local root_dir = lsp.find_root({".git"})
 local config = lsp.mk_config {
   name = "luals",
   cmd = {'lua-language-server'},
-  root_dir = lsp.find_root({'.git'}),
+  root_dir = root_dir,
   settings = {
     Lua = {
       diagnostics = {
@@ -189,6 +190,11 @@ local config = lsp.mk_config {
     }
   }
 }
+if root_dir and vim.endswith(root_dir, "neovim/neovim") then
+  config.settings.Lua.diagnostics.disable = {
+    "luadoc-miss-see-name"
+  }
+end
 vim.lsp.start(config)
 
 
