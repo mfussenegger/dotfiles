@@ -236,6 +236,26 @@ api.nvim_create_user_command("GV", function(args)
     vim.cmd(table.concat(cmd, " "))
   end, { range = "%" }
 )
+api.nvim_create_user_command("B", function(args)
+  local curbuf = api.nvim_get_current_buf()
+  local altbuf = nil
+  for _, buf in ipairs(api.nvim_list_bufs()) do
+    if buf ~= curbuf and api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == "" then
+      altbuf = buf
+      break
+    end
+  end
+  if not altbuf then
+    altbuf = api.nvim_create_buf(true, true)
+  end
+  for _, win in ipairs(api.nvim_list_wins()) do
+    if api.nvim_win_get_buf(win) == curbuf then
+      api.nvim_win_set_buf(win, altbuf)
+    end
+  end
+  api.nvim_buf_delete(curbuf, { force = args.bang })
+end, { bang = true })
+
 
 vim.filetype.add({
   pattern = {
