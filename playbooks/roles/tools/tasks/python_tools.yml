@@ -20,6 +20,7 @@
       - debugpy
       - exodus-bundler
       - curlylint
+      - llm
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -40,6 +41,7 @@
     - mprof
     - termgraph
     - curlylint
+    - llm
 - name: Symlink py -> ptipython
   file:
     src: ~/.virtualenvs/tools/bin/ptipython
