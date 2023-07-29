@@ -39,6 +39,7 @@ alias -g T='| tail'
 alias -g F='| fzf'
 alias -g X='| xargs'
 alias -g V='| v -'
+alias -g C='| wl-copy -n'
 
 
 ## misc
