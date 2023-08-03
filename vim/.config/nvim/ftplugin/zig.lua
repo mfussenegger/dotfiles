@@ -13,7 +13,7 @@ local function find_nearest_test()
   end
   for child in node:iter_children() do
     if child:type() == "STRINGLITERALSINGLE" then
-      local text = vim.treesitter.query.get_node_text(child, bufnr, { concat = true })
+      local text = vim.treesitter.get_node_text(child, bufnr, { concat = true })
       assert(type(text) == "string", "concat is true")
       return text
     end
@@ -23,6 +23,9 @@ end
 
 
 local function run_nearest_test()
+  if vim.bo.modified and vim.bo.buftype == "" then
+    vim.cmd.w()
+  end
   local testcase = find_nearest_test()
   if not testcase then
     return
