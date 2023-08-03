@@ -22,6 +22,11 @@ local function setup()
     lua = {
       parse_snippet('f', 'local function ${1:name}(${2})\n  $0\nend'),
       parse_snippet('m', 'function ${1:M}.${2:name}(${3})\n  $0\nend'),
+      parse_snippet("debug", [[
+        if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
+          require("lldebugger").start()
+        end
+      ]])
     },
     java = {
       parse_snippet('f', '${1:private} ${2:static} ${3:void} ${4:name}(${5}) {\n    $0\n}'),
