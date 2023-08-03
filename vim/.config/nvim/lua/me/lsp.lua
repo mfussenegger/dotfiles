@@ -2,6 +2,10 @@ local lsp = require 'vim.lsp'
 local api = vim.api
 local M = {}
 
+---@diagnostic disable-next-line: deprecated
+local get_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
+
+
 function M.mk_config(config)
   local lsp_compl = require('lsp_compl')
   local capabilities = vim.tbl_deep_extend(
@@ -70,7 +74,7 @@ function M.setup()
       group = lsp_group,
       callback = function(args)
         local cmd = server[2]
-        local config = vim.tbl_extend('force', M.mk_config(), {
+        local config = M.mk_config({
           name = type(cmd) == "table" and cmd[1] or cmd,
           cmd = type(cmd) == "table" and cmd or {cmd},
         })
@@ -128,12 +132,11 @@ function M.setup()
         },
       }
 
-      keymap.set("n", "K", vim.lsp.buf.hover, { buffer = args.buf })
       keymap.set({"n", "v"}, "<a-CR>", vim.lsp.buf.code_action, { buffer = args.buf })
       keymap.set("n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'} }}<CR>", { buffer = args.buf })
       keymap.set("v", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'}}}<CR>", { buffer = args.buf })
 
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
       keymap.set("n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", { buffer = args.buf })
       keymap.set("i", "<c-n>", function()
         require("lsp_compl").trigger_completion()
@@ -181,20 +184,42 @@ function M.setup()
     'LspStop',
     function(kwargs)
       local name = kwargs.fargs[1]
-      for _, client in pairs(vim.lsp.get_active_clients()) do
-        if client.name == name then
-          vim.lsp.stop_client(client.id)
+      for _, client in ipairs(get_clients({ name = name })) do
+        client.stop()
+      end
+    end,
+    {
+      nargs = 1,
+      complete = function()
+        return vim.tbl_map(function(c) return c.name end, get_clients())
+      end
+    }
+  )
+  api.nvim_create_user_command(
+    "LspRestart",
+    function(kwargs)
+      local name = kwargs.fargs[1]
+      for _, client in ipairs(get_clients({ name = name })) do
+        local bufs = lsp.get_buffers_by_client_id(client.id)
+        client.stop()
+        vim.wait(30000, function()
+          return lsp.get_client_by_id(client.id) == nil
+        end)
+        local client_id = lsp.start_client(client.config)
+        if client_id then
+          for _, buf in ipairs(bufs) do
+            lsp.buf_attach_client(buf, client_id)
+          end
         end
       end
     end,
     {
       nargs = 1,
       complete = function()
-        return vim.tbl_map(function(c) return c.name end, vim.lsp.get_active_clients())
+        return vim.tbl_map(function(c) return c.name end, get_clients())
       end
     }
   )
-
 end
 
 local function mk_tag_item(name, range, uri)
@@ -212,9 +237,10 @@ function M.symbol_tagfunc(pattern, flags)
   if not (flags == 'c' or flags == '' or flags == 'i') then
     return vim.NIL
   end
-  local clients = vim.lsp.get_active_clients()
+  local clients = get_clients()
   local num_clients = vim.tbl_count(clients)
   local results = {}
+  local bufnr = api.nvim_get_current_buf()
   for _, client in pairs(clients) do
     client.request('workspace/symbol', { query = pattern }, function(_, method_or_result, result_or_ctx)
       local result = type(method_or_result) == 'string' and result_or_ctx or method_or_result
@@ -225,7 +251,7 @@ function M.symbol_tagfunc(pattern, flags)
         table.insert(results, item)
       end
       num_clients = num_clients - 1
-    end)
+    end, bufnr)
   end
   vim.wait(1500, function() return num_clients == 0 end)
   return results
