@@ -130,6 +130,17 @@ end
 function M.setup()
   local dap = require('dap')
 
+  api.nvim_create_autocmd("WinEnter", {
+    callback = function()
+      local win = api.nvim_get_current_win()
+      local value = (
+        (vim.bo.buftype == "" and package.loaded.dap and require("dap").session())
+        and "yes:1"
+        or "auto"
+      )
+      vim.wo[win].signcolumn = value
+    end,
+  })
   api.nvim_create_autocmd("User", {
     group = api.nvim_create_augroup("dap", { clear = true }),
     pattern = "DapProgressUpdate",
