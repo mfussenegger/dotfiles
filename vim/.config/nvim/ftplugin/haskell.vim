@@ -1,5 +1,5 @@
 if executable("ormolu")
-    setlocal formatprg=ormolu
+    setlocal formatprg=ormolu\ --stdin-input-file\ %
 elseif executable("stylish-haskell")
     setlocal formatprg=stylish-haskell
 endif
@@ -12,5 +12,3 @@ setlocal errorformat=%f:%l:%v:%m
 setlocal include=^import\\s*\\(qualified\\)\\?\\s*
 setlocal includeexpr=substitute(v:fname,'\\.','/','g').'.'
 setlocal suffixesadd=.hs
-
-nnoremap <buffer> <silent>gO :Vista!!<CR>
