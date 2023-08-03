@@ -399,13 +399,24 @@ wfRecord :: String -> IO ()
 wfRecord slurpCmd = do
   removeIfExists filePath
   window <- readProcess slurpCmd [] ""
-  callProcess "systemd-run" ["--user", "-u", "record", "wf-recorder", "-g", window, "-f", filePath]
+  callProcess
+    "systemd-run"
+    [ "--user",
+      "-u", "record",
+      "wf-recorder",
+      "-c", "hevc_vaapi",
+      "-d", "/dev/dri/renderD128",
+      "-g", window,
+      "-f", filePath
+    ]
+  callProcess "pkill" ["-SIGUSR1", "i3status-rs"]
   where
     filePath = "/tmp/recording.mp4"
 
 stopRecording :: IO ()
 stopRecording = do
   callProcess "systemctl" ["--user", "kill", "-s", "SIGINT", "record.service"]
+  callProcess "pkill" ["-SIGUSR1", "i3status-rs"]
   callCommand $ "wl-copy < " <> filePath
   where
     filePath = "/tmp/recording.mp4"
