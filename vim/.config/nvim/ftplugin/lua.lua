@@ -187,7 +187,6 @@ local config = lsp.mk_config {
           os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-lsp-compl/lua",
           os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-lint/lua",
           os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-jdtls/lua",
-          os.getenv("HOME") .. "/.config/nvim/pack/plugins/opt/neodev.nvim/types/nightly",
         },
         checkThirdParty = false,
       },
@@ -197,11 +196,6 @@ local config = lsp.mk_config {
     }
   }
 }
-if root_dir and vim.endswith(root_dir, "neovim/neovim") then
-  config.settings.Lua.diagnostics.disable = {
-    "luadoc-miss-see-name"
-  }
-end
 vim.lsp.start(config)
 
 

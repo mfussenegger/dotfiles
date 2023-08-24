@@ -39,7 +39,6 @@
     - { folder: start, repo: jbyuki/venn.nvim }
     - { folder: start, repo: jbyuki/one-small-step-for-vimkind }
     - { folder: opt, repo: sirtaj/vim-openscad }
-    - { folder: opt, repo: folke/neodev.nvim }
 
 - name: Checkout vim dev plugins
   git:
