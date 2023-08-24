@@ -193,9 +193,10 @@ function M.setup()
     set("n", "<down>", dap.step_over)
     set("n", "<left>", dap.step_out)
     set("n", "<right>", dap.step_into)
-    vim.o.signcolumn = 'yes:1'
     for _, win in ipairs(api.nvim_list_wins()) do
-      vim.wo[win].signcolumn = "yes:1"
+      if vim.bo[api.nvim_win_get_buf(win)].buftype == "" then
+        vim.wo[win].signcolumn = "yes:1"
+      end
     end
   end
   local after_session = function()
@@ -204,7 +205,6 @@ function M.setup()
       pcall(keymap.del, "n", "<down>")
       pcall(keymap.del, "n", "<left>")
       pcall(keymap.del, "n", "<right>")
-      vim.o.signcolumn = 'auto'
       for _, win in ipairs(api.nvim_list_wins()) do
         vim.wo[win].signcolumn = "auto"
       end
