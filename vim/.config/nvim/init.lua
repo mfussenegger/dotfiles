@@ -163,6 +163,10 @@ keymap.set("n", "<leader>]m", move({
   next = select_methods_sync { mode = "next", pick_first = true },
   prev = select_methods_sync { mode = "prev", pick_first = true },
 }))
+keymap.set("n", "<leader>]c", move({
+  next = function() vim.cmd.normal("]c") end,
+  prev = function() vim.cmd.normal("[c") end,
+}))
 
 create_autocmd('WinEnter', { callback = function() vim.wo.cursorline = true end })
 create_autocmd('WinLeave', { callback = function() vim.wo.cursorline = false end })
