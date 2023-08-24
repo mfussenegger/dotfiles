@@ -26,7 +26,17 @@ function M.mk_config(config)
     },
     handlers = {},
     capabilities = capabilities,
-    on_attach = lsp_compl.attach,
+    on_attach = function(client, bufnr)
+      local triggers = vim.tbl_get(client.server_capabilities, "completionProvider", "triggerCharacters")
+      if triggers then
+        for _, char in ipairs({"a", "e", "i", "o", "u"}) do
+          if not vim.tbl_contains(triggers, char) then
+            table.insert(triggers, char)
+          end
+        end
+      end
+      lsp_compl.attach(client, bufnr)
+    end,
     init_options = vim.empty_dict(),
     settings = vim.empty_dict(),
   }

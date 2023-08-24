@@ -143,6 +143,14 @@ config.on_attach = function(client, bufnr)
     require("jdtls.tests").goto_subjects()
   end, {})
 
+  local triggers = vim.tbl_get(client.server_capabilities, "completionProvider", "triggerCharacters")
+  if triggers then
+    for _, char in ipairs({"a", "e", "i", "o", "u"}) do
+      if not vim.tbl_contains(triggers, char) then
+        table.insert(triggers, char)
+      end
+    end
+  end
   require('lsp_compl').attach(client, bufnr, {
     server_side_fuzzy_completion = true,
   })
