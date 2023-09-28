@@ -21,6 +21,7 @@
     - { repo: 'ikatyang/tree-sitter-yaml', version: 'master' }
     - { repo: 'ikatyang/tree-sitter-toml', version: 'master' }
     - { repo: 'PrestonKnopp/tree-sitter-gdscript', version: 'master' }
+    - { repo: 'ObserverOfTime/tree-sitter-xml', version: 'master' }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -41,6 +42,7 @@
     - queries/toml
     - queries/query
     - queries/rust
+    - queries/xml
 
 - name: Wait for git clone
   async_status:
@@ -93,6 +95,9 @@
     - repo: 'tree-sitter/tree-sitter-rust'
       ft: 'rust'
       files: src/parser.c src/scanner.c
+    - repo: 'ObserverOfTime/tree-sitter-xml/tree-sitter-xml'
+      ft: 'xml'
+      files: 'src/parser.c src/scanner.c'
 
 - name: Wait for compile parsers
   async_status:
@@ -113,6 +118,7 @@
     - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'highlights.scm' }
     - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'injections.scm' }
     - { ft: 'toml', src_dir: 'ikatyang/tree-sitter-toml/queries', file: 'highlights.scm' }
+    - { ft: 'xml', src_dir: 'ObserverOfTime/tree-sitter-xml/tree-sitter-xml/queries', file: 'highlights.scm' }
 
 - name: Fetch queries
   get_url:
