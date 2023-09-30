@@ -20,7 +20,7 @@ api.nvim_create_user_command("GV", function(args)
   end, { range = "%" }
 )
 
-api.nvim_create_user_command("B", function(args)
+api.nvim_create_user_command("C", function(args)
   local curbuf = api.nvim_get_current_buf()
   local altbuf = nil
   for _, buf in ipairs(api.nvim_list_bufs()) do
@@ -37,7 +37,11 @@ api.nvim_create_user_command("B", function(args)
       api.nvim_win_set_buf(win, altbuf)
     end
   end
-  api.nvim_buf_delete(curbuf, { force = args.bang })
+  local force = (args.bang
+    or vim.bo[curbuf].buftype == "prompt"
+    or api.nvim_buf_get_name(0) == ""
+  )
+  api.nvim_buf_delete(curbuf, { force = force })
 end, { bang = true })
 
 api.nvim_create_user_command("Osv", function()
