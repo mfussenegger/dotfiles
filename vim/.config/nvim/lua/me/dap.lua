@@ -110,7 +110,7 @@ local function add_tagfunc(widget)
   local orig_new_buf = widget.new_buf
   widget.new_buf = function(...)
     local bufnr = orig_new_buf(...)
-    api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.require'me.lsp.ext'.symbol_tagfunc")
+    api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.require'me.lsp'.symbol_tagfunc")
     return bufnr
   end
 end
@@ -165,10 +165,23 @@ function M.setup()
   set({'n', 't'}, '<F5>',  dap.continue)
   set('n', '<leader>b', dap.toggle_breakpoint)
   set('n', '<leader>B', function()
-    dap.toggle_breakpoint(vim.fn.input({ prompt = 'Breakpoint Condition: '}), nil, nil, true)
+    local condition = vim.fn.input({ prompt = 'Breakpoint Condition: '})
+    if condition then
+      dap.toggle_breakpoint(condition, nil, nil, true)
+    end
   end)
   set('n', '<leader>lp', function()
-    dap.toggle_breakpoint(nil, nil, vim.fn.input({ prompt = 'Log point message: '}), true)
+    local logpoint = vim.fn.input({ prompt = 'Log point message: '})
+    if logpoint then
+      dap.toggle_breakpoint(nil, nil, logpoint, true)
+    end
+  end)
+  set('n', '<leader>lv', function()
+    local variable = vim.fn.expand("<cexpr>")
+    local logpoint = string.format("%s={%s}", variable, variable)
+    if logpoint then
+      dap.toggle_breakpoint(nil, nil, logpoint, true)
+    end
   end)
   set('n', '<leader>dr', function() dap.repl.toggle({height=15}) end)
   set('n', '<leader>dR', dap.restart_frame)
