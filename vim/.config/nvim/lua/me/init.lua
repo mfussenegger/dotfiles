@@ -129,7 +129,7 @@ function M.init_hl()
   if not ok then
     return
   end
-  vim.treesitter.start(bufnr, parser._lang)
+  vim.treesitter.start(bufnr, parser:lang())
 end
 
 

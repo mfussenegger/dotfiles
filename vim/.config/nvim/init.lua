@@ -219,3 +219,18 @@ vim.filetype.add({
     ['.*/.github/workflows/.*%.yaml'] = 'yaml.ghaction',
   },
 })
+
+
+create_autocmd("FileType", {
+  group = api.nvim_create_augroup("init_hl", { clear = true }),
+  callback = function(args)
+    local lines = api.nvim_buf_line_count(args.buf)
+    local byte_count = api.nvim_buf_get_offset(args.buf, lines)
+    if (byte_count > 100000) then
+      vim.cmd("syn sync clear")
+      vim.cmd("setlocal nowrap")
+    else
+      require("me").init_hl()
+    end
+  end
+})

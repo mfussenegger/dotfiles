@@ -86,10 +86,6 @@ endfunction
 
 set statusline=%!v:lua.require'me'.statusline()
 set quickfixtextfunc=MyQuickfixtext
-augroup tshl
-  au!
-  au FileType * lua require('me').init_hl()
-augroup end
 
 hi! def link LspReferenceText IncSearch
 hi! def link LspReferenceRead IncSearch
