@@ -21,4 +21,4 @@ source ~/.zsh/plugins/pure.zsh
 [ -f ~/.zshrc.secret ] && source ~/.zshrc.secret
 
 [ -f ~/.dircolors ] && eval $(dircolors ~/.dircolors)
-eval "$(lua ~/.zsh/plugins/z.lua --init zsh once enhanced fzf)"
+eval "$(lua ~/.zsh/plugins/z.lua --init zsh once enhanced)"
