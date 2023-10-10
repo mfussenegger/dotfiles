@@ -5,11 +5,13 @@ export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
 
+export JDK11="/usr/lib/jvm/java-11-openjdk/"
 export JDK17="$HOME/.m2/jdks/jdk-17.0.8+7/"
 export JDK19="$HOME/.m2/jdks/jdk-19.0.2+7/"
 export JDK20="$HOME/.m2/jdks/jdk-20.0.2+9/"
-export JAVA_HOME="$JDK17"
-export GRAALVM_HOME="$HOME/.m2/jdks/graalvm-ce-java17-22.3.0/"
+export JDK21="$HOME/.m2/jdks/jdk-21+35/"
+export JAVA_HOME="$JDK21"
+export GRAALVM_HOME="$HOME/.m2/jdks/graalvm-community-openjdk-21+35.1/"
 
 export GOPATH="$HOME/workspace/code/go"
 export STARDICT_DATA_DIR="$HOME/.local/share/stardict/"

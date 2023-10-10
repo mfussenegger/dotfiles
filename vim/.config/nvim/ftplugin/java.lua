@@ -54,6 +54,10 @@ config.settings = {
     configuration = {
       runtimes = {
         {
+          name = "JavaSE-11",
+          path = os.getenv("JDK11"),
+        },
+        {
           name = "JavaSE-17",
           path = os.getenv("JDK17"),
         },
@@ -69,12 +73,16 @@ config.settings = {
           name = "JavaSE-20",
           path = os.getenv("JDK20"),
         },
+        {
+          name = "JavaSE-21",
+          path = os.getenv("JDK21"),
+        },
       }
     };
   };
 }
 config.cmd = {
-  home .. "/.m2/jdks/jdk-18.0.2.1+1/bin/java",
+  os.getenv("JDK21") .. "/bin/java",
   --'-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
   '-Dosgi.bundles.defaultStartLevel=4',

@@ -16,10 +16,11 @@
     - { major: 18, version: "{{ jdk18 }}" }
     - { major: 19, version: "{{ jdk19 }}" }
     - { major: 20, version: "{{ jdk20 }}" }
+    - { major: 21, version: "{{ jdk21 }}" }
 
-- name: Install GraalVM Java17
+- name: Install GraalVM Java21
   ansible.builtin.unarchive:
-    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz
+    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.0/graalvm-community-jdk-21.0.0_linux-x64_bin.tar.gz
     dest: ~/.m2/jdks/
-    creates: ~/.m2/jdks/graalvm-ce-java17-22.3.0/
+    creates: ~/.m2/jdks/graalvm-community-openjdk-21+35.1/
     remote_src: true
