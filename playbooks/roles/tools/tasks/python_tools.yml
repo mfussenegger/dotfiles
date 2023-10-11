@@ -21,6 +21,7 @@
       - exodus-bundler
       - curlylint
       - llm
+      - argostranslate
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -42,8 +43,20 @@
     - termgraph
     - curlylint
     - llm
+    - argospm
+    - argos-translate
 - name: Symlink py -> ptipython
   file:
     src: ~/.virtualenvs/tools/bin/ptipython
     dest: ~/bin/py
     state: link
+
+- name: Bootstrap argospm en_de
+  ansible.builtin.command: argospm install translate-en_de
+  args:
+    creates: ~/.local/cache/argos-translate/downloads/translate-en_de.argosmodel
+
+- name: Bootstrap argospm de_en
+  ansible.builtin.command: argospm install translate-de_en
+  args:
+    creates: ~/.local/cache/argos-translate/downloads/translate-de_en.argosmodel
