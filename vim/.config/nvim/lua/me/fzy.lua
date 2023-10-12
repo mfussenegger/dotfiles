@@ -35,6 +35,7 @@ function M.setup()
   q.format_bufname = format_bufname
   local set = vim.keymap.set
   local silent = { silent = true }
+  set('n', '<leader>fh', q.helptags, silent)
   set('n', '<leader>fq', q.quickfix, silent)
   set('n', '<leader>fb', q.buffers, silent)
   set('n', '<leader>fj', q.tagstack, silent)
