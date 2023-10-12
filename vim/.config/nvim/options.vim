@@ -70,9 +70,7 @@ augroup colorcol
   autocmd InsertLeave * set colorcolumn=""
 augroup end
 
-" template support
 set cpoptions-=a
-autocmd BufNewFile * silent! 0r $HOME/.config/nvim/templates/%:e.tpl
 
 if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading

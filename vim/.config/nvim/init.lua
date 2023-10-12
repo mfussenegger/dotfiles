@@ -234,3 +234,23 @@ create_autocmd("FileType", {
     end
   end
 })
+
+
+create_autocmd("BufNewFile", {
+  group = api.nvim_create_augroup("templates", { clear = true }),
+  desc = "Load template file",
+  callback = function(args)
+    local home = os.getenv("HOME")
+    local fname = vim.fn.fnamemodify(args.file, ":t")
+    local tmpl = home .. "/.config/nvim/templates/" .. fname ..".tpl"
+    if vim.uv.fs_stat(tmpl) then
+      vim.cmd("0r " .. tmpl)
+    else
+      local ext = vim.fn.fnamemodify(args.file, ":e")
+      tmpl = home .. "/.config/nvim/templates/" .. ext ..".tpl"
+      if vim.uv.fs_stat(tmpl) then
+        vim.cmd("0r " .. tmpl)
+      end
+    end
+  end
+})
