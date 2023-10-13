@@ -80,7 +80,7 @@
 
 - name: Fetch sjk.jar
   get_url:
-    url: https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=org.gridkit.jvmtool&a=sjk&v=LATEST
+    url: https://search.maven.org/remotecontent?filepath=org/gridkit/jvmtool/sjk/0.21/sjk-0.21.jar
     dest: ~/apps/sjk.jar
 
 - name: Get and unpack async-profiler
