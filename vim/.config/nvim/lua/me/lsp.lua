@@ -1,5 +1,6 @@
 local lsp = require 'vim.lsp'
 local api = vim.api
+local ms = lsp.protocol.Methods
 local M = {}
 
 ---@diagnostic disable-next-line: deprecated
@@ -28,6 +29,7 @@ function M.mk_config(config)
     capabilities = capabilities,
     on_attach = function(client, bufnr)
       local triggers = vim.tbl_get(client.server_capabilities, "completionProvider", "triggerCharacters")
+      triggers = triggers or {"."}
       if triggers then
         for _, char in ipairs({"a", "e", "i", "o", "u"}) do
           if not vim.tbl_contains(triggers, char) then
@@ -247,12 +249,12 @@ function M.symbol_tagfunc(pattern, flags)
   if not (flags == 'c' or flags == '' or flags == 'i') then
     return vim.NIL
   end
-  local clients = get_clients()
+  local clients = get_clients({ method = ms.workspace_symbol })
   local num_clients = vim.tbl_count(clients)
   local results = {}
   local bufnr = api.nvim_get_current_buf()
   for _, client in pairs(clients) do
-    client.request('workspace/symbol', { query = pattern }, function(_, method_or_result, result_or_ctx)
+    client.request(ms.workspace_symbol, { query = pattern }, function(_, method_or_result, result_or_ctx)
       local result = type(method_or_result) == 'string' and result_or_ctx or method_or_result
       for _, symbol in pairs(result or {}) do
         local loc = symbol.location
@@ -265,61 +267,6 @@ function M.symbol_tagfunc(pattern, flags)
   end
   vim.wait(1500, function() return num_clients == 0 end)
   return results
-end
-
-
-local function is_before(x, y)
-  if x.start.line < y.start.line then
-    return true
-  elseif x.start.line == y.start.line then
-    return x.start.character < y.start.character
-  else
-    return false
-  end
-end
-
-local function move_to_highlight(is_closer)
-  local params = lsp.util.make_position_params()
-  local win = api.nvim_get_current_win()
-  local lnum, col = unpack(api.nvim_win_get_cursor(win))
-  lnum = lnum - 1
-  local cursor = {
-    start = { line = lnum, character = col }
-  }
-  local results = lsp.buf_request_sync(0, 'textDocument/documentHighlight', params)
-  if not results then
-    return
-  end
-  for _, response in pairs(results) do
-    local result = response.result
-    local closest = nil
-    for _, highlight in pairs(result or {}) do
-      local range = highlight.range
-      local cursor_inside_range = (
-        range.start.line <= lnum
-        and range.start.character < col
-        and range["end"].line >= lnum
-        and range["end"].character > col
-      )
-      if not cursor_inside_range
-        and is_closer(cursor, range)
-        and (closest == nil or is_closer(range, closest)) then
-        closest = range
-      end
-    end
-    if closest then
-      api.nvim_win_set_cursor(win, { closest.start.line + 1, closest.start.character })
-    end
-  end
-end
-
-function M.next_highlight()
-  return move_to_highlight(is_before)
-end
-
-
-function M.prev_highlight()
-  return move_to_highlight(function(x, y) return is_before(y, x) end)
 end
 
 
