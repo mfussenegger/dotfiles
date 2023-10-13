@@ -22,6 +22,7 @@
       - curlylint
       - llm
       - argostranslate
+      - pgcli
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
 - name: Symlink tools
@@ -45,6 +46,7 @@
     - llm
     - argospm
     - argos-translate
+    - pgcli
 - name: Symlink py -> ptipython
   file:
     src: ~/.virtualenvs/tools/bin/ptipython
