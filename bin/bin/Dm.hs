@@ -4,11 +4,8 @@
  --package "http-client http-client-tls directory unix"
 -}
 
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
@@ -21,13 +18,15 @@ import Data.Aeson
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.UTF8 as BL
 import Data.Char (isSpace)
-import Data.Foldable (for_)
+import Data.Foldable (for_, find)
 import Data.List (findIndex, isInfixOf, foldl')
 import qualified Data.Map.Strict as M
 import Data.Maybe
   ( catMaybes,
     fromJust,
-    fromMaybe, mapMaybe
+    fromMaybe,
+    mapMaybe,
+    listToMaybe
   )
 import GHC.Generics (Generic)
 import qualified Network.HTTP.Client as HTTP
@@ -304,18 +303,19 @@ parseSinkInputs text = mapMaybe mkSinkInput inputs
     inputs = splitBy (== "") (lines text)
     mkSinkInput :: [String] -> Maybe SinkInput
     mkSinkInput lines = do
-      inputNumber <- get "Sink Input #"
+      inputNumber <- get "Sink Input #" >>= decimal
       inputAppName <- T.replace "\"" "" <$> get "application.name = "
-      sinkNumber <- get "Sink: "
+      sinkNumber <- get "Sink: " >>= decimal
       Just $
         SinkInput
-          { inputNumber = read $ T.unpack inputNumber,
+          { inputNumber = inputNumber,
             inputAppName = inputAppName,
-            inputSinkNumber = read $ T.unpack sinkNumber
+            inputSinkNumber = sinkNumber
           }
       where
+        decimal x = fst <$> rightToMaybe (T.decimal x)
         lines' = fmap T.pack lines
-        get prefix = mhead $ mapMaybe (T.stripPrefix prefix . T.strip) lines'
+        get prefix = listToMaybe $ mapMaybe (T.stripPrefix prefix . T.strip) lines'
 
 
 -- >>> parseSink "Sink #61\n    State: SUSPENDED\n    Name: alsa_output\n    Description: Foo"
@@ -336,7 +336,7 @@ parseSink text = mapMaybe mkSink (splitBy (== "") (lines text))
           }
       where
         lines' = fmap T.pack lines
-        get prefix = mhead $ mapMaybe (T.stripPrefix prefix . T.strip) lines'
+        get prefix = listToMaybe $ mapMaybe (T.stripPrefix prefix . T.strip) lines'
 
 
 -- >>> splitBy (== "") ["foo", "bar", "", "baz"]
@@ -361,27 +361,24 @@ splitBy pred xs = reverse . fmap reverse $ foldl' split [] xs
         in [x : h] <> t
 
 
-mhead :: [a] -> Maybe a
-mhead [] = Nothing
-mhead (x : _) = Just x
-
-
 pulseMove :: IO ()
 pulseMove = do
   inputs <- parseSinkInputs <$> listInputs
   sinks <- parseSink <$> listSinks
-  sinkInput <- pickOne inputs (formatInput sinks)
-  case sinkInput of
-    Nothing -> pure ()
-    Just sinkInput' -> do
+  Just sinkInput <- pickOne inputs (formatInput sinks)
+  if length sinks == 2
+    then
+      let selectedSinkNumber = inputSinkNumber sinkInput
+          inactiveSink = find (\s -> sinkNumber s /= selectedSinkNumber) sinks
+      in  for_ inactiveSink (moveSink sinkInput)
+    else do
       sink <- listSinks >>= flip pickOne sinkDescription . parseSink
-      case sink of
-        Nothing    -> pure()
-        Just sink' -> callProcess "pactl" ["move-sink-input", show (inputNumber sinkInput'), T.unpack (sinkName sink')]
+      for_ sink (moveSink sinkInput)
   where
     listInputs = readProcess "pactl" ["list", "sink-inputs"] ""
     listSinks = readProcess "pactl" ["list", "sinks"] ""
-    formatInput sinks input = inputAppName input <> maybe "" desc (mhead $ filter sinkMatches sinks)
+    moveSink src dst = callProcess "pactl" ["move-sink-input", show (inputNumber src), T.unpack (sinkName dst)]
+    formatInput sinks input = inputAppName input <> maybe "" desc (find sinkMatches sinks)
       where
         sinkMatches sink = sinkNumber sink == inputSinkNumber input
         desc sink = " (" <> sinkDescription sink <> ")"
