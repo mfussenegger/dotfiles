@@ -1,6 +1,6 @@
 #!/usr/bin/env stack
 {- stack script --optimize --resolver lts-21.15
- --package "aeson process bytestring regex-pcre text either utf8-string containers"
+ --package "aeson process bytestring regex-pcre text either utf8-string containers split"
  --package "http-client http-client-tls directory unix"
 -}
 
@@ -47,6 +47,7 @@ import Data.Either.Combinators (rightToMaybe)
 import Text.Printf (printf)
 import Control.Exception (catch, throwIO)
 import System.IO.Error (isDoesNotExistError)
+import Data.List.Split (wordsBy)
 
 
 data SwayOutput = SwayOutput
@@ -300,7 +301,7 @@ data Sink = Sink
 parseSinkInputs :: String -> [SinkInput]
 parseSinkInputs text = mapMaybe mkSinkInput inputs
   where
-    inputs = splitBy (== "") (lines text)
+    inputs = wordsBy (== "") (lines text)
     mkSinkInput :: [String] -> Maybe SinkInput
     mkSinkInput lines = do
       inputNumber <- get "Sink Input #" >>= decimal
@@ -321,7 +322,7 @@ parseSinkInputs text = mapMaybe mkSinkInput inputs
 -- >>> parseSink "Sink #61\n    State: SUSPENDED\n    Name: alsa_output\n    Description: Foo"
 -- [Sink {sinkNumber = 61, sinkName = "alsa_output", sinkDescription = "Foo"}]
 parseSink :: String -> [Sink]
-parseSink text = mapMaybe mkSink (splitBy (== "") (lines text))
+parseSink text = mapMaybe mkSink (wordsBy (== "") (lines text))
   where
     mkSink :: [String] -> Maybe Sink
     mkSink lines = do
@@ -337,28 +338,6 @@ parseSink text = mapMaybe mkSink (splitBy (== "") (lines text))
       where
         lines' = fmap T.pack lines
         get prefix = listToMaybe $ mapMaybe (T.stripPrefix prefix . T.strip) lines'
-
-
--- >>> splitBy (== "") ["foo", "bar", "", "baz"]
--- [["foo","bar"],["baz"]]
---
--- >>> splitBy (== "") []
--- []
---
--- >>> splitBy (== "") [""]
--- []
-splitBy :: forall a. (a -> Bool) -> [a] -> [[a]]
-splitBy pred xs = reverse . fmap reverse $ foldl' split [] xs
-  where
-    split :: [[a]] -> a -> [[a]]
-    split [] x
-      | pred x = []
-      | otherwise = [[x]]
-    split xs x
-      | pred x = [] : xs
-      | otherwise =
-        let (h : t) = xs
-        in [x : h] <> t
 
 
 pulseMove :: IO ()
