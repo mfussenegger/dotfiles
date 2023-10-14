@@ -6,6 +6,8 @@
 
 {-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 
 module Main where
 
@@ -243,10 +245,7 @@ fromUriOrCache cachePath source = do
 data Emoji = Emoji
   { emoji :: String
   , description :: String }
-  deriving (Show, Generic)
-
-
-instance FromJSON Emoji
+  deriving (Show, Generic, FromJSON)
 
 
 selectEmoji :: IO ()
@@ -258,13 +257,9 @@ selectEmoji = do
     (Left err)-> error $ "Couldn't decode " <> cachePath <> ": " <> err
     (Right emojis') -> do
       selected <- pickOne emojis' (\e -> emoji e <> " " <> description e)
-      case selected of
-        Nothing -> return ()
-        (Just selected') -> do
-          let
-            emoji' = emoji selected'
-          putStrLn emoji'
-          callProcess "wl-copy" [emoji']
+      for_ selected $ \s -> do
+        putStrLn s.emoji
+        callProcess "wl-copy" [s.emoji]
 
   where
     source = "https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json"
@@ -347,8 +342,7 @@ pulseMove = do
   Just sinkInput <- pickOne inputs (formatInput sinks)
   if length sinks == 2
     then
-      let selectedSinkNumber = inputSinkNumber sinkInput
-          inactiveSink = find (\s -> sinkNumber s /= selectedSinkNumber) sinks
+      let inactiveSink = find ((/= sinkInput.inputSinkNumber) . sinkNumber) sinks
       in  for_ inactiveSink (moveSink sinkInput)
     else do
       sink <- listSinks >>= flip pickOne sinkDescription . parseSink
