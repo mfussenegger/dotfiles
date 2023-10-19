@@ -16,8 +16,6 @@ vim.o.scrollback = 100000
 vim.o.signcolumn = "auto"
 vim.o.pumheight = 20
 
-
-
 do
   local function feedkeys(keys, mode)
     mode = mode or "n"
@@ -48,9 +46,22 @@ do
 end
 
 keymap.set({'i', 's'}, '<ESC>', function()
-  require('luasnip').unlink_current()
+  if vim.snippet then
+    vim.snippet.exit()
+  end
   return '<ESC>'
 end, { expr = true })
+
+
+local function try_jump(direction, key)
+  if vim.snippet and vim.snippet.jumpable(direction) then
+    return string.format("<cmd>lua vim.snippet.jump(%d)<cr>", direction)
+  end
+  return key
+end
+keymap.set({"i", "s"}, "<Tab>", function() return try_jump(1, "<Tab>") end, { expr = true })
+keymap.set({"i", "s"}, "<S-Tab>", function() return try_jump(-1, "<S-Tab>") end, { expr = true })
+
 
 keymap.set('n', 'gs', [[:let @/='\<'.expand('<cword>').'\>'<CR>cgn]])
 keymap.set('x', 'gs', [["sy:let @/=@s<CR>cgn]])
@@ -113,7 +124,7 @@ create_autocmd("FileType", {
   callback = function(args)
     local lines = api.nvim_buf_line_count(args.buf)
     local byte_count = api.nvim_buf_get_offset(args.buf, lines)
-    if (byte_count > 100000) then
+    if (byte_count > 200000) then
       vim.cmd("syn sync clear")
       vim.cmd("setlocal nowrap")
     else

@@ -19,11 +19,6 @@ nnoremap H Hzz
 " snippets
 imap <C-j> <cmd>lua require('me.snippet').maybe()<CR>
 
-imap <expr> <Tab>   luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : '<Tab>'
-smap <expr> <Tab>   luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : '<Tab>'
-imap <expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'
-smap <expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'
-
 
 " split navigation
 noremap <c-h> <c-w>h
@@ -46,7 +41,7 @@ tnoremap <c-l> <C-\><C-n><C-w>l
 " te -> terminal execute
 " ts -> terminal send
 nnoremap <silent><leader>tn :lua require('me.term').toggle()<CR>
-nnoremap <silent><leader>te :w<CR> :lua require('me.term').run()<CR>
+nnoremap <silent><leader>te :w<CR> :lua vim.schedule_wrap(require('me.term').run)()<CR>
 nnoremap <silent><leader>ts :lua require('me.term').sendLine(vim.fn.getline('.'))<CR>
 vnoremap <silent><leader>ts <ESC>:lua require('me.term').sendSelection()<CR>
 

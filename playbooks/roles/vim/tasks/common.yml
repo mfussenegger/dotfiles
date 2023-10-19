@@ -33,7 +33,6 @@
     - { folder: start, repo: tpope/vim-rhubarb }
     - { folder: start, repo: AndrewRadev/linediff.vim }
     - { folder: start, repo: hynek/vim-python-pep8-indent }
-    - { folder: start, repo: L3MON4D3/LuaSnip }
     - { folder: start, repo: phaazon/hop.nvim }
     - { folder: start, repo: vim-scripts/dbext.vim }
     - { folder: start, repo: jbyuki/venn.nvim }
