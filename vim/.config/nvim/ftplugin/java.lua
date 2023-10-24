@@ -8,6 +8,7 @@ local config = require('me.lsp').mk_config()
 config.settings = {
   java = {
     autobuild = { enabled = false },
+    maxConcurrentBuilds = 8,
     signatureHelp = { enabled = true };
     contentProvider = { preferred = 'fernflower' };
     saveActions = {
@@ -64,14 +65,6 @@ config.settings = {
         {
           name = "JavaSE-18",
           path = home .. "/.m2/jdks/jdk-18.0.2.1+1/",
-        },
-        {
-          name = "JavaSE-19",
-          path = os.getenv("JDK19"),
-        },
-        {
-          name = "JavaSE-20",
-          path = os.getenv("JDK20"),
         },
         {
           name = "JavaSE-21",

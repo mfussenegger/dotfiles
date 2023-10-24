@@ -14,8 +14,6 @@
   loop:
     - { major: 17, version: "{{ jdk17 }}" }
     - { major: 18, version: "{{ jdk18 }}" }
-    - { major: 19, version: "{{ jdk19 }}" }
-    - { major: 20, version: "{{ jdk20 }}" }
     - { major: 21, version: "{{ jdk21 }}" }
 
 - name: Install GraalVM Java21
