@@ -12,9 +12,9 @@
 
 - name: Get jol
   get_url:
-    url: https://repo1.maven.org/maven2/org/openjdk/jol/jol-cli/0.12/jol-cli-0.12-full.jar
+    url: https://repo1.maven.org/maven2/org/openjdk/jol/jol-cli/0.17/jol-cli-0.17-full.jar
     dest: ~/apps/jol.jar
-    checksum: sha256:95517ad43c185d8fba3bc3599278d31edc01a98233e07e2adafe63ad264b7e12
+    checksum: sha256:ea8cf31b7dc6c18810ca7aeadcbe7a2b352fb250261b8060ce513e8a99ebcd12
 
 - name: Get infracost
   unarchive:
