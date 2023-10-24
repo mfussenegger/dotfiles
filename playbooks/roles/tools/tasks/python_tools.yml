@@ -56,9 +56,9 @@
 - name: Bootstrap argospm en_de
   ansible.builtin.command: ~/.virtualenvs/tools/bin/argospm install translate-en_de
   args:
-    creates: ~/.local/cache/argos-translate/downloads/translate-en_de.argosmodel
+    creates: ~/.local/share/argos-translate/packages/en_de/model/model.bin
 
 - name: Bootstrap argospm de_en
   ansible.builtin.command: ~/.virtualenvs/tools/bin/argospm install translate-de_en
   args:
-    creates: ~/.local/cache/argos-translate/downloads/translate-de_en.argosmodel
+    creates: ~/.local/share/argos-translate/packages/de_en/model/model.bin
