@@ -9,11 +9,13 @@
     url: https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/3.3.4/openapi-generator-cli-3.3.4.jar
     dest: ~/apps/openapi-generator-cli.jar
     checksum: sha256:24cb04939110cffcdd7062d2f50c6f61159dc3e0ca3b8aecbae6ade53ad3dc8c
+
 - name: Get jol
   get_url:
     url: https://repo1.maven.org/maven2/org/openjdk/jol/jol-cli/0.12/jol-cli-0.12-full.jar
     dest: ~/apps/jol.jar
     checksum: sha256:95517ad43c185d8fba3bc3599278d31edc01a98233e07e2adafe63ad264b7e12
+
 - name: Get infracost
   unarchive:
     src: https://github.com/infracost/infracost/releases/latest/download/infracost-Linux-amd64.tar.gz
@@ -30,3 +32,7 @@
     dest: ~/bin/
     remote_src: true
     creates: ~/bin/neuron
+
+- name: Install stardict-wikt-en-en
+  aur:
+    name: stardict-wikt-en-en

@@ -1,8 +1,4 @@
 ---
-- name: Check stardict contents
-  shell: ls ~/.local/share/stardict || echo ""
-  register: stardict_contents
-
 - name: Create ~/.local/share/nvim
   ansible.builtin.file:
     state: directory
@@ -13,26 +9,3 @@
   get_url:
     url: https://raw.githubusercontent.com/words/moby/master/words.txt
     dest: ~/.local/share/nvim/mthesaur.txt
-- name: Create stardict folder
-  file:
-    path: ~/.local/share/stardict
-    state: directory
-- name: Fetch stardicts
-  unarchive:
-    src: "{{ item }}"
-    remote_src: true
-    dest: /tmp/
-  when: ('dictd_www.dict.org_gcide.idx' not in stardict_contents.stdout)
-  loop:
-    - http://download.huzheng.org/dict.org/stardict-dictd_www.dict.org_gcide-2.4.2.tar.bz2
-    - http://download.huzheng.org/dict.org/stardict-dictd-jargon-2.4.2.tar.bz2
-- name: Move stardict files
-  shell: mv /tmp/stardict-*/* ~/.local/share/stardict/
-  when: ('dictd_www.dict.org_gcide.idx' not in stardict_contents.stdout)
-- name: Cleanup tmp stardict
-  file:
-    path: "{{ item }}"
-    state: absent
-  loop:
-    - /tmp/stardict-dictd_www.dict.org_gcide-2.4.2
-    - /tmp/stardict-dictd-jargon-2.4.2
