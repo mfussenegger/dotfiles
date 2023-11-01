@@ -6,6 +6,7 @@ local function exit()
   api.nvim_feedkeys(key, 'n', true)
 end
 
+
 local snippets = {
   ["*"] = {
     date = function()
@@ -18,11 +19,11 @@ local snippets = {
   lua = {
     f = "local function ${1:name}(${2})\n  $0\nend",
     m = "function ${1:M}.${2:name}(${3})\n  $0\nend",
-    debug = [[
-      if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
-        require("lldebugger").start()
-      end
-    ]]
+    debug = vim.trim([[
+if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
+  require("lldebugger").start()
+end
+]])
   },
   java = {
     f = "${1:private} ${2:static} ${3:void} ${4:name}(${5}) {\n    $0\n}",
