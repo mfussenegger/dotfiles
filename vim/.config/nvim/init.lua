@@ -141,12 +141,12 @@ create_autocmd("BufNewFile", {
     local home = os.getenv("HOME")
     local fname = vim.fn.fnamemodify(args.file, ":t")
     local tmpl = home .. "/.config/nvim/templates/" .. fname ..".tpl"
-    if vim.uv.fs_stat(tmpl) then
+    if vim.loop.fs_stat(tmpl) then
       vim.cmd("0r " .. tmpl)
     else
       local ext = vim.fn.fnamemodify(args.file, ":e")
       tmpl = home .. "/.config/nvim/templates/" .. ext ..".tpl"
-      if vim.uv.fs_stat(tmpl) then
+      if vim.loop.fs_stat(tmpl) then
         vim.cmd("0r " .. tmpl)
       end
     end

@@ -198,7 +198,6 @@ end
 
 
 function M.setup()
-  require('jdtls').jol_path = os.getenv('HOME') .. '/apps/jol.jar'
   require('hop').setup()
 
   vim.diagnostic.config({
