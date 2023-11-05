@@ -1,0 +1,19 @@
+---
+- name: Checkout nlua repo
+  ansible.builtin.git:
+    repo: https://github.com/mfussenegger/nlua
+    dest: ~/dev/mfussenegger/nlua
+
+- name: Set home var
+  shell: echo $HOME
+  register: home
+
+- name: Symlink nlua
+  become: true
+  ansible.builtin.file:
+    state: link
+    src: "{{ home.stdout }}/dev/mfussenegger/nlua/nlua"
+    dest: /usr/bin/nlua
+    owner: root
+    group: root
+    mode: "0755"
