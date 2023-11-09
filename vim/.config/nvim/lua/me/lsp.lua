@@ -72,6 +72,7 @@ function M.setup()
     {'json', {'vscode-json-language-server', '--stdio'}},
     {'css', {'vscode-css-language-server', '--stdio'}},
     {'c', 'clangd', {'.git'}},
+    {'cpp', 'clangd', {'.git'}},
     {'sh', {'bash-language-server', 'start'}},
     {'rust', 'rust-analyzer', {'Cargo.toml', '.git'}},
     {'tex', 'texlab', {'.git'}},
@@ -113,7 +114,11 @@ function M.setup()
     callback = function(args)
       -- array of mappings to setup; {<capability>, <mode>, <lhs>, <rhs>}
       local key_mappings = {
-        {"referencesProvider", "n", "gr", vim.lsp.buf.references},
+        {"referencesProvider", "n", "gr",
+          function()
+            vim.lsp.buf.references({ includeDeclaration = false })
+          end
+        },
         {"implementationProvider", "n", "gD",  vim.lsp.buf.implementation},
         {"signatureHelpProvider", "i", "<c-space>", vim.lsp.buf.signature_help},
         {"workspaceSymbolProvider", "n", "gW", vim.lsp.buf.workspace_symbol},
