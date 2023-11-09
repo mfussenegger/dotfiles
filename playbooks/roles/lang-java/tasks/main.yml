@@ -29,7 +29,7 @@
     depth: 1
     single_branch: true
 - name: Build eclipse.jdt.ls
-  command: ./mvnw clean install -DskipTests
+  command: ./mvnw -T1C clean install -Dmaven.test.skip=true -Declipse.jdt.ls.skipGradleChecksums
   environment:
     JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.m2/jdks/jdk-{{ jdk17 }}"
   args:
@@ -43,7 +43,7 @@
     single_branch: true
     version: main
 - name: Build java-debug
-  command: ./mvnw clean install
+  command: ./mvnw -T1C clean install -Dmaven.test.skip=true
   environment:
     JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.m2/jdks/jdk-{{ jdk17 }}"
   args:
@@ -59,7 +59,7 @@
     depth: 1
 
 - name: Build vscode-java-test
-  command: ./mvnw clean verify -DskipTests
+  command: ./mvnw -T1C clean verify -Dmaven.test.skip=true
   environment:
     JAVA_HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}/.m2/jdks/jdk-{{ jdk17 }}"
   args:
