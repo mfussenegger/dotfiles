@@ -181,6 +181,7 @@ function M.paste(args)
       local ext = vim.split(filetype, "/")[2]
       local filename = hash .. "." .. ext
       vim.fn.system("scp /tmp/tmp.paste blog@zignar.net:/home/blog/output/assets/files/" .. filename)
+      os.remove(path)
       return { "https://zignar.net/assets/files/" .. filename, "" }
     end
   end

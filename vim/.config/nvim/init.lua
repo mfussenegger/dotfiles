@@ -79,17 +79,35 @@ require('me.fzy').setup()
 require('me.dap').setup()
 require('me.lsp').setup()
 
-vim.g.clipboard = {
-  name = 'wl-link-paste',
-  copy = {
-    ['+'] = {'wl-copy', '--type', 'text/plain'},
-    ['*'] = {'wl-copy', '--primary', '--type', 'text/plain'},
-  },
-  paste = {
-    ['+'] = me.paste(),
-    ['*'] = me.paste("--primary"),
+
+
+if os.getenv("SSH_CLIENT") then
+  local osc52 = require('vim.clipboard.osc52')
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = osc52.copy,
+      ['*'] = osc52.copy,
+    },
+    paste = {
+      ['+'] = osc52.paste,
+      ['*'] = osc52.paste,
+    },
   }
-}
+else
+  vim.g.clipboard = {
+    name = 'wl-link-paste',
+    copy = {
+      ['+'] = {'wl-copy', '--type', 'text/plain'},
+      ['*'] = {'wl-copy', '--primary', '--type', 'text/plain'},
+    },
+    paste = {
+      ['+'] = me.paste(),
+      ['*'] = me.paste("--primary"),
+    }
+  }
+end
+
 
 do
   local lint = require('lint')
