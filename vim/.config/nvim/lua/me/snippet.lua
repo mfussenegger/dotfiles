@@ -31,7 +31,7 @@ end
     logger = "private static final Logger LOGGER = LogManager.getLogger(${1}.class);",
     test = "@Test\npublic void ${1:test}() throws Exception {\n    $0\n}",
   },
-  ansible = {
+  ["yaml.ansible"] = {
     git = "ansible.builtin.git:\n  repo: ${1}\n  dest: ${0}",
     pip = "ansible.builtin.pip:\n  name: ${1}\n  virtualenv: ${2}\n  virtualenv_command: /usr/bin/python3 -m venv\n${0}",
     get_url = "ansible.builtin.get_url:\n  url: ${1}\n  dest: ${0}",
