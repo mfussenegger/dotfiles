@@ -81,8 +81,8 @@ require('me.lsp').setup()
 
 
 
-if os.getenv("SSH_CLIENT") then
-  local osc52 = require('vim.clipboard.osc52')
+local has_osc52, osc52 = pcall(require, 'vim.clipboard.osc52')
+if has_osc52 and os.getenv("SSH_CLIENT") then
   vim.g.clipboard = {
     name = 'OSC 52',
     copy = {
