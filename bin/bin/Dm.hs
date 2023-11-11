@@ -1,9 +1,10 @@
 #!/usr/bin/env stack
 {- stack script --optimize --resolver lts-21.15
  --package "aeson process bytestring regex-pcre text either utf8-string containers split"
- --package "http-client http-client-tls directory unix"
+ --package "http-client http-client-tls directory unix raw-strings-qq"
 -}
 
+{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveAnyClass #-}
@@ -43,6 +44,7 @@ import System.Posix.Files (rename)
 import System.Process (callProcess, readProcess, callCommand, shell, readCreateProcess)
 import Control.Monad (when, unless)
 import Text.Regex.PCRE ((=~))
+import Text.RawString.QQ
 import qualified Data.Text as T
 import qualified Data.Text.Read as T
 import Data.Either.Combinators (rightToMaybe)
@@ -286,7 +288,8 @@ data SinkInput = SinkInput
 data Sink = Sink
   { sinkNumber :: Int,
     sinkName :: T.Text,
-    sinkDescription :: T.Text
+    sinkDescription :: T.Text,
+    sinkVolume :: Int
   }
   deriving (Eq, Show)
 
@@ -324,11 +327,19 @@ parseSink text = mapMaybe mkSink (wordsBy (== "") (lines text))
       sinkNumber <- get "Sink #"
       sinkName <- get "Name: "
       sinkDescription <- get "Description: "
+      volumeOutput <- T.unpack <$> get "Volume: "
+      let pattern :: String
+          pattern = [r|.*/ +(\d{1,3})% /.*|]
+          [[_, volumeText]] = volumeOutput =~ pattern :: [[String]]
+          volume :: Int
+          volume = read volumeText
+
       Just $
         Sink
           { sinkNumber = read $ T.unpack sinkNumber,
             sinkName = sinkName,
-            sinkDescription = sinkDescription
+            sinkDescription = sinkDescription,
+            sinkVolume = volume
           }
       where
         lines' = fmap T.pack lines
@@ -355,6 +366,20 @@ pulseMove = do
       where
         sinkMatches sink = sinkNumber sink == inputSinkNumber input
         desc sink = " (" <> sinkDescription sink <> ")"
+
+
+setVolume :: IO ()
+setVolume = do
+  sinks <- parseSink <$> readProcess "pactl" ["list", "sinks"] ""
+  (Just sink) <- pickOne sinks sinkDescription
+  promptVolume sink
+  where
+    promptVolume :: Sink -> IO ()
+    promptVolume sink = do
+      let volume = show sink.sinkVolume
+      newVolume <- selection [volume]
+      callProcess "pactl" ["set-sink-volume", T.unpack sink.sinkName, newVolume <> "%"]
+      promptVolume sink
 
 
 removeIfExists :: FilePath -> IO ()
@@ -425,7 +450,8 @@ main = do
           ("call", callContacts),
           ("emoji", selectEmoji),
           ("mpc", selectSong),
-          ("pulse move", pulseMove),
+          ("pa move", pulseMove),
+          ("pa volume", setVolume),
           ("record window", wfRecord "slurp-win"),
           ("record region", wfRecord "slurp"),
           ("stop recording", stopRecording),
