@@ -9,7 +9,7 @@ export JDK11="/usr/lib/jvm/java-11-openjdk/"
 export JDK17="$HOME/.m2/jdks/jdk-17.0.9+9/"
 export JDK21="$HOME/.m2/jdks/jdk-21.0.1+12/"
 export JAVA_HOME="$JDK21"
-export GRAALVM_HOME="$HOME/.m2/jdks/graalvm-community-openjdk-21+35.1/"
+export GRAALVM_HOME="$HOME/.m2/jdks/graalvm-community-openjdk-21.0.1+12.1//"
 
 export GOPATH="$HOME/workspace/code/go"
 
