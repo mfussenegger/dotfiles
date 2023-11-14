@@ -175,7 +175,7 @@ xset = callProcess "xset"
 presOff :: IO ()
 presOff = do
   callProcess "systemctl" ["--user", "start", "swayidle.service"]
-  changeVimColorScheme ("tempus_totus", "gruvbox-material") ("light", "dark")
+  changeVimBackground "light" "dark"
   alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
   sed alacrittyConfig "colors: *light" "colors: *dark"
   sed alacrittyConfig "    family: JetBrains Mono" "    family: JetBrains Mono Light"
@@ -184,7 +184,7 @@ presOff = do
 presOn :: IO ()
 presOn = do
   callProcess "systemctl" ["--user", "stop", "swayidle.service"]
-  changeVimColorScheme ("gruvbox-material", "tempus_totus") ("dark", "light")
+  changeVimBackground "dark" "light"
   alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
   sed alacrittyConfig "colors: *dark" "colors: *light"
   sed alacrittyConfig "    family: JetBrains Mono Light" "    family: JetBrains Mono"
@@ -208,13 +208,12 @@ expandUser ('~' : xs) = do
 expandUser xs = pure xs
 
 
-changeVimColorScheme :: (String, String) -> (String, String) -> IO ()
-changeVimColorScheme colorscheme background = do
+changeVimBackground :: String -> String -> IO ()
+changeVimBackground from to = do
   vimrc <- expandUser "~/.config/nvim/options.vim" >>= canonicalizePath
-  sed vimrc ("colorscheme " ++ fst colorscheme) ("colorscheme " ++ snd colorscheme)
-  sed vimrc ("set background=" ++ fst background) ("set background=" ++ snd background)
+  sed vimrc ("set background=" ++ from) ("set background=" ++ to)
   instances <- lines <$> readProcess "nvr" ["--serverlist"] ""
-  let changeColor = "<Esc>:set background=" ++ snd background ++ "<CR>:colorscheme " ++ snd colorscheme ++ "<CR>"
+  let changeColor = "<Esc>:set background=" ++ to ++ "<CR>"
   for_ instances $ \x ->
     when (take 3 x /= "127") $
       callProcess "nvr" ["--nostart", "--servername", x, "--remote-send", changeColor]

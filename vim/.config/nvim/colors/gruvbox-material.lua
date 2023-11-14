@@ -1,6 +1,5 @@
 -- Based on sainnhe/gruvbox-material
---
-vim.o.background = 'dark'
+
 vim.cmd.highlight 'clear'
 if vim.g.syntax_on then
   vim.cmd.syntax 'reset'

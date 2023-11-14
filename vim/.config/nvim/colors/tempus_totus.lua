@@ -1,4 +1,3 @@
-vim.o.background = 'light'
 vim.cmd.highlight 'clear'
 if vim.g.syntax_on then
   vim.cmd.syntax 'reset'

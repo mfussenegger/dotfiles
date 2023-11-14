@@ -4,9 +4,6 @@ let mapleader = ","
 let maplocalleader = " "
 set termguicolors
 
-set background=dark
-colorscheme gruvbox-material
-
 set matchtime=3 " show matching parenthesis a bit faster.
 set nu rnu numberwidth=4
 set cursorline
