@@ -371,14 +371,14 @@ setVolume :: IO ()
 setVolume = do
   sinks <- parseSink <$> readProcess "pactl" ["list", "sinks"] ""
   (Just sink) <- pickOne sinks sinkDescription
-  promptVolume sink
+  promptVolume (T.unpack sink.sinkName) sink.sinkVolume
   where
-    promptVolume :: Sink -> IO ()
-    promptVolume sink = do
-      let volume = show sink.sinkVolume
+    promptVolume :: String -> Int -> IO ()
+    promptVolume sinkName sinkVolume = do
+      let volume = show sinkVolume
       newVolume <- selection [volume]
-      callProcess "pactl" ["set-sink-volume", T.unpack sink.sinkName, newVolume <> "%"]
-      promptVolume sink
+      callProcess "pactl" ["set-sink-volume", sinkName, newVolume <> "%"]
+      promptVolume sinkName (read newVolume)
 
 
 removeIfExists :: FilePath -> IO ()
