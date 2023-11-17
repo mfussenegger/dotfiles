@@ -39,7 +39,7 @@ alias -g T='| tail'
 alias -g F='| fzf'
 alias -g X='| xargs'
 alias -g V='| v -'
-if [ -n "$SSH_TTY" ] && hash tty-copy; then
+if [ -n "$SSH_TTY" ] && hash tty-copy 2> /dev/null; then
   alias -g C='| tty-copy -n'
 else
   alias -g C='| wl-copy -n'
