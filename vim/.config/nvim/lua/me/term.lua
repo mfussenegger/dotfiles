@@ -4,6 +4,11 @@ local M = {}
 
 local jobid = nil
 local winid = nil
+local repls = {
+  python = "py",
+  lua = "lua",
+  haskell = "stack ghci",
+}
 
 
 local function launch_term(cmd, opts)
@@ -28,17 +33,26 @@ local function close_term()
     return
   end
   vim.fn.jobstop(jobid)
-  if api.nvim_win_is_valid(winid) then
+  if winid and api.nvim_win_is_valid(winid) then
     api.nvim_win_close(winid, true)
   end
   winid = nil
 end
 
-function M.toggle()
+
+function M.repl()
+  local win = api.nvim_get_current_win()
+  M.toggle(repls[vim.bo.filetype])
+  api.nvim_set_current_win(win)
+end
+
+
+function M.toggle(cmd)
   if jobid then
     close_term()
   else
-    launch_term(vim.fn.environ()['SHELL'] or 'sh')
+    cmd = cmd or (vim.fn.environ()['SHELL'] or 'sh')
+    launch_term(cmd)
   end
 end
 
@@ -58,12 +72,15 @@ function M.cr8_run_next()
   local lnum, col = unpack(api.nvim_win_get_cursor(0))
   lnum = lnum - 1
   local cursor_node = root:descendant_for_range(lnum, col, lnum, col)
+  if not cursor_node then
+    return
+  end
   local parent = cursor_node:parent()
   while parent ~= nil do
     local type = parent:type()
     if type == "table" and parent:child_count() > 0 then
       local child = parent:child(1)
-      if child:type() == "bare_key" then
+      if child and child:type() == "bare_key" then
         local name = vim.treesitter.get_node_text(child, bufnr)
         if name == "setup" or name == "teardown" then
           local cmd = {
@@ -141,13 +158,40 @@ function M.sendSelection()
   if not jobid then
     return
   end
-  local start_row, start_col = unpack(api.nvim_buf_get_mark(0, '<'))
-  local end_row, end_col = unpack(api.nvim_buf_get_mark(0, '>'))
-  local mode = vim.fn.visualmode()
+  local mode = api.nvim_get_mode()
+  local start_row
+  local start_col
+  local end_row
+  local end_col
+  if mode.mode == "v" then
+    -- [bufnum, lnum, col, off]; 1-indexed
+    local start = vim.fn.getpos('v')
+    local end_ = vim.fn.getpos('.')
+
+    start_row = start[2]
+    start_col = start[3]
+
+    end_row = end_[2]
+    end_col = end_[3]
+
+    if start_row == end_row and end_col < start_col then
+      end_col, start_col = start_col, end_col
+    elseif end_row < start_row then
+      start_row, end_row = end_row, start_row
+      start_col, end_col = end_col, start_col
+    end
+    start_col = start_col -1
+    end_col = end_col - 1
+  else
+    start_row, start_col = unpack(api.nvim_buf_get_mark(0, '<'))
+    end_row, end_col = unpack(api.nvim_buf_get_mark(0, '>'))
+  end
+
   local offset
-  if mode == '' then -- in block mode all following lines are indented
+  local visualmode = vim.fn.visualmode()
+  if visualmode == '' then -- in block mode all following lines are indented
     offset = start_col
-  elseif mode == 'V' then
+  elseif visualmode == 'V' then
     end_row = end_row + 1
     offset = 0
   else
