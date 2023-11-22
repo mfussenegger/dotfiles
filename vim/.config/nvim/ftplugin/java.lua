@@ -96,9 +96,6 @@ config.cmd = {
 
 local function test_with_profile(test_fn)
   return function()
-    if vim.bo.modified then
-      vim.cmd.w()
-    end
     local choices = {
       'cpu,alloc=2m,lock=10ms',
       'cpu',
@@ -135,12 +132,15 @@ local function test_with_profile(test_fn)
 end
 
 config.on_attach = function(client, bufnr)
-  api.nvim_create_autocmd("BufWritePost", {
-    buffer = bufnr,
-    callback = function()
+  local function with_compile(fn)
+    return function()
+      if vim.bo.modified then
+        vim.cmd("w")
+      end
       client.request_sync("java/buildWorkspace", false, 5000, bufnr)
-    end,
-  })
+      fn()
+    end
+  end
 
   api.nvim_buf_create_user_command(bufnr, "A", function()
     require("jdtls.tests").goto_subjects()
@@ -160,24 +160,12 @@ config.on_attach = function(client, bufnr)
 
   local opts = { silent = true, buffer = bufnr }
   local set = vim.keymap.set
+  set("n", "<F5>", with_compile(require("dap").continue), opts)
   set('n', "<A-o>", jdtls.organize_imports, opts)
-  set('n', "<leader>df", function()
-    if vim.bo.modified then
-      vim.cmd('w')
-    end
-    jdtls.test_class()
-  end, opts)
-  set('n', "<leader>dl", function()
-    if vim.bo.modified then
-      vim.cmd('w')
-    end
-    require("dap").run_last()
-  end)
-  set('n', "<leader>dF", test_with_profile(jdtls.test_class), opts)
-  set('n', "<leader>dn", function()
-    if vim.bo.modified then
-      vim.cmd('w')
-    end
+  set('n', "<leader>df", with_compile(jdtls.test_class), opts)
+  set('n', "<leader>dl", with_compile(require("dap").run_last), opts)
+  set('n', "<leader>dF", with_compile(test_with_profile(jdtls.test_class)), opts)
+  set('n', "<leader>dn", with_compile(function()
     jdtls.test_nearest_method({
       config_overrides = {
         stepFilters = {
@@ -186,8 +174,8 @@ config.on_attach = function(client, bufnr)
         }
       }
     })
-  end, opts)
-  set('n', "<leader>dN", test_with_profile(jdtls.test_nearest_method), opts)
+  end), opts)
+  set('n', "<leader>dN", with_compile(test_with_profile(jdtls.test_nearest_method)), opts)
 
   vim.keymap.set('n', "crv", jdtls.extract_variable_all, opts)
   vim.keymap.set('v', "crv", [[<ESC><CMD>lua require('jdtls').extract_variable_all(true)<CR>]], opts)
@@ -199,6 +187,7 @@ config.on_attach = function(client, bufnr)
       local widgets = require("dap.ui.widgets")
       widgets.centered_float(widgets.scopes)
     else
+      client.request_sync("java/buildWorkspace", false, 5000, bufnr)
       require("jdtls.dap").pick_test()
     end
   end, opts)
