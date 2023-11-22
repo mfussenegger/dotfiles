@@ -59,6 +59,22 @@ end
 
 function M.run()
   local filepath = api.nvim_buf_get_name(0)
+  local lines = api.nvim_buf_get_lines(0, 0, 1, true)
+  if not vim.startswith(lines[1], "#!/usr/bin/env") then
+    local choice = vim.fn.confirm(
+      "File has no shebang, sure you want to execute it?", "&Yes\n&No")
+    if choice ~= 1 then
+      return
+    end
+  end
+  local stat = vim.loop.fs_stat(filepath)
+  if stat then
+    local user_execute = tonumber("00100", 8)
+    if bit.band(stat.mode, user_execute) ~= user_execute then
+      local newmode = bit.bor(stat.mode, user_execute)
+      vim.loop.fs_chmod(filepath, newmode)
+    end
+  end
   close_term()
   launch_term(filepath)
 end
