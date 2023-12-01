@@ -175,15 +175,13 @@ create_autocmd("BufNewFile", {
 vim.cmd.colorscheme("gruvbox-material")
 create_autocmd("OptionSet", {
   group = api.nvim_create_augroup("colors", { clear = true }),
+  nested = true,
   pattern = "background",
   callback = function()
-    -- use schedule to exit callback; to make sure ColorScheme autocmds fire too
-    vim.schedule(function()
-      if vim.o.background == "light" then
-        vim.cmd.colorscheme("tempus_totus")
-      else
-        vim.cmd.colorscheme("gruvbox-material")
-      end
-    end)
+    if vim.o.background == "light" then
+      vim.cmd.colorscheme("tempus_totus")
+    else
+      vim.cmd.colorscheme("gruvbox-material")
+    end
   end
 })
