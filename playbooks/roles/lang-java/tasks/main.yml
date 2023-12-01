@@ -10,7 +10,7 @@
 
 - name: Download mvnd
   ansible.builtin.unarchive:
-    src: https://github.com/apache/maven-mvnd/releases/download/1.0-m7/maven-mvnd-1.0-m7-m39-linux-amd64.tar.gz
+    src: https://github.com/apache/maven-mvnd/releases/download/1.0-m8/maven-mvnd-1.0-m8-m39-linux-amd64.tar.gz
     dest: ~/apps/mvnd/
     remote_src: true
     extra_opts:
