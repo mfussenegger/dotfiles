@@ -1,0 +1,9 @@
+---
+- name: Install ansibug
+  ansible.builtin.pip:
+    state: latest
+    name:
+      - ansible
+      - ansibug
+    virtualenv: ~/.virtualenvs/ansibug
+    virtualenv_command: /usr/bin/python3 -m venv

@@ -13,6 +13,23 @@ if vim.bo.buftype ==  "" then
   end
 end
 
+local dap = require("dap")
+if not dap.adapters.ansible then
+  dap.adapters.ansible = {
+    type = "executable",
+    command = os.getenv("HOME") .. "/.virtualenvs/ansibug/bin/python",
+    args = { "-m", "ansibug", "dap" },
+  }
+  dap.configurations["yaml.ansible"] = {
+    {
+      type = "ansible",
+      request = "launch",
+      name = "Debug playbook",
+      playbook = "${file}"
+    }
+  }
+end
+
 vim.lsp.start(require('me.lsp').mk_config {
   name = 'ansible-ls',
   cmd = {'ansible-language-server', '--stdio'},
