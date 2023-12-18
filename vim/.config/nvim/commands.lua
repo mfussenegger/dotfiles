@@ -54,7 +54,7 @@ api.nvim_create_user_command("Lua", function(args)
   vim.cmd.split()
   local bufnr = api.nvim_create_buf(true, true)
   api.nvim_buf_set_name(bufnr, "lua://" .. tostring(bufnr))
-  if args.line1 then
+  if args.range ~= 0 then
     local lines = api.nvim_buf_get_lines(srcbuf, args.line1 -1 , args.line2, true)
     local indent = math.huge
     for _, line in ipairs(lines) do
