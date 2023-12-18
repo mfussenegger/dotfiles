@@ -76,9 +76,21 @@ end
 local lsp = require("me.lsp")
 local config = lsp.mk_config {
   cmd = {"pylsp"},
+  cmd_env = {},
   root_dir = lsp.find_root({"setup.py", "setup.cfg", ".git"}),
 }
+if config.root_dir then
+  local folders = {"venv", ".venv", "env", ".env"}
+  for _, folder in ipairs(folders) do
+    local path = config.root_dir .. "/" .. folder
+    local stat = vim.loop.fs_stat(path)
+    if stat then
+      config.cmd_env["VIRTUAL_ENV"] = path
+    end
+  end
+end
 vim.lsp.start(config, {
+  bufnr = bufnr,
   reuse_client = function(client, conf)
     return (client.name == conf.name
       and (
