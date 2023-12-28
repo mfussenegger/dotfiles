@@ -48,6 +48,7 @@ set spelllang=en,de
 
 let &showbreak = '↪ '
 let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±,trail:⣿'
+let &fillchars = "eob: "
 set list
 
 set diffopt=filler,internal,hiddenoff,algorithm:histogram,indent-heuristic
