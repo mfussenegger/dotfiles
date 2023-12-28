@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-"$JDK19/bin/java" -cp ~/apps/converter.jar jfr2flame "$1" "$2"
+"$JDK21/bin/java" -cp ~/apps/converter.jar jfr2flame "$1" "$2"
