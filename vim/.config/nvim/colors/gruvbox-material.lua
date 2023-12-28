@@ -447,7 +447,7 @@ local theme = {
   MarkdownItalicDelimiter = {  },
   MarkdownItalic = {  },
   Italic = {  },
-  debugPC = { fg = '#1d2021', bg = bright_green },
+  debugPC = { bg = "#324232" },
   Type = { fg = bright_yellow },
   vCursor = { link = 'Cursor' },
   iCursor = { link = 'Cursor' },
