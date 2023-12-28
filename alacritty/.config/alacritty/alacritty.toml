@@ -1,0 +1,26 @@
+import = [
+  "~/.config/alacritty/dark.toml"
+]
+
+live_config_reload = true
+
+[font]
+size = 14
+
+[font.normal]
+family = "JuliaMono"
+style = "Normal"
+
+[[keyboard.bindings]]
+action = "CreateNewWindow"
+key = "Return"
+mods = "Control|Shift"
+
+[mouse]
+hide_when_typing = false
+
+[scrolling]
+history = 100000
+
+[window]
+dynamic_title = true

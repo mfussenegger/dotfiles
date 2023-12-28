@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-21.15
+{- stack script --optimize --resolver lts-21.25
  --package "aeson process bytestring regex-pcre text either utf8-string containers split"
  --package "http-client http-client-tls directory unix raw-strings-qq"
 -}
@@ -176,18 +176,20 @@ presOff :: IO ()
 presOff = do
   callProcess "systemctl" ["--user", "start", "swayidle.service"]
   changeVimBackground "light" "dark"
-  alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
-  sed alacrittyConfig "colors: *light" "colors: *dark"
-  sed alacrittyConfig "    family: JetBrains Mono" "    family: JetBrains Mono Light"
+  alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.toml" >>= canonicalizePath
+  sed alacrittyConfig
+    "  \"~/.config/alacritty/light.toml\""
+    "  \"~/.config/alacritty/dark.toml\""
 
 
 presOn :: IO ()
 presOn = do
   callProcess "systemctl" ["--user", "stop", "swayidle.service"]
   changeVimBackground "dark" "light"
-  alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.yml" >>= canonicalizePath
-  sed alacrittyConfig "colors: *dark" "colors: *light"
-  sed alacrittyConfig "    family: JetBrains Mono Light" "    family: JetBrains Mono"
+  alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.toml" >>= canonicalizePath
+  sed alacrittyConfig
+    "  \"~/.config/alacritty/dark.toml\""
+    "  \"~/.config/alacritty/light.toml\""
 
 
 sed :: FilePath -> String -> String -> IO ()
