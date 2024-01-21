@@ -113,7 +113,7 @@ local function test_with_profile(test_fn)
       if not choice then
         return
       end
-      local async_profiler_so = home .. "/apps/async-profiler/build/libasyncProfiler.so"
+      local async_profiler_so = home .. "/apps/async-profiler/lib/libasyncProfiler.so"
       local event = 'event=' .. choice
       local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,"
       vmArgs = vmArgs .. event .. ",file=/tmp/profile.jfr"
