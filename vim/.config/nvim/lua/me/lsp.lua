@@ -18,7 +18,7 @@ function M.mk_config(config)
         didChangeWatchedFiles = {
           dynamicRegistration = true
         }
-      }
+      },
     }
   )
   local defaults = {
@@ -104,9 +104,19 @@ function M.setup()
   end
   local keymap = vim.keymap
   if vim.fn.exists("##LspProgress") == 1 then
+    local timer = vim.loop.new_timer()
     api.nvim_create_autocmd("LspProgress", {
       group = lsp_group,
-      command = "redrawstatus"
+      callback = function()
+        vim.cmd.redrawstatus()
+        if timer then
+          timer:stop()
+          timer:start(500, 0, vim.schedule_wrap(function()
+            timer:stop()
+            vim.cmd.redrawstatus()
+          end))
+        end
+      end
     })
   end
   api.nvim_create_autocmd('LspAttach', {
