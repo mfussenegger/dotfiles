@@ -1,17 +1,17 @@
 venv() {
-    if [ -f venv/bin/activate ]
-    then
-        source venv/bin/activate
-    else
-        if [ -f .venv/bin/activate ]
-        then
-            source .venv/bin/activate
-        else
-            python -m venv venv
-            venv/bin/python -m pip install -U pip
-            source venv/bin/activate
-        fi
-    fi
+  if [ -f bin/activate ]; then
+    source bin/activate
+  elif [ -f venv/bin/activate ]; then
+    source venv/bin/activate
+  elif [ -f .venv/bin/activate ]; then
+      source .venv/bin/activate
+  elif (( $+commands[uv] )) then
+    uv venv venv
+    source venv/bin/activate
+  else
+    python -m venv venv
+    source venv/bin/activate
+  fi
 }
 
 
