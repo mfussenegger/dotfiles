@@ -27,6 +27,7 @@ data State
   | IDLE
   | PRINTING
   | ATTENTION
+  | BUSY
   deriving (Eq, Show, Generic, FromJSON)
 
 
@@ -58,6 +59,8 @@ showResponse (Right resp) = do
   let state = eitherDecode @StatusResult $ responseBody resp
   case state of
     Left err -> print err
+    Right (StatusResult {printer = Printer { state = BUSY }}) -> do
+      printf "🖨️ Busy"
     Right (StatusResult {printer = Printer { state = ATTENTION }}) -> do
       callProcess "swaymsg" ["bar", "mode", "dock"]
       printf "🖨️ ‼️"
