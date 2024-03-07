@@ -9,4 +9,4 @@ def configure(repl):
     repl.confirm_exit = False
     repl.enable_auto_suggest = True
     repl.complete_while_typing = True
-    repl.use_code_colorscheme('monokai')
+    repl.use_code_colorscheme('tango')
