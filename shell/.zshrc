@@ -18,7 +18,6 @@ source ~/.zsh/plugins/async.zsh
 source ~/.zsh/plugins/zsh-history-substring-search.zsh
 source ~/.zsh/plugins/pure.zsh
 
-[ -f ~/.zshrc.secret ] && source ~/.zshrc.secret
 
 [ -f ~/.dircolors ] && eval $(dircolors ~/.dircolors)
 eval "$(lua ~/.zsh/plugins/z.lua --init zsh once enhanced)"
