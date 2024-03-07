@@ -23,6 +23,7 @@
     - ~/.luarocks/bin
     - ~/.luarocks/lib
     - ~/.luarocks/share
+    - ~/.ghc
 - name: Ensure ~/.gnupg exists
   file:
     path: ~/.gnupg

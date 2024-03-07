@@ -12,5 +12,11 @@ bin/bin/term2mp4
 bin/bin/gh-maybe-clone
 bin/bin/pin-qemu
 bin/bin/nlua
+bin/bin/mk4
 bin/bin/*.hi
+bin/bin/*.dyn_hi
+bin/bin/*.dyn_o
+playbooks/roles/tmptask/
+python/.ipython/profile_default/history.sqlite
+python/.ipython/profile_default/startup/
 .mypy_cache/
