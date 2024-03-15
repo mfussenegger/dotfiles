@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-21.25
+{- stack script --optimize --resolver lts-22.13
   --package network-uri
   --package directory
   --package process

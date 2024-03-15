@@ -39,7 +39,7 @@
 
 - name: Install yay
   aur:
-    name: yay
+    name: yay-bin
 
 - name: Install tools
   aur:
@@ -51,3 +51,12 @@
       - hadolint-bin
       - comby-bin
       - local-lua-debugger-vscode
+
+
+- name: Install haskell dev packages
+  become: true
+  ansible.builtin.package:
+    state: present
+    name:
+      - hoogle
+      - haskell-ormolu

@@ -1,6 +1,6 @@
 ---
-- name: Install haskell tooling lts21
-  command: stack install --resolver lts-21.25 ghcid hlint hoogle ormolu
+- name: Install haskell tooling lts22
+  command: stack install --resolver lts-22.13 ghcid hlint
   args:
     chdir: ~/
 - name: Clone/pull ghcid
