@@ -12,9 +12,10 @@
     creates: ~/.m2/jdks/jdk-{{ item.version }}
     remote_src: true
   loop:
-    - { major: 17, version: "{{ jdk17 }}" }
-    - { major: 18, version: "{{ jdk18 }}" }
-    - { major: 21, version: "{{ jdk21 }}" }
+    - { major: 17, version: "{{ jdks_17 }}" }
+    - { major: 18, version: "{{ jdks_18 }}" }
+    - { major: 21, version: "{{ jdks_21 }}" }
+    - { major: 22, version: "{{ jdks_22 }}" }
 
 - name: Install GraalVM Java21
   ansible.builtin.unarchive:

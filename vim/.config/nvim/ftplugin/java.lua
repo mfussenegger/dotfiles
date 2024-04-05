@@ -72,12 +72,16 @@ config.settings = {
           name = "JavaSE-21",
           path = os.getenv("JDK21"),
         },
+        {
+          name = "JavaSE-22",
+          path = os.getenv("JDK22"),
+        },
       }
     };
   };
 }
 config.cmd = {
-  os.getenv("JDK21") .. "/bin/java",
+  os.getenv("JDK22") .. "/bin/java",
   --'-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
   '-Declipse.application=org.eclipse.jdt.ls.core.id1',
   '-Dosgi.bundles.defaultStartLevel=4',
