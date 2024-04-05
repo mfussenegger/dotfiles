@@ -118,7 +118,7 @@
     - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'highlights.scm' }
     - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'injections.scm' }
     - { ft: 'toml', src_dir: 'ikatyang/tree-sitter-toml/queries', file: 'highlights.scm' }
-    - { ft: 'xml', src_dir: 'tree-sitter-grammars/tree-sitter-xml/xml/queries', file: 'highlights.scm' }
+    - { ft: 'xml', src_dir: 'tree-sitter-grammars/tree-sitter-xml/queries/xml', file: 'highlights.scm' }
 
 - name: Fetch queries
   get_url:
