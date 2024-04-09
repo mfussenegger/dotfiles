@@ -51,7 +51,9 @@ end
 
 function M.find_root(markers, path)
   path = path or api.nvim_buf_get_name(0)
-  local match = vim.fs.find(markers, { path = path, upward = true })[1]
+  local cwd = vim.fn.getcwd()
+  local stop = vim.fn.fnamemodify(cwd, ":p:h:h")
+  local match = vim.fs.find(markers, { path = path, upward = true, stop = stop })[1]
   if match then
     local stat = vim.loop.fs_stat(match)
     if stat and stat.type == "directory" then

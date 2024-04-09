@@ -1,101 +1,103 @@
 local api = vim.api
 local jdtls = require('jdtls')
-local root_markers = {'gradlew', '.git'}
-local root_dir = require('jdtls.setup').find_root(root_markers)
+local root_markers = {'gradlew', 'mvnw', '.git'}
+local root_dir = require("me.lsp").find_root(root_markers) or require("me.lsp").find_root({"pom.xml"})
 local home = os.getenv('HOME')
 local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
-local config = require('me.lsp').mk_config()
-
 jdtls.jol_path = os.getenv('HOME') .. '/apps/jol.jar'
-config.settings = {
-  java = {
-    autobuild = { enabled = false },
-    maxConcurrentBuilds = 8,
-    signatureHelp = { enabled = true };
-    contentProvider = { preferred = 'fernflower' };
-    saveActions = {
-      organizeImports = true,
-    },
-    completion = {
-      favoriteStaticMembers = {
-        "io.crate.testing.Asserts.assertThat",
-        "org.assertj.core.api.Assertions.assertThat",
-        "org.assertj.core.api.Assertions.assertThatThrownBy",
-        "org.assertj.core.api.Assertions.assertThatExceptionOfType",
-        "org.assertj.core.api.Assertions.catchThrowable",
-        "org.hamcrest.MatcherAssert.assertThat",
-        "org.hamcrest.Matchers.*",
-        "org.hamcrest.CoreMatchers.*",
-        "org.junit.jupiter.api.Assertions.*",
-        "java.util.Objects.requireNonNull",
-        "java.util.Objects.requireNonNullElse",
-        "org.mockito.Mockito.*",
+local config = require('me.lsp').mk_config({
+  root_dir = root_dir,
+  settings = {
+    java = {
+      autobuild = { enabled = false },
+      maxConcurrentBuilds = 8,
+      signatureHelp = { enabled = true };
+      contentProvider = { preferred = 'fernflower' };
+      saveActions = {
+        organizeImports = true,
       },
-      filteredTypes = {
-        "com.sun.*",
-        "io.micrometer.shaded.*",
-        "java.awt.*",
-        "jdk.*",
-        "sun.*",
-      },
-    };
-    sources = {
-      organizeImports = {
-        starThreshold = 9999;
-        staticStarThreshold = 9999;
+      completion = {
+        favoriteStaticMembers = {
+          "io.crate.testing.Asserts.assertThat",
+          "org.assertj.core.api.Assertions.assertThat",
+          "org.assertj.core.api.Assertions.assertThatThrownBy",
+          "org.assertj.core.api.Assertions.assertThatExceptionOfType",
+          "org.assertj.core.api.Assertions.catchThrowable",
+          "org.hamcrest.MatcherAssert.assertThat",
+          "org.hamcrest.Matchers.*",
+          "org.hamcrest.CoreMatchers.*",
+          "org.junit.jupiter.api.Assertions.*",
+          "java.util.Objects.requireNonNull",
+          "java.util.Objects.requireNonNullElse",
+          "org.mockito.Mockito.*",
+        },
+        filteredTypes = {
+          "com.sun.*",
+          "io.micrometer.shaded.*",
+          "java.awt.*",
+          "jdk.*",
+          "sun.*",
+        },
       };
-    };
-    codeGeneration = {
-      toString = {
-        template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
-      },
-      hashCodeEquals = {
-        useJava7Objects = true,
-      },
-      useBlocks = true,
-    };
-    configuration = {
-      runtimes = {
-        {
-          name = "JavaSE-11",
-          path = os.getenv("JDK11"),
+      sources = {
+        organizeImports = {
+          starThreshold = 9999;
+          staticStarThreshold = 9999;
+        };
+      };
+      codeGeneration = {
+        toString = {
+          template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
         },
-        {
-          name = "JavaSE-17",
-          path = os.getenv("JDK17"),
+        hashCodeEquals = {
+          useJava7Objects = true,
         },
-        {
-          name = "JavaSE-18",
-          path = home .. "/.m2/jdks/jdk-18.0.2.1+1/",
-        },
-        {
-          name = "JavaSE-21",
-          path = os.getenv("JDK21"),
-        },
-        {
-          name = "JavaSE-22",
-          path = os.getenv("JDK22"),
-        },
+        useBlocks = true,
+        addFinalForNewDeclaration = "fields",
+      };
+      configuration = {
+        runtimes = {
+          {
+            name = "JavaSE-11",
+            path = os.getenv("JDK11"),
+          },
+          {
+            name = "JavaSE-17",
+            path = os.getenv("JDK17"),
+          },
+          {
+            name = "JavaSE-18",
+            path = home .. "/.m2/jdks/jdk-18.0.2.1+1/",
+          },
+          {
+            name = "JavaSE-21",
+            path = os.getenv("JDK21"),
+          },
+          {
+            name = "JavaSE-22",
+            path = os.getenv("JDK22"),
+          },
+        }
       }
-    };
-  };
-}
-config.cmd = {
-  os.getenv("JDK22") .. "/bin/java",
-  --'-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
-  '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-  '-Dosgi.bundles.defaultStartLevel=4',
-  '-Declipse.product=org.eclipse.jdt.ls.core.product',
-  '-Dlog.protocol=true',
-  '-Dlog.level=ALL',
-  '-Xmx4g',
-  '--add-modules=ALL-SYSTEM',
-  '--add-opens', 'java.base/java.util=ALL-UNNAMED',
-  '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-  '-jar', vim.fn.glob(home .. '/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_*.jar'),
-  '-configuration', home .. '/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux',
-  '-data', workspace_folder,
-}
+    }
+  },
+  cmd = {
+    os.getenv("JDK22") .. "/bin/java",
+    --'-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
+    '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+    '-Dosgi.bundles.defaultStartLevel=4',
+    '-Declipse.product=org.eclipse.jdt.ls.core.product',
+    '-Dlog.protocol=true',
+    '-Dlog.level=ALL',
+    '-Xmx4g',
+    '--add-modules=ALL-SYSTEM',
+    '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+    '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+    '-jar', vim.fn.glob(home .. '/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_*.jar'),
+    '-configuration', home .. '/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux',
+    '-data', workspace_folder,
+  }
+})
 
 
 local function test_with_profile(test_fn)
