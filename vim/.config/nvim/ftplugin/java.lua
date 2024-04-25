@@ -227,7 +227,8 @@ local bundle_list = vim.tbl_map(
     'org.eclipse.jdt.junit4.runtime_*.jar',
     'org.eclipse.jdt.junit5.runtime_*.jar',
     'org.opentest4j_*.jar',
-    'org.jacoco.*.jar'
+    'org.jacoco.*.jar',
+    'org.objectweb.asm*.jar'
   }
 )
 vim.list_extend(jar_patterns, bundle_list)
