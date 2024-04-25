@@ -103,19 +103,24 @@
     path: ~/apps/jmc/
     state: directory
     mode: 0700
+
 - name: Get and unpack jmc
   unarchive:
-    src: https://github.com/adoptium/jmc-build/releases/download/8.3.0/org.openjdk.jmc-8.3.0-linux.gtk.x86_64.tar.gz
+    src: https://github.com/adoptium/jmc-build/releases/download/9.0.0/org.openjdk.jmc-9.0.0-linux.gtk.x86_64.tar.gz
     dest: ~/apps/jmc/
     remote_src: true
     creates: ~/apps/jmc/bin/jmc
     extra_opts:
       - --strip-components=1
-- name: Create symlink for jmc
-  file:
-    src: ~/apps/jmc/jmc
+
+- name: Create jmc launcher
+  ansible.builtin.copy:
+    content: |
+      #!/usr/bin/env bash
+      set -Eeuo pipefail
+      PATH=$JAVA_HOME/bin:$PATH ~/apps/jmc/jmc
     dest: ~/bin/jmc
-    state: link
+    mode: "755"
 
 - name: Clone vscode-java-decompiler
   git:

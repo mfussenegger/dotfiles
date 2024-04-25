@@ -1,17 +1,7 @@
-export PATH=$PATH:$HOME/.local/share/npm/bin:$HOME/.luarocks/bin:.
-
 export KUBECONFIG=$HOME/.kube/config:$HOME/.kube/config_user
 export WINEDEBUG=-all
 export SDL_VIDEO_FULLSCREEN_DISPLAY=0
 export GPG_TTY=$(tty)
-
-export JDK11="/usr/lib/jvm/java-11-openjdk/"
-export JDK17="$HOME/.m2/jdks/jdk-17.0.10+7/"
-export JDK21="$HOME/.m2/jdks/jdk-21.0.2+13/"
-export JDK22="$HOME/.m2/jdks/jdk-22+36//"
-export JAVA_HOME="$JDK21"
-export GRAALVM_HOME="$HOME/.m2/jdks/graalvm-community-openjdk-21.0.1+12.1//"
-
 export GOPATH="$HOME/workspace/code/go"
 
 # Refresh gpg-agent tty in case user switches into an X session
