@@ -64,7 +64,10 @@ update_mirrorlist() {
 
 
 mp42gif() {
-  ffmpeg -i "$1" -vf "fps=10,scale=1024:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 "$2"
+  palette="/tmp/palette.png"
+  filters="fps=10,scale=1280:-1:flags=lanczos"
+  ffmpeg -i "$1" -vf "$filters,palettegen" -y "$palette"
+  ffmpeg -i "$1" -i "$palette" -lavfi "$filters [x]; [x][1:v] paletteuse" -y "$2"
 }
 
 pick-color() {
