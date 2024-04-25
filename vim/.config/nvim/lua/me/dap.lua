@@ -165,8 +165,13 @@ function M.setup()
   set({'n', 't'}, '<F5>',  dap.continue)
   set('n', '<leader>b', dap.toggle_breakpoint)
   set('n', '<leader>B', function()
-    local condition = vim.fn.input({ prompt = 'Breakpoint Condition: '})
-    if condition then
+    local line = vim.trim(api.nvim_get_current_line())
+    local default
+    if vim.bo.filetype == "java" and vim.startswith(line, "assert") then
+      default = vim.trim("!" .. line:match("^assert ([^:]*)"))
+    end
+    local condition = vim.fn.input({ prompt = 'Breakpoint Condition: ', default = default})
+    if condition and condition ~= "" then
       dap.toggle_breakpoint(condition, nil, nil, true)
     end
   end)
@@ -200,6 +205,15 @@ function M.setup()
   set('n', '<leader>ds', function() widgets.centered_float(widgets.scopes) end)
   set({'n', 'v'}, '<leader>dh', widgets.hover)
   set({'n', 'v'}, '<leader>dp', widgets.preview)
+  set("n", "<leader>di", function()
+    dap.repl.open()
+    dap.repl.execute(vim.fn.expand("<cexpr>"))
+  end)
+  set("v", "<leader>di", function()
+    local lines = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))
+    dap.repl.open()
+    dap.repl.execute(table.concat(lines, "\n"))
+  end)
 
   dap.listeners.after.event_initialized['me.dap'] = function()
     set("n", "<up>", dap.restart_frame)
@@ -234,6 +248,17 @@ function M.setup()
   create_command('DapVisualize', function() M.visualize() end, { nargs = 0 })
   create_command("DapNew", function() dap.continue({ new = true }) end, { nargs = 0 })
 
+  create_command("DapDiff", function(cmd_args)
+    local fargs = cmd_args.fargs
+    local max_level = nil
+    if #fargs == 3 then
+      max_level = tonumber(fargs[3])
+    elseif #fargs ~= 2 then
+      error("Two or three arguments required")
+    end
+    require("dap.ui.widgets").diff_var(fargs[1], fargs[2], max_level)
+  end, { nargs = "+" })
+
   local sessions_bar = widgets.sidebar(widgets.sessions, {}, '5 sp')
   create_command("DapSessions", sessions_bar.toggle, { nargs = 0 })
 
@@ -250,6 +275,16 @@ function M.setup()
     type = 'executable',
     command = HOME .. '/apps/cpptools/extension/debugAdapters/bin/OpenDebugAD7',
   }
+  dap.adapters.gdb = {
+    type = "executable",
+    command = "gdb",
+    args = { "-i", "dap" }
+  }
+  dap.adapters["gdb-arm"] = {
+    type = "executable",
+    command = "arm-none-eabi-gdb",
+    args = { "-i", "dap" }
+  }
   dap.adapters.codelldb = {
     type = 'server',
     port = "${port}",
@@ -265,23 +300,46 @@ function M.setup()
   }
 
   local function program()
-    return vim.fn.input({
+    local path = vim.fn.input({
       prompt = 'Path to executable: ',
       default = vim.fn.getcwd() .. '/',
       completion = 'file'
     })
+    return (path and path ~= "") and path or dap.ABORT
   end
 
   -- Dont forget, attach needs permission:
   --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
   local configs = {
     {
+      name = "gdb: Launch",
+      type = "gdb",
+      request = "launch",
+      program = program,
+      cwd = '${workspaceFolder}',
+    },
+    {
+      name = "gdb-arm: Attach target",
+      type = "gdb-arm",
+      request = "attach",
+      program = program,
+      target = "localhost:3333",
+      cwd = '${workspaceFolder}',
+    },
+    {
+      name = "gdbserver: attach",
+      type = "gdb",
+      request = "attach",
+      target = "localhost:1234",
+      cwd = '${workspaceFolder}',
+    },
+    {
       name = "cppdbg: Launch",
       type = "cppdbg",
       request = "launch",
       program = program,
       cwd = '${workspaceFolder}',
-      externalConsole = true,
+      externalConsole = false,
       args = {},
     },
     {
@@ -409,7 +467,7 @@ function M.setup()
   dap.configurations.zig = {
     {
       name = "Zig run",
-      type = "cppdbg",
+      type = "gdb",
       request = "launch",
       program = "/usr/bin/zig",
       args = {"run", "${file}"},
@@ -417,7 +475,7 @@ function M.setup()
     },
     {
       name = "Program",
-      type = "cppdbg",
+      type = "gdb",
       request = "launch",
       program = program,
       args = {},
@@ -425,7 +483,7 @@ function M.setup()
     },
     {
       name = "Test (No breakpoints 😢)",
-      type = "cppdbg",
+      type = "gdb",
       request = "launch",
       program = "/usr/bin/zig",
       args = {"test", "-fno-strip", "${file}"},
