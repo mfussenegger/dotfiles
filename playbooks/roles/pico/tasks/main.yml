@@ -1,0 +1,17 @@
+---
+- name: Install pico tools
+  become: true
+  ansible.builtin.package:
+    state: present
+    name:
+      - openocd
+      - arm-none-eabi-gdb
+      - arm-none-eabi-gcc
+      - arm-none-eabi-newlib
+      - minicom
+
+- name: Clone pico-sdk
+  become: false
+  ansible.builtin.git:
+    repo: https://github.com/raspberrypi/pico-sdk.git
+    dest: ~/dev/raspberrypi/pico-sdk
