@@ -16,6 +16,12 @@ action = "CreateNewWindow"
 key = "Return"
 mods = "Control|Shift"
 
+[[keyboard.bindings]]
+key = "/"
+action = "SearchForward"
+mode = "Vi|~Search"
+mods = "Shift"
+
 [mouse]
 hide_when_typing = false
 
