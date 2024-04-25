@@ -30,7 +30,7 @@
     state: directory
     mode: 0700
 - name: Create symlinks
-  shell: stow bin shell vim intellij sway git alacritty haskell psql gnupg python pinentry lua
+  shell: stow --dotfiles bin shell vim intellij sway git alacritty haskell psql gnupg python pinentry lua
   args:
     chdir: ~/dotfiles
 - name: Init dircolors
