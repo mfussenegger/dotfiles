@@ -75,6 +75,7 @@ end
 
 local lsp = require("me.lsp")
 local config = lsp.mk_config {
+  name = "pylsp",
   cmd = {"pylsp"},
   cmd_env = {},
   root_dir = lsp.find_root({"setup.py", "setup.cfg", ".git"}),
