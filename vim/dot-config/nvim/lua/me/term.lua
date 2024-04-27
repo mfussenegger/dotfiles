@@ -169,71 +169,42 @@ function M.cr8_run_file()
 end
 
 
-function M.sendLine(line)
+function M.send_line(line)
   if not jobid then
     return
   end
   vim.fn.chansend(jobid, line .. '\n')
 end
 
-function M.sendSelection()
+
+function M.send_selection()
   if not jobid then
     return
   end
   local mode = api.nvim_get_mode()
-  local start_row
-  local start_col
-  local end_row
-  local end_col
-  if mode.mode == "v" then
-    -- [bufnum, lnum, col, off]; 1-indexed
-    local start = vim.fn.getpos('v')
-    local end_ = vim.fn.getpos('.')
-
-    start_row = start[2]
-    start_col = start[3]
-
-    end_row = end_[2]
-    end_col = end_[3]
-
-    if start_row == end_row and end_col < start_col then
-      end_col, start_col = start_col, end_col
-    elseif end_row < start_row then
-      start_row, end_row = end_row, start_row
-      start_col, end_col = end_col, start_col
-    end
-    start_col = start_col -1
-    end_col = end_col - 1
+  local pos1
+  local pos2
+  local type
+  if vim.tbl_contains({"v", "V", ""}, mode.mode) then
+    pos1 = vim.fn.getpos("v")
+    pos2 = vim.fn.getpos(".")
+    type = mode.mode
   else
-    start_row, start_col = unpack(api.nvim_buf_get_mark(0, '<'))
-    end_row, end_col = unpack(api.nvim_buf_get_mark(0, '>'))
-  end
-
-  local offset
-  local visualmode = vim.fn.visualmode()
-  if visualmode == '' then -- in block mode all following lines are indented
-    offset = start_col
-  elseif visualmode == 'V' then
-    end_row = end_row + 1
-    offset = 0
-  else
-    offset = 0
-  end
-  local lines = api.nvim_buf_get_lines(0, start_row - 1, end_row, false)
-  for idx, line in pairs(lines) do
-    local l
-    if idx == 1 and idx == #lines then
-      l = line:sub(start_col + 1, end_col + 1)
-    elseif idx == 1 then
-      l = line:sub(start_col + 1)
-    elseif idx == #lines then
-      l = line:sub(offset + 1, end_col > #line and #line or end_col + 1)
-    elseif offset > 0 then
-      l = line:sub(offset + 1)
-    else
-      l = line
+    pos1 = vim.fn.getpos("'<")
+    pos2 = vim.fn.getpos("'>")
+    type = vim.fn.visualmode()
+    if type == "V" then
+      pos2[3] = #vim.fn.getline(pos2[2])
     end
-    vim.fn.chansend(jobid, l .. '\n')
+  end
+  local lines = vim.fn.getregion(pos1, pos2, { type = type })
+  local indent = math.huge
+  for _, line in ipairs(lines) do
+    indent = math.min(line:find("[^ ]") or math.huge, indent)
+  end
+  indent = indent == math.huge and 0 or indent
+  for _, line in ipairs(lines) do
+    vim.fn.chansend(jobid, line:sub(indent) .. '\n')
   end
 end
 
