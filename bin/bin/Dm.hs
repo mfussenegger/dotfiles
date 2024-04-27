@@ -1,7 +1,7 @@
 #!/usr/bin/env stack
 {- stack script --optimize --resolver lts-22.13
- --package "aeson process bytestring regex-pcre text either utf8-string containers split"
- --package "http-client http-client-tls directory unix raw-strings-qq"
+ --package "aeson process bytestring regex-tdfa text either utf8-string containers split"
+ --package "http-client http-client-tls directory unix raw-strings-qq filepath"
 -}
 
 {-# LANGUAGE QuasiQuotes #-}
@@ -22,14 +22,15 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.UTF8 as BL
 import Data.Char (isSpace)
 import Data.Foldable (for_, find)
-import Data.List (findIndex, isInfixOf, foldl')
+import Data.List (findIndex, isInfixOf, foldl', isPrefixOf, stripPrefix)
 import qualified Data.Map.Strict as M
 import Data.Maybe
   ( catMaybes,
     fromJust,
     fromMaybe,
     mapMaybe,
-    listToMaybe
+    listToMaybe,
+    isJust
   )
 import GHC.Generics (Generic)
 import qualified Network.HTTP.Client as HTTP
@@ -37,21 +38,26 @@ import qualified Network.HTTP.Client.TLS as HTTP
 import System.Directory
   ( canonicalizePath,
     doesFileExist,
-    getHomeDirectory, removeFile
+    getHomeDirectory,
+    removeFile,
+    listDirectory,
+    getSymbolicLinkTarget
   )
 import System.Environment (getArgs)
 import System.Posix.Files (rename)
 import System.Process (callProcess, readProcess, callCommand, shell, readCreateProcess)
-import Control.Monad (when, unless)
-import Text.Regex.PCRE ((=~))
+import Control.Monad (when, unless, join)
+import Text.Regex.TDFA
 import Text.RawString.QQ
 import qualified Data.Text as T
 import qualified Data.Text.Read as T
 import Data.Either.Combinators (rightToMaybe)
 import Text.Printf (printf)
-import Control.Exception (catch, throwIO)
+import Control.Exception (catch, throwIO, try, IOException)
 import System.IO.Error (isDoesNotExistError)
 import Data.List.Split (wordsBy)
+import Text.Read (readMaybe)
+import System.FilePath ((</>))
 
 
 data SwayOutput = SwayOutput
@@ -210,15 +216,92 @@ expandUser ('~' : xs) = do
 expandUser xs = pure xs
 
 
+data Stat = Stat
+  { pid :: Int,
+    tcomm :: String
+  }
+  deriving (Eq, Show)
+
+
+rights :: [Either a b] -> [b]
+rights = map toRight . filter isRight
+  where
+    isRight (Right _) = True
+    isRight _ = False
+    toRight (Right x) = x
+
+
+--- >>> nvimSockets
+-- ["/run/user/1000/nvim.159961.0"]
+nvimSockets :: IO [T.Text]
+nvimSockets = do
+  procStats <- listDirectory "/proc" >>= traverse getStat . mapMaybe readMaybe
+  let nvimPids = fmap pid . filter (\x -> x.tcomm == "nvim") $ procStats
+  inodes <- join <$> traverse socketPaths nvimPids
+  pure $ mapMaybe snd inodes
+  where
+    socketPaths pid = do
+      inodes <- getInodes pid
+      nodePaths <- netUnix pid
+      pure $ filter (\(inode, path) -> inode `elem` inodes) nodePaths
+    getStat :: Int -> IO Stat
+    getStat pid = do
+      -- See "Contents of the stat fields" https://www.kernel.org/doc/html/latest/filesystems/proc.html
+      parts <- words <$> readFile (printf "/proc/%d/stat" pid)
+      pure Stat {
+        pid = read (head parts),
+        tcomm = reverse . drop 1 . reverse . drop 1 $ parts !! 1
+      }
+    getInodes :: Int -> IO [Int]
+    getInodes pid = do
+      let fdpath = printf "/proc/%d/fd" pid
+      filenames <- map (fdpath </>) <$> listDirectory fdpath
+      filenames' <- rights <$> traverse (try @IOException . getSymbolicLinkTarget) filenames
+      -- pure filenames'
+      pure $ mapMaybe parseInode filenames'
+
+    --- >>> parseInode "socket:[534859]"
+    -- "534859"
+    parseInode :: String -> Maybe Int
+    parseInode str
+      | "socket:[" `isPrefixOf` str = readMaybe $ str =~ ("[0-9]+" :: String)
+      | otherwise = Nothing
+
+
+mapfst :: (a -> b) -> (a, c) -> (b, c)
+mapfst f (a, c)= (f a, c)
+
+
+-- >>> netUnix 159959
+-- [(336370,Just "/run/user/1000/bus"),(17522,Just "/run/systemd/journal/stdout")]
+netUnix :: Int -> IO [(Int, Maybe T.Text)]
+netUnix pid = do
+  let path = printf "/proc/%d/net/unix" pid
+  content <- readFile path
+  pure
+    . fmap (mapfst fromJust)
+    . filter (isJust . snd)
+    . filter (isJust . fst)
+    . fmap (getInodeAndPath . parseRow)
+    . drop 1
+    $ lines content
+  where
+    parseRow :: String -> [T.Text]
+    parseRow = drop 6 . filter (not . T.null) . T.splitOn " " . T.pack
+    getInodeAndPath :: [T.Text] -> (Maybe Int, Maybe T.Text)
+    getInodeAndPath [inode] = (readMaybe $ T.unpack inode, Nothing)
+    getInodeAndPath [inode, path] = (readMaybe $ T.unpack inode, Just path)
+    getInodeAndPath nope = error $ "Unexpected record: " <> show nope
+
+
 changeVimBackground :: String -> String -> IO ()
 changeVimBackground from to = do
   vimrc <- expandUser "~/.config/nvim/options.vim" >>= canonicalizePath
   sed vimrc ("set background=" ++ from) ("set background=" ++ to)
-  instances <- lines <$> readProcess "nvr" ["--serverlist"] ""
+  instances <- nvimSockets
   let changeColor = "<Esc>:set background=" ++ to ++ "<CR>"
   for_ instances $ \x ->
-    when (take 3 x /= "127") $
-      callProcess "nvr" ["--nostart", "--servername", x, "--remote-send", changeColor]
+    callProcess "v" ["--server", T.unpack x, "--remote-send", changeColor]
 
 
 callContacts :: IO ()
