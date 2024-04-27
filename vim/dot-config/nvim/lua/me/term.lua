@@ -60,11 +60,17 @@ end
 function M.run()
   local filepath = api.nvim_buf_get_name(0)
   local lines = api.nvim_buf_get_lines(0, 0, 1, true)
+  ---@type string|string[]
+  local cmd = filepath
   if not vim.startswith(lines[1], "#!/usr/bin/env") then
-    local choice = vim.fn.confirm(
-      "File has no shebang, sure you want to execute it?", "&Yes\n&No")
-    if choice ~= 1 then
-      return
+    if vim.bo.filetype == "haskell" then
+      cmd = {"stack", "run"}
+    else
+      local choice = vim.fn.confirm(
+        "File has no shebang, sure you want to execute it?", "&Yes\n&No")
+      if choice ~= 1 then
+        return
+      end
     end
   end
   local stat = vim.loop.fs_stat(filepath)
@@ -76,7 +82,7 @@ function M.run()
     end
   end
   close_term()
-  launch_term(filepath)
+  launch_term(cmd)
 end
 
 
