@@ -58,6 +58,7 @@ import System.IO.Error (isDoesNotExistError)
 import Data.List.Split (wordsBy)
 import Text.Read (readMaybe)
 import System.FilePath ((</>))
+import Data.Bifunctor (bimap)
 
 
 data SwayOutput = SwayOutput
@@ -232,13 +233,12 @@ rights = map toRight . filter isRight
 
 
 --- >>> nvimSockets
--- ["/run/user/1000/nvim.159961.0"]
+-- ["/run/user/1000/nvim.9623.0"]
 nvimSockets :: IO [T.Text]
 nvimSockets = do
   procStats <- listDirectory "/proc" >>= traverse getStat . mapMaybe readMaybe
   let nvimPids = fmap pid . filter (\x -> x.tcomm == "nvim") $ procStats
-  inodes <- join <$> traverse socketPaths nvimPids
-  pure $ mapMaybe snd inodes
+  fmap snd . join <$> traverse socketPaths nvimPids
   where
     socketPaths pid = do
       inodes <- getInodes pid
@@ -268,18 +268,14 @@ nvimSockets = do
       | otherwise = Nothing
 
 
-mapfst :: (a -> b) -> (a, c) -> (b, c)
-mapfst f (a, c)= (f a, c)
-
-
 -- >>> netUnix 159959
 -- [(336370,Just "/run/user/1000/bus"),(17522,Just "/run/systemd/journal/stdout")]
-netUnix :: Int -> IO [(Int, Maybe T.Text)]
+netUnix :: Int -> IO [(Int, T.Text)]
 netUnix pid = do
   let path = printf "/proc/%d/net/unix" pid
   content <- readFile path
   pure
-    . fmap (mapfst fromJust)
+    . fmap (bimap fromJust fromJust)
     . filter (isJust . snd)
     . filter (isJust . fst)
     . fmap (getInodeAndPath . parseRow)
