@@ -1,6 +1,6 @@
 #!/usr/bin/env stack
 {- stack script --optimize --resolver lts-22.13
- --package "aeson process bytestring regex-tdfa text either utf8-string containers split"
+ --package "aeson process bytestring regex-pcre text either utf8-string containers split"
  --package "http-client http-client-tls directory unix raw-strings-qq filepath"
 -}
 
@@ -47,7 +47,7 @@ import System.Environment (getArgs)
 import System.Posix.Files (rename)
 import System.Process (callProcess, readProcess, callCommand, shell, readCreateProcess)
 import Control.Monad (when, unless, join)
-import Text.Regex.TDFA
+import Text.Regex.PCRE ((=~))
 import Text.RawString.QQ
 import qualified Data.Text as T
 import qualified Data.Text.Read as T
@@ -59,6 +59,7 @@ import Data.List.Split (wordsBy)
 import Text.Read (readMaybe)
 import System.FilePath ((</>))
 import Data.Bifunctor (bimap)
+import Control.Concurrent (threadDelay)
 
 
 data SwayOutput = SwayOutput
@@ -233,7 +234,7 @@ rights = map toRight . filter isRight
 
 
 --- >>> nvimSockets
--- ["/run/user/1000/nvim.9623.0"]
+-- ["/run/user/1000/nvim.29685.0","/run/user/1000/nvim.42548.0"]
 nvimSockets :: IO [T.Text]
 nvimSockets = do
   procStats <- listDirectory "/proc" >>= traverse getStat . mapMaybe readMaybe
@@ -491,6 +492,7 @@ wfRecord slurpCmd = do
 stopRecording :: IO ()
 stopRecording = do
   callProcess "systemctl" ["--user", "kill", "-s", "SIGINT", "record.service"]
+  threadDelay 1000
   callProcess "pkill" ["-SIGUSR1", "i3status-rs"]
   callCommand $ "wl-copy < " <> filePath
   where
