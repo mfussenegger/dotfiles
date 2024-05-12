@@ -47,14 +47,14 @@ end
 
 keymap.set({'i', 's'}, '<ESC>', function()
   if vim.snippet then
-    vim.snippet.exit()
+    vim.snippet.stop()
   end
   return '<ESC>'
 end, { expr = true })
 
 
 local function try_jump(direction, key)
-  if vim.snippet and vim.snippet.jumpable(direction) then
+  if vim.snippet and vim.snippet.active({direction = direction}) then
     return string.format("<cmd>lua vim.snippet.jump(%d)<cr>", direction)
   end
   return key
