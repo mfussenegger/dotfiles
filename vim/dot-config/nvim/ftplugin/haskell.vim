@@ -1,9 +1,3 @@
-if executable("ormolu")
-    setlocal formatprg=ormolu\ --stdin-input-file\ %
-elseif executable("stylish-haskell")
-    setlocal formatprg=stylish-haskell
-endif
-
 setlocal tabstop=2
 setlocal shiftwidth=2
 setlocal softtabstop=2
