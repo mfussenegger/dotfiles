@@ -1,16 +1,19 @@
 local api = vim.api
-local jdtls = require('jdtls')
 local root_markers = {'gradlew', 'mvnw', '.git'}
-local root_dir = require("me.lsp").find_root(root_markers) or require("me.lsp").find_root({"pom.xml"})
+local root_dir = vim.fs.root(0, root_markers) or vim.fs.root(0, {"pom.xml"})
+if not root_dir then
+  return
+end
 local home = os.getenv('HOME')
 local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
+local jdtls = require('jdtls')
 jdtls.jol_path = os.getenv('HOME') .. '/apps/jol.jar'
 local config = require('me.lsp').mk_config({
   root_dir = root_dir,
   settings = {
     java = {
       autobuild = { enabled = false },
-      maxConcurrentBuilds = 8,
+      maxConcurrentBuilds = 1,
       signatureHelp = { enabled = true };
       contentProvider = { preferred = 'fernflower' };
       saveActions = {

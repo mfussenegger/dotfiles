@@ -32,7 +32,7 @@ do
       require("lsp_compl").accept_pum()
       feedkeys("<c-y>", "n")
     else
-      if next(vim.lsp.get_active_clients({ bufnr = 0 })) then
+      if next(vim.lsp.get_clients({ bufnr = 0 })) then
         require("lsp_compl").trigger_completion()
       else
         if vim.bo.omnifunc == "" then
@@ -54,7 +54,7 @@ end, { expr = true })
 
 
 local function try_jump(direction, key)
-  if vim.snippet and vim.snippet.active({direction = direction}) then
+  if vim.snippet.active({direction = direction}) then
     return string.format("<cmd>lua vim.snippet.jump(%d)<cr>", direction)
   end
   return key
@@ -185,3 +185,5 @@ create_autocmd("OptionSet", {
     end
   end
 })
+
+vim.cmd.packadd("cfilter")

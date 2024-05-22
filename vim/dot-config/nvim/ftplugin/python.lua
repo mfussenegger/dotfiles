@@ -78,7 +78,7 @@ local config = lsp.mk_config {
   name = "pylsp",
   cmd = {"pylsp"},
   cmd_env = {},
-  root_dir = lsp.find_root({"setup.py", "setup.cfg", ".git"}),
+  root_dir = vim.fs.root(0, {"setup.py", "setup.cfg", ".git"}),
 }
 if config.root_dir then
   local folders = {"venv", ".venv", "env", ".env"}

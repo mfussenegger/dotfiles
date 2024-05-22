@@ -1,7 +1,7 @@
 if vim.lsp.rpc.connect then
   local config = require('me.lsp').mk_config()
   config.cmd = vim.lsp.rpc.connect('127.0.0.1', 6008)
-  config.root_dir = require('jdtls.setup').find_root({'.git', 'project.godot'})
+  config.root_dir = vim.fs.root(0, {'.git', 'project.godot'})
   vim.lsp.start(config)
 end
 

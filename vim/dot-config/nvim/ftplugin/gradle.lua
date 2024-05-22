@@ -4,7 +4,7 @@ local config = lsp.mk_config {
     os.getenv('HOME') .. '/dev/microsoft/vscode-gradle/build/gradle-language-server/bin/gradle-language-server'
   },
   name = 'gradle-ls',
-  root_dir = lsp.find_root({"gradlew", ".git"}),
+  root_dir = vim.fs.root(0, {"gradlew", ".git"}),
   settings = {
     gradleWrapperEnabled = true,
   }

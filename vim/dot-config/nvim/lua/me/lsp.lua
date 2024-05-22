@@ -49,21 +49,6 @@ function M.mk_config(config)
   end
 end
 
-function M.find_root(markers, path)
-  path = path or api.nvim_buf_get_name(0)
-  local cwd = vim.fn.getcwd()
-  local stop = vim.fn.fnamemodify(cwd, ":p:h:h")
-  local match = vim.fs.find(markers, { path = path, upward = true, stop = stop })[1]
-  if match then
-    local stat = vim.loop.fs_stat(match)
-    if stat and stat.type == "directory" then
-      return vim.fn.fnamemodify(match, ':p:h:h')
-    end
-    return vim.fn.fnamemodify(match, ':p:h')
-  end
-  return nil
-end
-
 
 function M.setup()
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' })
@@ -95,7 +80,7 @@ function M.setup()
         })
         local markers = server[3]
         if markers then
-          config.root_dir = M.find_root(markers, args.file)
+          config.root_dir = vim.fs.root(args.file, markers)
         end
         vim.lsp.start(config)
       end,
@@ -110,7 +95,9 @@ function M.setup()
     api.nvim_create_autocmd("LspProgress", {
       group = lsp_group,
       callback = function()
-        vim.cmd.redrawstatus()
+        if api.nvim_get_mode().mode == "n" then
+          vim.cmd.redrawstatus()
+        end
         if timer then
           timer:stop()
           timer:start(500, 0, vim.schedule_wrap(function()
@@ -133,7 +120,6 @@ function M.setup()
         },
         {"implementationProvider", "n", "gD",  vim.lsp.buf.implementation},
         {"signatureHelpProvider", "i", "<c-space>", vim.lsp.buf.signature_help},
-        {"workspaceSymbolProvider", "n", "gW", vim.lsp.buf.workspace_symbol},
         {"codeLensProvider", "n", "<leader>cr", vim.lsp.codelens.refresh},
         {"codeLensProvider", "n", "<leader>ce", vim.lsp.codelens.run},
         {"codeLensProvider", "n", "<leader>ca",
@@ -166,7 +152,7 @@ function M.setup()
       keymap.set("v", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { context = { only = {'refactor'}}}<CR>", { buffer = args.buf })
 
       local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-      keymap.set("n", "crr", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", { buffer = args.buf })
+      keymap.set("n", "crn", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", { buffer = args.buf })
       keymap.set("i", "<c-n>", function()
         require("lsp_compl").trigger_completion()
       end, { buffer = args.buffer })

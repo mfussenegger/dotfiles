@@ -164,9 +164,8 @@ if vim.loop.fs_stat(".stylua.toml") then
 end
 
 
-local lsp = require('me.lsp')
-local root_dir = lsp.find_root({".git"})
-local config = lsp.mk_config {
+local root_dir = vim.fs.root(0, {".git"})
+local config = require("me.lsp").mk_config {
   name = "luals",
   cmd = {'lua-language-server'},
   root_dir = root_dir,
