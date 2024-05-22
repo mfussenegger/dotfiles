@@ -192,8 +192,8 @@ input * {
     repeat_rate 40
 }
 
-input type:touchpad {
-  tap enabled
+input "1356:3302:Sony_Interactive_Entertainment_Wireless_Controller_Touchpad" {
+  events disabled
 }
 
 
