@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-22.13
+{- stack script --optimize --resolver lts-22.23
  --package "aeson process bytestring regex-pcre text either utf8-string containers split"
  --package "http-client http-client-tls directory unix raw-strings-qq filepath"
 -}
@@ -45,8 +45,9 @@ import System.Directory
   )
 import System.Environment (getArgs)
 import System.Posix.Files (rename)
-import System.Process (callProcess, readProcess, callCommand, shell, readCreateProcess)
-import Control.Monad (when, unless, join)
+import System.Process (callCommand, callProcess, readCreateProcess, readProcess, shell)
+import qualified System.Process as P
+import Control.Monad (when, join)
 import Text.Regex.PCRE ((=~))
 import Text.RawString.QQ
 import qualified Data.Text as T
@@ -60,6 +61,7 @@ import Text.Read (readMaybe)
 import System.FilePath ((</>))
 import Data.Bifunctor (bimap)
 import Control.Concurrent (threadDelay)
+import System.Exit (ExitCode(..))
 
 
 data SwayOutput = SwayOutput
@@ -491,12 +493,14 @@ wfRecord slurpCmd = do
 
 stopRecording :: IO ()
 stopRecording = do
-  callProcess "systemctl" ["--user", "kill", "-s", "SIGINT", "record.service"]
-  threadDelay 1000
+  exitCode <- P.waitForProcess =<< P.spawnProcess "systemctl" systemctlArgs
+  threadDelay 2000
   callProcess "pkill" ["-SIGUSR1", "i3status-rs"]
-  callCommand $ "wl-copy < " <> filePath
+  when (exitCode == ExitSuccess) $
+    callCommand $ "wl-copy < " <> filePath
   where
     filePath = "/tmp/recording.mp4"
+    systemctlArgs = ["--user", "kill", "-s", "SIGINT", "record.service"]
 
 grim :: String -> IO ()
 grim slurpCmd = do
