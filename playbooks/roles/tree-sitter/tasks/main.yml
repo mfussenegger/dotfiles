@@ -5,7 +5,7 @@
     dest: ~/dev/{{ item.repo }}
     version: '{{ item.version }}'
     force: true
-  async: 300
+  async: 1200
   poll: 0
   register: git_clone
   loop:
@@ -15,6 +15,7 @@
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-c-sharp', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-rust', version: 'master' }
+    - { repo: 'tree-sitter/tree-sitter-regex', version: 'master' }
     - { repo: 'nvim-treesitter/tree-sitter-query', version: 'master' }
     - { repo: 'stsewd/tree-sitter-rst', version: 'master' }
     - { repo: 'maxxnino/tree-sitter-zig', version: 'main' }
@@ -22,6 +23,8 @@
     - { repo: 'ikatyang/tree-sitter-toml', version: 'master' }
     - { repo: 'PrestonKnopp/tree-sitter-gdscript', version: 'master' }
     - { repo: 'tree-sitter-grammars/tree-sitter-xml', version: 'master' }
+    - { repo: 'tree-sitter-grammars/tree-sitter-luap', version: 'master' }
+    - { repo: 'pstuifzand/tree-sitter-printf', version: 'main' }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -43,6 +46,9 @@
     - queries/query
     - queries/rust
     - queries/xml
+    - queries/luap
+    - queries/printf
+    - queries/regex
 
 - name: Wait for git clone
   async_status:
@@ -53,7 +59,7 @@
 
 - name: Generate parsers
   shell: cc -O2 -o ~/.config/nvim/parser/{{ item.ft }}.so -I./src {{ item.files }} -shared -Os -lstdc++ -fPIC
-  async: 300
+  async: 1200
   poll: 0
   register: compile_parsers
   args:
@@ -98,6 +104,15 @@
     - repo: 'tree-sitter-grammars/tree-sitter-xml/xml'
       ft: 'xml'
       files: 'src/parser.c src/scanner.c'
+    - repo: 'tree-sitter-grammars/tree-sitter-luap'
+      ft: 'luap'
+      files: 'src/parser.c'
+    - repo: 'pstuifzand/tree-sitter-printf'
+      ft: 'printf'
+      files: 'src/parser.c'
+    - repo: 'tree-sitter/tree-sitter-regex'
+      ft: 'regex'
+      files: 'src/parser.c'
 
 - name: Wait for compile parsers
   async_status:
@@ -119,6 +134,8 @@
     - { ft: 'zig', src_dir: 'maxxnino/tree-sitter-zig/queries', file: 'injections.scm' }
     - { ft: 'toml', src_dir: 'ikatyang/tree-sitter-toml/queries', file: 'highlights.scm' }
     - { ft: 'xml', src_dir: 'tree-sitter-grammars/tree-sitter-xml/queries/xml', file: 'highlights.scm' }
+    - { ft: 'luap', src_dir: 'tree-sitter-grammars/tree-sitter-luap/queries', file: 'highlights.scm' }
+    - { ft: 'regex', src_dir: 'tree-sitter/tree-sitter-regex/queries', file: 'highlights.scm' }
 
 - name: Fetch queries
   get_url:
@@ -142,6 +159,7 @@
     - { ft: 'rust', name: 'highlights' }
     - { ft: 'rust', name: 'locals' }
     - { ft: 'rust', name: 'injections' }
+    - { ft: 'printf', name: 'highlights' }
 
 - name: Fetch csharp queries
   get_url:
