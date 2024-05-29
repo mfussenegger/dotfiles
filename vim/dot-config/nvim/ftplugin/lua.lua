@@ -1,53 +1,79 @@
 local dap = require('dap')
 local api = vim.api
-dap.adapters.nlua = function(callback, conf)
-  local port = conf["port"]
-  local adapter = {
-    type = 'server',
-    host = '127.0.0.1',
-    port = port
-  }
-  if conf.start_neovim then
-    local start_opts = conf.start_neovim
-    conf.start_neovim = nil
-    local handle
-    local pid_or_err
-    local address = string.format('/tmp/nvim-osv-%d', port)
-    local opts = {
-      args = {
-        '-e',
-        vim.v.progpath,
-        '--listen',
-        address,
-        start_opts.fname or api.nvim_buf_get_name(0),
-      },
-      cwd = start_opts.cwd or vim.fn.getcwd(),
-      detached = true,
-    }
-    handle, pid_or_err = vim.loop.spawn('/usr/bin/alacritty', opts, function(code)
-      if handle then
-        handle:close()
-      end
-      assert(code == 0, "Exit code must be 0, not " .. tostring(code))
-    end)
-    if not handle then
-      error(pid_or_err)
-    end
-    vim.defer_fn(function()
-      local channel = vim.fn.sockconnect("pipe", address, { rpc = true })
-      assert(channel > 0)
-      vim.rpcrequest(
-        channel,
-        "nvim_exec_lua",
-        string.format("require('osv').launch({ port = %s })", port),
-        {}
-      )
-      vim.fn.chanclose(channel)
-      vim.defer_fn(vim.schedule_wrap(function() callback(adapter) end), 500)
-    end, 500)
-  else
-    callback(adapter)
+
+
+local function select_cwd_and_path()
+  local cwd = vim.fn.input("cwd: ", "", "dir")
+  if cwd == "" then
+    return vim.uv.cwd()
   end
+  cwd = vim.fs.normalize(cwd)
+  local fzy = require("fzy")
+  local is_git = vim.uv.fs_stat(vim.fs.joinpath(cwd, ".git"))
+  local ls_files = is_git and "git ls-files" or "fd"
+  local shellcmd = string.format("(cd %s; %s)", vim.fn.shellescape(cwd), ls_files)
+  local co = coroutine.running()
+  local function on_choice(file)
+    coroutine.resume(co, vim.trim(file))
+  end
+  fzy.execute(shellcmd, on_choice, "File> ")
+  return cwd, coroutine.yield()
+end
+
+
+dap.adapters.nlua = function(callback, conf)
+  coroutine.wrap(function()
+    local port = conf["port"]
+    local adapter = {
+      type = 'server',
+      host = '127.0.0.1',
+      port = port
+    }
+    if conf.start_neovim then
+      local start_opts = conf.start_neovim
+      conf.start_neovim = nil
+      if start_opts.prompt then
+        start_opts.cwd, start_opts.fname = select_cwd_and_path()
+      end
+      local handle
+      local pid_or_err
+      local address = string.format('/tmp/nvim-foo-osv-%d', port)
+      local opts = {
+        args = {
+          '-e',
+          vim.v.progpath,
+          '--listen',
+          address,
+          start_opts.fname or api.nvim_buf_get_name(0),
+        },
+        cwd = start_opts.cwd or vim.fn.getcwd(),
+        detached = true,
+      }
+      handle, pid_or_err = vim.loop.spawn('/usr/bin/alacritty', opts, function(code)
+        if handle then
+          handle:close()
+        end
+        assert(code == 0, "Exit code must be 0, not " .. tostring(code))
+      end)
+      if not handle then
+        error(pid_or_err)
+      end
+      vim.defer_fn(function()
+        local channel = vim.fn.sockconnect("pipe", address, { rpc = true })
+        assert(channel > 0)
+        vim.rpcrequest(
+          channel,
+          "nvim_exec_lua",
+          string.format("require('osv').launch({ port = %s })", port),
+          {}
+        )
+        vim.fn.chanclose(channel)
+        vim.defer_fn(vim.schedule_wrap(function() callback(adapter) end), 500)
+      end, 500)
+    else
+      callback(adapter)
+    end
+  end)()
 end
 
 dap.adapters["local-lua"] = {
@@ -86,6 +112,15 @@ dap.configurations.lua = {
   {
     type = "nlua",
     request = "attach",
+    name = "New instance (prompt cwd)",
+    port = free_port,
+    start_neovim = {
+      prompt = true
+    }
+  },
+  {
+    type = "nlua",
+    request = "attach",
     name = "New instance (dotfiles)",
     port = free_port,
     start_neovim = {
@@ -118,7 +153,8 @@ dap.configurations.lua = {
     request = 'attach',
     name = 'Attach',
     port = function()
-      return assert(tonumber(vim.fn.input('Port: ')), 'Port is required')
+      local port = tonumber(vim.fn.input('Port: '))
+      return port or dap.ABORT
     end
   },
   {
