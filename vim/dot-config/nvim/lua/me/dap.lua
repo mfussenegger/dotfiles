@@ -167,8 +167,11 @@ function M.setup()
   set('n', '<leader>B', function()
     local line = vim.trim(api.nvim_get_current_line())
     local default
-    if vim.bo.filetype == "java" and vim.startswith(line, "assert") then
-      default = vim.trim("!" .. line:match("^assert ([^:]*)"))
+    if vim.bo.filetype == "java" then
+      local assert_condition = line:match("^assert ([^:]*)")
+      if assert_condition then
+        default = vim.trim("!" .. assert_condition)
+      end
     end
     local condition = vim.fn.input({ prompt = 'Breakpoint Condition: ', default = default})
     if condition and condition ~= "" then
@@ -209,7 +212,7 @@ function M.setup()
     dap.repl.open()
     dap.repl.execute(vim.fn.expand("<cexpr>"))
   end)
-  set("v", "<leader>di", function()
+  set("x", "<leader>di", function()
     local lines = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"))
     dap.repl.open()
     dap.repl.execute(table.concat(lines, "\n"))
@@ -315,7 +318,7 @@ function M.setup()
       name = "gdb: Launch",
       type = "gdb",
       request = "launch",
-      program = program,
+      program = require("dap.utils").pick_file,
       cwd = '${workspaceFolder}',
     },
     {
