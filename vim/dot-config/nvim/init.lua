@@ -66,6 +66,9 @@ keymap.set({"i", "s"}, "<S-Tab>", function() return try_jump(-1, "<S-Tab>") end,
 keymap.set('n', 'gs', [[:let @/='\<'.expand('<cword>').'\>'<CR>cgn]])
 keymap.set('x', 'gs', [["sy:let @/=@s<CR>cgn]])
 
+keymap.set("i", "<c-r>s", function() require("snippasta").paste("s") end)
+keymap.set({"x", "n"}, "<leader>p", function() require("snippasta").paste() end)
+
 create_autocmd('WinEnter', { callback = function() vim.wo.cursorline = true end })
 create_autocmd('WinLeave', { callback = function() vim.wo.cursorline = false end })
 

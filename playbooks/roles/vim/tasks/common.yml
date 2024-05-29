@@ -57,3 +57,4 @@
     - mfussenegger/nvim-lsp-compl
     - mfussenegger/nvim-ansible
     - mfussenegger/nvim-overfly
+    - mfussenegger/nvim-snippasta
