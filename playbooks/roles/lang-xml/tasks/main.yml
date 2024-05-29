@@ -15,7 +15,7 @@
   ansible.builtin.git:
     repo: https://github.com/eclipse/lemminx-maven/
     dest: ~/dev/eclipse/lemminx-maven
-    version: 0.10.1
+    version: 0.11.1
 
 - name: Build lemminx-maven
   ansible.builtin.command: ./mvnw clean -B verify --file lemminx-maven/pom.xml -DskipTests -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true
@@ -33,6 +33,6 @@
 
 - name: Unpack zip with dependencies
   ansible.builtin.unarchive:
-    src: ~/dev/eclipse/lemminx-maven/lemminx-maven/target/lemminx-maven-0.10.1-zip-with-dependencies.zip
+    src: ~/dev/eclipse/lemminx-maven/lemminx-maven/target/lemminx-maven-0.11.1-zip-with-dependencies.zip
     dest: ~/dev/eclipse/lemminx-maven/dist/
     remote_src: true
