@@ -2,6 +2,7 @@ local M = {}
 local api = vim.api
 
 function M.statusline()
+  local counts = vim.diagnostic.count(0, { severity = { min = vim.diagnostic.severity.WARN }})
   local parts = {
     [[%<» %{luaeval("require'me'.file_or_lsp_status()")} %m%r%=]],
     "%#warningmsg#",
@@ -16,22 +17,15 @@ function M.statusline()
     "%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.'] ':''}",
     "%*",
     [[%{luaeval("require'me'.dap_status()")}]],
-    [[%{luaeval("require'me'.diagnostic_status()")}]],
   }
-  return table.concat(parts, '')
-end
-
-
-function M.diagnostic_status()
-  local num_errors = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+  local num_errors = counts[vim.diagnostic.severity.ERROR] or 0
+  local num_warnings = counts[vim.diagnostic.severity.WARN] or 0
   if num_errors > 0 then
-    return ' 💀 ' .. num_errors .. ' '
+    vim.list_extend(parts, {" 💀 ", tostring(num_errors), " "})
+  elseif num_warnings > 0 then
+    vim.list_extend(parts, {" 💩", tostring(num_warnings), " "})
   end
-  local num_warnings = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN })
-  if num_warnings > 0 then
-    return ' 💩' .. num_warnings .. ' '
-  end
-  return ''
+  return table.concat(parts, '')
 end
 
 
