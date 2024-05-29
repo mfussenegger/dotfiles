@@ -163,9 +163,13 @@ config.on_attach = function(client, bufnr)
       end
     end
   end
-  require('lsp_compl').attach(client, bufnr, {
-    server_side_fuzzy_completion = true,
-  })
+  if vim.lsp.completion then
+    vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
+  else
+    require('lsp_compl').attach(client, bufnr, {
+      server_side_fuzzy_completion = true,
+    })
+  end
 
   local opts = { silent = true, buffer = bufnr }
   local set = vim.keymap.set

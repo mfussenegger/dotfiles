@@ -29,15 +29,24 @@ function M.mk_config(config)
     capabilities = capabilities,
     on_attach = function(client, bufnr)
       local triggers = vim.tbl_get(client.server_capabilities, "completionProvider", "triggerCharacters")
-      triggers = triggers or {"."}
       if triggers then
         for _, char in ipairs({"a", "e", "i", "o", "u"}) do
           if not vim.tbl_contains(triggers, char) then
             table.insert(triggers, char)
           end
         end
+        for i, t in ipairs(triggers) do
+          if t == "," then
+            triggers[i] = nil
+          end
+        end
+        client.server_capabilities.completionProvider.triggerCharacters = vim.iter(triggers):totable()
       end
-      lsp_compl.attach(client, bufnr)
+      if vim.lsp.completion then
+        vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
+      else
+        lsp_compl.attach(client, bufnr)
+      end
     end,
     init_options = vim.empty_dict(),
     settings = vim.empty_dict(),
@@ -154,7 +163,11 @@ function M.setup()
       local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
       keymap.set("n", "crn", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", { buffer = args.buf })
       keymap.set("i", "<c-n>", function()
-        require("lsp_compl").trigger_completion()
+        if vim.lsp.completion then
+          vim.lsp.completion.trigger()
+        else
+          require("lsp_compl").trigger_completion()
+        end
       end, { buffer = args.buffer })
       keymap.set('i', '<CR>', function()
         return require('lsp_compl').accept_pum() and '<c-y>' or '<CR>'

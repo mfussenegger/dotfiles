@@ -33,7 +33,11 @@ do
       feedkeys("<c-y>", "n")
     else
       if next(vim.lsp.get_clients({ bufnr = 0 })) then
-        require("lsp_compl").trigger_completion()
+        if vim.lsp.completion then
+          vim.lsp.completion.trigger()
+        else
+          require("lsp_compl").trigger_completion()
+        end
       else
         if vim.bo.omnifunc == "" then
           feedkeys("<C-x><C-n>", "n")
