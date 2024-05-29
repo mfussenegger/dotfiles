@@ -1,4 +1,43 @@
 local api = vim.api
+
+
+local dap = require("dap")
+---@type ExecutableAdapter
+dap.adapters.hprof = {
+  type = "executable",
+  command = os.getenv("GRAALVM_HOME") .. "/bin/java",
+  args = {
+    -- "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005",
+    "-Dpolyglot.engine.WarnInterpreterOnly=false",
+    "-jar",
+    vim.fn.expand("~/dev/mfussenegger/hprofdap/target/hprofdap-0.1.0-jar-with-dependencies.jar"),
+  }
+}
+dap.configurations.java = {
+  {
+    name = "hprof (pick path)",
+    request = "launch",
+    type = "hprof",
+    filepath = function()
+      return require("dap.utils").pick_file({
+        executables = false,
+        filter = "%.hprof$"
+      })
+    end,
+  },
+  {
+    name = "hprof (prompt path)",
+    request = "launch",
+    type = "hprof",
+    filepath = function()
+      local path = vim.fn.input("hprof path: ", "", "file")
+      return path and vim.fn.fnamemodify(path, ":p") or dap.ABORT
+    end,
+  },
+}
+
+
+
 local root_markers = {'gradlew', 'mvnw', '.git'}
 local root_dir = vim.fs.root(0, root_markers) or vim.fs.root(0, {"pom.xml"})
 if not root_dir then
@@ -176,7 +215,10 @@ config.on_attach = function(client, bufnr)
   set("n", "<F5>", with_compile(function()
     local main_config_opts = {
       verbose = false,
-      on_ready = require("dap").continue,
+      on_ready = function()
+        pcall(require('dap.ext.vscode').load_launchjs)
+        require("dap").continue()
+      end,
     }
     require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
   end), opts)
@@ -201,7 +243,6 @@ config.on_attach = function(client, bufnr)
   vim.keymap.set('v', 'crm', [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
   vim.keymap.set('n', "crc", jdtls.extract_constant, opts)
   vim.keymap.set("n", "<leader>ds", function()
-    local dap = require("dap")
     if dap.session() then
       local widgets = require("dap.ui.widgets")
       widgets.centered_float(widgets.scopes)
@@ -210,6 +251,7 @@ config.on_attach = function(client, bufnr)
       require("jdtls.dap").pick_test()
     end
   end, opts)
+
 end
 
 local jar_patterns = {
