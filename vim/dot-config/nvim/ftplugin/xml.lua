@@ -12,7 +12,7 @@ vim.list_extend(cp, vim.split(vim.fn.glob(lemminx_maven, 1), '\n'))
 
 vim.lsp.start(require("me.lsp").mk_config({
   name = "lemminx",
-  root_dir = vim.fs.root(0, {'.git'}),
+  root_dir = vim.fs.root(0, {'.git'}) or vim.uv.cwd(),
   cmd = {
     os.getenv('JDK17') .. '/bin/java',
     '-cp', table.concat(cp, ':'),
