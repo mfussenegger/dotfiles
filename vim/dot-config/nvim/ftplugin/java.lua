@@ -223,7 +223,13 @@ config.on_attach = function(client, bufnr)
     require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
   end), opts)
   set('n', "<A-o>", jdtls.organize_imports, opts)
-  set('n', "<leader>df", with_compile(jdtls.test_class), opts)
+  set('n', "<leader>df", with_compile(function()
+    jdtls.test_class({
+      config_overrides = {
+        vmArgs = "-ea -XX:+TieredCompilation -XX:TieredStopAtLevel=1",
+      }
+    })
+  end), opts)
   set('n', "<leader>dl", with_compile(require("dap").run_last), opts)
   set('n', "<leader>dF", with_compile(test_with_profile(jdtls.test_class)), opts)
   set('n', "<leader>dn", with_compile(function()
@@ -232,7 +238,8 @@ config.on_attach = function(client, bufnr)
         stepFilters = {
           skipClasses = {"$JDK", "junit.*"},
           skipSynthetics = true
-        }
+        },
+        vmArgs = "-ea -XX:+TieredCompilation -XX:TieredStopAtLevel=1",
       }
     })
   end), opts)
