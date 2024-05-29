@@ -17,9 +17,9 @@
     - { major: 21, version: "{{ jdks_21 }}" }
     - { major: 22, version: "{{ jdks_22 }}" }
 
-- name: Install GraalVM Java21
+- name: Install GraalVM-CE Java22
   ansible.builtin.unarchive:
-    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.1/graalvm-community-jdk-21.0.1_linux-x64_bin.tar.gz
+    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-22.0.1/graalvm-community-jdk-22.0.1_linux-x64_bin.tar.gz
     dest: ~/.m2/jdks/
-    creates: ~/.m2/jdks/graalvm-community-openjdk-21.0.1+12.1/
+    creates: ~/.m2/jdks/graalvm-community-openjdk-22.0.1+8.1/
     remote_src: true
