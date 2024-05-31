@@ -1,5 +1,17 @@
 ---
 - name: Install luacheck
-  command: luarocks --local install luacheck
+  ansible.builtin.command: luarocks --local install luacheck
   args:
     creates: ~/.luarocks/bin/luacheck
+
+- name: Install busted
+  ansible.builtin.command: luarocks --local install busted
+  args:
+    creates: ~/.luarocks/bin/busted
+
+- name: Create nbusted
+  ansible.builtin.copy:
+    content: |
+      {{ lookup("template", "~/.luarocks/bin/busted") | regex_replace("exec '/usr/bin/lua5.1'", "exec '/usr/bin/nlua'") }}
+    dest: ~/.luarocks/bin/nbusted
+    mode: "0755"

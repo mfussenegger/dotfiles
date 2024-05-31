@@ -21,7 +21,7 @@ local function select_cwd_and_path()
 end
 
 
-dap.adapters.nlua = function(callback, conf)
+dap.adapters.osv = function(callback, conf)
   coroutine.wrap(function()
     local port = conf["port"]
     local adapter = {
@@ -82,6 +82,7 @@ dap.adapters["local-lua"] = {
   enrich_config = function(config, on_config)
     if not config["extensionPath"] then
       local c = vim.deepcopy(config)
+      ---@diagnostic disable-next-line: inject-field
       c.extensionPath = "/usr/lib/node_modules/local-lua-debugger-vscode/"
       on_config(c)
     else
@@ -103,14 +104,14 @@ end
 
 dap.configurations.lua = {
   {
-    type = "nlua",
+    type = "osv",
     request = "attach",
     name = "New instance (current file)",
     port = free_port,
     start_neovim = {}
   },
   {
-    type = "nlua",
+    type = "osv",
     request = "attach",
     name = "New instance (prompt cwd)",
     port = free_port,
@@ -119,7 +120,7 @@ dap.configurations.lua = {
     }
   },
   {
-    type = "nlua",
+    type = "osv",
     request = "attach",
     name = "New instance (dotfiles)",
     port = free_port,
@@ -129,7 +130,7 @@ dap.configurations.lua = {
     }
   },
   {
-    type = "nlua",
+    type = "osv",
     request = "attach",
     name = "New instance (crate/crate)",
     port = free_port,
@@ -139,7 +140,7 @@ dap.configurations.lua = {
     }
   },
   {
-    type = "nlua",
+    type = "osv",
     request = "attach",
     name = "New instance (neovim/neovim)",
     port = free_port,
@@ -149,7 +150,7 @@ dap.configurations.lua = {
     }
   },
   {
-    type = 'nlua',
+    type = 'osv',
     request = 'attach',
     name = 'Attach',
     port = function()
@@ -163,27 +164,27 @@ dap.configurations.lua = {
     request = 'launch',
     cwd = '${workspaceFolder}',
     program = {
-      lua = 'nlua.lua',
+      lua = 'nlua',
       file = '${file}',
     },
-    verbose = true,
+    verbose = false,
     args = {},
   },
   {
-    name = 'Busted current file (local-lua-dbg, nlua)',
+    name = 'nbusted current file',
     type = 'local-lua',
     request = 'launch',
     cwd = '${workspaceFolder}',
     program = {
-      command = "busted",
+      command = "nbusted",
     },
-    verbose = true,
+    verbose = false,
     args = {
       "${file}"
     },
   },
   {
-    name = 'Current file (local-lua-dbg, lua)',
+    name = 'Current file (local-lua-dbg, poc lua5.1)',
     type = 'local-lua',
     request = 'launch',
     cwd = '${workspaceFolder}',
@@ -320,28 +321,49 @@ if config.root_dir and vim.endswith(config.root_dir, "neovim/neovim") then
   end)
 else
   vim.keymap.set("n", "<leader>dn", function()
-    if vim.bo.modified then
+    local path = find_test()
+    local bufnr = api.nvim_get_current_buf()
+    local lines = api.nvim_buf_get_lines(0, 0, 3, false)
+    local lldebugger = {
+      'if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then',
+      '  require("lldebugger").start()',
+      'end',
+    }
+    local clear_lldebuger = false
+    if table.concat(lines, "\n") ~= table.concat(lldebugger, "\n") then
+      clear_lldebuger = true
+      api.nvim_buf_set_lines(0, 0, 0, true, lldebugger)
+      vim.cmd.w()
+    elseif vim.bo.modified then
       vim.cmd.w()
     end
-    local path = find_test()
     local name = table.concat(path, " ")
-    dap.run({
+    local runconfig = {
       name = name,
       type = "local-lua",
       request = "launch",
       cwd = "${workspaceFolder}",
       program = {
-        command = "busted",
+        command = "nbusted",
       },
       args = {
+        "--ignore-lua",
         api.nvim_buf_get_name(0),
         '--filter="' .. name .. '"',
       }
+    }
+    dap.run(runconfig, {
+      after = function()
+        if clear_lldebuger then
+          api.nvim_buf_set_lines(bufnr, 0, 3, true, {})
+          vim.cmd.w()
+        end
+      end
     })
   end)
   vim.keymap.set("n", "<leader>df", function()
     vim.cmd.split()
     local fname = api.nvim_buf_get_name(0)
-    vim.cmd.term('~/.luarocks/bin/busted "' .. fname .. '"')
+    vim.cmd.term('~/.luarocks/bin/nbusted --ignore-lua "' .. fname .. '"')
   end)
 end
