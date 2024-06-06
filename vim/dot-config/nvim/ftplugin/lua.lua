@@ -31,6 +31,7 @@ dap.adapters.osv = function(callback, conf)
     }
     if conf.start_neovim then
       local start_opts = conf.start_neovim
+      ---@diagnostic disable-next-line: inject-field
       conf.start_neovim = nil
       if start_opts.prompt then
         start_opts.cwd, start_opts.fname = select_cwd_and_path()
@@ -106,14 +107,14 @@ dap.configurations.lua = {
   {
     type = "osv",
     request = "attach",
-    name = "New instance (current file)",
+    name = "nvim:file",
     port = free_port,
     start_neovim = {}
   },
   {
     type = "osv",
     request = "attach",
-    name = "New instance (prompt cwd)",
+    name = "nvim:prompt-cwd",
     port = free_port,
     start_neovim = {
       prompt = true
@@ -122,7 +123,7 @@ dap.configurations.lua = {
   {
     type = "osv",
     request = "attach",
-    name = "New instance (dotfiles)",
+    name = "nvim:dots",
     port = free_port,
     start_neovim = {
       cwd = os.getenv('HOME') .. '/dotfiles',
@@ -132,7 +133,7 @@ dap.configurations.lua = {
   {
     type = "osv",
     request = "attach",
-    name = "New instance (crate/crate)",
+    name = "nvim:crate",
     port = free_port,
     start_neovim = {
       cwd = os.getenv('HOME') .. '/dev/crate/crate',
@@ -142,7 +143,7 @@ dap.configurations.lua = {
   {
     type = "osv",
     request = "attach",
-    name = "New instance (neovim/neovim)",
+    name = "nvim:neovim",
     port = free_port,
     start_neovim = {
       cwd = os.getenv('HOME') .. '/dev/neovim/neovim',
@@ -159,7 +160,7 @@ dap.configurations.lua = {
     end
   },
   {
-    name = 'Current file (local-lua-dbg, nlua)',
+    name = 'nlua-dbg:file',
     type = 'local-lua',
     request = 'launch',
     cwd = '${workspaceFolder}',
@@ -171,7 +172,7 @@ dap.configurations.lua = {
     args = {},
   },
   {
-    name = 'nbusted current file',
+    name = 'nbusted',
     type = 'local-lua',
     request = 'launch',
     cwd = '${workspaceFolder}',
@@ -184,7 +185,7 @@ dap.configurations.lua = {
     },
   },
   {
-    name = 'Current file (local-lua-dbg, poc lua5.1)',
+    name = 'lua-dbg:file',
     type = 'local-lua',
     request = 'launch',
     cwd = '${workspaceFolder}',
@@ -239,27 +240,17 @@ local config = require("me.lsp").mk_config {
 vim.lsp.start(config)
 
 
-if vim.loop.fs_stat("lemmy.sh") then
-  local bufnr = api.nvim_get_current_buf()
-  local group = vim.api.nvim_create_augroup('lemmy-' .. bufnr, { clear = true })
-  api.nvim_create_autocmd('BufWritePost', {
-    command = 'silent !./lemmy.sh',
-    buffer = bufnr,
-    group = group
-  })
-end
-
 local function find_test()
     local bufnr = api.nvim_get_current_buf()
     local lang = "lua"
     local end_row = api.nvim_win_get_cursor(0)[1]
     local query = vim.treesitter.query.parse(lang, [[
-      ((function_call
+      (function_call
         name: (identifier) @name (#any-of? @name "describe" "it")
         arguments: (arguments
-          ((string) @str)
+          (string) @str
         )
-      ))
+      )
     ]])
 
     local function get_text(root)
@@ -355,8 +346,9 @@ else
     dap.run(runconfig, {
       after = function()
         if clear_lldebuger then
+          clear_lldebuger = false
           api.nvim_buf_set_lines(bufnr, 0, 3, true, {})
-          vim.cmd.w()
+          api.nvim_buf_call(bufnr, vim.cmd.w)
         end
       end
     })
