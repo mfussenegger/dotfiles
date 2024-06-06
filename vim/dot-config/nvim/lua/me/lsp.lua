@@ -129,17 +129,17 @@ function M.setup()
         },
         {"implementationProvider", "n", "gD",  vim.lsp.buf.implementation},
         {"signatureHelpProvider", "i", "<c-space>", vim.lsp.buf.signature_help},
-        {"codeLensProvider", "n", "<leader>cr", vim.lsp.codelens.refresh},
+        {"codeLensProvider", "n", "<leader>cr", function() vim.lsp.codelens.refresh({bufnr = 0}) end},
         {"codeLensProvider", "n", "<leader>ce", vim.lsp.codelens.run},
         {"codeLensProvider", "n", "<leader>ca",
           function()
-            vim.lsp.codelens.refresh()
+            vim.lsp.codelens.refresh({ bufnr = 0 })
             local bufnr = api.nvim_get_current_buf()
             api.nvim_create_autocmd({'InsertLeave', 'CursorHold'}, {
               group = api.nvim_create_augroup(string.format('lsp-codelens-%s', bufnr), {}),
               buffer = bufnr,
               callback = function()
-                vim.lsp.codelens.refresh()
+                vim.lsp.codelens.refresh({ bufnr = 0 })
               end,
             })
           end
