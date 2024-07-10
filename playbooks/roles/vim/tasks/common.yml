@@ -25,6 +25,7 @@
     dest: ~/.config/nvim/pack/plugins/{{ item.folder }}/{{ item.repo | basename }}
     single_branch: true
     depth: 1
+    version: "{{ item.version | default('HEAD') }}"
   async: 1000
   poll: 0
   loop:
@@ -34,10 +35,10 @@
     - { folder: start, repo: AndrewRadev/linediff.vim }
     - { folder: start, repo: hynek/vim-python-pep8-indent }
     - { folder: start, repo: phaazon/hop.nvim }
-    - { folder: start, repo: vim-scripts/dbext.vim }
     - { folder: start, repo: jbyuki/venn.nvim }
     - { folder: start, repo: jbyuki/one-small-step-for-vimkind }
     - { folder: opt, repo: sirtaj/vim-openscad }
+    - { folder: start, repo: nvim-treesitter/nvim-treesitter-textobjects, version: main }
 
 - name: Checkout vim dev plugins
   git:
