@@ -93,3 +93,17 @@ api.nvim_create_user_command("Lua", function(args)
     end,
   })
 end, { range = "%" })
+
+
+api.nvim_create_user_command("CUniqueFile", function()
+  local qflist = vim.fn.getqflist()
+  local result = {}
+  local seen = {}
+  for _, item in ipairs(qflist) do
+    if seen[item.bufnr] == nil then
+      seen[item.bufnr] = true
+      table.insert(result, item)
+    end
+  end
+  vim.fn.setqflist(qflist, "r")
+end, { nargs = 0 })
