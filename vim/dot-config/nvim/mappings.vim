@@ -53,12 +53,12 @@ cnoremap <C-e> <End>
 
 " fugitive {{{
 
-nnoremap <Leader>ge :sp<CR>:Gedit :%:p<Left><Left><Left><Left>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gd :Gdiffsplit<cr>
 nnoremap <leader>gs :Git<cr>
 nnoremap <leader>gb :Git blame<cr>
 nnoremap <leader>gc :Git commit -v<cr>
+nnoremap <leader>gl :G log -n 30 --oneline<cr>
 nnoremap <leader>gj :cexpr system("git jump --stdout diff")<CR>
 
 " }}}
@@ -79,7 +79,7 @@ command -nargs=0 -bar Warnings :lua vim.diagnostic.setqflist { severity = vim.di
 
 nnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
 nnoremap <silent> <leader>/ :HopPattern<CR>
-vnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
+xnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
 omap     <silent> h :HopWord<CR>
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
 xnoremap <silent> m :lua require('tsht').nodes()<CR>
