@@ -92,6 +92,12 @@
     extra_opts:
       - --strip-components=1
 
+- name: Symlink asprof
+  ansible.builtin.file:
+    state: link
+    src: ~/apps/async-profiler/bin/asprof
+    dest: ~/bin/asprof
+
 - name: Get jfr converter
   get_url:
     url: https://github.com/jvm-profiling-tools/async-profiler/releases/download/v3.0/converter.jar
