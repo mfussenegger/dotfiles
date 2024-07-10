@@ -179,7 +179,7 @@ end
 
 function M.send_selection()
   if not jobid then
-    return
+    M.toggle()
   end
   local mode = api.nvim_get_mode()
   local pos1
