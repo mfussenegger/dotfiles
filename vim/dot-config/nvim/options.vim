@@ -12,12 +12,14 @@ set scrolloff=3
 set updatetime=1000
 
 set complete=.,w,b,u,U,i,d,t
-set completeopt=menuone,noinsert,noselect
 
 set wildmode=longest:full,full
 set wildignore+=*.pyc,.git,.idea,*.o
-if has('nvim-0.9')
-  set wildoptions=pum,tagfile,fuzzy
+set wildoptions=pum,tagfile,fuzzy
+if has('nvim-0.11')
+  set completeopt=menuone,noselect,fuzzy
+else
+  set completeopt=menuone,noselect
 endif
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
