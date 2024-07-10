@@ -213,14 +213,7 @@ config.on_attach = function(client, bufnr)
   local opts = { silent = true, buffer = bufnr }
   local set = vim.keymap.set
   set("n", "<F5>", with_compile(function()
-    local main_config_opts = {
-      verbose = false,
-      on_ready = function()
-        pcall(require('dap.ext.vscode').load_launchjs)
-        require("dap").continue()
-      end,
-    }
-    require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
+    dap.continue()
   end), opts)
   set('n', "<A-o>", jdtls.organize_imports, opts)
   set('n', "<leader>df", with_compile(function()

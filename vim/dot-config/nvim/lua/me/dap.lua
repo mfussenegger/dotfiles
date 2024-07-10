@@ -501,10 +501,6 @@ function M.setup()
       }
     },
   }
-  require('dap.ext.vscode').type_to_filetypes = {
-    lldb = {'rust', 'c', 'cpp'},
-  }
-  pcall(require('dap.ext.vscode').load_launchjs)
 end
 
 
