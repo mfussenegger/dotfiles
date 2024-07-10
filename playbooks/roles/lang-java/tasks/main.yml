@@ -138,7 +138,7 @@
 
 - name: Download mcs
   ansible.builtin.unarchive:
-    src: https://github.com/mthmulders/mcs/releases/download/v0.4.1/mcs-0.4.1-linux-x86_64.tar.gz
+    src: https://github.com/mthmulders/mcs/releases/download/v0.7.0/mcs-0.7.0-linux-x86_64.tar.gz
     dest: ~/apps/mcs/
     remote_src: true
     creates: ~/apps/mcs/bin
