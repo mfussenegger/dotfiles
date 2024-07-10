@@ -242,7 +242,7 @@ function M.setup()
       end
     end,
     {
-      nargs = 1,
+      nargs = "?",
       complete = function()
         return vim.tbl_map(function(c) return c.name end, get_clients())
       end
