@@ -18,7 +18,7 @@ local snippets = {
   },
   lua = {
     f = "local function ${1:name}(${2})\n  $0\nend",
-    m = "function ${1:M}.${2:name}(${3})\n  $0\nend",
+    m = "function ${1:M}${2:.}${3:name}(${4})\n  $0\nend",
     debug = vim.trim([[
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
   require("lldebugger").start()
@@ -138,7 +138,13 @@ function M.maybe()
           empty = 1,
           user_data = {
             item = item,
-            client_id = client_id
+            client_id = client_id,
+            nvim = {
+              lsp = {
+                completion_item = item,
+                client_id = client_id
+              }
+            }
           }
         })
       end
