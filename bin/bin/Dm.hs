@@ -494,12 +494,14 @@ wfRecord slurpCmd = do
 stopRecording :: IO ()
 stopRecording = do
   exitCode <- P.waitForProcess =<< P.spawnProcess "systemctl" systemctlArgs
+  callProcess "ffmpeg" [mp4, webm]
   threadDelay 2000
   callProcess "pkill" ["-SIGUSR1", "i3status-rs"]
   when (exitCode == ExitSuccess) $
-    callCommand $ "wl-copy < " <> filePath
+    callCommand $ "wl-copy < " <> webm
   where
-    filePath = "/tmp/recording.mp4"
+    mp4 = "/tmp/recording.mp4"
+    webm = "/tmp/recording.webm"
     systemctlArgs = ["--user", "kill", "-s", "SIGINT", "record.service"]
 
 grim :: String -> IO ()
