@@ -11,6 +11,7 @@ until-success() {
 until-error() {
     "$@"
     while [ $? -eq 0 ]; do
+        echo -n -e "\033]0;$(( SECONDS / 60 )) min $(( SECONDS % 60 )) sec: $@\007"
         "$@"
     done
 }
