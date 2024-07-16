@@ -10,6 +10,7 @@
   register: git_clone
   loop:
     - { repo: 'tree-sitter/tree-sitter-java', version: 'master' }
+    - { repo: 'tree-sitter/tree-sitter-python', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-html', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-json', version: 'master' }
     - { repo: 'tree-sitter/tree-sitter-haskell', version: 'master' }
@@ -34,6 +35,7 @@
     - parser/
     - queries/
     - queries/java
+    - queries/python
     - queries/rst
     - queries/html
     - queries/json
@@ -68,6 +70,9 @@
     - repo: 'tree-sitter/tree-sitter-java'
       ft: 'java'
       files: src/parser.c
+    - repo: 'tree-sitter/tree-sitter-python'
+      ft: 'python'
+      files: src/parser.c src/scanner.c
     - repo: 'tree-sitter/tree-sitter-haskell'
       ft: 'haskell'
       files: src/parser.c src/scanner.c
@@ -145,6 +150,8 @@
     - { ft: 'json', name: 'highlights' }
     - { ft: 'java', name: 'highlights' }
     - { ft: 'java', name: 'locals' }
+    - { ft: 'python', name: 'highlights' }
+    - { ft: 'python', name: 'locals' }
     - { ft: 'rst', name: 'highlights' }
     - { ft: 'rst', name: 'injections' }
     - { ft: 'yaml', name: 'highlights' }
