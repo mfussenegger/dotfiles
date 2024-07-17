@@ -3,6 +3,7 @@ PATH=$PATH:/home/$USER/.local/bin/
 PATH=$PATH:/home/$USER/.cargo/bin/
 PATH=$PATH:$HOME/.local/share/npm/bin
 PATH=$PATH:$HOME/.luarocks/bin:
+PATH=$PATH:$HOME/.ghcup/bin:
 PATH=$PATH/.
 
 export JDK11="/usr/lib/jvm/java-11-openjdk/"

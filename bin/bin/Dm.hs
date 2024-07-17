@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-22.23
+{- stack script --optimize --resolver lts-22.29
  --package "aeson process bytestring regex-pcre text either utf8-string containers split"
  --package "http-client http-client-tls directory unix raw-strings-qq filepath"
 -}

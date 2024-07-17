@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-22.23
+{- stack script --optimize --resolver lts-22.29
  --package "bytestring aeson http-client http-client-tls process"
 -}
 
