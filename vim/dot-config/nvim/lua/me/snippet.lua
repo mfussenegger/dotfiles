@@ -44,8 +44,13 @@ end
     command = "ansible.builtin.command: ${1}\nargs:\n  chdir: ${2}\n  creates: ${0}",
   },
   haskell = {
-    f = "${1:name} :: ${2}\n${1:name} ${3}= ${0:undefined}",
+    f = "${1:name} :: ${2}\n${1:name} ${3}= ${4:undefined}${0}",
     lang = "{-# LANGUAGE ${1} #-}$0",
+  },
+  python = {
+    main = 'if __name__ == "__main__":\n    ${1:pass}${0}',
+    f = "def ${1:name}(${2}):\n    ${3:pass}${0}",
+    m = "def ${1:name}(self${2}):\n    ${3:pass}${0}",
   }
 }
 
