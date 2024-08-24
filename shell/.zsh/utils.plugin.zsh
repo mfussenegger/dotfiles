@@ -9,9 +9,11 @@ until-success() {
 
 # repeat command until it fails
 until-error() {
+    start_time=$(date +%s)
     "$@"
     while [ $? -eq 0 ]; do
-        echo -n -e "\033]0;$(( SECONDS / 60 )) min $(( SECONDS % 60 )) sec: $@\007"
+        duration=$(($(date +%s) - $start_time))
+        echo -n -e "\033]0;$(( $duration / 60 )) min $(( $duration % 60 )) sec: $@\007"
         "$@"
     done
 }
