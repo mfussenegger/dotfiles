@@ -26,6 +26,7 @@
     - { repo: 'tree-sitter-grammars/tree-sitter-xml', version: 'master' }
     - { repo: 'tree-sitter-grammars/tree-sitter-luap', version: 'master' }
     - { repo: 'pstuifzand/tree-sitter-printf', version: 'main' }
+    - { repo: "cbarrete/tree-sitter-ledger", version: "master" }
 - name: Ensure nvim parser and query folders exists
   file:
     path: ~/.config/nvim/{{ item }}
@@ -51,6 +52,7 @@
     - queries/luap
     - queries/printf
     - queries/regex
+    - queries/ledger
 
 - name: Wait for git clone
   async_status:
@@ -118,6 +120,9 @@
     - repo: 'tree-sitter/tree-sitter-regex'
       ft: 'regex'
       files: 'src/parser.c'
+    - repo: "cbarrete/tree-sitter-ledger"
+      ft: "ledger"
+      files: "src/parser.c"
 
 - name: Wait for compile parsers
   async_status:
@@ -167,6 +172,7 @@
     - { ft: 'rust', name: 'locals' }
     - { ft: 'rust', name: 'injections' }
     - { ft: 'printf', name: 'highlights' }
+    - { ft: "ledger", name: "highlights" }
 
 - name: Fetch csharp queries
   get_url:
