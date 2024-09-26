@@ -33,6 +33,7 @@
 
 [branch]
     autoSetupRebase = always
+    sort = -committerdate
 
 [rerere]
     enabled = true
@@ -111,6 +112,9 @@
 
 [url "ssh://git@github.com/"]
     insteadOf = https://github.com/
+
+[url "https://codeberg.org/"]
+    insteadOf = cb:
 
 [url "git@github.com:"]
     insteadOf = gh:
