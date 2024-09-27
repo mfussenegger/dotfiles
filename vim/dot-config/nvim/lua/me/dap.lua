@@ -281,7 +281,7 @@ function M.setup()
   dap.adapters.gdb = {
     type = "executable",
     command = "gdb",
-    args = { "-i", "dap" }
+    args = { "-q", "-i", "dap" }
   }
   dap.adapters["gdb-arm"] = {
     type = "executable",
@@ -474,6 +474,14 @@ function M.setup()
       request = "launch",
       program = "/usr/bin/zig",
       args = {"run", "${file}"},
+      cwd = "${workspaceFolder}",
+    },
+    {
+      name = "Zig C run",
+      type = "gdb",
+      request = "launch",
+      program = "/usr/bin/zig",
+      args = {"run", "-lc", "${file}"},
       cwd = "${workspaceFolder}",
     },
     {

@@ -15,14 +15,14 @@ local function find_nearest_test()
     if child:type() == "STRINGLITERALSINGLE" then
       local text = vim.treesitter.get_node_text(child, bufnr, { concat = true })
       assert(type(text) == "string", "concat is true")
-      return text
+      return text:sub(2, #text - 1) -- strip quotes
     end
   end
   return nil
 end
 
 
-local function run_nearest_test()
+local function test_method()
   if vim.bo.modified and vim.bo.buftype == "" then
     vim.cmd.w()
   end
@@ -34,7 +34,7 @@ local function run_nearest_test()
   -- Use "--test-no-exec" and then use result binary as `program`?
   require("dap").run({
     name = "Test: " .. testcase,
-    type = "cppdbg",
+    type = "gdb",
     request = "launch",
     program = "/usr/bin/zig",
     args = {"test", "-fno-strip", "${file}", "--test-filter", testcase},
@@ -42,5 +42,41 @@ local function run_nearest_test()
   })
 end
 
+local function test_file()
+  if vim.bo.modified and vim.bo.buftype == "" then
+    vim.cmd.w()
+  end
+  require("dap").run({
+    name = "Test: " .. api.nvim_buf_get_name(0),
+    type = "gdb",
+    request = "launch",
+    program = "/usr/bin/zig",
+    args = {"test", "-fno-strip", "${file}"},
+    cwd = "${workspaceFolder}",
+  })
+end
 
-vim.keymap.set("n", "<leader>dn", run_nearest_test)
+
+vim.keymap.set("n", "<leader>dn", test_method)
+vim.keymap.set("n", "<leader>df", test_file)
+
+
+local config = require("me.lsp").mk_config({
+  cmd = {"zls"},
+  name = "zls",
+  root_dir = vim.fs.root(0, {"build.zig", ".git"})
+})
+vim.lsp.start(config, {
+  reuse_client = function (client, conf)
+    return (
+      client.name == conf.name
+      and (
+        client.config.root_dir == conf.root_dir
+        or (
+          conf.root_dir == nil
+          and vim.startswith(api.nvim_buf_get_name(0), "/usr/lib/zig/")
+        )
+      )
+    )
+  end
+})
