@@ -5,7 +5,7 @@ import = [
 live_config_reload = true
 
 [font]
-size = 14
+size = 10
 
 [font.normal]
 family = "JuliaMono"

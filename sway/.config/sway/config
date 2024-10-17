@@ -4,7 +4,7 @@ set $down j
 set $left h
 set $right l
 
-font pango: JuliaMono 14
+font pango: JuliaMono 10
 
 # colors
 #
@@ -132,21 +132,24 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     status_command i3status-rs ~/.config/i3/status.toml
-    font pango: JuliaMono 15
+    font pango: JuliaMono 10
 }
 
 
-output 'Dell Inc. DELL P2416D 07C5367S0RKU' {
-  position 0 0
+output 'BNQ BenQ RD280U H5R0121001Q' {
+  position 0 0 res 3840x2560
+  scale 2
 }
 output 'Dell Inc. DELL P2416D 07C5367S0R4U' {
-  position 2560 0
+  position 1920 0 res 2560x1440
+  scale 1.5
+  scale_filter nearest
 }
 
-workspace 1 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
-workspace 2 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
-workspace 3 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
-workspace 4 output 'Dell Inc. DELL P2416D 07C5367S0RKU'
+workspace 1 output 'BNQ BenQ RD280U H5R0121001Q'
+workspace 2 output 'BNQ BenQ RD280U H5R0121001Q'
+workspace 3 output 'BNQ BenQ RD280U H5R0121001Q'
+workspace 4 output 'BNQ BenQ RD280U H5R0121001Q'
 
 workspace 7 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
 workspace 8 output 'Dell Inc. DELL P2416D 07C5367S0R4U'

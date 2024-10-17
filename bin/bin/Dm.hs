@@ -107,7 +107,7 @@ selection input = do
   if tool == "bemenu"
     then do
       idx <- getDisplayIdx
-      runTool "bemenu" ["-m", show idx, "-l", "30", "--fn", "JuliaMono 16"]
+      runTool "bemenu" ["-m", show idx, "-l", "30", "--fn", "JuliaMono 11"]
     else runTool tool []
   where
     getDisplayIdx :: IO Int
@@ -185,6 +185,9 @@ xset = callProcess "xset"
 presOff :: IO ()
 presOff = do
   callProcess "systemctl" ["--user", "start", "swayidle.service"]
+  callProcess "ddcutil" ["-d", "1", "setvcp", "10", "49"]
+  callProcess "ddcutil" ["-d", "1", "setvcp", "12", "50"]
+  callProcess "ddcutil" ["-d", "1", "setvcp", "14", "0x0b"]
   changeVimBackground "light" "dark"
   alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.toml" >>= canonicalizePath
   sed alacrittyConfig
@@ -195,6 +198,9 @@ presOff = do
 presOn :: IO ()
 presOn = do
   callProcess "systemctl" ["--user", "stop", "swayidle.service"]
+  callProcess "ddcutil" ["-d", "1", "setvcp", "10", "26"]
+  callProcess "ddcutil" ["-d", "1", "setvcp", "12", "50"]
+  callProcess "ddcutil" ["-d", "1", "setvcp", "14", "05"]
   changeVimBackground "dark" "light"
   alacrittyConfig <- expandUser "~/.config/alacritty/alacritty.toml" >>= canonicalizePath
   sed alacrittyConfig
@@ -494,7 +500,7 @@ wfRecord slurpCmd = do
 stopRecording :: IO ()
 stopRecording = do
   exitCode <- P.waitForProcess =<< P.spawnProcess "systemctl" systemctlArgs
-  callProcess "ffmpeg" [mp4, webm]
+  callProcess "ffmpeg" ["-y", "-i", mp4, webm]
   threadDelay 2000
   callProcess "pkill" ["-SIGUSR1", "i3status-rs"]
   when (exitCode == ExitSuccess) $

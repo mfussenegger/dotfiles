@@ -8,7 +8,7 @@ password_files=( "${password_files[@]#"$prefix"/}" )
 password_files=( "${password_files[@]%.gpg}" )
 
 idx=$(swaymsg -r -t get_outputs | jq '. | reverse | to_entries | .[] | select(.value.focused == true) | .key')
-password=$(printf '%s\n' "${password_files[@]}" | bemenu --fn "JuliaMono 16" -m "$idx" "$@")
+password=$(printf '%s\n' "${password_files[@]}" | bemenu --fn "JuliaMono 11" -m "$idx" "$@")
 
 [[ -n $password ]] || exit
 
