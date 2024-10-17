@@ -1,4 +1,21 @@
 local api = vim.api
+local bufnr = api.nvim_get_current_buf()
+
+local checkstyle_config = vim.uv.cwd() .. "/checkstyle.xml"
+local has_checkstyle = vim.uv.fs_stat(checkstyle_config) and vim.fn.executable("checkstyle")
+local is_main = api.nvim_buf_get_name(0):find("src/main/java") ~= nil
+if has_checkstyle and is_main then
+  require("lint.linters.checkstyle").config_file = checkstyle_config
+  api.nvim_create_autocmd({"BufEnter", "BufWritePost"}, {
+    buffer = bufnr,
+    group = api.nvim_create_augroup("checkstyle-" .. bufnr, { clear = true }),
+    callback = function()
+      if not vim.bo[bufnr].modified then
+        require("lint").try_lint("checkstyle")
+      end
+    end
+  })
+end
 
 
 local dap = require("dap")
