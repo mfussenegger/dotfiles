@@ -68,33 +68,36 @@ function M.file_or_lsp_status()
 end
 
 
+---@return vim.treesitter.LanguageTree?
 local function get_parser(bufnr)
-  local ok, parser = pcall(vim.treesitter.get_parser, bufnr)
-  local err
-  if ok then
+  local _getparser = vim.fn.has("nvim-0.11") == 1 and vim.treesitter.get_parser or function(b, lang, opts)
+    local ok, parser = pcall(vim.treesitter.get_parser, b, lang, opts)
+    return ok and parser or nil
+  end
+  local parser, _ = _getparser(bufnr, nil, { error = false })
+  if parser then
     return parser
-  else
-    err = parser
   end
   if string.find(vim.bo.filetype, '%.') then
     for ft in string.gmatch(vim.bo.filetype, '([^.]+)') do
-      ok, parser = pcall(vim.treesitter.get_parser, bufnr, ft)
-      if ok then
+      parser, _ = _getparser(bufnr, ft, { error = false })
+      if parser then
         return parser
       end
     end
   end
-  error(err)
+  return nil
 end
 
 
 function M.init_hl()
   local bufnr = api.nvim_get_current_buf()
-  local ok, parser = pcall(get_parser, bufnr)
-  if not ok then
-    return
+
+
+  local parser = get_parser(bufnr)
+  if parser then
+    vim.treesitter.start(bufnr, parser:lang())
   end
-  vim.treesitter.start(bufnr, parser:lang())
 end
 
 
