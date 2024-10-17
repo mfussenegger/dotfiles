@@ -186,12 +186,15 @@ local function test_with_profile(test_fn)
 end
 
 config.on_attach = function(client, bufnr)
+  local function compile()
+    if vim.bo.modified then
+      vim.cmd("w")
+    end
+    client.request_sync("java/buildWorkspace", false, 5000, bufnr)
+  end
   local function with_compile(fn)
     return function()
-      if vim.bo.modified then
-        vim.cmd("w")
-      end
-      client.request_sync("java/buildWorkspace", false, 5000, bufnr)
+      compile()
       fn()
     end
   end
@@ -218,29 +221,36 @@ config.on_attach = function(client, bufnr)
 
   local opts = { silent = true, buffer = bufnr }
   local set = vim.keymap.set
-  set("n", "<F5>", with_compile(function()
-    dap.continue()
-  end), opts)
+  set("n", "<F5>", function()
+    if dap.session() == nil then
+      compile()
+      dap.continue()
+    else
+      dap.continue()
+    end
+  end, opts)
   set('n', "<A-o>", jdtls.organize_imports, opts)
+
+  local conf_overrides = {
+    stepFilters = {
+      skipClasses = {"$JDK", "junit.*"},
+      skipSynthetics = true
+    },
+    vmArgs = table.concat({
+      "-ea",
+      "-XX:+TieredCompilation",
+      "-XX:TieredStopAtLevel=1",
+      "--add-modules", "jdk.incubator.vector",
+      "--enable-native-access=ALL-UNNAMED",
+    }, " "),
+  }
   set('n', "<leader>df", with_compile(function()
-    jdtls.test_class({
-      config_overrides = {
-        vmArgs = "-ea -XX:+TieredCompilation -XX:TieredStopAtLevel=1",
-      }
-    })
+    jdtls.test_class({ config_overrides = conf_overrides })
   end), opts)
   set('n', "<leader>dl", with_compile(require("dap").run_last), opts)
   set('n', "<leader>dF", with_compile(test_with_profile(jdtls.test_class)), opts)
   set('n', "<leader>dn", with_compile(function()
-    jdtls.test_nearest_method({
-      config_overrides = {
-        stepFilters = {
-          skipClasses = {"$JDK", "junit.*"},
-          skipSynthetics = true
-        },
-        vmArgs = "-ea -XX:+TieredCompilation -XX:TieredStopAtLevel=1",
-      }
-    })
+    jdtls.test_nearest_method({ config_overrides = conf_overrides })
   end), opts)
   set('n', "<leader>dN", with_compile(test_with_profile(jdtls.test_nearest_method)), opts)
 
