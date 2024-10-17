@@ -2,7 +2,7 @@ local api = vim.api
 
 
 local dap = require("dap")
----@type ExecutableAdapter
+---@type dap.ExecutableAdapter
 dap.adapters.hprof = {
   type = "executable",
   command = os.getenv("GRAALVM_HOME") .. "/bin/java",
@@ -119,19 +119,25 @@ local config = require('me.lsp').mk_config({
             name = "JavaSE-22",
             path = os.getenv("JDK22"),
           },
+          {
+            name = "JavaSE-23",
+            path = os.getenv("JDK23"),
+          },
         }
       }
     }
   },
   cmd = {
-    os.getenv("JDK22") .. "/bin/java",
-    --'-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
+    os.getenv("JDK23") .. "/bin/java",
+    -- '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
     '-Dlog.protocol=true',
     '-Dlog.level=ALL',
-    '-Xmx4g',
+    "-XX:+UseTransparentHugePages",
+    "-XX:+AlwaysPreTouch",
+    "-Xmx2g",
     '--add-modules=ALL-SYSTEM',
     '--add-opens', 'java.base/java.util=ALL-UNNAMED',
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
