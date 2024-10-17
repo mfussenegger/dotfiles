@@ -10,7 +10,7 @@ local cp = {
 ---@diagnostic disable-next-line: param-type-mismatch
 vim.list_extend(cp, vim.split(vim.fn.glob(lemminx_maven, 1), '\n'))
 
-if vim.bo.buftype == "" then
+if vim.bo.buftype == "" and vim.startswith(vim.uri_from_bufnr(0), "file://") then
   vim.lsp.start(require("me.lsp").mk_config({
     name = "lemminx",
     root_dir = vim.fs.root(0, {'.git'}),
