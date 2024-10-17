@@ -129,6 +129,9 @@ do
     gitcommit = {'codespell'},
     dockerfile = {'hadolint'},
     ghaction = {"actionlint"},
+    ledger = {"hledger"},
+    systemd = {"systemd-analyze"},
+    html = {"tidy"},
   }
   create_autocmd({'BufWritePost', 'BufEnter'}, {
     group = api.nvim_create_augroup('lint', { clear = true }),
