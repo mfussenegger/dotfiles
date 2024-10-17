@@ -1,5 +1,6 @@
 local dap = require('dap')
 local api = vim.api
+local home = os.getenv("HOME")
 
 
 local function select_cwd_and_path()
@@ -126,7 +127,7 @@ dap.configurations.lua = {
     name = "nvim:dots",
     port = free_port,
     start_neovim = {
-      cwd = os.getenv('HOME') .. '/dotfiles',
+      cwd = home .. '/dotfiles',
       fname = 'vim/.config/nvim/init.lua',
     }
   },
@@ -136,7 +137,7 @@ dap.configurations.lua = {
     name = "nvim:crate",
     port = free_port,
     start_neovim = {
-      cwd = os.getenv('HOME') .. '/dev/crate/crate',
+      cwd = home .. '/dev/crate/crate',
       fname = 'server/src/test/java/io/crate/planner/PlannerTest.java',
     }
   },
@@ -146,7 +147,7 @@ dap.configurations.lua = {
     name = "nvim:neovim",
     port = free_port,
     start_neovim = {
-      cwd = os.getenv('HOME') .. '/dev/neovim/neovim',
+      cwd = home .. '/dev/neovim/neovim',
       fname = 'src/nvim/main.c',
     }
   },
@@ -221,13 +222,13 @@ local config = require("me.lsp").mk_config {
           "${3rd}/luv/library",
           "${3rd}/busted/library",
           "${3rd}/luassert/library",
-          os.getenv("HOME") .. "/dev/neovim/neovim/runtime/lua/",
-          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-dap/lua",
-          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-fzy/lua",
-          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-qwahl/lua",
-          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-lsp-compl/lua",
-          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-lint/lua",
-          os.getenv("HOME") .. "/.config/nvim/pack/plugins/start/nvim-jdtls/lua",
+          home .. "/dev/neovim/neovim/runtime/lua/",
+          home .. "/.config/nvim/pack/plugins/start/nvim-dap/lua",
+          home .. "/.config/nvim/pack/plugins/start/nvim-fzy/lua",
+          home .. "/.config/nvim/pack/plugins/start/nvim-qwahl/lua",
+          home .. "/.config/nvim/pack/plugins/start/nvim-lsp-compl/lua",
+          home .. "/.config/nvim/pack/plugins/start/nvim-lint/lua",
+          home .. "/.config/nvim/pack/plugins/start/nvim-jdtls/lua",
         },
         checkThirdParty = false,
       },
@@ -302,14 +303,14 @@ if config.root_dir and vim.endswith(config.root_dir, "neovim/neovim") then
     ))
   end
 
-  vim.keymap.set("n", "<leader>dn", run_test)
+  vim.keymap.set("n", "<leader>dn", run_test, { buffer = true })
   vim.keymap.set("n", "<leader>df", function()
     vim.cmd.split()
     vim.cmd.term(string.format(
       [[TEST_FILE="%s" make functionaltest]],
       api.nvim_buf_get_name(0)
     ))
-  end)
+  end, { buffer = true })
 else
   vim.keymap.set("n", "<leader>dn", function()
     local path = find_test()
@@ -352,10 +353,10 @@ else
         end
       end
     })
-  end)
+  end, { buffer = true })
   vim.keymap.set("n", "<leader>df", function()
     vim.cmd.split()
     local fname = api.nvim_buf_get_name(0)
     vim.cmd.term('~/.luarocks/bin/nbusted --ignore-lua "' .. fname .. '"')
-  end)
+  end, { buffer = true })
 end
