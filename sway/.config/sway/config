@@ -86,16 +86,16 @@ bindsym $mod+Ctrl+l exec swaymsg workspace 0 && swaylock
 #bindcode $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+1 workspace 1; output DP-1 scale 2.0; output DP-2 position 1920 0
+bindsym $mod+2 workspace 2; output DP-1 scale 2.0; output DP-2 position 1920 0
+bindsym $mod+3 workspace 3; output DP-1 scale 2.0; output DP-2 position 1920 0
+bindsym $mod+4 workspace 4; output DP-1 scale 2.0; output DP-2 position 1920 0
+bindsym $mod+5 workspace 5; output DP-1 scale 1.0; output DP-2 position 3840 0
+bindsym $mod+6 workspace 6; output DP-1 scale 2.0; output DP-2 position 1920 0 scale 1.0
+bindsym $mod+7 workspace 7; output DP-1 scale 2.0; output DP-2 position 1920 0
+bindsym $mod+8 workspace 8; output DP-1 scale 2.0; output DP-2 position 1920 0
+bindsym $mod+9 workspace 9; output DP-1 scale 2.0; output DP-2 position 1920 0
+bindsym $mod+0 workspace 10; output DP-1 scale 2.0; output DP-2 position 1920 0
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -142,7 +142,7 @@ output 'BNQ BenQ RD280U H5R0121001Q' {
 }
 output 'Dell Inc. DELL P2416D 07C5367S0R4U' {
   position 1920 0 res 2560x1440
-  scale 1.5
+  scale 1.3333
   scale_filter nearest
 }
 
@@ -151,6 +151,7 @@ workspace 2 output 'BNQ BenQ RD280U H5R0121001Q'
 workspace 3 output 'BNQ BenQ RD280U H5R0121001Q'
 workspace 4 output 'BNQ BenQ RD280U H5R0121001Q'
 
+workspace 6 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
 workspace 7 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
 workspace 8 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
 workspace 9 output 'Dell Inc. DELL P2416D 07C5367S0R4U'
