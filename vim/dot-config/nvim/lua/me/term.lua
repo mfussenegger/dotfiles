@@ -2,8 +2,8 @@ local api = vim.api
 
 local M = {}
 
-local jobid = nil
-local winid = nil
+local job = nil
+local termwin = nil
 local repls = {
   python = "py",
   lua = "lua",
@@ -13,30 +13,35 @@ local repls = {
 
 local function launch_term(cmd, opts)
   opts = opts or {}
+
+  local path = vim.bo.path
   vim.cmd("belowright new")
-  winid = vim.fn.win_getid()
-  api.nvim_win_set_var(0, 'REPL', 1)
+
+  termwin = api.nvim_get_current_win()
+  vim.bo.path = path
   vim.bo.buftype = "nofile"
   vim.bo.bufhidden = "wipe"
   vim.bo.buflisted = false
   vim.bo.swapfile = false
   opts = vim.tbl_extend('error', opts, {
     on_exit = function()
-      jobid = nil
+      job = nil
     end
   })
-  jobid = vim.fn.termopen(cmd, opts)
+  job = vim.fn.termopen(cmd, opts)
 end
 
+
 local function close_term()
-  if not jobid then
+  if not job then
     return
   end
-  vim.fn.jobstop(jobid)
-  if winid and api.nvim_win_is_valid(winid) then
-    api.nvim_win_close(winid, true)
+  vim.fn.jobstop(job)
+  if termwin and api.nvim_win_is_valid(termwin) then
+    -- avoid cannot close last window error
+    pcall(api.nvim_win_close, termwin, true)
   end
-  winid = nil
+  termwin = nil
 end
 
 
@@ -48,7 +53,7 @@ end
 
 
 function M.toggle(cmd)
-  if jobid then
+  if job then
     close_term()
   else
     cmd = cmd or (vim.fn.environ()['SHELL'] or 'sh')
@@ -88,7 +93,7 @@ end
 
 function M.cr8_run_next()
   local bufnr = api.nvim_get_current_buf()
-  local parser = vim.treesitter.get_parser(bufnr)
+  local parser = assert(vim.treesitter.get_parser(bufnr))
   local tree = parser:parse()[1]
   local root = tree:root()
   local lnum, col = unpack(api.nvim_win_get_cursor(0))
@@ -170,17 +175,18 @@ end
 
 
 function M.send_line(line)
-  if not jobid then
+  if not job then
     return
   end
-  vim.fn.chansend(jobid, line .. '\n')
+  vim.fn.chansend(job, line .. '\n')
 end
 
 
 function M.send_selection()
-  if not jobid then
+  if not job then
     M.toggle()
   end
+  assert(job, "There should be a jobid after toggling if it was missing before")
   local mode = api.nvim_get_mode()
   local pos1
   local pos2
@@ -204,7 +210,7 @@ function M.send_selection()
   end
   indent = indent == math.huge and 0 or indent
   for _, line in ipairs(lines) do
-    vim.fn.chansend(jobid, line:sub(indent) .. '\n')
+    vim.fn.chansend(job, line:sub(indent) .. '\n')
   end
 end
 
