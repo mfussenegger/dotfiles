@@ -199,6 +199,7 @@ function M.setup()
     end
     dap.run_last()
   end)
+  set({"n", "x"}, "<leader>de", "<cmd>DapEval | setlocal winfixheight<cr>")
   set('n', '<leader>dj', dap.down)
   set('n', '<leader>dk', dap.up)
   set('n', '<leader>dc', dap.run_to_cursor)
@@ -249,7 +250,6 @@ function M.setup()
   create_command('DapReload', reload, { nargs = 0 })
   create_command('DapBreakpoints', function() dap.list_breakpoints(true) end, { nargs = 0 })
   create_command('DapVisualize', function() M.visualize() end, { nargs = 0 })
-  create_command("DapNew", function() dap.continue({ new = true }) end, { nargs = 0 })
 
   create_command("DapDiff", function(cmd_args)
     local fargs = cmd_args.fargs
@@ -273,6 +273,19 @@ function M.setup()
     command = '/usr/bin/alacritty';
     args = {'--hold', '-e'};
   }
+  dap.adapters.nluarepl = function(cb, config)
+    return require("me.nluarepl").nluarepl(cb, config)
+  end
+  dap.providers.configs["nluarepl"] = function()
+    return {
+      {
+        name = "nluarepl",
+        type = "nluarepl",
+        request = "launch",
+      }
+    }
+  end
+
   dap.adapters.cppdbg = {
     id = 'cppdbg',
     type = 'executable',
