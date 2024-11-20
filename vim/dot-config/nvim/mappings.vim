@@ -59,7 +59,7 @@ nnoremap <leader>gs :Git<cr>
 nnoremap <leader>gb :Git blame<cr>
 nnoremap <leader>gc :Git commit -v<cr>
 nnoremap <leader>gl :G log -n 30 --oneline<cr>
-nnoremap <leader>gj :cexpr system("git jump --stdout diff")<CR>
+nnoremap <leader>gj :cgete system("git jump --stdout diff")<CR>
 
 " }}}
 
@@ -74,8 +74,8 @@ func! ReadExCommandOutput(newbuf, cmd) abort
 endf
 command! -nargs=+ -bang -complete=command R call ReadExCommandOutput(<bang>0, <q-args>)
 
-command -nargs=0 -bar Errors :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.ERROR }
-command -nargs=0 -bar Warnings :lua vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
+command -nargs=0 -bar Errors :lua vim.diagnostic.setqflist { title = "Errors", severity = vim.diagnostic.severity.ERROR }
+command -nargs=0 -bar Warnings :lua vim.diagnostic.setqflist { title = "Warnings", severity = vim.diagnostic.severity.WARN }
 
 nnoremap <silent> <leader>h :lua require('hop').hint_words()<CR>
 nnoremap <silent> <leader>/ :HopPattern<CR>
