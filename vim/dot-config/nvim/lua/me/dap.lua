@@ -106,16 +106,6 @@ function M.visualize(opts)
 end
 
 
-local function add_tagfunc(widget)
-  local orig_new_buf = widget.new_buf
-  widget.new_buf = function(...)
-    local bufnr = orig_new_buf(...)
-    api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.require'me.lsp'.symbol_tagfunc")
-    return bufnr
-  end
-end
-
-
 local function reload()
   local m = require('me')
   require('dap.repl').close()
@@ -155,8 +145,6 @@ function M.setup()
   end
 
   local widgets = require('dap.ui.widgets')
-  add_tagfunc(widgets.expression)
-  add_tagfunc(widgets.scopes)
   local keymap = vim.keymap
   local function set(mode, lhs, rhs)
     keymap.set(mode, lhs, rhs, { silent = true })
