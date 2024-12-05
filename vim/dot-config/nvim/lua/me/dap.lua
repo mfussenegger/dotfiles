@@ -273,19 +273,6 @@ function M.setup()
     command = '/usr/bin/alacritty';
     args = {'--hold', '-e'};
   }
-  dap.adapters.nluarepl = function(cb, config)
-    return require("me.nluarepl").nluarepl(cb, config)
-  end
-  dap.providers.configs["nluarepl"] = function()
-    return {
-      {
-        name = "nluarepl",
-        type = "nluarepl",
-        request = "launch",
-      }
-    }
-  end
-
   dap.adapters.cppdbg = {
     id = 'cppdbg',
     type = 'executable',

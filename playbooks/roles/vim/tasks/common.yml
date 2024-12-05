@@ -59,3 +59,4 @@
     - mfussenegger/nvim-ansible
     - mfussenegger/nvim-overfly
     - mfussenegger/nvim-snippasta
+    - mfussenegger/nluarepl
