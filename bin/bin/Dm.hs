@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
-{- stack script --optimize --resolver lts-22.29
+{- stack script --optimize --resolver lts-23.1
  --package "aeson process bytestring regex-pcre text either utf8-string containers split"
  --package "http-client http-client-tls directory unix raw-strings-qq filepath"
 -}
@@ -242,7 +242,7 @@ rights = map toRight . filter isRight
 
 
 --- >>> nvimSockets
--- ["/run/user/1000/nvim.29685.0","/run/user/1000/nvim.42548.0"]
+-- ["/run/user/1000/nvim.105564.0","/run/user/1000/nvim.106579.0"]
 nvimSockets :: IO [T.Text]
 nvimSockets = do
   procStats <- listDirectory "/proc" >>= traverse getStat . mapMaybe readMaybe
@@ -257,9 +257,10 @@ nvimSockets = do
     getStat pid = do
       -- See "Contents of the stat fields" https://www.kernel.org/doc/html/latest/filesystems/proc.html
       parts <- words <$> readFile (printf "/proc/%d/stat" pid)
+      let (pidtext : (tcommtext : _tail)) = parts
       pure Stat {
-        pid = read (head parts),
-        tcomm = reverse . drop 1 . reverse . drop 1 $ parts !! 1
+        pid = read pidtext,
+        tcomm = reverse . drop 1 . reverse . drop 1 $ tcommtext
       }
     getInodes :: Int -> IO [Int]
     getInodes pid = do

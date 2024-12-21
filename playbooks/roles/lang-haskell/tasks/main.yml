@@ -1,6 +1,6 @@
 ---
-- name: Install haskell tooling lts22
-  command: stack install --resolver lts-22.29 ghcid hlint
+- name: Install haskell tooling lts23
+  command: stack install --resolver lts-23.1 ghcid hlint
   args:
     chdir: ~/
 - name: Clone/pull ghcid
