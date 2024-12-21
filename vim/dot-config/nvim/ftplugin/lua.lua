@@ -71,7 +71,7 @@ dap.adapters.osv = function(callback, conf)
         )
         vim.fn.chanclose(channel)
         vim.defer_fn(vim.schedule_wrap(function() callback(adapter) end), 500)
-      end, 500)
+      end, 1000)
     else
       callback(adapter)
     end
@@ -242,68 +242,113 @@ vim.lsp.start(config)
 
 
 local function find_test()
-    local bufnr = api.nvim_get_current_buf()
-    local lang = "lua"
-    local end_row = api.nvim_win_get_cursor(0)[1]
-    local query = vim.treesitter.query.parse(lang, [[
-      (function_call
-        name: (identifier) @name (#any-of? @name "describe" "it")
-        arguments: (arguments
-          (string) @str
-        )
+  local bufnr = api.nvim_get_current_buf()
+  local lang = "lua"
+  local end_row = api.nvim_win_get_cursor(0)[1]
+  local query = vim.treesitter.query.parse(lang, [[
+    (function_call
+      name: (identifier) @name (#any-of? @name "describe" "it")
+      arguments: (arguments
+        (string) @str
       )
-    ]])
+    )
+  ]])
 
-    local function get_text(root)
-      local start_row = root:range()
-      for id, node in query:iter_captures(root, bufnr, start_row, end_row) do
-        local name = query.captures[id]
-        local text = vim.treesitter.get_node_text(node, bufnr)
-        assert(text and type(text) == "string")
-        if name == "str" then
-          -- strip leading and trailing quotes
-          return text:sub(2, #text - 1)
-        end
+  local function get_text(root)
+    local start_row = root:range()
+    for id, node in query:iter_captures(root, bufnr, start_row, end_row) do
+      local name = query.captures[id]
+      local text = vim.treesitter.get_node_text(node, bufnr)
+      assert(text and type(text) == "string")
+      if name == "str" then
+        -- strip leading and trailing quotes
+        return text:sub(2, #text - 1)
       end
-      return nil
     end
-
-    local node = vim.treesitter.get_node()
-    local path = {}
-    while node ~= nil do
-      if node:type() == "function_call" then
-        local text = get_text(node)
-        if text then
-          table.insert(path, text)
-        end
-      end
-      node = node:parent()
-    end
-
-    for i = 1, math.floor(#path * 0.5) do
-      local tmp = path[i]
-      path[i] = path[#path - (i - 1)]
-      path[#path - (i - 1)] = tmp
-    end
-
-    return path
-end
-
-
-if config.root_dir and vim.endswith(config.root_dir, "neovim/neovim") then
-  local function run_test()
-    local path = find_test()
-    vim.cmd.split()
-    local fname = api.nvim_buf_get_name(0)
-    local filter = table.concat(path, " ")
-    vim.cmd.term(string.format(
-      [[TEST_FILE="%s" make functionaltest TEST_FILTER="%s"]],
-      fname,
-      filter
-    ))
+    return nil
   end
 
-  vim.keymap.set("n", "<leader>dn", run_test, { buffer = true })
+  local node = vim.treesitter.get_node()
+  local path = {}
+  while node ~= nil do
+    if node:type() == "function_call" then
+      local text = get_text(node)
+      if text then
+        table.insert(path, text)
+      end
+    end
+    node = node:parent()
+  end
+
+  for i = 1, math.floor(#path * 0.5) do
+    local tmp = path[i]
+    path[i] = path[#path - (i - 1)]
+    path[#path - (i - 1)] = tmp
+  end
+
+  return path
+end
+
+local is_nvim_repo = config.root_dir and vim.endswith(config.root_dir, "neovim/neovim")
+
+vim.keymap.set("n", "<leader>dn", function()
+  local path = find_test()
+  local bufnr = api.nvim_get_current_buf()
+  local lines = api.nvim_buf_get_lines(0, 0, 3, false)
+  local lldebugger = {
+    'if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then',
+    '  require("lldebugger").start()',
+    'end',
+  }
+  local clear_lldebuger = false
+  if table.concat(lines, "\n") ~= table.concat(lldebugger, "\n") then
+    clear_lldebuger = true
+    api.nvim_buf_set_lines(0, 0, 0, true, lldebugger)
+    vim.cmd.w()
+  elseif vim.bo.modified then
+    vim.cmd.w()
+  end
+  local name = table.concat(path, " ")
+  local args
+  if is_nvim_repo then
+    args = {
+      "--ignore-lua",
+      "--lazy",
+      "--helper=test/functional/preload.lua",
+      "--lpath=build/?.lua",
+      "--lpath=?.lua",
+      api.nvim_buf_get_name(0),
+      '--filter="' .. name .. '"',
+    }
+  else
+    args = {
+      "--ignore-lua",
+      api.nvim_buf_get_name(0),
+      '--filter="' .. name .. '"',
+    }
+  end
+  local runconfig = {
+    name = name,
+    type = "local-lua",
+    request = "launch",
+    cwd = "${workspaceFolder}",
+    program = {
+      command = "nbusted",
+    },
+    args = args
+  }
+  dap.run(runconfig, {
+    after = function()
+      if clear_lldebuger then
+        clear_lldebuger = false
+        api.nvim_buf_set_lines(bufnr, 0, 3, true, {})
+        api.nvim_buf_call(bufnr, vim.cmd.w)
+      end
+    end
+  })
+end, { buffer = true })
+
+if is_nvim_repo then
   vim.keymap.set("n", "<leader>df", function()
     vim.cmd.split()
     vim.cmd.term(string.format(
@@ -312,51 +357,9 @@ if config.root_dir and vim.endswith(config.root_dir, "neovim/neovim") then
     ))
   end, { buffer = true })
 else
-  vim.keymap.set("n", "<leader>dn", function()
-    local path = find_test()
-    local bufnr = api.nvim_get_current_buf()
-    local lines = api.nvim_buf_get_lines(0, 0, 3, false)
-    local lldebugger = {
-      'if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then',
-      '  require("lldebugger").start()',
-      'end',
-    }
-    local clear_lldebuger = false
-    if table.concat(lines, "\n") ~= table.concat(lldebugger, "\n") then
-      clear_lldebuger = true
-      api.nvim_buf_set_lines(0, 0, 0, true, lldebugger)
-      vim.cmd.w()
-    elseif vim.bo.modified then
-      vim.cmd.w()
-    end
-    local name = table.concat(path, " ")
-    local runconfig = {
-      name = name,
-      type = "local-lua",
-      request = "launch",
-      cwd = "${workspaceFolder}",
-      program = {
-        command = "nbusted",
-      },
-      args = {
-        "--ignore-lua",
-        api.nvim_buf_get_name(0),
-        '--filter="' .. name .. '"',
-      }
-    }
-    dap.run(runconfig, {
-      after = function()
-        if clear_lldebuger then
-          clear_lldebuger = false
-          api.nvim_buf_set_lines(bufnr, 0, 3, true, {})
-          api.nvim_buf_call(bufnr, vim.cmd.w)
-        end
-      end
-    })
-  end, { buffer = true })
   vim.keymap.set("n", "<leader>df", function()
     vim.cmd.split()
     local fname = api.nvim_buf_get_name(0)
-    vim.cmd.term('~/.luarocks/bin/nbusted --ignore-lua "' .. fname .. '"')
+    vim.cmd.term('nbusted --ignore-lua "' .. fname .. '"')
   end, { buffer = true })
 end
