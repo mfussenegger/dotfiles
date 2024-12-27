@@ -110,6 +110,7 @@ local theme = {
   NvimInvalidFigureBrace = { link = 'NvimInvalidDelimiter' },
   NvimInvalidSpacing = { link = 'ErrorMsg' },
   NvimDoubleQuotedUnknownEscape = { link = 'NvimInvalidValue' },
+  SnippetTabstop = { bg = "#185870", fg = bright_white },
   DiagnosticError = { fg = '#ff0000' },
   DiagnosticWarn = { fg = '#ffa500' },
   DiagnosticInfo = { fg = '#add8e6' },
