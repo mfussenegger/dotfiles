@@ -58,7 +58,6 @@ set diffopt=filler,internal,hiddenoff,algorithm:histogram,indent-heuristic
 augroup nvim_opts
     au!
     au FileType markdown,rst,text,mail source ~/.config/nvim/prose.vim
-    au TermOpen * setlocal nonumber norelativenumber signcolumn=no
 
     " Auto-create parent directories. But not for URIs (paths containing "://").
     au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
