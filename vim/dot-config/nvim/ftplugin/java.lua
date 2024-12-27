@@ -1,10 +1,10 @@
 local api = vim.api
-local bufnr = api.nvim_get_current_buf()
 
 local checkstyle_config = vim.uv.cwd() .. "/checkstyle.xml"
 local has_checkstyle = vim.uv.fs_stat(checkstyle_config) and vim.fn.executable("checkstyle")
 local is_main = api.nvim_buf_get_name(0):find("src/main/java") ~= nil
 if has_checkstyle and is_main then
+  local bufnr = api.nvim_get_current_buf()
   require("lint.linters.checkstyle").config_file = checkstyle_config
   api.nvim_create_autocmd({"BufEnter", "BufWritePost"}, {
     buffer = bufnr,
@@ -19,17 +19,6 @@ end
 
 
 local dap = require("dap")
----@type dap.ExecutableAdapter
-dap.adapters.hprof = {
-  type = "executable",
-  command = os.getenv("GRAALVM_HOME") .. "/bin/java",
-  args = {
-    -- "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005",
-    "-Dpolyglot.engine.WarnInterpreterOnly=false",
-    "-jar",
-    vim.fn.expand("~/dev/mfussenegger/hprofdap/target/hprofdap-0.1.0-jar-with-dependencies.jar"),
-  }
-}
 dap.configurations.java = {
   {
     name = "hprof (pick path)",
@@ -109,7 +98,8 @@ local config = require('me.lsp').mk_config({
           template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
         },
         hashCodeEquals = {
-          useJava7Objects = true,
+          useJava7Objects = false,
+          useInstanceOf = true,
         },
         useBlocks = true,
         addFinalForNewDeclaration = "fields",
@@ -147,23 +137,37 @@ local config = require('me.lsp').mk_config({
   cmd = {
     os.getenv("JDK23") .. "/bin/java",
     -- '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044',
-    '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-    '-Dosgi.bundles.defaultStartLevel=4',
-    '-Declipse.product=org.eclipse.jdt.ls.core.product',
-    '-Dlog.protocol=true',
-    '-Dlog.level=ALL',
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    "-Dlog.protocol=true",
+    "-Dlog.level=ALL",
     "-XX:+UseTransparentHugePages",
     "-XX:+AlwaysPreTouch",
     "-Xmx2g",
-    '--add-modules=ALL-SYSTEM',
-    '--add-opens', 'java.base/java.util=ALL-UNNAMED',
-    '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-    '-jar', vim.fn.glob(home .. '/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_*.jar'),
-    '-configuration', home .. '/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux',
-    '-data', workspace_folder,
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens", "java.base/java.util=ALL-UNNAMED",
+    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
   }
 })
-
+local build_path = home .. "/dev/eclipse/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/"
+local src_build_launcher = vim.fn.glob(build_path .. "repository/plugins/org.eclipse.equinox.launcher_*.jar")
+if vim.uv.fs_stat(src_build_launcher) then
+  vim.list_extend(config.cmd, {
+    "-jar", src_build_launcher,
+    "-configuration", build_path .. "repository/config_linux",
+    "-data", workspace_folder
+  })
+else
+  vim.list_extend(config.cmd, {
+    "-Dosgi.checkConfiguration=true",
+    "-Dosgi.sharedConfiguration.area=/usr/share/java/jdtls/config_linux/",
+    "-Dosgi.sharedConfiguration.area.readOnly=true",
+    "-Dosgi.configuration.cascaded=true",
+    "-jar", vim.fn.glob("/usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"),
+    "-data", workspace_folder,
+  })
+end
 
 local function test_with_profile(test_fn)
   return function()
@@ -220,22 +224,6 @@ config.on_attach = function(client, bufnr)
     require("jdtls.tests").goto_subjects()
   end, {})
 
-  local triggers = vim.tbl_get(client.server_capabilities, "completionProvider", "triggerCharacters")
-  if triggers then
-    for _, char in ipairs({"a", "e", "i", "o", "u"}) do
-      if not vim.tbl_contains(triggers, char) then
-        table.insert(triggers, char)
-      end
-    end
-  end
-  if vim.lsp.completion then
-    vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
-  else
-    require('lsp_compl').attach(client, bufnr, {
-      server_side_fuzzy_completion = true,
-    })
-  end
-
   local opts = { silent = true, buffer = bufnr }
   local set = vim.keymap.set
   set("n", "<F5>", function()
@@ -284,7 +272,6 @@ config.on_attach = function(client, bufnr)
       require("jdtls.dap").pick_test()
     end
   end, opts)
-
 end
 
 local jar_patterns = {
