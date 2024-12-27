@@ -8,32 +8,39 @@ vim.bo.makeprg = 'python %'
 local dap = require('dap')
 local dappy = require('dap-python')
 if not dap.adapters.python then
-  dappy.setup('~/.virtualenvs/tools/bin/python')
+  dappy.setup('~/.virtualenvs/tools/bin/python', {
+  })
+
+  local django = dappy.test_runners.django
+  dappy.test_runners.django = function(classnames, methodname)
+    local name, args = django(classnames, methodname)
+    table.insert(args, 2, "--timing")
+    table.insert(args, 2, "--keepdb")
+    return name, args
+  end
 end
 
 local silent = { silent = true }
 
-local function save(fn)
+local function save(fn, ...)
+  local args = {...}
   return function()
     if vim.bo.modified then
       vim.cmd.w()
     end
-    fn()
+    fn(unpack(args))
   end
 end
 
-vim.keymap.set('n', '<leader>dn', save(dappy.test_method), silent)
-vim.keymap.set('n', '<leader>dN', function()
-  if vim.bo.modified then
-    vim.cmd.w()
-  end
-  local opts = {
-    config = {
-      justMyCode = false
+local opts = {
+  config = {
+    autoReload = {
+      enabled = true
     }
   }
-  dappy.test_method(opts)
-end, silent)
+}
+vim.keymap.set('n', '<leader>dn', save(dappy.test_method, opts), silent)
+vim.keymap.set('n', '<leader>dN', save(dappy.test_method, {config = { justMyCode = false }}), silent)
 vim.keymap.set('n', '<leader>df', save(dappy.test_class), silent)
 vim.keymap.set(
   'v', '<leader>ds', '<ESC>:lua require("dap-python").debug_selection()<CR>', silent)
@@ -45,7 +52,6 @@ local function run_cmds(cmds)
       vim.cmd(cmd)
     end
     vim.cmd('silent e!')
-    require("lint").try_lint("ruff")
   end
 end
 
@@ -63,12 +69,6 @@ if next(on_write_cmds) then
     callback = run_cmds(on_write_cmds),
     buffer = bufnr,
     group = api.nvim_create_augroup('black-' .. bufnr, {})
-  })
-else
-  api.nvim_create_autocmd('BufWritePost', {
-    callback = function() require("lint").try_lint("ruff") end,
-    buffer = bufnr,
-    group = api.nvim_create_augroup('ruff-' .. bufnr, {})
   })
 end
 
@@ -104,3 +104,18 @@ vim.lsp.start(config, {
     )
   end
 })
+if vim.bo.buftype == "" and vim.fn.filereadable(api.nvim_buf_get_name(0)) == 1 then
+  vim.lsp.start(lsp.mk_config {
+    cmd = {"ruff", "server"},
+    name = "ruff",
+    root_dir = config.root_dir,
+
+    on_attach = function()
+    end,
+
+    ---@param client vim.lsp.Client
+    on_init = function(client)
+      client.server_capabilities.hoverProvider = nil
+    end,
+  })
+end
