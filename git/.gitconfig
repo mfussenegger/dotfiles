@@ -43,6 +43,10 @@
     conflictstyle = zdiff3
     renamelimit = 20000
 
+[merge "mergiraf"]
+    name = mergiraf
+    driver = mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P
+
 [mergetool]
     keepBackup = false
 
