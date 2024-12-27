@@ -155,6 +155,7 @@ create_autocmd("FileType", {
     if (byte_count > 200000) then
       vim.cmd("syn sync clear")
       vim.cmd("setlocal nowrap")
+      vim.cmd("setlocal nospell")
     else
       require("me").init_hl()
     end
