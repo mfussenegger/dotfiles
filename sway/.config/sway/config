@@ -4,7 +4,7 @@ set $down j
 set $left h
 set $right l
 
-font pango: JuliaMono 10
+font pango: B612Mono 10
 
 # colors
 #
@@ -132,7 +132,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     status_command i3status-rs ~/.config/i3/status.toml
-    font pango: JuliaMono 10
+    font pango: B612 10
 }
 
 

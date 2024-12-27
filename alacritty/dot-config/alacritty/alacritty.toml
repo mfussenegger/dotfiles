@@ -5,11 +5,11 @@ import = [
 live_config_reload = true
 
 [font]
-size = 10
+size = 12
 
 [font.normal]
-family = "JuliaMono"
-style = "Normal"
+family = "NanumGothicCoding"
+style = "Regular"
 
 [[keyboard.bindings]]
 action = "CreateNewWindow"

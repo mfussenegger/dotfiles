@@ -40,6 +40,14 @@
       - ttf-roboto
       - ttf-hack
 
+- name: Install more fonts
+  become: false
+  aur:
+    name:
+      - ttf-juliamono
+      - ttf-b612
+      - ttf-nanumgothic_coding
+
 - name: Install i3status-rust
   become: false
   aur:
