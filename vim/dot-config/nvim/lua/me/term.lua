@@ -26,9 +26,15 @@ local function launch_term(cmd, opts)
   opts = vim.tbl_extend('error', opts, {
     on_exit = function()
       job = nil
-    end
+    end,
+    term = true,
   })
-  job = vim.fn.termopen(cmd, opts)
+  if vim.version().api_level >= 13 then
+    job = vim.fn.jobstart(cmd, opts)
+  else
+    ---@diagnostic disable-next-line: deprecated
+    job = vim.fn.termopen(cmd, opts)
+  end
 end
 
 
@@ -67,10 +73,17 @@ function M.run()
   local lines = api.nvim_buf_get_lines(0, 0, 1, true)
   ---@type string|string[]
   local cmd = filepath
+  local skipchmod = false
   if not vim.startswith(lines[1], "#!/usr/bin/env") then
+    skipchmod = true
     if vim.bo.filetype == "haskell" then
       cmd = {"stack", "run"}
+    elseif vim.bo.filetype == "python" then
+      cmd = {"python", filepath}
+    elseif vim.bo.filetype == "lua" then
+      cmd = {"nlua", filepath}
     else
+      skipchmod = false
       local choice = vim.fn.confirm(
         "File has no shebang, sure you want to execute it?", "&Yes\n&No")
       if choice ~= 1 then
@@ -79,7 +92,7 @@ function M.run()
     end
   end
   local stat = vim.loop.fs_stat(filepath)
-  if stat then
+  if stat and not skipchmod then
     local user_execute = tonumber("00100", 8)
     if bit.band(stat.mode, user_execute) ~= user_execute then
       local newmode = bit.bor(stat.mode, user_execute)
