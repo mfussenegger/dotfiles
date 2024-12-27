@@ -73,7 +73,6 @@
     fixup = !git commit --fixup $(git rev-parse HEAD)
     serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
     br = !git ls-remote -h . | awk '{print(substr($NF, 12))}' | fzf | xargs git checkout
-    dsf = !git diff --color "$@" | diffr | less --tabs=4 -RFX
     filter-commits = "!sh -c 'git log --pretty=format:\"%h - %an: %s\" $1 \
         | fzf --no-sort \
         | cut -d \" \" -f1 ' -"
@@ -106,6 +105,10 @@
     today = !git log --since=00:00:00 --all --oneline --no-merges --author=$(git config user.email)
     st = !$EDITOR '+Gedit :'
     fa = "!git ls-files -m -o --exclude-standard | fzf --print0 -m | xargs -0 -t -o git add"
+
+    dl = -c diff.external=difft log -p --ext-diff
+    ds = -c diff.external=difft show --ext-diff
+    dft = -c diff.external=difft diff
 
 [instaweb]
     httpd = webrick
