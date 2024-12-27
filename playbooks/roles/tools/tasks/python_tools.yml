@@ -16,12 +16,9 @@
       - ipython
       - ptpython
       - memory_profiler
-      - termgraph
       - debugpy
       - exodus-bundler
-      - curlylint
       - llm
-      - argostranslate
       - pgcli
     virtualenv: ~/.virtualenvs/tools
     virtualenv_command: /usr/bin/python3 -m venv
@@ -41,24 +38,10 @@
     - proselint
     - ansible-lint
     - mprof
-    - termgraph
-    - curlylint
     - llm
-    - argospm
-    - argos-translate
     - pgcli
 - name: Symlink py -> ptipython
   file:
     src: ~/.virtualenvs/tools/bin/ptipython
     dest: ~/bin/py
     state: link
-
-- name: Bootstrap argospm en_de
-  ansible.builtin.command: ~/.virtualenvs/tools/bin/argospm install translate-en_de
-  args:
-    creates: ~/.local/share/argos-translate/packages/en_de/model/model.bin
-
-- name: Bootstrap argospm de_en
-  ansible.builtin.command: ~/.virtualenvs/tools/bin/argospm install translate-de_en
-  args:
-    creates: ~/.local/share/argos-translate/packages/de_en/model/model.bin
