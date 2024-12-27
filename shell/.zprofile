@@ -4,13 +4,13 @@ PATH=$PATH:/home/$USER/.cargo/bin/
 PATH=$PATH:$HOME/.local/share/npm/bin
 PATH=$PATH:$HOME/.luarocks/bin:
 PATH=$PATH:$HOME/.ghcup/bin:
-PATH=$PATH/.
+PATH=$PATH:/.
 
 export JDK11="/usr/lib/jvm/java-11-openjdk/"
 export JDK17="$HOME/.m2/jdks/jdk-17.0.10+7/"
 export JDK21="$HOME/.m2/jdks/jdk-21.0.2+13/"
 export JDK22="$HOME/.m2/jdks/jdk-22.0.2+9/"
-export JDK23="$HOME/.m2/jdks/jdk-23+37/"
+export JDK23="$HOME/.m2/jdks/jdk-23.0.1+11/"
 export JAVA_HOME="$JDK23"
 export GRAALVM_HOME="$HOME/.m2/jdks/graalvm-community-openjdk-23+37.1/"
 
