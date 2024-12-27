@@ -42,9 +42,10 @@ dap.adapters.osv = function(callback, conf)
       local address = string.format('/tmp/nvim-foo-osv-%d', port)
       local opts = {
         args = {
-          '-e',
+          "-e",
           vim.v.progpath,
-          '--listen',
+          "--luamod-dev",
+          "--listen",
           address,
           start_opts.fname or api.nvim_buf_get_name(0),
         },
@@ -310,6 +311,7 @@ vim.keymap.set("n", "<leader>dn", function()
   end
   local name = table.concat(path, " ")
   local args
+  local env
   if is_nvim_repo then
     args = {
       "--ignore-lua",
@@ -317,8 +319,13 @@ vim.keymap.set("n", "<leader>dn", function()
       "--helper=test/functional/preload.lua",
       "--lpath=build/?.lua",
       "--lpath=?.lua",
-      api.nvim_buf_get_name(0),
+      function()
+        return api.nvim_buf_get_name(0)
+      end,
       '--filter="' .. name .. '"',
+    }
+    env = {
+      OSV_PORT = free_port
     }
   else
     args = {
@@ -335,8 +342,35 @@ vim.keymap.set("n", "<leader>dn", function()
     program = {
       command = "nbusted",
     },
+    env = env,
     args = args
   }
+  if is_nvim_repo then
+    setmetatable(runconfig, {
+      __call = function (c)
+
+        ---@param session dap.Session
+        dap.listeners.after.event_initialized["nvim_debug"] = function(session)
+          if session.config.name ~= name then
+            return false
+          end
+          vim.defer_fn(function()
+            dap.run({
+              name = "attach",
+              type = "osv",
+              request = "attach",
+
+              ---@diagnostic disable-next-line: undefined-field
+              port = session.config.env.OSV_PORT,
+            })
+          end, 500)
+          return true
+        end
+
+        return c
+      end
+    })
+  end
   dap.run(runconfig, {
     after = function()
       if clear_lldebuger then
