@@ -119,7 +119,32 @@ function M.maybe()
   if not next(clients) then
     return exit()
   end
-  local params = vim.lsp.util.make_position_params()
+
+  if vim.lsp.completion and vim.lsp.completion.get then
+
+    ---@param item lsp.CompletionItem
+    local function filter(_, item)
+      local kind = vim.lsp.protocol.CompletionItemKind[item.kind] or ''
+      return kind == 'Snippet'
+    end
+
+    local function on_result(startcol, matches)
+      if #matches == 0 then
+        return exit()
+      else
+        vim.fn.complete(startcol, matches)
+        if #matches == 1 then
+          api.nvim_feedkeys(vim.keycode("<C-n>"), "n", true)
+          api.nvim_feedkeys(vim.keycode("<C-y>"), "n", true)
+        end
+      end
+    end
+    vim.lsp.completion.get({ filter = filter, on_result = vim.schedule_wrap(on_result) })
+
+    return
+  end
+
+  local params = vim.lsp.util.make_position_params(0, "utf-16")
   local results, err = vim.lsp.buf_request_sync(0, 'textDocument/completion', params, 3000)
   assert(not err, vim.inspect(err))
   local mode = api.nvim_get_mode()['mode']
@@ -162,10 +187,8 @@ function M.maybe()
   local word_boundary = vim.fn.match(line_to_cursor, '\\k*$')
   vim.fn.complete(word_boundary + 1, matches)
   if #matches == 1 then
-    api.nvim_feedkeys(
-      api.nvim_replace_termcodes("<C-n>", true, false, true), 'n', true)
-    api.nvim_feedkeys(
-      api.nvim_replace_termcodes("<CR>", true, false, true), 'm', true)
+    api.nvim_feedkeys(vim.keycode("<C-n>"), "n", true)
+    api.nvim_feedkeys(vim.keycode("<C-y>"), "n", true)
   end
 end
 

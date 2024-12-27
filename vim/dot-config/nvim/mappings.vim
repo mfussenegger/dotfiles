@@ -17,7 +17,7 @@ nnoremap L Lzz
 nnoremap H Hzz
 
 " snippets
-imap <C-j> <cmd>lua require('me.snippet').maybe()<CR>
+inoremap <C-j> <cmd>lua require('me.snippet').maybe()<CR>
 
 
 " split navigation
