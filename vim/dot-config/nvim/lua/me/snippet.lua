@@ -1,6 +1,7 @@
 local api = vim.api
 local M = {}
 
+
 local function exit()
   local key = api.nvim_replace_termcodes("<C-j>", true, false, true)
   api.nvim_feedkeys(key, 'n', true)
@@ -53,6 +54,45 @@ end
     m = "def ${1:name}(self${2}):\n    ${3:pass}${0}",
   }
 }
+
+
+local ft_vsnippets = {
+  lua = {
+    profile = function(lines)
+      table.insert(lines, 1, [[require("jit.p").start("", "/tmp/luajit-profile")]])
+      table.insert(lines, [[require("jit.p").stop()]])
+      return lines
+    end,
+    timeit = function(lines)
+      table.insert(lines, 1, [[local start = vim.uv.hrtime()]])
+      table.insert(lines, [[local durationms = (vim.uv.hrtime() - start) * 0.000001]])
+      return lines
+    end
+  }
+}
+
+
+function M.select()
+  local vsnippets = ft_vsnippets[vim.bo.filetype] or {}
+  local opts = {
+    prompt = "Snippet: ",
+    format_item = tostring
+  }
+  local bufnr = api.nvim_get_current_buf()
+  local spos = vim.fn.getpos("v")
+  local epos = vim.fn.getpos(".")
+  local type = vim.fn.visualmode()
+  if type == "V" then
+    epos[3] = #vim.fn.getline(epos[2])
+  end
+  local lines = vim.fn.getregion(spos, epos)
+  vim.ui.select(vim.tbl_keys(vsnippets), opts, function(snippet_name)
+    if snippet_name then
+      local snippet = vsnippets[snippet_name]
+      api.nvim_buf_set_lines(bufnr, spos[2] - 1, epos[2] + 1, true, snippet(lines))
+    end
+  end)
+end
 
 
 -- Expose those in nvim-lsp-compl or add { filter = ..., on_results = ...} options?

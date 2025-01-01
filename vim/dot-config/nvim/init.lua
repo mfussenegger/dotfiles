@@ -65,6 +65,7 @@ local function try_jump(direction, key)
 end
 keymap.set({"i", "s"}, "<Tab>", function() return try_jump(1, "<Tab>") end, { expr = true })
 keymap.set({"i", "s"}, "<S-Tab>", function() return try_jump(-1, "<S-Tab>") end, { expr = true })
+keymap.set("x", "<leader>s", function() require("me.snippet").select() end)
 
 
 keymap.set('n', 'gs', [[:let @/='\<'.expand('<cword>').'\>'<CR>cgn]])
