@@ -135,7 +135,12 @@ do
   }
   create_autocmd({'BufWritePost', 'BufEnter'}, {
     group = api.nvim_create_augroup('lint', { clear = true }),
-    callback = function() lint.try_lint() end,
+    callback = function()
+      lint.try_lint(nil, { ignore_errors = true })
+      if vim.fn.executable("sphinx-lint") == 1 and vim.bo.filetype == "rst" then
+        lint.try_lint("sphinx-lint")
+      end
+    end,
   })
 end
 
