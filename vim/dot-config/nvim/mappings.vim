@@ -29,6 +29,8 @@ nnoremap <silent> <c-w>s :lua require('me.win').split()<CR>
 nnoremap <silent> <c-w>v :lua require('me.win').vsplit()<CR>
 nnoremap <silent> <c-w>] :lua require('me.win').goto_def()<CR>
 
+inoremap <c-e> <end>
+
 
 " :terminal stuff
 
@@ -56,7 +58,7 @@ cnoremap <C-e> <End>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gd :Gdiffsplit<cr>
 nnoremap <leader>gs :Git<cr>
-nnoremap <leader>gb :Git blame<cr>
+nnoremap <leader>gb :Git blame -w -C <cr>
 nnoremap <leader>gc :Git commit -v<cr>
 nnoremap <leader>gl :G log -n 30 --oneline<cr>
 nnoremap <leader>gj :cgete system("git jump --stdout diff")<CR>

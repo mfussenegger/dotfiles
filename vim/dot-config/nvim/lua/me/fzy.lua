@@ -56,7 +56,7 @@ function M.setup()
     local fzy = require('fzy')
     fzy.execute('git ls-files --modified', fzy.sinks.edit_file)
   end, silent)
-  set('i', '<c-e>', emoji, silent)
+  set('i', '<c-x><c-e>', emoji, silent)
 end
 
 
