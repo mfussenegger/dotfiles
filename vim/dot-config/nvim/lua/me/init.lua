@@ -4,7 +4,7 @@ local api = vim.api
 function M.statusline()
   local counts = vim.diagnostic.count(0, { severity = { min = vim.diagnostic.severity.WARN }})
   local parts = {
-    [[%<» %{luaeval("require'me'.file_or_lsp_status()")} %m%r%=]],
+    [[%<» %n: %{luaeval("require'me'.file_or_lsp_status()")} %m%r%=]],
     "%#warningmsg#",
     "%{&paste?'[paste] ':''}",
     "%*",
