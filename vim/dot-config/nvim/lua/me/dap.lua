@@ -3,7 +3,6 @@ local HOME = os.getenv('HOME')
 local M = {}
 local log_level = 'INFO'
 
-
 function M.visualize(opts)
   opts = opts or {}
   local varname = opts.varname or vim.fn.expand("<cexpr>")
@@ -149,7 +148,9 @@ function M.setup()
   local function set(mode, lhs, rhs)
     keymap.set(mode, lhs, rhs, { silent = true })
   end
-  set({'n', 't'}, '<F3>',  dap.terminate)
+  set({'n', 't'}, '<F3>', function()
+    dap.terminate({ hierarchy = true })
+  end)
   set({'n', 't'}, '<F5>',  dap.continue)
   set('n', '<leader>b', dap.toggle_breakpoint)
   set('n', '<leader>B', function()
@@ -196,7 +197,9 @@ function M.setup()
   set('n', '<leader>dt', function() widgets.centered_float(widgets.threads) end)
   set('n', '<leader>ds', function() widgets.centered_float(widgets.scopes) end)
   set({'n', 'v'}, '<leader>dh', widgets.hover)
-  set({'n', 'v'}, '<leader>dp', widgets.preview)
+  set({'n', 'v'}, '<leader>dp', function()
+    widgets.preview(nil, {listener = {"event_stopped"}})
+  end)
   set("n", "<leader>di", function()
     dap.repl.open()
     dap.repl.execute(vim.fn.expand("<cexpr>"))
@@ -206,6 +209,13 @@ function M.setup()
     dap.repl.open()
     dap.repl.execute(table.concat(lines, "\n"))
   end)
+
+  dap.listeners.after.event_initialized["compl-triggers"] = function(session)
+    local capabilities = session.capabilities
+    if capabilities then
+      capabilities.completionTriggerCharacters = {"a", "e", "i", "o", "u", "."}
+    end
+  end
 
   dap.listeners.after.event_initialized['me.dap'] = function()
     set("n", "<up>", dap.restart_frame)
@@ -250,13 +260,33 @@ function M.setup()
     require("dap.ui.widgets").diff_var(fargs[1], fargs[2], max_level)
   end, { nargs = "+" })
 
-  local sessions_bar = widgets.sidebar(widgets.sessions, {}, '5 sp')
+  local sessions_bar = widgets.sidebar(widgets.sessions, {}, '5 sp | setlocal winfixheight')
   create_command("DapSessions", sessions_bar.toggle, { nargs = 0 })
 
+  dap.defaults.fallback.autostart = "nluarepl"
+  dap.defaults.fallback.switchbuf = 'usevisible,usetab,uselast'
+  dap.defaults.fallback.terminal_win_cmd = function(config)
+    local oldwin = api.nvim_get_current_win()
 
-  dap.defaults.fallback.switchbuf = 'usetab,uselast'
-  dap.defaults.fallback.terminal_win_cmd = 'tabnew'
-  dap.defaults.python.terminal_win_cmd = 'belowright new'
+    ---@diagnostic disable-next-line: undefined-field
+    local module = config.module
+    ---@diagnostic disable-next-line: undefined-field
+    local args = config.args or {}
+
+    if config.type == "python"
+        and (module == "unittest" or (module == "django" and args[1] == "test")) then
+      vim.cmd("belowright new")
+    else
+      vim.cmd.tabnew()
+    end
+    local path = vim.bo.path
+    local bufnr = api.nvim_get_current_buf()
+    vim.bo[bufnr].path = path
+    local win = api.nvim_get_current_win()
+    api.nvim_set_current_win(oldwin)
+    return bufnr, win
+  end
+
   dap.defaults.fallback.external_terminal = {
     command = '/usr/bin/alacritty';
     args = {'--hold', '-e'};
@@ -274,20 +304,38 @@ function M.setup()
   dap.adapters["gdb-arm"] = {
     type = "executable",
     command = "arm-none-eabi-gdb",
-    args = { "-i", "dap" }
+    args = { "-q", "-i", "dap" }
   }
   dap.adapters.codelldb = {
-    type = 'server',
-    port = "${port}",
-    executable = {
-      command = HOME .. '/apps/codelldb/extension/adapter/codelldb',
-      args = {"--port", "${port}"},
-    }
+    type = "executable",
+    command = HOME .. "/apps/codelldb/extension/adapter/codelldb",
   }
   dap.adapters.lldb = {
     type = 'executable',
     command = '/usr/bin/lldb-vscode',
     name = "lldb"
+  }
+
+  ---@type dap.ExecutableAdapter
+  dap.adapters.hprof = {
+    type = "executable",
+    command = os.getenv("GRAALVM_HOME") .. "/bin/java",
+    args = {
+      -- "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005",
+      "-Dpolyglot.engine.WarnInterpreterOnly=false",
+      "-jar",
+      vim.fn.expand("~/dev/mfussenegger/hprofdap/target/hprofdap-0.1.0-jar-with-dependencies.jar"),
+    }
+  }
+
+  dap.adapters["pwa-node"] = {
+    type = "server",
+    host = "localhost",
+    port = "${port}",
+    executable = {
+      command = "node",
+      args = {"/usr/bin/dapDebugServer.js", "${port}", "localhost"}
+    }
   }
 
   local function program()
@@ -306,8 +354,17 @@ function M.setup()
       name = "gdb: Launch",
       type = "gdb",
       request = "launch",
-      program = require("dap.utils").pick_file,
+      program = "${command:pickFile}",
       cwd = '${workspaceFolder}',
+    },
+    {
+      name = "gdb: Attach (input pid)",
+      type = 'gdb',
+      request = 'attach',
+      pid = function()
+        return tonumber(vim.fn.input({ prompt = 'pid: '}))
+      end,
+      args = {},
     },
     {
       name = "gdb-arm: Attach target",
@@ -373,7 +430,7 @@ function M.setup()
       type = 'codelldb',
       request = 'attach',
       pid = function()
-        return tonumber(vim.fn. input({ prompt = 'pid: '}))
+        return tonumber(vim.fn.input({ prompt = 'pid: '}))
       end,
       args = {},
     },
@@ -429,7 +486,6 @@ function M.setup()
             end
           end
           dap.listeners.after.event_process[key] = function(_, body)
-            dap.listeners.after.initialize[key] = nil
             local ppid = body.systemProcessId
             vim.wait(1000, function()
               return tonumber(vim.fn.system("ps -o pid= --ppid " .. tostring(ppid))) ~= nil
@@ -446,6 +502,7 @@ function M.setup()
                 externalConsole = false,
               })
             end
+            return true
           end
           return config
         end
@@ -457,7 +514,7 @@ function M.setup()
   dap.configurations.cpp = configs
   dap.configurations.zig = {
     {
-      name = "Zig run",
+      name = "run",
       type = "gdb",
       request = "launch",
       program = "/usr/bin/zig",
@@ -465,7 +522,7 @@ function M.setup()
       cwd = "${workspaceFolder}",
     },
     {
-      name = "Zig C run",
+      name = "run-lc",
       type = "gdb",
       request = "launch",
       program = "/usr/bin/zig",
@@ -473,7 +530,7 @@ function M.setup()
       cwd = "${workspaceFolder}",
     },
     {
-      name = "Program",
+      name = "run:prompt",
       type = "gdb",
       request = "launch",
       program = program,
@@ -481,7 +538,7 @@ function M.setup()
       cwd = "${workspaceFolder}",
     },
     {
-      name = "Test (No breakpoints 😢)",
+      name = "test:file",
       type = "gdb",
       request = "launch",
       program = "/usr/bin/zig",
