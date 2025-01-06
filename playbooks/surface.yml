@@ -2,7 +2,6 @@
 - hosts: localhost
   gather_facts: true
   roles:
-    - x11-touchpad
     - x11-backlight
   tasks:
     - name: Install onboard
