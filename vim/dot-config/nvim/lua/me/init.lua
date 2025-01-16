@@ -191,40 +191,6 @@ function M.setup()
   })
 
   U = M
-  P = function(...)
-    print(unpack(vim.tbl_map(vim.inspect, {...})))
-  end
-  PL = function(...)
-    local log_date_format = "%FT%H:%M:%S%z"
-    local fp = io.open('/tmp/nvim-debug.log', 'a+')
-    local line = table.concat(vim.tbl_map(vim.inspect, {...}), ', ')
-    fp:write('[' .. os.date(log_date_format) .. '] ' .. line .. '\n')
-    fp:flush()
-    fp:close()
-  end
-  local debug_view = nil
-  PB = function(...)
-    if not debug_view then
-      debug_view = require('dap.ui').new_view(
-        function()
-          return api.nvim_create_buf(false, true)
-        end,
-        function(buf)
-          vim.cmd('split')
-          api.nvim_win_set_buf(0, buf)
-          return api.nvim_get_current_win()
-        end
-      )
-    end
-    debug_view.open()
-    local text = table.concat(vim.tbl_map(vim.inspect, {...}), ', ')
-    local lines = vim.split(vim.trim(text), '\n')
-    vim.fn.appendbufline(debug_view.buf, '$', lines)
-  end
-  PT = function()
-    PL(debug.traceback("Stack trace"))
-    PL(debug.getinfo(1))
-  end
 end
 
 
