@@ -1,7 +1,7 @@
+[general]
 import = [
-  "~/.config/alacritty/dark.toml"
+  "~/.config/alacritty/light.toml"
 ]
-
 live_config_reload = true
 
 [font]
@@ -11,16 +11,15 @@ size = 12
 family = "NanumGothicCoding"
 style = "Regular"
 
-[[keyboard.bindings]]
-action = "CreateNewWindow"
-key = "Return"
-mods = "Control|Shift"
-
-[[keyboard.bindings]]
-key = "/"
-action = "SearchForward"
-mode = "Vi|~Search"
-mods = "Shift"
+[keyboard]
+bindings = [
+  {key = "Return", action = "CreateNewWindow", mods = "Control|Shift"},
+  {key = "/", action = "SearchForward", mode = "vi|~Search", mods = "Shift"},
+  {key = "p", action = "ToggleViMode", mode = "~vi|~Search", mods = "Control|Shift"},
+  {key = "p", action = "SearchBackward", mode = "~vi|~Search", mods = "Control|Shift"},
+  {key = "p", chars = "↪  |❮ ", mode = "~vi|~Search", mods = "Control|Shift"},
+  {key = "p", action = "SearchConfirm", mode = "~vi|~Search", mods = "Control|Shift"},
+]
 
 [mouse]
 hide_when_typing = false
