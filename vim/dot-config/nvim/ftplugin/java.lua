@@ -115,10 +115,6 @@ local config = require('me.lsp').mk_config({
             path = os.getenv("JDK17"),
           },
           {
-            name = "JavaSE-18",
-            path = home .. "/.m2/jdks/jdk-18.0.2.1+1/",
-          },
-          {
             name = "JavaSE-21",
             path = os.getenv("JDK21"),
           },
