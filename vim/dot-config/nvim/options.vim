@@ -17,7 +17,7 @@ set wildmode=longest:full,full
 set wildignore+=*.pyc,.git,.idea,*.o
 set wildoptions=pum,tagfile,fuzzy
 if has('nvim-0.11')
-  set completeopt=menuone,noselect,fuzzy
+  set completeopt=menuone,noselect,fuzzy,nosort
 else
   set completeopt=menuone,noselect
 endif
