@@ -152,11 +152,13 @@
     url: https://raw.githubusercontent.com/nvim-treesitter/nvim-treesitter/master/queries/{{ item.ft }}/{{ item.name }}.scm
     dest: ~/.config/nvim/queries/{{ item.ft }}/{{ item.name }}.scm
   loop:
-    - { ft: 'json', name: 'highlights' }
-    - { ft: 'java', name: 'highlights' }
-    - { ft: 'java', name: 'locals' }
-    - { ft: 'python', name: 'highlights' }
-    - { ft: 'python', name: 'locals' }
+    - { ft: "json", name: "highlights" }
+    - { ft: "java", name: "highlights" }
+    - { ft: "java", name: "locals" }
+    - { ft: "java", name: "folds" }
+    - { ft: "python", name: "highlights" }
+    - { ft: "python", name: "locals" }
+    - { ft: "python", name: "folds" }
     - { ft: 'rst', name: 'highlights' }
     - { ft: 'rst', name: 'injections' }
     - { ft: 'yaml', name: 'highlights' }

@@ -9,6 +9,11 @@ set nu rnu numberwidth=4
 set cursorline
 set scrolloff=3
 
+set foldexpr=v:lua.vim.treesitter.foldexpr()
+set nofoldenable
+set foldlevelstart=1
+set foldmethod=expr
+
 set updatetime=1000
 
 set complete=.,w,b,u,U,i,d,t
