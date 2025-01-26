@@ -3,7 +3,7 @@
   ansible.builtin.git:
     repo: https://github.com/eclipse/lemminx
     dest: ~/dev/eclipse/lemminx
-    version: 0.27.0
+    version: 0.29.0
 - name: Build lemminx
   ansible.builtin.command: ./mvnw clean install -DskipTests
   environment:
@@ -29,7 +29,7 @@
     state: directory
     recurse: true
     path: ~/dev/eclipse/lemminx-maven/dist
-    mode: 0755
+    mode: "0755"
 
 - name: Unpack zip with dependencies
   ansible.builtin.unarchive:
