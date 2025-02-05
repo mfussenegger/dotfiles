@@ -310,16 +310,6 @@ changeVimBackground from to = do
     callProcess "v" ["--server", T.unpack x, "--remote-send", changeColor]
 
 
-callContacts :: IO ()
-callContacts = do
-  contactsPath <- expandUser "~/.config/dm/contacts.json"
-  contents <- BL.readFile contactsPath
-  let
-    contacts = fromMaybe M.empty (decode contents :: Maybe (M.Map String String))
-  choice <- selection $ M.keys contacts
-  callProcess "xdg-open" [fromJust $ M.lookup choice contacts]
-
-
 fromUriOrCache :: String -> String -> IO BL.ByteString
 fromUriOrCache cachePath source = do
   resolvedPath <- expandUser cachePath
@@ -542,7 +532,6 @@ main = do
           ("xrandr on", xrandrOn),
           ("pres on", presOn),
           ("pres off", presOff),
-          ("call", callContacts),
           ("emoji", selectEmoji),
           ("mpc", selectSong),
           ("pa move", pulseMove),
