@@ -19,7 +19,7 @@
 
 - name: Install GraalVM-CE Java23
   ansible.builtin.unarchive:
-    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.0/graalvm-community-jdk-23.0.0_linux-x64_bin.tar.gz
+    src: https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-23.0.2/graalvm-community-jdk-23.0.2_linux-x64_bin.tar.gz
     dest: ~/.m2/jdks/
-    creates: ~/.m2/jdks/graalvm-community-openjdk-23+37.1/
+    creates: ~/.m2/jdks/graalvm-community-openjdk-23.0.2+7.1/
     remote_src: true

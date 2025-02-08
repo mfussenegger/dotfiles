@@ -12,7 +12,7 @@ export JDK21="$HOME/.m2/jdks/jdk-21.0.6+7/"
 export JDK22="$HOME/.m2/jdks/jdk-22.0.2+9/"
 export JDK23="$HOME/.m2/jdks/jdk-23.0.2+7/"
 export JAVA_HOME="$JDK23"
-export GRAALVM_HOME="$HOME/.m2/jdks/graalvm-community-openjdk-23+37.1/"
+export GRAALVM_HOME="$HOME/.m2/jdks/graalvm-community-openjdk-23.0.2+7.1/"
 
 if [[ -z "$SSH_CLIENT" ]]; then
   export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh"
