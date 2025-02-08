@@ -1,6 +1,6 @@
 ---
 - name: Create pyls virtualenv
-  pip:
+  ansible.builtin.pip:
     name:
       - pip
       - python-lsp-server
@@ -10,9 +10,24 @@
       - pylsp-mypy
     virtualenv: ~/.virtualenvs/pyls
     virtualenv_command: /usr/bin/python3 -m venv
-    state: latest
+    state: present
 - name: Symlink pyls
-  file:
+  ansible.builtin.file:
     src: ~/.virtualenvs/pyls/bin/pylsp
     dest: ~/bin/pylsp
     state: link
+
+- name: Install graalpy
+  ansible.builtin.unarchive:
+    src: https://github.com/oracle/graalpython/releases/download/graal-24.1.2/graalpy-community-24.1.2-linux-amd64.tar.gz
+    dest: ~/apps/
+    creates: ~/apps/graalpy
+    remote_src: true
+    extra_opts:
+      - --transform
+      - s/-community-24.1.2-linux-amd64//
+- name: Symlink graalpy
+  ansible.builtin.file:
+    state: link
+    src: ~/apps/graalpy/bin/graalpy
+    dest: ~/bin/graalpy
