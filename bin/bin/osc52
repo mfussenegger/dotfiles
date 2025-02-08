@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+printf "\033]52;c;%s\007" "$(base64 <&0)"

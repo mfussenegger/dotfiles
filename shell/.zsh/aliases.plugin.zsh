@@ -28,8 +28,8 @@ alias -g N='2> /dev/null'
 alias -g G='| rg'
 alias -g J='| jless'
 alias -g V='| v -'
-if [ -n "$SSH_TTY" ] && hash tty-copy 2> /dev/null; then
-  alias -g C='| tty-copy -n'
+if [ -n "$SSH_TTY" ]; then
+  alias -g C='| osc52'
 else
   alias -g C='| wl-copy -n'
 fi
