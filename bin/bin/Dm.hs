@@ -478,10 +478,8 @@ wfRecord slurpCmd = do
     "systemd-run"
     [ "--user",
       "-u", "record",
-      "wf-recorder",
-      "-c", "hevc_vaapi",
-      "-d", "/dev/dri/renderD128",
-      "-g", window,
+      "wl-screenrec",
+      "-g", trim window,
       "-f", filePath
     ]
   callProcess "pkill" ["-SIGUSR1", "i3status-rs"]
