@@ -43,6 +43,7 @@ end
     package = "ansible.builtin.package:\n  state: ${1:present}\n  name: ${0}",
     ln = "ansible.builtin.file:\n  state: link\n  src: ${1}\n  dest: ${0}",
     command = "ansible.builtin.command: ${1}\nargs:\n  chdir: ${2}\n  creates: ${0}",
+    unarchive = "ansible.builtin.unarchive:\n  src: ${1}\n  dest: ${2}\n  creates: ${3}\n  remote_src: ${4:true}${0}"
   },
   haskell = {
     f = "${1:name} :: ${2}\n${1:name} ${3}= ${4:undefined}${0}",
