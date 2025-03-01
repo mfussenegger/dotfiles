@@ -92,8 +92,9 @@ end
 
 function M.init_hl()
   local bufnr = api.nvim_get_current_buf()
-
-
+  if not api.nvim_buf_is_loaded(bufnr) then
+    return
+  end
   local parser = get_parser(bufnr)
   if parser then
     vim.treesitter.start(bufnr, parser:lang())
