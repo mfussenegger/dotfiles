@@ -15,6 +15,7 @@ vim.o.laststatus = 3
 vim.o.scrollback = 100000
 vim.o.signcolumn = "auto"
 vim.o.pumheight = 20
+vim.o.winborder = "single"
 
 do
   local function feedkeys(keys, mode)

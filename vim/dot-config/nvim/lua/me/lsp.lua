@@ -104,22 +104,6 @@ function M.setup()
     root_markers = {"package.json", ".git"},
   })
 
-  local hover = vim.lsp.buf.hover
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim.lsp.buf.hover = function(config)
-    config = config or {}
-    config.border = "single"
-    hover(config)
-  end
-
-  local signature_help = vim.lsp.buf.signature_help
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim.lsp.buf.signature_help = function(config)
-    config = config or {}
-    config.border = "single"
-    signature_help(config)
-  end
-
   local setk = vim.keymap.set
   setk("n", "gr", function() vim.lsp.buf.references({ includeDeclaration = false }) end)
   setk({"n", "x"}, "<a-CR>", vim.lsp.buf.code_action)
