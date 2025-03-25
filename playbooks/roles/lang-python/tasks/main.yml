@@ -5,7 +5,6 @@
       - pip
       - python-lsp-server
       - yapf
-      - mccabe
       - pydocstyle
       - pylsp-mypy
     virtualenv: ~/.virtualenvs/pyls
