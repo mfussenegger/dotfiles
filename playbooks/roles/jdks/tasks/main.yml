@@ -14,8 +14,8 @@
   loop:
     - { major: 17, version: "{{ jdks_17 }}" }
     - { major: 21, version: "{{ jdks_21 }}" }
-    - { major: 22, version: "{{ jdks_22 }}" }
     - { major: 23, version: "{{ jdks_23 }}" }
+    - { major: 24, version: "{{ jdks_24 }}" }
 
 - name: Install GraalVM-CE Java23
   ansible.builtin.unarchive:
