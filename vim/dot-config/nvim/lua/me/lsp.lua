@@ -80,8 +80,31 @@ local function extendtriggers(client)
   client.server_capabilities.completionProvider.triggerCharacters = vim.iter(triggers):totable()
 end
 
+local function add_lsp_commands()
+  if not vim.lsp.completion then
+    return
+  end
+  vim.lsp.commands["editor.action.triggerSuggest"] = function()
+    local ok, result = pcall(vim.lsp.completion.trigger)
+    if ok then
+      return vim.NIL
+    else
+      return vim.lsp.rpc_response_error(vim.lsp.protocol.ErrorCodes.InternalError, result)
+    end
+  end
+  vim.lsp.commands["editor.action.triggerParameterHints"] = function()
+    local ok, result = pcall(vim.lsp.buf.signature_help)
+    if ok then
+      return vim.NIL
+    else
+      return vim.lsp.rpc_response_error(vim.lsp.protocol.ErrorCodes.InternalError, result)
+    end
+  end
+end
+
 
 function M.setup()
+  add_lsp_commands()
   enable("json-ls", {
     cmd = {"vscode-json-language-server", "--stdio"},
     filetypes = {"json"}
