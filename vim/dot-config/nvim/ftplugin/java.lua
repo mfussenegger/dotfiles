@@ -1,5 +1,6 @@
-local api = vim.api
+vim.bo.completeopt = "menuone,noselect,fuzzy,nosort"
 
+local api = vim.api
 local checkstyle_config = vim.uv.cwd() .. "/checkstyle.xml"
 local has_checkstyle = vim.uv.fs_stat(checkstyle_config) and vim.fn.executable("checkstyle")
 local is_main = api.nvim_buf_get_name(0):find("src/main/java") ~= nil

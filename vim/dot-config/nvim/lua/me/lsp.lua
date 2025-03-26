@@ -3,14 +3,12 @@ local lsp = vim.lsp
 local api = vim.api
 
 
----@param config vim.lsp.ClientConfig
+---@param config? vim.lsp.ClientConfig
 ---@return vim.lsp.ClientConfig
 function M.mk_config(config)
-  local lsp_compl = require('lsp_compl')
   local capabilities = vim.tbl_deep_extend(
     "force",
     lsp.protocol.make_client_capabilities(),
-    lsp_compl.capabilities(),
     {
       workspace = {
         didChangeWatchedFiles = {
@@ -25,40 +23,14 @@ function M.mk_config(config)
     init_options = vim.empty_dict(),
     settings = vim.empty_dict(),
   }
-  if config then
-    return vim.tbl_deep_extend("force", defaults, config)
-  else
-    return defaults
-  end
+  return vim.tbl_deep_extend("force", defaults, config or {})
 end
 
 
 ---@param config vim.lsp.Config
 local function enable(name, config)
-  if lsp.config then
-    lsp.config(name, config)
-    lsp.enable(name)
-    return
-  end
-  local group = api.nvim_create_augroup("lsp-enable-" .. name, { clear = true })
-  for _, ft in ipairs(config.filetypes) do
-    api.nvim_create_autocmd("FileType", {
-      pattern = ft,
-      group = group,
-
-      ---@param args vim.api.keyset.create_autocmd.callback_args
-      callback = function(args)
-        if config.root_markers then
-          config = vim.deepcopy(config)
-          config.root_dir = vim.fs.root(args.buf, config.root_markers)
-        end
-        vim.lsp.start(config, {
-          bufnr = args.buf,
-          reuse_client = config.reuse_client,
-        })
-      end,
-    })
-  end
+  lsp.config(name, config)
+  lsp.enable(name)
 end
 
 ---@param client vim.lsp.Client
@@ -81,9 +53,6 @@ local function extendtriggers(client)
 end
 
 local function add_lsp_commands()
-  if not vim.lsp.completion then
-    return
-  end
   vim.lsp.commands["editor.action.triggerSuggest"] = function()
     local ok, result = pcall(vim.lsp.completion.trigger)
     if ok then
@@ -144,11 +113,7 @@ function M.setup()
 
       if client.server_capabilities.completionProvider then
         extendtriggers(client)
-        if vim.lsp.completion then
-          vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
-        else
-          require("lsp_compl").attach(client, args.buf, {})
-        end
+        vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
       end
       if client.server_capabilities.implementationProvider then
         setk("n", "gD", vim.lsp.buf.implementation, { buffer = args.buf })
@@ -188,7 +153,7 @@ function M.setup()
           callback = function()
             local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
             ---@diagnostic disable-next-line: param-type-mismatch
-            client.request("textDocument/documentHighlight", params, nil, args.buf)
+            client:request("textDocument/documentHighlight", params, nil, args.buf)
           end,
         })
         api.nvim_create_autocmd("CursorMoved", {

@@ -40,7 +40,7 @@
     - { folder: opt, repo: sirtaj/vim-openscad }
     - { folder: start, repo: nvim-treesitter/nvim-treesitter-textobjects, version: main }
 
-- name: Checkout vim dev plugins
+- name: Checkout dev plugins from github
   git:
     repo: https://github.com/{{ item }}
     dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
@@ -55,8 +55,16 @@
     - mfussenegger/nvim-qwahl
     - mfussenegger/nvim-lint
     - mfussenegger/nvim-treehopper
-    - mfussenegger/nvim-lsp-compl
     - mfussenegger/nvim-ansible
     - mfussenegger/nvim-overfly
     - mfussenegger/nvim-snippasta
+
+- name: Checkout dev plugins from codeberg
+  git:
+    repo: https://codeberg.org/{{ item }}
+    dest: ~/.config/nvim/pack/plugins/start/{{ item | basename }}
+    update: false
+  async: 1000
+  poll: 0
+  loop:
     - mfussenegger/nluarepl

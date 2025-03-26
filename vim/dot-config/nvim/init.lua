@@ -16,6 +16,8 @@ vim.o.scrollback = 100000
 vim.o.signcolumn = "auto"
 vim.o.pumheight = 20
 vim.o.winborder = "single"
+vim.o.completeopt = "menuone,noselect,fuzzy"
+
 
 do
   local function feedkeys(keys, mode)
@@ -30,15 +32,10 @@ do
       if info.selected == -1 then
         feedkeys("<C-n>", "n")
       end
-      require("lsp_compl").accept_pum()
       feedkeys("<c-y>", "n")
     else
       if next(vim.lsp.get_clients({ bufnr = 0 })) then
-        if vim.lsp.completion then
-          vim.lsp.completion.trigger()
-        else
-          require("lsp_compl").trigger_completion()
-        end
+        vim.lsp.completion.get()
       else
         if vim.bo.omnifunc == "" then
           feedkeys("<C-x><C-n>", "n")

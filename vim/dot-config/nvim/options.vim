@@ -21,11 +21,6 @@ set complete=.,w,b,u,U,i,d,t
 set wildmode=longest:full,full
 set wildignore+=*.pyc,.git,.idea,*.o
 set wildoptions=pum,tagfile,fuzzy
-if has('nvim-0.11')
-  set completeopt=menuone,noselect,fuzzy,nosort
-else
-  set completeopt=menuone,noselect
-endif
 set suffixes+=.pyc,.tmp                     " along with the defaults, ignore these
 
 set path-=/usr/include
@@ -95,9 +90,3 @@ hi! def link LspReferenceWrite IncSearch
 hi! def link LspCodeLens Include
 hi! def link LspSignatureActiveParameter WarningMsg
 hi! def link NormalFloat Normal
-
-
-sign define DiagnosticSignError text= texthl= linehl= numhl=ErrorMsg
-sign define DiagnosticSignWarn text= texthl= linehl= numhl=WarningMsg
-sign define DiagnosticSignInfo text= texthl= linehl= numhl=Underlined
-sign define DiagnosticSignHint text= texthl= linehl= numhl=Underlined
