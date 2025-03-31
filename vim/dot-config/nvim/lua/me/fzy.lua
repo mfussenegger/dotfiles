@@ -35,10 +35,11 @@ function M.setup()
   q.format_bufname = format_bufname
   local set = vim.keymap.set
   local silent = { silent = true }
+  set('n', '<leader>fc', q.changelist, silent)
   set('n', '<leader>fh', q.helptags, silent)
   set('n', '<leader>fq', q.quickfix, silent)
   set('n', '<leader>fb', q.buffers, silent)
-  set('n', '<leader>fj', q.tagstack, silent)
+  set('n', '<leader>fj', q.jumplist, silent)
   set('n', '<leader>fd', function()
     q.diagnostic(0, { severity = require('me').diagnostic_severity() })
   end, silent)
@@ -47,7 +48,14 @@ function M.setup()
     local fzy = require('fzy')
     fzy.execute('fd', fzy.sinks.edit_file)
   end, silent)
-  set('n', '<leader>ft', function() q.try(q.lsp_tags, q.buf_tags) end, silent)
+  set('n', '<leader>ft', function()
+    q.try(
+      function()
+        q.lsp_tags({ timeout = 1000 })
+      end,
+      q.buf_tags
+    )
+  end, silent)
   set('n', '<leader>fg', function()
     local fzy = require('fzy')
     fzy.execute('git ls-files', fzy.sinks.edit_file)
