@@ -49,6 +49,22 @@ end
     f = "${1:name} :: ${2}\n${1:name} ${3}= ${4:undefined}${0}",
     lang = "{-# LANGUAGE ${1} #-}$0",
   },
+  cabal = {
+    test = vim.trim([[
+test-suite ${1:name}-test
+  import: deps
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  default-language: Haskell2010
+  build-depends:
+      hspec
+    , ${1:name}
+  hs-source-dirs:
+      tests
+  other-modules:
+  build-tool-depends: hspec-discover:hspec-discover
+    ]])
+  },
   python = {
     main = 'if __name__ == "__main__":\n    ${1:pass}${0}',
     f = "def ${1:name}(${2}):\n    ${3:pass}${0}",
